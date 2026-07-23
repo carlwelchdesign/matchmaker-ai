@@ -44,5 +44,5 @@ Create a version-controlled, decision-ready planning package that defines Argent
 
 - Branch: `planning/foundation`
 - Commit: `6582ef7` (`ARG-000: establish Argent planning foundation`)
-- PR: Blocked because no Git remote is configured; tracked by `ARG-100`
+- PR: [#1 — ARG-000 — Establish Argent planning foundation](https://github.com/carlwelchdesign/matchmaker-ai/pull/1) (`draft`, clean, mergeable)
 - Merge: Intentionally pending project-owner review

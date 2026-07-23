@@ -25,6 +25,11 @@
 - Git diff whitespace validation passes.
 - No empty planning files exist.
 
-## Known delivery prerequisite
+## GitHub delivery evidence
 
-No Git remote is configured. The planning branch can be committed locally, but a pull request, branch protection, remote review, and merge cannot be completed until `ARG-100` configures the repository destination and governance.
+- Remote: `git@github.com:carlwelchdesign/matchmaker-ai.git`
+- Pull request: [#1 — ARG-000 — Establish Argent planning foundation](https://github.com/carlwelchdesign/matchmaker-ai/pull/1)
+- PR state at creation: draft, clean, and mergeable
+- Merge: pending project-owner review
+
+`ARG-100` still owns branch protection, required CI, reviewer policy, and the long-term PR workflow before implementation tickets begin.
