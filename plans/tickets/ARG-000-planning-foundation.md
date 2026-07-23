@@ -43,6 +43,6 @@ Create a version-controlled, decision-ready planning package that defines Argent
 ## Verification evidence
 
 - Branch: `planning/foundation`
-- Commit: `7a45f1a` (`ARG-000: establish Argent planning foundation`)
+- Commit: `6582ef7` (`ARG-000: establish Argent planning foundation`)
 - PR: Blocked because no Git remote is configured; tracked by `ARG-100`
 - Merge: Intentionally pending project-owner review

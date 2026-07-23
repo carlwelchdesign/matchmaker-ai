@@ -3,7 +3,7 @@
 - **Date:** 2026-07-23
 - **Branch:** `planning/foundation`
 - **Ticket:** `ARG-000`
-- **Planning commit:** `7a45f1a`
+- **Planning commit:** `6582ef7`
 
 ## Independent reviews
 
