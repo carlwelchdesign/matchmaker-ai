@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1024" viewBox="0 0 1440 1024">
+  <rect width="1440" height="1024" fill="#F6F3EC"/>
+  <rect x="0" y="0" width="1440" height="84" fill="#182A24"/>
+  <text x="72" y="52" fill="#F7F2E8" font-family="Georgia, serif" font-size="24" letter-spacing="5">ARGENT</text>
+  <text x="240" y="51" fill="#AAB5AF" font-family="Arial, sans-serif" font-size="12" letter-spacing="2">PRIVATE APPLICATION</text>
+  <text x="1285" y="50" fill="#D7DED9" font-family="Arial, sans-serif" font-size="12">Save and exit</text>
+
+  <rect x="0" y="84" width="1440" height="5" fill="#DED8CD"/>
+  <rect x="0" y="84" width="576" height="5" fill="#B79A64"/>
+  <text x="72" y="142" fill="#8D7760" font-family="Arial, sans-serif" font-size="11" letter-spacing="2">STEP 2 OF 5</text>
+  <text x="72" y="203" fill="#18241F" font-family="Georgia, serif" font-size="46">About you</text>
+  <text x="74" y="238" fill="#66706B" font-family="Arial, sans-serif" font-size="15">Help your matchmaker understand your life, values, and intentions.</text>
+
+  <rect x="72" y="284" width="826" height="624" rx="12" fill="#FFFFFF" stroke="#DED8CD"/>
+  <text x="108" y="335" fill="#24322D" font-family="Arial, sans-serif" font-size="13" font-weight="bold">BASIC INFORMATION</text>
+  <text x="108" y="385" fill="#59635E" font-family="Arial, sans-serif" font-size="12">Preferred name</text>
+  <rect x="108" y="399" width="348" height="54" rx="8" fill="#FBFAF7" stroke="#CFC9BE"/>
+  <text x="128" y="432" fill="#26342F" font-family="Arial, sans-serif" font-size="15">Alexandra</text>
+  <text x="490" y="385" fill="#59635E" font-family="Arial, sans-serif" font-size="12">Age</text>
+  <rect x="490" y="399" width="168" height="54" rx="8" fill="#FBFAF7" stroke="#CFC9BE"/>
+  <text x="510" y="432" fill="#26342F" font-family="Arial, sans-serif" font-size="15">42</text>
+  <text x="692" y="385" fill="#59635E" font-family="Arial, sans-serif" font-size="12">County</text>
+  <rect x="692" y="399" width="168" height="54" rx="8" fill="#FBFAF7" stroke="#CFC9BE"/>
+  <text x="712" y="432" fill="#26342F" font-family="Arial, sans-serif" font-size="14">Santa Barbara</text>
+
+  <line x1="108" y1="492" x2="860" y2="492" stroke="#E4DED4"/>
+  <text x="108" y="538" fill="#24322D" font-family="Arial, sans-serif" font-size="13" font-weight="bold">YOUR LIFE</text>
+  <text x="108" y="585" fill="#59635E" font-family="Arial, sans-serif" font-size="12">What does a meaningful life look like to you?</text>
+  <rect x="108" y="600" width="752" height="120" rx="8" fill="#FBFAF7" stroke="#CFC9BE"/>
+  <text x="128" y="633" fill="#9AA19D" font-family="Arial, sans-serif" font-size="14">Share as much or as little as feels useful...</text>
+  <text x="108" y="765" fill="#59635E" font-family="Arial, sans-serif" font-size="12">What are you hoping to build with a partner?</text>
+  <rect x="108" y="780" width="752" height="54" rx="8" fill="#FBFAF7" stroke="#CFC9BE"/>
+  <text x="128" y="813" fill="#26342F" font-family="Arial, sans-serif" font-size="14">A lasting partnership grounded in curiosity and kindness</text>
+
+  <rect x="948" y="284" width="420" height="298" rx="12" fill="#E9E5DC"/>
+  <circle cx="994" cy="334" r="20" fill="#1E3A32"/>
+  <path d="M986 334h16M994 326v16" stroke="#FFF" stroke-width="2"/>
+  <text x="1027" y="330" fill="#1E2D27" font-family="Georgia, serif" font-size="20">Why we ask</text>
+  <text x="982" y="378" fill="#5F6964" font-family="Arial, sans-serif" font-size="14">Your answers help a human matchmaker</text>
+  <text x="982" y="402" fill="#5F6964" font-family="Arial, sans-serif" font-size="14">understand context that filters alone miss.</text>
+  <text x="982" y="446" fill="#5F6964" font-family="Arial, sans-serif" font-size="14">They are not displayed publicly and are not</text>
+  <text x="982" y="470" fill="#5F6964" font-family="Arial, sans-serif" font-size="14">used to make an automatic admission decision.</text>
+  <line x1="982" y1="510" x2="1332" y2="510" stroke="#D0C9BC"/>
+  <text x="982" y="545" fill="#1E3A32" font-family="Arial, sans-serif" font-size="12" text-decoration="underline">See who can access this information</text>
+
+  <rect x="948" y="606" width="420" height="180" rx="12" fill="#FFFFFF" stroke="#DED8CD"/>
+  <text x="982" y="651" fill="#24322D" font-family="Arial, sans-serif" font-size="12" font-weight="bold">YOUR PROGRESS</text>
+  <circle cx="993" cy="691" r="8" fill="#1E3A32"/>
+  <text x="1015" y="696" fill="#4E5954" font-family="Arial, sans-serif" font-size="13">Application saved securely</text>
+  <circle cx="993" cy="732" r="8" fill="#B99B67"/>
+  <text x="1015" y="737" fill="#4E5954" font-family="Arial, sans-serif" font-size="13">Estimated time remaining: 8 minutes</text>
+
+  <rect x="1080" y="850" width="288" height="58" rx="29" fill="#1E3A32"/>
+  <text x="1224" y="885" text-anchor="middle" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="13" letter-spacing=".7">SAVE AND CONTINUE</text>
+  <text x="948" y="884" fill="#42504A" font-family="Arial, sans-serif" font-size="13">Back</text>
+</svg>

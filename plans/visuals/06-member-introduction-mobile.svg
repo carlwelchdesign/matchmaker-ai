@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="430" height="932" viewBox="0 0 430 932">
+  <defs>
+    <linearGradient id="card" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#536F63"/>
+      <stop offset="1" stop-color="#19342A"/>
+    </linearGradient>
+  </defs>
+  <rect width="430" height="932" rx="38" fill="#F4F0E7"/>
+  <text x="28" y="56" fill="#17231F" font-family="Georgia, serif" font-size="20" letter-spacing="4">ARGENT</text>
+  <text x="402" y="54" text-anchor="end" fill="#56635D" font-family="Arial, sans-serif" font-size="12">Private introduction</text>
+  <line x1="24" y1="84" x2="406" y2="84" stroke="#D7D1C6"/>
+
+  <text x="28" y="128" fill="#9A7A44" font-family="Arial, sans-serif" font-size="10" letter-spacing="2">A CONSIDERED INTRODUCTION</text>
+  <text x="28" y="169" fill="#17231F" font-family="Georgia, serif" font-size="29">Meet someone selected</text>
+  <text x="28" y="203" fill="#17231F" font-family="Georgia, serif" font-size="29">with intention.</text>
+
+  <rect x="24" y="232" width="382" height="240" rx="18" fill="url(#card)"/>
+  <ellipse cx="215" cy="326" rx="59" ry="67" fill="#D9C6A6" opacity=".25"/>
+  <ellipse cx="215" cy="308" rx="30" ry="37" fill="#17251F" opacity=".88"/>
+  <path d="M145 433c10-68 36-104 70-104s62 36 72 104z" fill="#D8C4A2" opacity=".22"/>
+  <rect x="44" y="418" width="342" height="34" rx="17" fill="#12261F" opacity=".76"/>
+  <text x="215" y="439" text-anchor="middle" fill="#E9E2D6" font-family="Arial, sans-serif" font-size="11">Photos are revealed only after mutual approval</text>
+
+  <text x="28" y="516" fill="#22322B" font-family="Georgia, serif" font-size="22">Why your matchmaker sees potential</text>
+  <circle cx="38" cy="558" r="5" fill="#B89A62"/>
+  <text x="56" y="562" fill="#55615B" font-family="Arial, sans-serif" font-size="13">Shared commitment to a grounded, active life</text>
+  <circle cx="38" cy="594" r="5" fill="#B89A62"/>
+  <text x="56" y="598" fill="#55615B" font-family="Arial, sans-serif" font-size="13">Compatible relationship goals and geography</text>
+  <circle cx="38" cy="630" r="5" fill="#B89A62"/>
+  <text x="56" y="634" fill="#55615B" font-family="Arial, sans-serif" font-size="13">Complementary communication styles</text>
+
+  <rect x="24" y="668" width="382" height="102" rx="15" fill="#E7E2D7"/>
+  <text x="48" y="705" fill="#25352E" font-family="Arial, sans-serif" font-size="12" font-weight="bold">YOU ARE ALWAYS IN CONTROL</text>
+  <text x="48" y="732" fill="#66706B" font-family="Arial, sans-serif" font-size="12">Your response remains private. Contact details are</text>
+  <text x="48" y="752" fill="#66706B" font-family="Arial, sans-serif" font-size="12">shared only if both people choose to continue.</text>
+
+  <rect x="24" y="798" width="382" height="54" rx="27" fill="#1E3A32"/>
+  <text x="215" y="831" text-anchor="middle" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="13">I’M OPEN TO THIS INTRODUCTION</text>
+  <text x="215" y="885" text-anchor="middle" fill="#45534C" font-family="Arial, sans-serif" font-size="13">Not this time</text>
+</svg>

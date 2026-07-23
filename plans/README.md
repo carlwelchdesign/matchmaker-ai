@@ -44,6 +44,7 @@ Deliver a secure, privacy-conscious private beta that supports:
 | [decisions.md](decisions.md) | Architecture and product decision log |
 | [reviews.md](reviews.md) | Specialist review findings and validation traceability |
 | [validation.md](validation.md) | Current validation evidence and known repository prerequisite |
+| [visuals/README.md](visuals/README.md) | Reviewable visual concept set for public, admin, and mobile experiences |
 
 ## Status vocabulary
 

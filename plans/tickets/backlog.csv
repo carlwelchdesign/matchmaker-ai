@@ -3,7 +3,7 @@ ARG-000,Planning governance,0,P0,In progress,Create and harden canonical plannin
 ARG-001,Product strategy,0,P0,Proposed,Approve product brief ICP service model and success measures,ARG-000,Product,Decision gate,EPIC-0,Unassigned,Unassigned,TBD,Required at Ready,"",""
 ARG-002,Research,0,P0,Proposed,Document founder and matchmaker operating workflows,ARG-001,Product,Decision gate,EPIC-0,Unassigned,Unassigned,TBD,Required at Ready,"",""
 ARG-003,Research,0,P0,Proposed,Test applicant candidate and client concepts and language,ARG-001,Product,Decision gate,EPIC-0,Unassigned,Unassigned,TBD,Required at Ready,"",""
-ARG-004,Brand experience,0,P0,Proposed,Approve restrained luxury brand and content direction,ARG-001;ARG-003,Product,Decision gate,EPIC-0,Unassigned,Unassigned,TBD,Required at Ready,"",""
+ARG-004,Brand experience,0,P0,In review,Approve restrained luxury brand and content direction,ARG-001;ARG-003,Product,Decision gate,EPIC-0,Unassigned,Unassigned,TBD,plans/visuals/README.md,"",""
 ARG-005,Domain design,0,P0,Proposed,Approve admission candidate client and campaign lifecycles,ARG-002;ARG-003,Architecture,Decision gate,EPIC-0,Unassigned,Unassigned,TBD,Required at Ready,"",""
 ARG-006,Privacy legal,0,P0,Proposed,Complete privacy legal screening and partner requirements assessment,ARG-001;ARG-005,Privacy,Decision gate,EPIC-0,Unassigned,Unassigned,TBD,Required at Ready,"",""
 ARG-007,Security,0,P0,Proposed,Complete threat model and data flow diagrams,ARG-005;ARG-006,Security,Decision gate,EPIC-0,Unassigned,Unassigned,TBD,Required at Ready,"",""

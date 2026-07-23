@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1024" viewBox="0 0 1440 1024">
+  <defs>
+    <linearGradient id="portrait" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#557064"/>
+      <stop offset="0.55" stop-color="#233B34"/>
+      <stop offset="1" stop-color="#14231F"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="48%" cy="35%" r="60%">
+      <stop offset="0" stop-color="#D9C7A7" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#D9C7A7" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1440" height="1024" fill="#F4F0E7"/>
+  <rect x="0" y="0" width="1440" height="92" fill="#F4F0E7"/>
+  <text x="78" y="57" fill="#17231F" font-family="Georgia, serif" font-size="25" letter-spacing="5">ARGENT</text>
+  <text x="255" y="56" fill="#87908A" font-family="Arial, sans-serif" font-size="12" letter-spacing="2">MATCHMAKING</text>
+  <text x="1055" y="55" fill="#37443F" font-family="Arial, sans-serif" font-size="13">How it works</text>
+  <text x="1170" y="55" fill="#37443F" font-family="Arial, sans-serif" font-size="13">Privacy</text>
+  <rect x="1260" y="29" width="118" height="38" rx="19" fill="#1E3A32"/>
+  <text x="1319" y="53" text-anchor="middle" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="12" letter-spacing=".7">APPLY</text>
+  <line x1="62" y1="92" x2="1378" y2="92" stroke="#D8D2C6"/>
+
+  <text x="78" y="154" fill="#9A7A44" font-family="Arial, sans-serif" font-size="12" letter-spacing="2.5">A CONTROLLED ARGENT CAMPAIGN</text>
+  <text x="78" y="205" fill="#17231F" font-family="Georgia, serif" font-size="19">Montecito Matchmaker</text>
+
+  <text x="78" y="300" fill="#17231F" font-family="Georgia, serif" font-size="66">A private search for</text>
+  <text x="78" y="375" fill="#17231F" font-family="Georgia, serif" font-size="66">exceptional people.</text>
+  <text x="80" y="433" fill="#5F6964" font-family="Arial, sans-serif" font-size="18">Argent is thoughtfully building a select candidate network</text>
+  <text x="80" y="462" fill="#5F6964" font-family="Arial, sans-serif" font-size="18">in Santa Barbara County. Anyone may apply. Every profile</text>
+  <text x="80" y="491" fill="#5F6964" font-family="Arial, sans-serif" font-size="18">is reviewed personally by our matchmaking team.</text>
+
+  <rect x="78" y="548" width="216" height="54" rx="27" fill="#1E3A32"/>
+  <text x="186" y="581" text-anchor="middle" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="13" letter-spacing=".8">APPLY FOR CONSIDERATION</text>
+  <text x="328" y="580" fill="#263A33" font-family="Arial, sans-serif" font-size="13" text-decoration="underline">What to expect</text>
+
+  <rect x="78" y="698" width="522" height="145" rx="14" fill="#E9E3D8"/>
+  <circle cx="124" cy="742" r="21" fill="#1E3A32"/>
+  <path d="M115 742l6 6 13-15" fill="none" stroke="#FFF" stroke-width="2.3"/>
+  <text x="158" y="736" fill="#17231F" font-family="Georgia, serif" font-size="20">Discreet by design</text>
+  <text x="158" y="768" fill="#65706A" font-family="Arial, sans-serif" font-size="14">Profiles are never publicly browsable. Information is</text>
+  <text x="158" y="791" fill="#65706A" font-family="Arial, sans-serif" font-size="14">shared only through a considered, permissioned process.</text>
+
+  <rect x="700" y="126" width="678" height="780" rx="4" fill="url(#portrait)"/>
+  <rect x="700" y="126" width="678" height="780" fill="url(#glow)"/>
+  <ellipse cx="1040" cy="412" rx="166" ry="190" fill="#DCC7A5" opacity=".18"/>
+  <ellipse cx="1040" cy="390" rx="86" ry="104" fill="#14231F" opacity=".92"/>
+  <path d="M842 836c24-174 95-267 198-267s180 93 204 267z" fill="#C5B18F" opacity=".25"/>
+  <rect x="742" y="834" width="594" height="1" fill="#D3C19F" opacity=".35"/>
+  <text x="742" y="871" fill="#D5C9B4" font-family="Arial, sans-serif" font-size="12" letter-spacing="2">SANTA BARBARA COUNTY • PRIVATE SEARCH</text>
+
+  <text x="78" y="962" fill="#7A837E" font-family="Arial, sans-serif" font-size="11">ARGENT MATCHMAKING</text>
+  <text x="1195" y="962" fill="#7A837E" font-family="Arial, sans-serif" font-size="11">Human-led. Technology-assisted.</text>
+</svg>
