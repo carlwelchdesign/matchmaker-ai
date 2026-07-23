@@ -36,13 +36,13 @@ Create a version-controlled, decision-ready planning package that defines Argent
 - [x] Material findings integrated into canonical plans and tickets.
 - [x] Planning validation checklist completed.
 - [x] Markdown/CSV/link hygiene checks pass.
-- [ ] Intended planning files committed with ticket ID.
+- [x] Intended planning files committed with ticket ID.
 - [x] PR opened or exact remote/auth prerequisite recorded.
 - [x] Merge completed or intentionally left for owner review.
 
 ## Verification evidence
 
 - Branch: `planning/foundation`
-- Commit: Pending
+- Commit: `7a45f1a` (`ARG-000: establish Argent planning foundation`)
 - PR: Blocked because no Git remote is configured; tracked by `ARG-100`
 - Merge: Intentionally pending project-owner review
