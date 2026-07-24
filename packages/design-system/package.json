@@ -1,0 +1,25 @@
+{
+  "name": "@argent/design-system",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "files": [
+    "generated",
+    "tokens"
+  ],
+  "exports": {
+    "./nocturne.css": "./generated/web/nocturne.css",
+    "./tokens": "./tokens/nocturne.tokens.json"
+  },
+  "scripts": {
+    "build": "node scripts/generate.mjs",
+    "generate": "node scripts/generate.mjs",
+    "test": "vitest run test",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "24.13.3",
+    "typescript": "6.0.3",
+    "vitest": "4.1.10"
+  }
+}

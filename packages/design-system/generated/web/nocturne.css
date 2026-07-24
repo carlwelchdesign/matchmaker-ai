@@ -1,0 +1,85 @@
+/* Generated from packages/design-system/tokens/nocturne.tokens.json. Do not edit by hand. */
+:root {
+  --argent-primitive-color-aubergine-850: #211922;
+  --argent-primitive-color-aubergine-900: #1a141b;
+  --argent-primitive-color-aubergine-950: #130f14;
+  --argent-primitive-color-plum-600: #5c4f5b;
+  --argent-primitive-color-plum-700: #453a44;
+  --argent-primitive-color-plum-800: #332832;
+  --argent-primitive-color-parchment-100: #e8ded3;
+  --argent-primitive-color-parchment-050: #f3eee8;
+  --argent-primitive-color-silver-200: #cfc5cc;
+  --argent-primitive-color-silver-300: #aaa1a9;
+  --argent-primitive-color-silver-500: #7d747c;
+  --argent-primitive-color-oxblood-500: #b36a70;
+  --argent-primitive-color-oxblood-600: #8f3e46;
+  --argent-primitive-color-oxblood-700: #6f2b33;
+  --argent-primitive-color-moss-500: #80886e;
+  --argent-primitive-color-amber-500: #b9925c;
+  --argent-primitive-space-100: 8px;
+  --argent-primitive-space-150: 12px;
+  --argent-primitive-space-200: 16px;
+  --argent-primitive-space-300: 24px;
+  --argent-primitive-space-400: 32px;
+  --argent-primitive-space-600: 48px;
+  --argent-primitive-space-800: 64px;
+  --argent-primitive-space-050: 4px;
+  --argent-primitive-radius-sm: 4px;
+  --argent-primitive-radius-md: 8px;
+  --argent-primitive-border-hairline: 1px;
+  --argent-primitive-motion-fast: 120ms;
+  --argent-primitive-motion-standard: 180ms;
+  --argent-primitive-font-display:
+    Arial Narrow, Roboto Condensed, ui-sans-serif, system-ui, sans-serif;
+  --argent-primitive-font-body:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    Segoe UI, sans-serif;
+  --argent-primitive-font-mono:
+    SFMono-Regular, Consolas, Liberation Mono, monospace;
+  --argent-semantic-surface-canvas: #130f14;
+  --argent-semantic-surface-raised: #1a141b;
+  --argent-semantic-surface-overlay: #211922;
+  --argent-semantic-text-primary: #f3eee8;
+  --argent-semantic-text-secondary: #e8ded3;
+  --argent-semantic-text-muted: #aaa1a9;
+  --argent-semantic-text-subtle: #7d747c;
+  --argent-semantic-text-inverse: #130f14;
+  --argent-semantic-border-subtle: #453a44;
+  --argent-semantic-border-strong: #5c4f5b;
+  --argent-semantic-action-primary: #8f3e46;
+  --argent-semantic-action-primary-hover: #b36a70;
+  --argent-semantic-action-on-primary: #f3eee8;
+  --argent-semantic-focus-ring: #b36a70;
+  --argent-semantic-status-success: #80886e;
+  --argent-semantic-status-warning: #b9925c;
+  --argent-semantic-status-danger: #b36a70;
+  --argent-component-button-radius: 8px;
+  --argent-component-button-height: 44px;
+  --argent-component-panel-radius: 8px;
+  --argent-component-panel-border-width: 1px;
+  --argent-component-input-radius: 4px;
+  --argent-component-input-height: 44px;
+  --argent-layout-content-standard: 832px;
+  --argent-layout-content-wide: 1184px;
+  --argent-layout-gutter-compact: 24px;
+  --argent-layout-gutter-expanded: 48px;
+  --argent-type-family-display:
+    Arial Narrow, Roboto Condensed, ui-sans-serif, system-ui, sans-serif;
+  --argent-type-family-body:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    Segoe UI, sans-serif;
+  --argent-type-family-mono:
+    SFMono-Regular, Consolas, Liberation Mono, monospace;
+  --argent-type-size-display: 72px;
+  --argent-type-size-display-mobile: 48px;
+  --argent-type-size-section: 32px;
+  --argent-type-size-body: 18px;
+  --argent-type-size-compact: 14px;
+  --argent-type-size-label: 12px;
+  --argent-type-line-height-display: 0.92;
+  --argent-type-line-height-body: 1.6;
+  --argent-type-line-height-compact: 1.4;
+  --argent-type-weight-regular: 400;
+  --argent-type-weight-medium: 550;
+  --argent-type-weight-semibold: 650;
+}
