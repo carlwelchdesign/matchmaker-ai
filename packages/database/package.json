@@ -20,8 +20,8 @@
     "migrate:down": "tsx src/cli/migrate.ts down",
     "migrate:up": "tsx src/cli/migrate.ts up",
     "seed": "tsx src/cli/seed.ts",
-    "test": "vitest run src --exclude src/integration.test.ts",
-    "test:integration": "vitest run src/integration.test.ts",
+    "test": "vitest run src --exclude src/integration.test.ts --exclude '**/*.integration.test.ts'",
+    "test:integration": "vitest run --no-file-parallelism src/integration.test.ts src/delivery.integration.test.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {

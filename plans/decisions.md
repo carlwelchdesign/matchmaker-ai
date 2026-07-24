@@ -34,7 +34,7 @@
 | ADR-009 | AI provider, data policy, and evaluation harness | AI + privacy + security | AI implementation | Proposed |
 | ADR-010 | Staff admin inside or separate from primary web app | Engineering + security + design | Before foundation scaffold | Proposed |
 | ADR-011 | API evolution and supported-mobile compatibility | API + mobile owners | Before contract generation | Accepted |
-| ADR-012 | Transactional outbox/inbox and job delivery semantics | Platform + data owners | Before worker foundation | Proposed |
+| ADR-012 | Transactional outbox/inbox and job delivery semantics | Platform + data owners | Before worker foundation | Accepted |
 | ADR-013 | Analytics event architecture and deletion behavior | Data + privacy owners | Before instrumentation | Proposed |
 | ADR-014 | Server-only and client-safe package boundaries | Engineering + security | Before foundation scaffold | Accepted |
 | ADR-015 | Production topology, SLOs, capacity, and scaling | Platform + security | Before staging provisioning | Proposed |
