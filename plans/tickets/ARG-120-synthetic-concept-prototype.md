@@ -90,9 +90,9 @@ workspace without collecting, processing, or presenting real personal data.
 
 ## Delivery evidence
 
-- Branch: `codex/ARG-120-mobile-hero-image`
-- Commit: `32eb96d` (`ARG-120 add bundled mobile splash image`)
-- PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/41
+- Branch: `codex/ARG-120-mobile-status-moment`
+- Commit: `c1ae1f5` (`ARG-120 add mobile sample status moment`)
+- PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/42
 - Merge: https://github.com/carlwelchdesign/matchmaker-ai/pull/39
 - Deployment: Local Docker concept prototype only
 - Evidence URLs/paths:
