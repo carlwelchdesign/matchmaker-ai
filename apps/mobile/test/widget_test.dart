@@ -12,6 +12,16 @@ void main() {
     expect(find.text('ARGENT'), findsOneWidget);
     expect(find.text('A private\nintroduction.'), findsOneWidget);
     expect(find.textContaining('NOTHING IS SUBMITTED'), findsOneWidget);
+    expect(
+      find.byWidgetPredicate(
+        (widget) =>
+            widget is Image &&
+            widget.image is AssetImage &&
+            (widget.image as AssetImage).assetName ==
+                'assets/images/nocturne-coastal-residence-hero.png',
+      ),
+      findsOneWidget,
+    );
   });
 
   testWidgets('changes only local concept state', (tester) async {

@@ -49,19 +49,19 @@ class _ConceptLandingScreenState extends State<ConceptLandingScreen> {
 
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(ArgentTokens.primitiveSpace300),
-          child: _view == _ConceptView.landing
-              ? _Landing(
-                  onPreviewApplication: () =>
-                      setState(() => _view = _ConceptView.applicationPreview),
-                  textTheme: textTheme,
-                )
-              : _ApplicationPreview(
+        child: _view == _ConceptView.landing
+            ? _Landing(
+                onPreviewApplication: () =>
+                    setState(() => _view = _ConceptView.applicationPreview),
+                textTheme: textTheme,
+              )
+            : Padding(
+                padding: const EdgeInsets.all(ArgentTokens.primitiveSpace300),
+                child: _ApplicationPreview(
                   onReturn: () => setState(() => _view = _ConceptView.landing),
                   textTheme: textTheme,
                 ),
-        ),
+              ),
       ),
     );
   }
@@ -75,71 +75,101 @@ class _Landing extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'ARGENT',
-          style: textTheme.labelLarge?.copyWith(
-            fontWeight: FontWeight.w600,
-            letterSpacing: 5,
+    return ClipRect(
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Image.asset(
+            'assets/images/nocturne-coastal-residence-hero.png',
+            alignment: Alignment.centerRight,
+            fit: BoxFit.cover,
+            semanticLabel: 'Coastal residence at blue hour',
           ),
-        ),
-        const SizedBox(height: ArgentTokens.primitiveSpace100),
-        Text(
-          'CONCEPT PROTOTYPE · NOTHING IS SUBMITTED',
-          style: textTheme.labelSmall?.copyWith(
-            color: ArgentTokens.semanticTextMuted,
-            letterSpacing: 0.8,
+          const DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [
+                  Color(0xF00F1014),
+                  Color(0xC20F1014),
+                  Color(0x240F1014),
+                ],
+                stops: [0, 0.52, 1],
+              ),
+            ),
           ),
-        ),
-        const Spacer(),
-        Text(
-          'FIRST CAMPAIGN · SANTA BARBARA COUNTY',
-          style: textTheme.labelSmall?.copyWith(
-            color: ArgentTokens.semanticTextMuted,
-            letterSpacing: 0.8,
+          Padding(
+            padding: const EdgeInsets.all(ArgentTokens.primitiveSpace300),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'ARGENT',
+                  style: textTheme.labelLarge?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 5,
+                  ),
+                ),
+                const SizedBox(height: ArgentTokens.primitiveSpace100),
+                Text(
+                  'CONCEPT PROTOTYPE · NOTHING IS SUBMITTED',
+                  style: textTheme.labelSmall?.copyWith(
+                    color: ArgentTokens.semanticTextMuted,
+                    letterSpacing: 0.8,
+                  ),
+                ),
+                const Spacer(),
+                Text(
+                  'FIRST CAMPAIGN · SANTA BARBARA COUNTY',
+                  style: textTheme.labelSmall?.copyWith(
+                    color: ArgentTokens.semanticTextMuted,
+                    letterSpacing: 0.8,
+                  ),
+                ),
+                const SizedBox(height: ArgentTokens.primitiveSpace200),
+                Text(
+                  'A private\nintroduction.',
+                  style: textTheme.displayMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    height: ArgentTokens.typeLineHeightDisplay,
+                  ),
+                ),
+                const SizedBox(height: ArgentTokens.primitiveSpace200),
+                Container(
+                  color: ArgentTokens.semanticActionPrimary,
+                  height: 2,
+                  width: 48,
+                ),
+                const SizedBox(height: ArgentTokens.primitiveSpace300),
+                Text(
+                  'A human-led introduction service for people who value '
+                  'discretion, clarity, and an unhurried beginning.',
+                  style: textTheme.bodyLarge?.copyWith(
+                    color: ArgentTokens.primitiveColorSilver200,
+                    height: ArgentTokens.typeLineHeightBody,
+                  ),
+                ),
+                const SizedBox(height: ArgentTokens.primitiveSpace400),
+                SizedBox(
+                  width: double.infinity,
+                  child: FilledButton(
+                    onPressed: onPreviewApplication,
+                    child: const Text('Explore the application preview'),
+                  ),
+                ),
+                const SizedBox(height: ArgentTokens.primitiveSpace200),
+                Text(
+                  'Private by design · Human reviewed · No guarantees',
+                  style: textTheme.labelSmall?.copyWith(
+                    color: ArgentTokens.semanticTextMuted,
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        const SizedBox(height: ArgentTokens.primitiveSpace200),
-        Text(
-          'A private\nintroduction.',
-          style: textTheme.displayMedium?.copyWith(
-            fontWeight: FontWeight.w600,
-            height: ArgentTokens.typeLineHeightDisplay,
-          ),
-        ),
-        const SizedBox(height: ArgentTokens.primitiveSpace200),
-        Container(
-          color: ArgentTokens.semanticActionPrimary,
-          height: 2,
-          width: 48,
-        ),
-        const SizedBox(height: ArgentTokens.primitiveSpace300),
-        Text(
-          'A human-led introduction service for people who value discretion, '
-          'clarity, and an unhurried beginning.',
-          style: textTheme.bodyLarge?.copyWith(
-            color: ArgentTokens.primitiveColorSilver200,
-            height: ArgentTokens.typeLineHeightBody,
-          ),
-        ),
-        const SizedBox(height: ArgentTokens.primitiveSpace400),
-        SizedBox(
-          width: double.infinity,
-          child: FilledButton(
-            onPressed: onPreviewApplication,
-            child: const Text('Explore the application preview'),
-          ),
-        ),
-        const SizedBox(height: ArgentTokens.primitiveSpace200),
-        Text(
-          'Private by design · Human reviewed · No guarantees',
-          style: textTheme.labelSmall?.copyWith(
-            color: ArgentTokens.semanticTextMuted,
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
