@@ -1,5 +1,5 @@
-import { ConceptPrototype } from "./prototype";
+import { PublicSplash } from "./public-splash";
 
 export default function FoundationPage() {
-  return <ConceptPrototype />;
+  return <PublicSplash />;
 }

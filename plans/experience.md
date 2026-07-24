@@ -138,5 +138,5 @@ A partner cannot:
 
 - Applicant/member: application or profile, status, introductions, feedback, privacy, support.
 - Matchmaker: review queue, people, clients, search, shortlists, introductions, tasks, safety escalation.
-- Administrator: campaigns, content approvals, staff/access, audit, providers, operations.
+- Administrator (Jenny/Argent owner): a separate operational web workspace for campaigns, content approvals, staff/access, audit, providers, operations, and pricing. It is not exposed as public or member navigation.
 - Partner: approved campaign preview and aggregate reporting only for the pilot.

@@ -8,7 +8,7 @@ void main() {
     await tester.pumpWidget(const ArgentMobileApp());
 
     expect(find.text('ARGENT MATCHMAKING'), findsOneWidget);
-    expect(find.text('A more considered way to begin.'), findsOneWidget);
+    expect(find.text('A private introduction.'), findsOneWidget);
     expect(
       find.textContaining('NO INFORMATION IS SUBMITTED'),
       findsOneWidget,

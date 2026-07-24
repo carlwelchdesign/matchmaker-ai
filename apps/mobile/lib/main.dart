@@ -71,7 +71,7 @@ class _FoundationScreenState extends State<FoundationScreen> {
               const Spacer(),
               Text(
                 _step == 0
-                    ? 'A more considered way to begin.'
+                    ? 'A private introduction.'
                     : 'Nothing leaves this device.',
                 style: textTheme.displayMedium?.copyWith(
                   fontWeight: FontWeight.w600,

@@ -20,8 +20,8 @@ workspace without collecting, processing, or presenting real personal data.
 
 ## Scope
 
-- Build a responsive web prototype with synthetic, clearly labeled campaign,
-  applicant, and matchmaker data.
+- Build a Nocturne public splash screen, public campaign/application prototype,
+  and separate synthetic operational admin route with fictional data.
 - Include a public campaign landing view, a reviewable application path, a
   submission/status moment, and an operational matchmaker workspace view.
 - Add a Flutter concept screen that demonstrates the same applicant-facing
@@ -41,8 +41,10 @@ workspace without collecting, processing, or presenting real personal data.
 ## Acceptance criteria
 
 - [x] Public web view communicates a bounded first campaign without treating Santa Barbara as Argent's permanent market boundary.
+- [x] Public root uses the Nocturne public splash composition and does not expose operational navigation.
 - [x] Web application path has clear synthetic/demo and non-submission behavior.
 - [x] Web operational view demonstrates human-led review and candidate discovery without scores or match claims.
+- [x] Jenny's operational concept is isolated at `/admin`, separate from the public/member experience.
 - [x] Flutter screen uses the shared token adapter and represents the same prototype boundary.
 - [x] All sample records are fictional and contain no personal or sensitive data.
 - [x] Keyboard, focus, responsive, reduced-motion, and non-production states are represented proportionately; no asynchronous data action exists, so loading/error recovery is not simulated.

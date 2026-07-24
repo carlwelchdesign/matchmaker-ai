@@ -8,21 +8,13 @@ import {
   prototypeGuardrails,
 } from "./prototype-data";
 
-type PrototypeView = "application" | "campaign" | "matchmaker";
+type PrototypeView = "application" | "campaign";
 
 const steps = ["Your approach", "What matters", "Review"] as const;
 
 export function ConceptPrototype() {
   const [applicationStep, setApplicationStep] = useState(0);
-  const [selectedApplicantId, setSelectedApplicantId] = useState<string>(
-    prototypeApplicants[0].id,
-  );
   const [view, setView] = useState<PrototypeView>("campaign");
-
-  const selectedApplicant =
-    prototypeApplicants.find(
-      (applicant) => applicant.id === selectedApplicantId,
-    ) ?? prototypeApplicants[0];
 
   return (
     <main className="prototype-shell">
@@ -49,12 +41,6 @@ export function ConceptPrototype() {
           >
             Application
           </ViewButton>
-          <ViewButton
-            active={view === "matchmaker"}
-            onClick={() => setView("matchmaker")}
-          >
-            Matchmaker
-          </ViewButton>
         </nav>
       </header>
 
@@ -64,16 +50,8 @@ export function ConceptPrototype() {
         ) : null}
         {view === "application" ? (
           <Application
-            onExploreWorkspace={() => setView("matchmaker")}
             onStepChange={setApplicationStep}
             step={applicationStep}
-          />
-        ) : null}
-        {view === "matchmaker" ? (
-          <Matchmaker
-            onSelect={setSelectedApplicantId}
-            selectedApplicant={selectedApplicant}
-            selectedApplicantId={selectedApplicantId}
           />
         ) : null}
       </section>
@@ -145,11 +123,9 @@ function Campaign({ onExplore }: Readonly<{ onExplore: () => void }>) {
 }
 
 function Application({
-  onExploreWorkspace,
   onStepChange,
   step,
 }: Readonly<{
-  onExploreWorkspace: () => void;
   onStepChange: (step: number) => void;
   step: number;
 }>) {
@@ -253,10 +229,10 @@ function Application({
             {isReview ? (
               <button
                 className="action-button"
-                onClick={onExploreWorkspace}
+                onClick={() => onStepChange(0)}
                 type="button"
               >
-                View matchmaker workspace <span aria-hidden="true">↗</span>
+                Restart preview <span aria-hidden="true">↺</span>
               </button>
             ) : (
               <button
@@ -283,6 +259,33 @@ function Choice({
       <h3>{title}</h3>
       <p>{detail}</p>
     </article>
+  );
+}
+
+export function AdminPrototype() {
+  const [selectedApplicantId, setSelectedApplicantId] = useState<string>(
+    prototypeApplicants[0].id,
+  );
+  const selectedApplicant =
+    prototypeApplicants.find(
+      (applicant) => applicant.id === selectedApplicantId,
+    ) ?? prototypeApplicants[0];
+
+  return (
+    <main className="admin-shell">
+      <header className="admin-header">
+        <span className="wordmark">ARGENT</span>
+        <p>Operations workspace · concept only</p>
+        <span>Jenny’s admin</span>
+      </header>
+      <section className="prototype-content">
+        <Matchmaker
+          onSelect={setSelectedApplicantId}
+          selectedApplicant={selectedApplicant}
+          selectedApplicantId={selectedApplicantId}
+        />
+      </section>
+    </main>
   );
 }
 
