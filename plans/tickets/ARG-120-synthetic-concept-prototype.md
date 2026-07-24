@@ -88,10 +88,10 @@ workspace without collecting, processing, or presenting real personal data.
 
 ## Delivery evidence
 
-- Branch: `ticket/ARG-120-synthetic-concept-prototype`
-- Commit: `00f27a8` (`ARG-120 separate owner admin application`)
-- PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/38
-- Merge:
+- Branch: `codex/ARG-120-mobile-nocturne-splash`
+- Commit: `8f67983` (`ARG-120 align mobile opening with Nocturne splash`)
+- PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/39
+- Merge: https://github.com/carlwelchdesign/matchmaker-ai/pull/38
 - Deployment: Local Docker concept prototype only
 - Evidence URLs/paths:
 - Completion date:
