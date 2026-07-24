@@ -3,7 +3,7 @@
 - **Epic:** Event delivery
 - **Capability/requirement IDs:** CAP-007
 - **Priority:** P0
-- **Status:** Done
+- **Status:** In Progress
 - **Named owner:** Codex
 - **Named approver/reviewer:** Project owner
 - **Target milestone:** Operational alpha
@@ -11,6 +11,16 @@
 - **Dependencies:** ARG-107; ARG-101
 - **Decision/risk links:** ADR-012; ADR-022; R-027
 - **Blocked reason/review date:** Not blocked
+
+## JSON-boundary remediation — 2026-07-23
+
+A second post-completion boundary review demonstrated that compile-time
+`JsonObject` types were not sufficient at untyped runtime boundaries. A `Date`
+value was silently canonicalized as an empty object, while a sparse array
+produced invalid JSON text. ARG-112 is reopened narrowly until canonical
+serialization rejects non-JSON objects, sparse or augmented arrays, accessor
+properties, cycles, excessive nesting, and non-JSON primitive values with
+bounded validation errors.
 
 ## Outcome
 
