@@ -44,3 +44,4 @@
 | ADR-019 | Canonical design-token format, web/Dart/Figma generation, and drift governance | Design systems + web + mobile owners | Before `ARG-118` | Proposed |
 | ADR-020 | Conversational intake ASR deployment, provider, consent, source retention, and deletion boundary | Privacy + security + mobile + AI owners | Before `ARG-613` | Proposed |
 | ADR-021 | Deterministic filtering, semantic retrieval, evidence bundle, human ranking, and outcome-evaluation boundary | AI + product + data + privacy owners | Before `ARG-502` or `ARG-605` | Proposed |
+| ADR-022 | PostgreSQL migrations and synthetic fixture boundary | Engineering + data | Before `ARG-107` | Accepted |

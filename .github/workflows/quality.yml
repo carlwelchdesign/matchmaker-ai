@@ -47,3 +47,5 @@ jobs:
         run: pnpm verify
       - name: Validate Compose configuration
         run: docker compose config --quiet
+      - name: Exercise database migrations and synthetic fixtures
+        run: pnpm db:smoke

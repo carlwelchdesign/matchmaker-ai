@@ -69,6 +69,16 @@ for (const service of ["postgres", "redis"]) {
   }
 }
 
+const databaseSmoke = await readFile(
+  resolve(repositoryRoot, "infra/database/smoke.sh"),
+  "utf8",
+);
+if (
+  !/^readonly postgres_image="\S+@sha256:[0-9a-f]{64}"$/mu.test(databaseSmoke)
+) {
+  throw new Error("Database smoke image must be pinned by digest");
+}
+
 process.stdout.write(
   `CI policy validated across ${workflowFiles.length} workflows.\n`,
 );
