@@ -2,6 +2,10 @@
 
 Argent is a discreet, human-led matchmaking platform. This monorepo contains the public/staff web application, Flutter iOS and Android application, API, worker, framework-light domain policy, server-only database foundation, contracts boundary, and design-system boundary.
 
+The current local screen is a **synthetic concept prototype** for product review.
+It has no accounts, submission, storage, real profiles, matching, or production
+workflow. Do not use it to collect personal information.
+
 ## Workspace
 
 ```text

@@ -4,15 +4,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('renders the gated foundation state', (tester) async {
+  testWidgets('renders the synthetic concept prototype boundary', (tester) async {
     await tester.pumpWidget(const ArgentMobileApp());
 
     expect(find.text('ARGENT MATCHMAKING'), findsOneWidget);
-    expect(find.text('Private by design.'), findsOneWidget);
+    expect(find.text('A more considered way to begin.'), findsOneWidget);
     expect(
-      find.textContaining('Member workflows remain behind'),
+      find.textContaining('NO INFORMATION IS SUBMITTED'),
       findsOneWidget,
     );
+  });
+
+  testWidgets('changes only local concept state', (tester) async {
+    await tester.pumpWidget(const ArgentMobileApp());
+
+    await tester.tap(find.text('Preview application posture'));
+    await tester.pump();
+
+    expect(find.text('Nothing leaves this device.'), findsOneWidget);
+    expect(find.textContaining('no account, form submission, storage'), findsOneWidget);
   });
 
   testWidgets('uses generated Nocturne theme tokens', (tester) async {
