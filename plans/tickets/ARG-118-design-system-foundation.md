@@ -3,7 +3,7 @@
 - **Epic:** Design system
 - **Capability/requirement IDs:** ARG-118
 - **Priority:** P0
-- **Status:** In review
+- **Status:** Done
 - **Named owner:** Codex
 - **Named approver/reviewer:** Project owner
 - **Target milestone:** Operational alpha
@@ -78,10 +78,12 @@ Argent has one human-readable Nocturne token source that generates web and Flutt
 - Branch: `ticket/ARG-118-design-system-foundation`
 - Commit: branch HEAD, `ARG-118: establish design token foundation`
 - PR: <https://github.com/carlwelchdesign/matchmaker-ai/pull/27>
-- Merge:
+- Merge: `26aa05f` on 2026-07-24
 - Deployment:
 - Evidence URLs/paths:
+  - [PR #27 checks](https://github.com/carlwelchdesign/matchmaker-ai/pull/27/checks)
 - Completion date:
+  2026-07-24
 
 ## Completion notes
 

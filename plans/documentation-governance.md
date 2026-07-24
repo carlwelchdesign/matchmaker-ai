@@ -25,10 +25,18 @@ Before implementation, every canonical plan/runbook must have an owner, approver
 
 ## Drift checks
 
-CI should validate:
+CI validates the first documentation-governance slice with `pnpm plans:check`.
+That check currently covers:
+
+- backlog CSV schema, unique IDs, and valid dependencies;
+- dependency cycles;
+- ticket-file status drift against `backlog.csv`;
+- `backlog.md` coverage and `Done` checklist state;
+- local Markdown links under `/plans`.
+
+Later `ARG-024` traceability work should extend this to cover:
 
 - internal links and required metadata;
-- backlog CSV schema, unique IDs, and valid dependencies;
 - ticket/master-checklist/traceability coverage;
 - OpenAPI compatibility and generated-client cleanliness;
 - current screenshots/examples for supported versions;
