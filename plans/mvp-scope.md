@@ -106,7 +106,10 @@ Consent alone is not a substitute for security, privacy, legal, retention, acces
 ## Open assumptions
 
 - Argent intends to operate the platform and control access; qualified counsel must determine the parties' legal roles from actual processing purposes and contracts.
-- The first campaign is proposed for an adult Santa Barbara County cohort; age gating, service-area evidence, and inclusive eligibility language remain Phase 0 decisions.
+- The first campaign is proposed for an adult Santa Barbara County/Montecito
+  geofenced beta cohort; Santa Barbara County is not the long-term ICP
+  boundary. Age gating, service-area evidence, and inclusive eligibility
+  language remain Phase 0 decisions.
 - The web application is the primary application surface.
 - Flutter mobile initially focuses on accepted candidates/clients, not full staff administration.
 - Argent staff make final admission, verification, matching, and introduction decisions.

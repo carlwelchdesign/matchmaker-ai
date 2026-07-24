@@ -14,13 +14,25 @@ The product creates value by helping Argent:
 
 ## Beachhead and pilot hypothesis
 
-The first proving ground is a human-led local service pilot supported by one controlled Santa Barbara County recruiting campaign.
+Argent's beachhead client is an adult, relationship-intentional professional,
+founder, executive, or similarly time-constrained person who can afford a
+high-touch service, materially values privacy, accepts a human-led process, and
+does not expect a guaranteed romantic outcome.
+
+The first proving ground is a human-led local service pilot supported by one
+controlled Santa Barbara County/Montecito geofenced recruiting campaign. Santa
+Barbara County is the initial beta test ground, not the long-term customer
+boundary.
 
 Proposed hypothesis:
 
 > Argent can recruit and qualify a private local candidate pool, then help one matchmaker produce credible, mutually approved introductions for a small number of paying clients with materially less operational effort.
 
-The first paying customer, package, price, duration, fulfillment promise, staffing envelope, and non-guarantees must be approved in Phase 0. Candidate acquisition is necessary but is not by itself proof that clients will pay or receive value.
+The first paying customer, package, duration, fulfillment promise, staffing
+envelope, and non-guarantees must be approved in Phase 0. Pricing should be
+configured through the Argent admin dashboard and processed through Stripe once
+commerce decisions are approved. Candidate acquisition is necessary but is not
+by itself proof that clients will pay or receive value.
 
 A campaign may use a recruiting message such as:
 
@@ -93,7 +105,10 @@ An optional conversational application may help people dictate or type fuller an
 ## Business-model questions requiring validation
 
 - Who pays: clients, candidates, partners, or a combination?
-- Is an interview or verification fee appropriate, and what does it guarantee?
+- Which admin-configured Stripe packages, prices, and payment timing should be
+  offered?
+- Is an interview, verification, or add-on fee appropriate, and what does it
+  guarantee?
 - What services may be premium without corrupting match quality?
 - How are partner referrals and campaign attribution compensated?
 - What happens when a client or candidate withdraws?

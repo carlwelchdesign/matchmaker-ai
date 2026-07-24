@@ -25,6 +25,7 @@ Scoring: impact and likelihood are `1` (low) to `5` (critical/high). Score is th
 | R-019 | International ambitions create premature regulatory/operational scope | 4 | 3 | 12 | US/local beta only; jurisdiction gate before expansion | Founder/legal | Roadmap expansion review | Open |
 | R-020 | No remote repository or review automation prevents PR governance | 3 | 5 | 15 | ARG-100 ARG-104 ARG-117 | Repository owner | Before implementation tickets | Open |
 | R-021 | Service promise fees refunds or fulfillment remain unclear | 5 | 3 | 15 | ARG-010 ARG-017 and counsel review before payment | Founder | Before service offer | Open |
+| R-041 | Pricing configured without enough policy control creates misleading offers or pay-to-be-considered pressure | 5 | 3 | 15 | Admin-configured Stripe pricing requires package terms refund rules candidate non-payment safeguards and audit before launch | Founder/product/legal | Before payment implementation | Open |
 | R-022 | Referral compensation or disclosure creates conflict or dispute | 4 | 3 | 12 | ARG-014 ARG-017 and versioned attribution | Founder/legal | Before referral launch | Open |
 | R-023 | Matchmaker staffing cannot meet review or concierge promises | 4 | 4 | 16 | ARG-011 capacity envelope and pilot limits | Founder/product | Before campaign claims | Open |
 | R-024 | Applicant disappointment or mass waitlisting damages reputation | 4 | 3 | 12 | ARG-013 ARG-016 ARG-412 and support SLA | Product/content | Before public campaign | Open |

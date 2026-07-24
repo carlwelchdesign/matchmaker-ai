@@ -2,7 +2,7 @@
 
 - **Prepared:** 2026-07-23
 - **Decision owner:** Project owner
-- **Status:** Ready for owner review; recommendations are not yet approved
+- **Status:** Owner decisions recorded; ready for merge review
 - **Decision ticket:** [ARG-001](tickets/ARG-001-product-strategy.md)
 
 ## Decision requested
@@ -23,7 +23,8 @@ decision:
 - Argent controls the platform and candidate network.
 - Partners participate through controlled, co-branded Argent campaigns, not
   self-service tenant software.
-- The initial proving ground is Santa Barbara County/Montecito.
+- Santa Barbara County/Montecito is the first geofenced beta campaign and test
+  ground, not the boundary of Argent's intended customer profile.
 - The service is human-led; AI cannot autonomously admit, reject, rank, or
   introduce people.
 - The experience avoids public profiles, swiping, popularity mechanics, and
@@ -34,16 +35,16 @@ decision:
 Approve this initial ideal client profile:
 
 > An adult, relationship-intentional professional, founder, executive, or
-> similarly time-constrained person in or connected to Santa Barbara County who
-> can afford a high-touch service, materially values privacy, accepts a
-> human-led process, and is willing to give candid feedback without expecting a
-> guaranteed romantic outcome.
+> similarly time-constrained person who can afford a high-touch service,
+> materially values privacy, accepts a human-led process, and is willing to
+> give candid feedback without expecting a guaranteed romantic outcome.
 
 Why:
 
 - It describes the problem Argent solves—time, privacy, curation, and
   accountability—rather than treating wealth or occupation as character.
-- It is narrow enough for one matchmaker and a local pilot.
+- It is narrow enough for one matchmaker and a controlled pilot without making
+  Santa Barbara County the permanent ICP boundary.
 - It does not encode gender, presumed narcissism, public status, or net worth as
   a match-quality signal.
 
@@ -52,15 +53,18 @@ Not approved by this recommendation:
 - a minimum income/net-worth rule;
 - gender-specific service promises;
 - a claim that affluent people are more suitable partners;
-- national or international search;
+- national or international search before jurisdiction, operational, privacy,
+  and support requirements are approved;
 - public-figure-grade security or concierge promises before operations support
   them.
 
-**Owner decision:** Approve / revise / reject.
+**Owner decision:** Revise and approve. Santa Barbara County/Montecito is the
+first geofenced campaign and beta test ground, not an exclusionary customer
+boundary.
 
 ## Recommendation 2 — Who pays
 
-Approve a client-funded concierge model for the pilot:
+Approve a client-funded concierge model with admin-configured Stripe pricing:
 
 - Paying clients retain Argent for a defined human-led search and service
   process.
@@ -71,6 +75,10 @@ Approve a client-funded concierge model for the pilot:
 - Campaign partners do not pay for profile access. Any campaign sponsorship,
   referral compensation, or service fee remains a later contract/economics
   decision.
+- Admin users configure available packages, prices, payment links or checkout
+  products, and active/inactive sales states through the Argent admin surface.
+- Stripe is the expected payment processor for paid client services and any
+  later approved paid candidate, partner, or add-on service.
 
 Do not charge the proposed `$500` candidate interview/database fee in the first
 pilot. It risks confusing payment with acceptance, access, endorsement, or
@@ -81,13 +89,17 @@ does not reduce matching treatment.
 
 Why:
 
-- It aligns the payer with the party receiving dedicated search labor.
+- It aligns the initial payer with the party receiving dedicated search labor.
 - It keeps the candidate pool broad enough for a local pilot.
 - It avoids pay-to-be-considered and paid-placement trust problems.
+- It keeps pricing operationally configurable without hardcoding offers in the
+  app.
 - It mirrors a visible category pattern without requiring Argent to copy a
   competitor's package or claims.
 
-**Owner decision:** Approve / revise / reject.
+**Owner decision:** Revise and approve. Pricing belongs in the admin dashboard
+and should be processed through Stripe. Exact packages, amounts, refund terms,
+and payment timing remain downstream commerce decisions.
 
 ## Recommendation 3 — Pilot service promise
 
@@ -119,7 +131,7 @@ Argent must not promise:
 Exact package, term, price, hold time, cancellation, refund, staffing capacity,
 and remedies remain `ARG-010`/`ARG-017` decisions.
 
-**Owner decision:** Approve / revise / reject.
+**Owner decision:** Approved.
 
 ## Recommendation 4 — Proof before expansion
 
@@ -153,7 +165,7 @@ Evidence categories for the later metric ticket:
 Thresholds, sample size, cohort rules, and stop/iterate/expand criteria remain
 `ARG-011`.
 
-**Owner decision:** Approve / revise / reject.
+**Owner decision:** Approved.
 
 ## Current-market check
 
@@ -182,8 +194,10 @@ evidence.
 
 ## Decisions explicitly deferred
 
-- Exact pilot package, price, term, staffing, unit economics, refund, and
-  non-performance remedy: `ARG-010`, `ARG-017`.
+- Exact pilot package, price, term, staffing, unit economics, refund,
+  non-performance remedy, Stripe product/price setup, and admin pricing
+  controls: `ARG-010`, `ARG-017`, `ARG-106`, and a follow-up commerce/admin
+  implementation ticket.
 - Founder and matchmaker workflow truth: `ARG-002`.
 - Applicant/client interpretation of “elite,” “accepted,” “verified,” and
   “confidential”: `ARG-003`, `ARG-016`.
@@ -194,10 +208,16 @@ evidence.
 
 ## Approval record
 
-- Recommendation 1 — Beachhead client: Pending
-- Recommendation 2 — Who pays: Pending
-- Recommendation 3 — Pilot service promise: Pending
-- Recommendation 4 — Proof before expansion: Pending
-- Approved/revised by:
-- Date:
-- Required follow-up edits:
+- Recommendation 1 — Beachhead client: Revised and approved. Do not make Santa
+  Barbara County the ICP boundary; use it as the first geofenced beta campaign
+  and test ground.
+- Recommendation 2 — Who pays: Revised and approved. Use admin-configured
+  Stripe pricing for paid services; exact pricing and commercial terms remain
+  downstream.
+- Recommendation 3 — Pilot service promise: Approved.
+- Recommendation 4 — Proof before expansion: Approved.
+- Approved/revised by: Project owner
+- Date: 2026-07-24
+- Required follow-up edits: update product strategy, scope, decision log, risk
+  notes, and backlog status; add downstream commerce/admin pricing work before
+  paid services are implemented.
