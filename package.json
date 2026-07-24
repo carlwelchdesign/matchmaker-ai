@@ -24,7 +24,8 @@
     "format:check": "prettier --check .",
     "mobile:analyze": "cd apps/mobile && flutter analyze",
     "mobile:test": "cd apps/mobile && flutter test",
-    "plans:check": "node --test scripts/validate-plans.test.mjs && node scripts/validate-plans.mjs",
+    "plans:check": "node --test scripts/validate-plans.test.mjs scripts/report-next-work.test.mjs && node scripts/validate-plans.mjs",
+    "plans:next": "node scripts/report-next-work.mjs",
     "test": "turbo run test",
     "typecheck": "turbo run typecheck",
     "verify": "pnpm check && pnpm build && pnpm contracts:check && pnpm audit:prod"
