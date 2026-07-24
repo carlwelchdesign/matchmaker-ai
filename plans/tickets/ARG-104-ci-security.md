@@ -3,14 +3,14 @@
 - **Epic:** Platform foundation
 - **Capability/requirement IDs:** CAP-007, CAP-008
 - **Priority:** P0
-- **Status:** In progress
+- **Status:** Done
 - **Named owner:** Codex
 - **Named approver/reviewer:** Project owner
 - **Target milestone:** Operational alpha
 - **Estimate band:** M
 - **Dependencies:** ARG-101, ARG-103
 - **Decision/risk links:** R-020, R-032
-- **Blocked reason/review date:** Remote required-check enforcement remains owned by ARG-100
+- **Blocked reason/review date:** Not blocked; remote required-check enforcement remains owned by ARG-100
 
 ## Outcome
 
@@ -38,16 +38,16 @@ and release-grade container SBOM evidence.
 
 ## Acceptance criteria
 
-- [ ] Root verification runs on pull requests and `main`.
-- [ ] Secret scanning examines complete repository history.
-- [ ] New high-severity vulnerable dependencies are rejected.
-- [ ] CodeQL analyzes JavaScript and TypeScript.
-- [ ] Web, API, and worker images are built and scanned for high/critical vulnerabilities.
-- [ ] Each application image produces an uploaded SPDX JSON SBOM.
-- [ ] Every workflow declares least-privilege permissions and pins actions by full SHA.
-- [ ] Weekly dependency and security refresh paths exist.
-- [ ] Workflows pass local syntax/policy checks and run successfully on the ticket PR.
-- [ ] Intended changes are committed and reviewed in a ticket PR.
+- [x] Root verification runs on pull requests and `main`.
+- [x] Secret scanning examines complete repository history.
+- [x] New high-severity vulnerable dependencies are rejected.
+- [x] CodeQL analyzes JavaScript and TypeScript.
+- [x] Web, API, and worker images are built and scanned for high/critical vulnerabilities.
+- [x] Each application image produces an uploaded SPDX JSON SBOM.
+- [x] Every workflow declares least-privilege permissions and pins actions by full SHA.
+- [x] Weekly dependency and security refresh paths exist.
+- [x] Workflows pass local syntax/policy checks and run successfully on the ticket PR.
+- [x] Intended changes are committed and reviewed in a ticket PR.
 
 ## Security, privacy, AI, data, and accessibility
 
@@ -69,8 +69,8 @@ and release-grade container SBOM evidence.
 - [x] Add action/image pin-policy validation.
 - [x] Add scheduled dependency update coverage.
 - [x] Run local workflow syntax and policy validation.
-- [ ] Exercise all workflows on the pull request and resolve failures.
-- [ ] Update delivery evidence and move to review.
+- [x] Exercise all workflows on the pull request and resolve failures.
+- [x] Update delivery evidence and close the ticket.
 
 ## Verification evidence
 
@@ -82,7 +82,7 @@ and release-grade container SBOM evidence.
 - [x] Security/privacy checks: Gitleaks `8.30.1` reports no leaks across full
   repository history; Trivy `0.70.0` reports 0 high and 0 critical findings
   for web, API, and worker images; the production dependency audit is clean.
-- [ ] Accessibility/visual checks: Not applicable; no UI change.
+- [x] Accessibility/visual checks: Not applicable; no UI change.
 - [x] Runtime/deployment checks: Disposable Docker smoke builds the three
   application images, starts all five services, verifies health/data paths,
   confirms non-root application users, and exercises graceful shutdown.
@@ -93,12 +93,17 @@ and release-grade container SBOM evidence.
 ## Delivery evidence
 
 - Branch: `ticket/ARG-104-ci-security`
-- Commit:
-- PR:
-- Merge:
+- Commit: `75ea049e2937406dbd022a706d43eaa059cd3400`
+- PR: [#8](https://github.com/carlwelchdesign/matchmaker-ai/pull/8)
+- Merge: `422bb4ec483fb64b40e03fb16778874034f39c92`
 - Deployment: GitHub Actions only
 - Evidence URLs/paths:
-- Completion date:
+  - [PR checks](https://github.com/carlwelchdesign/matchmaker-ai/pull/8/checks)
+  - [Quality on main](https://github.com/carlwelchdesign/matchmaker-ai/actions/runs/30069298551)
+  - [Security on main](https://github.com/carlwelchdesign/matchmaker-ai/actions/runs/30069298560)
+  - [Secret scan on main](https://github.com/carlwelchdesign/matchmaker-ai/actions/runs/30069298570)
+  - [Container scans and SBOMs on main](https://github.com/carlwelchdesign/matchmaker-ai/actions/runs/30069298576)
+- Completion date: 2026-07-23
 
 ## Completion notes
 
@@ -112,5 +117,10 @@ non-root distroless final image rather than weakening the vulnerability policy.
 The Debian 12 distroless digest was also rejected after the scan identified
 fixed OpenSSL findings; the final runtime uses a clean Debian 13 distroless
 digest.
+
+Enabling GitHub's dependency graph exposed two pre-existing development-only
+`shell-quote` alerts that the package audit did not report. A narrow resolution
+override raises the transitive package to patched version `1.9.0`; GitHub alert
+closure is part of the completion evidence.
 
 - Follow-up owner: ARG-100, ARG-111, ARG-113, and ARG-117
