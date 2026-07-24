@@ -130,25 +130,34 @@ function assertErrorCode(value: string): string {
   return normalized;
 }
 
-function canonicalize(value: JsonValue): JsonValue {
+function compareCodeUnits(left: string, right: string): number {
+  return left < right ? -1 : left > right ? 1 : 0;
+}
+
+function serializeCanonical(value: JsonValue): string {
   if (Array.isArray(value)) {
-    return value.map(canonicalize);
+    return `[${value.map(serializeCanonical).join(",")}]`;
   }
   if (value !== null && typeof value === "object") {
-    return Object.fromEntries(
-      Object.entries(value)
-        .sort(([left], [right]) => left.localeCompare(right))
-        .map(([key, child]) => [key, canonicalize(child)]),
-    );
+    return `{${Object.entries(value)
+      .sort(([left], [right]) => compareCodeUnits(left, right))
+      .map(
+        ([key, child]) => `${JSON.stringify(key)}:${serializeCanonical(child)}`,
+      )
+      .join(",")}}`;
   }
   if (typeof value === "number" && !Number.isFinite(value)) {
     throw new DeliveryValidationError("JSON numbers must be finite");
   }
-  return value;
+  const serialized = JSON.stringify(value);
+  if (serialized === undefined) {
+    throw new DeliveryValidationError("Value is not valid JSON");
+  }
+  return serialized;
 }
 
 export function canonicalJson(value: JsonObject): string {
-  return JSON.stringify(canonicalize(value));
+  return serializeCanonical(value);
 }
 
 export function jsonSha256(value: JsonObject): string {
@@ -325,6 +334,7 @@ export async function releaseOutboxEvent(
         event_id = $1
         AND status = 'leased'
         AND lease_owner = $2
+        AND lease_expires_at > clock_timestamp()
     `,
     [
       options.eventId,
@@ -501,7 +511,18 @@ export async function registerJob(
         priority,
         available_at
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7::jsonb, $8, $9, $10)
+      VALUES (
+        $1,
+        $2,
+        $3,
+        $4,
+        $5,
+        $6,
+        $7::jsonb,
+        $8,
+        $9,
+        COALESCE($10, clock_timestamp())
+      )
       ON CONFLICT (job_type, idempotency_key) DO NOTHING
       RETURNING job_id AS id
     `,
@@ -515,7 +536,7 @@ export async function registerJob(
       payload,
       maxAttempts,
       priority,
-      input.availableAt ?? new Date(),
+      input.availableAt ?? null,
     ],
   );
 

@@ -15,6 +15,12 @@ describe("delivery payload identity", () => {
     expect(jsonSha256(left)).toBe(jsonSha256(right));
   });
 
+  it("sorts keys by deterministic Unicode code units, not host locale", () => {
+    expect(canonicalJson({ "2": "two", "10": "ten", ä: 1, z: 2, Z: 3 })).toBe(
+      '{"10":"ten","2":"two","Z":3,"z":2,"ä":1}',
+    );
+  });
+
   it("preserves array order", () => {
     expect(jsonSha256({ values: ["first", "second"] })).not.toBe(
       jsonSha256({ values: ["second", "first"] }),

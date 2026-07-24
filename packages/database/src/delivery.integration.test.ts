@@ -147,6 +147,14 @@ describe.sequential("event delivery foundation", () => {
       [eventId],
     );
 
+    expect(
+      await releaseOutboxEvent(pool, {
+        eventId,
+        workerId: "worker-stopped",
+        errorCode: "worker.recovered_late",
+      }),
+    ).toBe(false);
+
     const recovered = await claimOutboxEvents(pool, {
       workerId: "worker-recovery",
       limit: 1,

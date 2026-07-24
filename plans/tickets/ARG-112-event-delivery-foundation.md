@@ -3,7 +3,7 @@
 - **Epic:** Event delivery
 - **Capability/requirement IDs:** CAP-007
 - **Priority:** P0
-- **Status:** Done
+- **Status:** In progress
 - **Named owner:** Codex
 - **Named approver/reviewer:** Project owner
 - **Target milestone:** Operational alpha
@@ -81,7 +81,7 @@ events or job requests cannot create different work under the same identity.
 
 ## Verification evidence
 
-- [x] Focused tests: 19 database unit tests and 12 real-PostgreSQL integration
+- [x] Focused tests: 20 database unit tests and 12 real-PostgreSQL integration
   tests pass.
 - [x] Static/quality checks: `pnpm verify`, repository formatting, TypeScript,
   Flutter analysis/tests, builds, generated-contract drift, full dependency
@@ -115,6 +115,12 @@ separate idempotency and reconciliation evidence.
 The first cold CI run exposed a readiness race against PostgreSQL's temporary
 initialization server. The smoke probe now waits for the final TCP listener and
 prints container diagnostics only on timeout.
+
+Post-merge review reopened ARG-112 on 2026-07-23 with concrete failed
+acceptance evidence: an expired lease owner could still release an event before
+another worker reclaimed it, canonical payload sorting used host-locale
+behavior, and immediate job availability used the application clock.
+Remediation is active on `ticket/ARG-112-lease-hash-remediation`.
 
 - Follow-up owner: ARG-106, ARG-108, ARG-110, ARG-113, ARG-115, and provider
   integration tickets

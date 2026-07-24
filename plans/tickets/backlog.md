@@ -51,7 +51,7 @@ When a ticket moves to `Ready`, copy [the ticket template](../templates/ticket.m
 - [ ] `ARG-109` Establish backups, point-in-time recovery, and restore reconciliation.
 - [ ] `ARG-110` Establish durable job processing, retries, and dead-letter recovery.
 - [ ] `ARG-111` Establish feature flags and safe deployment/rollback controls.
-- [x] `ARG-112` Implement transactional outbox, webhook inbox, and job registry.
+- [ ] `ARG-112` Implement transactional outbox, webhook inbox, and job registry.
 - [ ] `ARG-113` Harden production containers and singleton migration execution.
 - [ ] `ARG-114` Establish privacy-safe analytics event pipeline.
 - [ ] `ARG-115` Establish data-quality monitoring and reconciliation.
