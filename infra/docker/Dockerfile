@@ -1,8 +1,9 @@
-# syntax=docker/dockerfile:1.7
+# syntax=docker/dockerfile:1.7@sha256:a57df69d0ea827fb7266491f2813635de6f17269be881f696fbfdf2d83dda33e
 
-ARG NODE_IMAGE=node:20.20.1-bookworm-slim@sha256:17281e8d1dc4d671976c6b89a12f47a44c2f390b63a989e2e327631041f544fd
+ARG BUILD_NODE_IMAGE=node:24.18.0-bookworm-slim@sha256:6f7b03f7c2c8e2e784dcf9295400527b9b1270fd37b7e9a7285cf83b6951452d
+ARG RUNTIME_NODE_IMAGE=gcr.io/distroless/nodejs24-debian13:nonroot@sha256:af85d11ce7ef10172855a6e3649e3e8125b1b9e3ca41849ec2918036f05cb212
 
-FROM ${NODE_IMAGE} AS toolchain
+FROM ${BUILD_NODE_IMAGE} AS toolchain
 ENV PNPM_HOME=/pnpm
 ENV PATH=${PNPM_HOME}:${PATH}
 ENV NEXT_TELEMETRY_DISABLED=1
@@ -25,29 +26,29 @@ RUN pnpm --filter @argent/domain build \
     && pnpm --filter @argent/api deploy --prod /output/api --legacy \
     && pnpm --filter @argent/worker deploy --prod /output/worker --legacy
 
-FROM ${NODE_IMAGE} AS web
+FROM ${RUNTIME_NODE_IMAGE} AS web
 ENV NODE_ENV=production
 ENV HOSTNAME=0.0.0.0
 ENV PORT=3000
 WORKDIR /app
-COPY --from=build --chown=node:node /workspace/apps/web/.next/standalone/ ./
-USER node
+COPY --from=build --chown=65532:65532 /workspace/apps/web/.next/standalone/ ./
+USER 65532:65532
 EXPOSE 3000
-CMD ["node", "apps/web/server.js"]
+CMD ["apps/web/server.js"]
 
-FROM ${NODE_IMAGE} AS api
+FROM ${RUNTIME_NODE_IMAGE} AS api
 ENV NODE_ENV=production
 ENV HOST=0.0.0.0
 ENV PORT=3001
 WORKDIR /app
-COPY --from=build --chown=node:node /output/api/ ./
-USER node
+COPY --from=build --chown=65532:65532 /output/api/ ./
+USER 65532:65532
 EXPOSE 3001
-CMD ["node", "dist/server.js"]
+CMD ["dist/server.js"]
 
-FROM ${NODE_IMAGE} AS worker
+FROM ${RUNTIME_NODE_IMAGE} AS worker
 ENV NODE_ENV=production
 WORKDIR /app
-COPY --from=build --chown=node:node /output/worker/ ./
-USER node
-CMD ["node", "dist/main.js"]
+COPY --from=build --chown=65532:65532 /output/worker/ ./
+USER 65532:65532
+CMD ["dist/main.js"]

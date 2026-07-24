@@ -38,7 +38,7 @@ The web, API, and worker remain independently deployable. Exact dependency versi
 
 ## Decision
 
-- Node.js `20.20.1` and pnpm `10.34.5`.
+- Node.js `24.18.0` LTS and pnpm `10.34.5`.
 - TypeScript `6.0.3` workspaces orchestrated with pnpm and Turborepo. TypeScript 7 is deferred because the selected Next.js release fails its production build with it.
 - Next.js App Router for the web surface.
 - Fastify for the versioned HTTP API.
@@ -51,6 +51,10 @@ The web, API, and worker remain independently deployable. Exact dependency versi
 - Flutter does not appear in `pnpm-workspace.yaml`.
 - Root `check` runs formatting, TypeScript checks/tests, Flutter analysis, and Flutter tests.
 - OpenAPI generation, Docker, CI, identity, persistence, and design-token generation remain separate tickets.
+- The Node pin was raised from `20.20.1` to `24.18.0` under `ARG-104` after
+  scanning found vulnerable package-manager tooling in the end-of-life Node 20
+  base. Distroless final images keep the vulnerability gate actionable without
+  shipping package managers.
 
 ## Reversal or migration strategy
 

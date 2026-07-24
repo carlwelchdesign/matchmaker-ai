@@ -18,7 +18,7 @@ plans                  Canonical plans, tickets, decisions, and risks
 
 ## Local requirements
 
-- Node.js `20.20.1`
+- Node.js `24.18.0`
 - pnpm `10.34.5`
 - Flutter stable with Dart `3.12.2` or compatible
 - Docker Desktop for the later Docker environment ticket
@@ -67,3 +67,19 @@ pnpm contracts:check
 ```
 
 No application, admission, matching, AI, or conversational-intake feature should be added without its ticket and documented readiness gates.
+
+## Continuous integration
+
+Pull requests run named quality, secret, dependency, CodeQL, and container
+security checks. Container checks build the web, API, and worker images, reject
+high or critical vulnerabilities, and retain an SPDX JSON SBOM for each image.
+All third-party workflow actions and application base images are immutable
+pins.
+
+Run the repository-side CI policy validation locally with:
+
+```bash
+pnpm ci:check
+```
+
+Required-check enforcement on `main` is tracked separately in `ARG-100`.

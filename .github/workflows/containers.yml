@@ -1,0 +1,93 @@
+name: Container Security
+
+on:
+  pull_request:
+    paths:
+      - ".dockerignore"
+      - ".github/workflows/containers.yml"
+      - "apps/web/**"
+      - "infra/docker/**"
+      - "package.json"
+      - "packages/domain/**"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - "services/api/**"
+      - "services/worker/**"
+  push:
+    branches:
+      - main
+    paths:
+      - ".dockerignore"
+      - ".github/workflows/containers.yml"
+      - "apps/web/**"
+      - "infra/docker/**"
+      - "package.json"
+      - "packages/domain/**"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - "services/api/**"
+      - "services/worker/**"
+  schedule:
+    - cron: "43 13 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: container-security-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  scan:
+    name: scan-${{ matrix.target }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - web
+          - api
+          - worker
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@bb05f3f5519dd87d3ba754cc423b652a5edd6d2c # v4.2.0
+      - name: Build ${{ matrix.target }} image
+        env:
+          IMAGE: argent-${{ matrix.target }}:${{ github.sha }}
+          TARGET: ${{ matrix.target }}
+        run: |
+          docker buildx build \
+            --load \
+            --file infra/docker/Dockerfile \
+            --target "${TARGET}" \
+            --tag "${IMAGE}" \
+            .
+      - name: Generate ${{ matrix.target }} SBOM
+        uses: anchore/sbom-action@e22c389904149dbc22b58101806040fa8d37a610 # v0.24.0
+        with:
+          image: argent-${{ matrix.target }}:${{ github.sha }}
+          format: spdx-json
+          output-file: sbom-${{ matrix.target }}.spdx.json
+          upload-artifact: false
+      - name: Upload ${{ matrix.target }} SBOM
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: sbom-${{ matrix.target }}-${{ github.sha }}
+          path: sbom-${{ matrix.target }}.spdx.json
+          if-no-files-found: error
+          retention-days: 14
+      - name: Reject high or critical image vulnerabilities
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          scan-type: image
+          image-ref: argent-${{ matrix.target }}:${{ github.sha }}
+          format: table
+          exit-code: "1"
+          ignore-unfixed: false
+          scanners: vuln
+          severity: HIGH,CRITICAL
+          vuln-type: os,library
