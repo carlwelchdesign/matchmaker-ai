@@ -41,7 +41,7 @@ describe.sequential("database foundation", () => {
     const history = await client.query<{ count: string }>(
       "SELECT count(*)::text AS count FROM argent_migrations.history",
     );
-    expect(history.rows[0]?.count).toBe("1");
+    expect(history.rows[0]?.count).toBe("2");
   });
 
   it("fails closed while another migration session owns the advisory lock", async () => {
@@ -115,7 +115,7 @@ describe.sequential("database foundation", () => {
   });
 
   it("reverses the foundation migration and reapplies it", async () => {
-    await runMigrations({ databaseUrl, direction: "down", count: 1 });
+    await runMigrations({ databaseUrl, direction: "down", count: 2 });
 
     const result = await client.query<{ count: string }>(
       `

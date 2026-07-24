@@ -123,6 +123,15 @@ Jobs require idempotency, retry policy, dead-letter handling, audit events, and 
 
 Domain mutations that emit events use a transactional outbox. Incoming webhooks and replayable commands use an inbox/receipt record with verified signature, deduplication, occurrence/receipt times, and reconciliation state. Delivery is at-least-once; consumers must be idempotent. Ordering guarantees are explicit and limited to the smallest required aggregate.
 
+The initial implementation keeps these durable identities in PostgreSQL. An
+outbox row is inserted by the same transaction as its source mutation.
+Dispatchers claim bounded batches with `FOR UPDATE SKIP LOCKED` and expiring
+leases. Provider integrations verify signatures before storing a normalized
+receipt and deduplicate by provider event ID plus canonical payload hash. The
+job registry reserves idempotent work identity; queue execution and
+dead-letter behavior remain a separate worker-foundation decision. See
+[ADR-012](adrs/ADR-012-transactional-event-delivery.md).
+
 Worker classes are isolated by risk and SLO:
 
 | Queue class | Examples | Special controls |

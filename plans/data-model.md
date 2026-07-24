@@ -71,6 +71,13 @@
 | `WebhookReceipt` | Verified incoming provider message | Provider ID, signature result, deduplication, timestamps, reconciliation |
 | `JobExecution` | Durable asynchronous attempt | Job class, idempotency, retry, cancellation, quarantine, and outcome |
 
+The operational foundation currently implements `OutboxEvent` as
+`argent_system.outbox_events`, `WebhookReceipt` as
+`argent_system.webhook_receipts`, and durable job identity as
+`argent_system.job_registry`. These tables accept only versioned,
+purpose-minimized object payloads. Job attempts and provider-specific schemas
+remain deferred to their owning tickets.
+
 ## Important relationships
 
 - `Person 1—N Application`

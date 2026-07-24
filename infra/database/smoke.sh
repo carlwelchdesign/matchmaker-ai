@@ -22,18 +22,23 @@ docker run \
   --publish "127.0.0.1::5432" \
   "${postgres_image}" >/dev/null
 
-for _ in $(seq 1 30); do
+database_ready=false
+for _ in $(seq 1 60); do
   if docker exec "${container_name}" pg_isready \
+    --host "127.0.0.1" \
     --username "${database_user}" \
     --dbname "${database_name}" >/dev/null 2>&1; then
+    database_ready=true
     break
   fi
   sleep 1
 done
 
-docker exec "${container_name}" pg_isready \
-  --username "${database_user}" \
-  --dbname "${database_name}" >/dev/null
+if [[ "${database_ready}" != "true" ]]; then
+  echo "PostgreSQL did not expose its final TCP listener in time." >&2
+  docker logs "${container_name}" >&2
+  exit 1
+fi
 
 host_port="$(
   docker inspect "${container_name}" \
