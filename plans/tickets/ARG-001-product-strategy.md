@@ -3,7 +3,7 @@
 - **Epic:** Product strategy
 - **Capability/requirement IDs:** CAP-001; CAP-002; CAP-003; CAP-004
 - **Priority:** P0
-- **Status:** In review
+- **Status:** Done
 - **Named owner:** Project owner
 - **Named approver/reviewer:** Project owner
 - **Target milestone:** Decision gate
@@ -11,8 +11,7 @@
 - **Dependencies:** ARG-000
 - **Decision/risk links:** DEC-002; DEC-003; DEC-004; DEC-008; DEC-009;
   DEC-015; DEC-016; R-002; R-019; R-021; R-023; R-025; R-041
-- **Blocked reason/review date:** Owner decisions recorded on 2026-07-24;
-  awaiting PR review/merge.
+- **Blocked reason/review date:** PR #32 merged on 2026-07-24.
 
 ## Outcome
 
@@ -52,7 +51,7 @@ eligibility, or implementation.
 - [x] Project owner approves or revises each of the four recommendations.
 - [x] Approved decisions are reflected in canonical product, scope, decision,
   risk, and backlog documents.
-- [ ] Intended changes are reviewed and merged in a ticket PR.
+- [x] Intended changes are reviewed and merged in a ticket PR.
 
 ## Security, privacy, AI, data, and accessibility
 
@@ -94,16 +93,20 @@ eligibility, or implementation.
 ## Delivery evidence
 
 - Branch: `planning/ARG-001-product-strategy`
-- Commit:
-- PR:
-- Merge:
+- Commit: `709bada`
+- PR: <https://github.com/carlwelchdesign/matchmaker-ai/pull/32>
+- Merge: `5e51586` on 2026-07-24
 - Deployment: Planning only
 - Evidence URLs/paths:
+- [PR #32 checks](https://github.com/carlwelchdesign/matchmaker-ai/pull/32/checks)
 - Completion date:
+  2026-07-24
 
 ## Completion notes
 
-ARG-001 can be marked `Done` after the owner-decision updates merge.
+ARG-001 is complete. Downstream work can now continue through the dependency
+graph; research, privacy, lifecycle, pricing, and match-science gates still
+control implementation scope.
 
 - Follow-up owner: Project owner, then ARG-002/ARG-003/ARG-005/ARG-006/ARG-010
   and ARG-011 owners
