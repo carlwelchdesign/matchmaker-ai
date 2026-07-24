@@ -36,7 +36,7 @@ compose up --build --detach --wait
 
 for service in web api worker; do
   container_id="$(compose ps --quiet "${service}")"
-  test "$(docker inspect "${container_id}" --format '{{.Config.User}}')" = "node"
+  test "$(docker inspect "${container_id}" --format '{{.Config.User}}')" = "65532:65532"
   test "$(docker inspect "${container_id}" --format '{{.HostConfig.ReadonlyRootfs}}')" = "true"
   docker inspect "${container_id}" --format '{{json .HostConfig.CapDrop}}' |
     grep --quiet '"ALL"'

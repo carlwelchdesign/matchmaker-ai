@@ -1,0 +1,49 @@
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "14:00"
+      timezone: America/Los_Angeles
+    groups:
+      production-minor-patch:
+        dependency-type: production
+        update-types:
+          - minor
+          - patch
+      development-minor-patch:
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+    open-pull-requests-limit: 10
+
+  - package-ecosystem: pub
+    directory: /apps/mobile
+    schedule:
+      interval: weekly
+      day: monday
+      time: "14:15"
+      timezone: America/Los_Angeles
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: docker
+    directory: /infra/docker
+    schedule:
+      interval: weekly
+      day: monday
+      time: "14:30"
+      timezone: America/Los_Angeles
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "14:45"
+      timezone: America/Los_Angeles
+    open-pull-requests-limit: 10
