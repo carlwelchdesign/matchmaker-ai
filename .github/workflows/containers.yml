@@ -6,6 +6,7 @@ on:
       - ".dockerignore"
       - ".github/workflows/containers.yml"
       - "apps/web/**"
+      - "compose.yaml"
       - "infra/docker/**"
       - "package.json"
       - "packages/domain/**"
@@ -20,6 +21,7 @@ on:
       - ".dockerignore"
       - ".github/workflows/containers.yml"
       - "apps/web/**"
+      - "compose.yaml"
       - "infra/docker/**"
       - "package.json"
       - "packages/domain/**"
@@ -39,6 +41,16 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  runtime-smoke:
+    name: runtime-smoke
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Exercise the containerized runtime
+        run: bash infra/docker/smoke.sh
+
   scan:
     name: scan-${{ matrix.target }}
     runs-on: ubuntu-24.04

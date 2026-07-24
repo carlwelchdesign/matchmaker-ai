@@ -44,6 +44,17 @@ for (const workflowFile of workflowFiles) {
   }
 }
 
+const containerWorkflow = await readFile(
+  resolve(workflowDirectory, "containers.yml"),
+  "utf8",
+);
+if (!/^\s+- "compose\.yaml"$/mu.test(containerWorkflow)) {
+  throw new Error("Container workflow must run when compose.yaml changes");
+}
+if (!/^\s+run: bash infra\/docker\/smoke\.sh$/mu.test(containerWorkflow)) {
+  throw new Error("Container workflow must exercise the runtime smoke path");
+}
+
 const dockerfile = await readFile(
   resolve(repositoryRoot, "infra/docker/Dockerfile"),
   "utf8",

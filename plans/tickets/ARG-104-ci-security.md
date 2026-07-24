@@ -3,7 +3,7 @@
 - **Epic:** Platform foundation
 - **Capability/requirement IDs:** CAP-007, CAP-008
 - **Priority:** P0
-- **Status:** Done
+- **Status:** In Progress
 - **Named owner:** Codex
 - **Named approver/reviewer:** Project owner
 - **Target milestone:** Operational alpha
@@ -11,6 +11,15 @@
 - **Dependencies:** ARG-101, ARG-103
 - **Decision/risk links:** R-020, R-032
 - **Blocked reason/review date:** Not blocked; remote required-check enforcement remains owned by ARG-100
+
+## Remediation note — 2026-07-23
+
+Post-completion review found that the disposable Docker runtime smoke path was
+local-only and that `compose.yaml` changes did not trigger the container
+workflow. Image builds and vulnerability scans alone cannot detect regressions
+in Compose wiring, service health, runtime privilege restrictions, or graceful
+shutdown. ARG-104 is reopened narrowly until the runtime smoke check passes on
+the remediation pull request and its evidence is recorded.
 
 ## Outcome
 
