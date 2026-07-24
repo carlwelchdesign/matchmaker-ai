@@ -40,6 +40,7 @@ services/
   worker/           Asynchronous jobs, notifications, AI, and integrations
 packages/
   contracts/        OpenAPI/schema source and generated TypeScript/Dart clients
+  database/         Server-only migrations, seed policy, and synthetic fixtures
   domain/           Server-only framework-light domain policy
   design-system/    Canonical tokens, generated web/Dart outputs, and web foundations
   config/           Shared lint, formatting, testing, and build configuration

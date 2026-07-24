@@ -1,6 +1,6 @@
 # Argent Matchmaking
 
-Argent is a discreet, human-led matchmaking platform. This monorepo contains the public/staff web application, Flutter iOS and Android application, API, worker, framework-light domain policy, contracts boundary, and design-system boundary.
+Argent is a discreet, human-led matchmaking platform. This monorepo contains the public/staff web application, Flutter iOS and Android application, API, worker, framework-light domain policy, server-only database foundation, contracts boundary, and design-system boundary.
 
 ## Workspace
 
@@ -10,6 +10,7 @@ apps/mobile            Flutter iOS and Android application
 services/api           Fastify HTTP API
 services/worker        Background worker process
 packages/domain        Framework-light domain policy
+packages/database      Server-only migrations and synthetic fixture boundary
 packages/contracts     OpenAPI and generated clients (ARG-102)
 packages/design-system Nocturne tokens and adapters (ARG-118)
 packages/config        Shared build and quality configuration
@@ -64,6 +65,25 @@ When an API route schema changes, regenerate both checked-in clients:
 ```bash
 pnpm contracts:generate
 pnpm contracts:check
+```
+
+Exercise the reversible database foundation against an isolated pinned
+PostgreSQL container:
+
+```bash
+pnpm db:smoke
+```
+
+For an existing local database, migrations require an explicit `DATABASE_URL`.
+Synthetic fixtures also require `ARGENT_ENVIRONMENT=local`; production is
+always refused and staging requires `ALLOW_SYNTHETIC_SEED=true`.
+
+```bash
+DATABASE_URL=postgresql://argent:argent-local-only@127.0.0.1:5432/argent \
+  pnpm db:migrate
+DATABASE_URL=postgresql://argent:argent-local-only@127.0.0.1:5432/argent \
+  ARGENT_ENVIRONMENT=local \
+  pnpm db:seed
 ```
 
 No application, admission, matching, AI, or conversational-intake feature should be added without its ticket and documented readiness gates.
