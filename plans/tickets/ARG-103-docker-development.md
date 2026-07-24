@@ -3,7 +3,7 @@
 - **Epic:** Platform foundation
 - **Capability/requirement IDs:** CAP-007, CAP-008
 - **Priority:** P0
-- **Status:** In review
+- **Status:** Done
 - **Named owner:** Codex
 - **Named approver/reviewer:** Project owner
 - **Target milestone:** Operational alpha
@@ -43,7 +43,7 @@ worker, PostgreSQL, and Redis, plus one disposable end-to-end smoke path.
 - [x] Worker startup and graceful API/worker shutdown are verified.
 - [x] The disposable smoke project removes its containers and volumes.
 - [x] Existing root verification and production dependency audit remain green.
-- [ ] Intended changes are committed and reviewed in a ticket PR.
+- [x] Intended changes are committed and reviewed in a ticket PR.
 
 ## Security, privacy, AI, data, and accessibility
 
@@ -80,12 +80,12 @@ worker, PostgreSQL, and Redis, plus one disposable end-to-end smoke path.
 ## Delivery evidence
 
 - Branch: `ticket/ARG-103-docker-development`
-- Commit:
-- PR:
-- Merge:
+- Commit: `016e07f` (`ARG-103: add reproducible Docker environment`)
+- PR: [#6 — ARG-103 — Add reproducible Docker environment](https://github.com/carlwelchdesign/matchmaker-ai/pull/6)
+- Merge: PR #6 squash-merged as `32ea1f8`
 - Deployment: Local Docker only
 - Evidence URLs/paths:
-- Completion date:
+- Completion date: 2026-07-23
 
 ## Completion notes
 
