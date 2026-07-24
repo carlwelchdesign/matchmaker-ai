@@ -3,7 +3,7 @@
 - **Epic:** Product prototype
 - **Capability/requirement IDs:** CAP-001; CAP-003; CAP-004
 - **Priority:** P0
-- **Status:** In progress
+- **Status:** Done
 - **Named owner:** Codex
 - **Named approver/reviewer:** Project owner
 - **Target milestone:** Prototype review
@@ -89,17 +89,23 @@ workspace without collecting, processing, or presenting real personal data.
 ## Delivery evidence
 
 - Branch: `codex/ARG-120-mobile-nocturne-splash`
-- Commit: `8f67983` (`ARG-120 align mobile opening with Nocturne splash`)
+- Commit: `a905dd0` (`ARG-120 record mobile splash pull request`)
 - PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/39
-- Merge: https://github.com/carlwelchdesign/matchmaker-ai/pull/38
+- Merge: https://github.com/carlwelchdesign/matchmaker-ai/pull/39
 - Deployment: Local Docker concept prototype only
 - Evidence URLs/paths:
-- Completion date:
+- Completion date: 2026-07-24
 
 ## Completion notes
 
 This ticket intentionally creates a review artifact, not a pathway to collect
 real data or bypass ARG-002/ARG-003, privacy, lifecycle, matching, or launch
 gates.
+
+Both implementation PRs passed their required checks before merge: the
+separate owner admin application in PR #38 and the Flutter Nocturne opening
+state in PR #39. The local Docker stack and iPhone simulator build were
+verified. No production workflow, personal data, or consequential action was
+introduced.
 
 - Follow-up owner: Project owner

@@ -59,7 +59,7 @@ When a ticket moves to `Ready`, copy [the ticket template](../templates/ticket.m
 - [x] `ARG-117` Establish documentation governance and drift checks.
 - [x] `ARG-118` Establish cross-platform design tokens and foundational components.
 - [x] `ARG-119` Report safe next development work from the backlog.
-- [ ] `ARG-120` Build a synthetic, interactive public, applicant, and matchmaker concept prototype.
+- [x] `ARG-120` Build a synthetic, interactive public, applicant, and matchmaker concept prototype.
 - [ ] `ARG-201` Integrate authentication, MFA, recovery, and session management.
 - [ ] `ARG-202` Implement deny-by-default RBAC and object-scoped authorization.
 - [ ] `ARG-203` Implement staff administration and privileged-access review.
