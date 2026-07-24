@@ -2,7 +2,7 @@ import { buildApiApp } from "./app.js";
 
 const port = Number.parseInt(process.env.PORT ?? "3001", 10);
 const host = process.env.HOST ?? "0.0.0.0";
-const app = buildApiApp({
+const app = await buildApiApp({
   logger: true,
   version: process.env.APP_VERSION ?? "0.0.0-dev",
 });

@@ -1,6 +1,7 @@
 packages:
   - apps/web
   - packages/*
+  - packages/contracts/generated/*
   - services/*
 
 onlyBuiltDependencies:
