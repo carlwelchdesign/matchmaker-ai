@@ -1,0 +1,13 @@
+.git
+.github
+.next
+.turbo
+.dart_tool
+**/build
+**/dist
+**/node_modules
+coverage
+apps/mobile
+plans
+*.log
+.DS_Store

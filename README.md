@@ -34,6 +34,31 @@ pnpm verify
 
 The Flutter application is intentionally outside the pnpm workspace. Root checks invoke `flutter analyze` and `flutter test` explicitly.
 
+## Docker development environment
+
+Build and run the application services with isolated local PostgreSQL and
+Redis:
+
+```bash
+docker compose up --build --wait
+```
+
+The web surface is available at `http://localhost:3000` and API liveness at
+`http://localhost:3001/health/live`. PostgreSQL and Redis bind to loopback only.
+Override local ports and credentials with environment variables shown in
+`compose.yaml`.
+
+Run the disposable end-to-end container path on isolated ports:
+
+```bash
+pnpm docker:smoke
+```
+
+The smoke path builds all three application images, waits for five healthy
+services, verifies web/API/data-service responses, confirms worker startup, and
+checks graceful API/worker shutdown. It removes its isolated volumes unless
+`KEEP_ARGENT_SMOKE_STACK=1` is set.
+
 When an API route schema changes, regenerate both checked-in clients:
 
 ```bash
