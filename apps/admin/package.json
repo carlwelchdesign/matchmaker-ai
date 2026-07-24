@@ -1,0 +1,25 @@
+{
+  "name": "@argent/admin",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "next build && node scripts/prepare-standalone.mjs",
+    "dev": "next dev --port 3002",
+    "start": "node .next/standalone/apps/admin/server.js",
+    "test": "vitest run src --passWithNoTests",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@argent/design-system": "workspace:*",
+    "next": "16.2.11",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@types/node": "26.1.1",
+    "@types/react": "19.2.17",
+    "@types/react-dom": "19.2.3",
+    "typescript": "6.0.3",
+    "vitest": "4.1.10"
+  }
+}

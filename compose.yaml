@@ -40,6 +40,30 @@ services:
       retries: 12
       start_period: 10s
 
+  admin:
+    <<: *application-security
+    build:
+      <<: *application-build
+      target: admin
+    environment:
+      APP_VERSION: ${APP_VERSION:-0.0.0-local}
+    ports:
+      - "127.0.0.1:${ADMIN_PORT:-3002}:3002"
+    tmpfs:
+      - /tmp:size=16m,mode=1777
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "/nodejs/bin/node",
+          "-e",
+          "fetch('http://127.0.0.1:3002').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))",
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 10s
+
   api:
     <<: *application-security
     build:

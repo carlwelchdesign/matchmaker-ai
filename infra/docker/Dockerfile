@@ -14,12 +14,14 @@ FROM toolchain AS dependencies
 COPY . .
 RUN --mount=type=cache,id=argent-pnpm,target=/pnpm/store \
     pnpm install --frozen-lockfile \
+      --filter @argent/admin... \
       --filter @argent/web... \
       --filter @argent/api... \
       --filter @argent/worker...
 
 FROM dependencies AS build
 RUN pnpm --filter @argent/domain build \
+    && pnpm --filter @argent/admin build \
     && pnpm --filter @argent/web build \
     && pnpm --filter @argent/api build \
     && pnpm --filter @argent/worker build \
@@ -35,6 +37,16 @@ COPY --from=build --chown=65532:65532 /workspace/apps/web/.next/standalone/ ./
 USER 65532:65532
 EXPOSE 3000
 CMD ["apps/web/server.js"]
+
+FROM ${RUNTIME_NODE_IMAGE} AS admin
+ENV NODE_ENV=production
+ENV HOSTNAME=0.0.0.0
+ENV PORT=3002
+WORKDIR /app
+COPY --from=build --chown=65532:65532 /workspace/apps/admin/.next/standalone/ ./
+USER 65532:65532
+EXPOSE 3002
+CMD ["apps/admin/server.js"]
 
 FROM ${RUNTIME_NODE_IMAGE} AS api
 ENV NODE_ENV=production
