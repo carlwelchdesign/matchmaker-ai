@@ -119,6 +119,10 @@ A partner cannot:
 
 ## UX research before build
 
+- Use [ARG-002 founder/matchmaker workflow research](research/ARG-002-founder-matchmaker-workflow.md)
+  and
+  [ARG-003 concept/language testing](research/ARG-003-concept-language-testing.md)
+  as the executable Phase 0 research protocols.
 - Interview the founder and at least two practicing matchmakers.
 - Walk through five recent or simulated cases from application to outcome.
 - Test application language with representative candidates.
