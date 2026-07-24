@@ -3,7 +3,7 @@
 - **Epic:** Platform foundation
 - **Capability/requirement IDs:** CAP-007
 - **Priority:** P0
-- **Status:** In progress
+- **Status:** Done
 - **Named owner:** Codex
 - **Named approver/reviewer:** Project owner
 - **Target milestone:** Operational alpha
@@ -46,8 +46,8 @@ idempotency, reverse the foundation, and restore it.
 - [x] Production seeding is impossible and staging requires explicit approval.
 - [x] Missing or malformed database configuration fails safely.
 - [x] One migration can reverse and reapply without drift.
-- [ ] Root verification and disposable database integration smoke pass in CI.
-- [ ] Intended changes are committed and reviewed in a ticket PR.
+- [x] Root verification and disposable database integration smoke pass in CI.
+- [x] Intended changes are committed and reviewed in a ticket PR.
 
 ## Security, privacy, AI, data, and accessibility
 
@@ -92,12 +92,16 @@ idempotency, reverse the foundation, and restore it.
 ## Delivery evidence
 
 - Branch: `ticket/ARG-107-data-foundation`
-- Commit:
-- PR:
-- Merge:
+- Commit: `471c103b4a5a93f5c5053aadfb61ba32c9b058db`
+- PR: [#13](https://github.com/carlwelchdesign/matchmaker-ai/pull/13)
+- Merge: `0777e97b53dd2aaee6e5f88e8114930a46ed0225`
 - Deployment: Local/CI database foundation only
 - Evidence URLs/paths:
-- Completion date:
+  [Quality](https://github.com/carlwelchdesign/matchmaker-ai/actions/runs/30070504571),
+  [Security](https://github.com/carlwelchdesign/matchmaker-ai/actions/runs/30070504527),
+  [Secret scan](https://github.com/carlwelchdesign/matchmaker-ai/actions/runs/30070504528),
+  [Container security](https://github.com/carlwelchdesign/matchmaker-ai/actions/runs/30070504526)
+- Completion date: 2026-07-23
 
 ## Completion notes
 

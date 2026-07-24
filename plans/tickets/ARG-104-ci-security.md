@@ -12,6 +12,23 @@
 - **Decision/risk links:** R-020, R-032
 - **Blocked reason/review date:** Not blocked; remote required-check enforcement remains owned by ARG-100
 
+## Remediation note — 2026-07-23
+
+Post-completion review found that the disposable Docker runtime smoke path was
+local-only and that `compose.yaml` changes did not trigger the container
+workflow. Image builds and vulnerability scans alone cannot detect regressions
+in Compose wiring, service health, runtime privilege restrictions, or graceful
+shutdown. ARG-104 is reopened narrowly until the runtime smoke check passes on
+the remediation pull request and its evidence is recorded.
+
+The remediation is complete. Pull request
+[#21](https://github.com/carlwelchdesign/matchmaker-ai/pull/21) was
+squash-merged as `df53f6e02b30a8f4ddaf1a4a705b55683f042ef2`. The new
+`runtime-smoke` check passed remotely in 1 minute and the three image scans,
+repository verification, CodeQL, dependency review, and secret scan also
+passed. `compose.yaml` is now an explicit container-workflow trigger and the
+local CI policy check prevents either requirement from silently disappearing.
+
 ## Outcome
 
 Create named GitHub quality and security checks for repository verification,
@@ -103,6 +120,10 @@ and release-grade container SBOM evidence.
   - [Security on main](https://github.com/carlwelchdesign/matchmaker-ai/actions/runs/30069298560)
   - [Secret scan on main](https://github.com/carlwelchdesign/matchmaker-ai/actions/runs/30069298570)
   - [Container scans and SBOMs on main](https://github.com/carlwelchdesign/matchmaker-ai/actions/runs/30069298576)
+  - [Runtime smoke remediation](https://github.com/carlwelchdesign/matchmaker-ai/actions/runs/30072953993)
+  - [Remediation repository verification](https://github.com/carlwelchdesign/matchmaker-ai/actions/runs/30072953938)
+  - [Remediation security checks](https://github.com/carlwelchdesign/matchmaker-ai/actions/runs/30072953958)
+  - [Remediation secret scan](https://github.com/carlwelchdesign/matchmaker-ai/actions/runs/30072953963)
 - Completion date: 2026-07-23
 
 ## Completion notes

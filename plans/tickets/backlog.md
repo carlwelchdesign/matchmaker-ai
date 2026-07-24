@@ -4,6 +4,8 @@ The ordered source for import and reporting is [backlog.csv](backlog.csv). This 
 
 When a ticket moves to `Ready`, copy [the ticket template](../templates/ticket.md) to `plans/tickets/ARG-###-short-name.md`. Update that file during implementation. A checkbox below is checked only after the ticket is `Done` under [the Definition of Done](../delivery.md).
 
+- [x] `ARG-000` Establish the planning and delivery foundation.
+
 ## Phase 0 — Decisions and validation
 
 - [ ] `ARG-001` Approve product brief, ICP, service model, and success measures.
@@ -44,12 +46,12 @@ When a ticket moves to `Ready`, copy [the ticket template](../templates/ticket.m
 - [x] `ARG-104` Establish CI quality, test, secret, dependency, and container gates.
 - [ ] `ARG-105` Select the cloud/deployment approach and provision staging.
 - [ ] `ARG-106` Establish environment configuration and managed secrets.
-- [ ] `ARG-107` Establish database migrations, seed data, and synthetic fixtures.
+- [x] `ARG-107` Establish database migrations, seed data, and synthetic fixtures.
 - [ ] `ARG-108` Establish structured logs, metrics, traces, redaction, and alerts.
 - [ ] `ARG-109` Establish backups, point-in-time recovery, and restore reconciliation.
 - [ ] `ARG-110` Establish durable job processing, retries, and dead-letter recovery.
 - [ ] `ARG-111` Establish feature flags and safe deployment/rollback controls.
-- [ ] `ARG-112` Implement transactional outbox, webhook inbox, and job registry.
+- [x] `ARG-112` Implement transactional outbox, webhook inbox, and job registry.
 - [ ] `ARG-113` Harden production containers and singleton migration execution.
 - [ ] `ARG-114` Establish privacy-safe analytics event pipeline.
 - [ ] `ARG-115` Establish data-quality monitoring and reconciliation.

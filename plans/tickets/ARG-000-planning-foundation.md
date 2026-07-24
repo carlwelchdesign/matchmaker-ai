@@ -2,7 +2,7 @@
 
 - **Epic:** Planning and governance
 - **Priority:** P0
-- **Status:** In review
+- **Status:** Done
 - **Owner:** Codex
 - **Reviewer:** Project owner
 - **Dependencies:** None
@@ -43,6 +43,15 @@ Create a version-controlled, decision-ready planning package that defines Argent
 ## Verification evidence
 
 - Branch: `planning/foundation`
-- Commit: `6582ef7` (`ARG-000: establish Argent planning foundation`)
-- PR: [#1 — ARG-000 — Establish Argent planning foundation](https://github.com/carlwelchdesign/matchmaker-ai/pull/1) (`draft`, clean, mergeable)
-- Merge: Intentionally pending project-owner review
+- Baseline commit: `6582ef7` (`ARG-000: establish Argent planning foundation`)
+- Final reviewed branch commit: `55b3207b25e3e922a2837b7834fc0ac58d929b50`
+- PR:
+  [#1 — ARG-000 — Establish Argent planning foundation](https://github.com/carlwelchdesign/matchmaker-ai/pull/1)
+- Merge: `5212d0df1d8ba7a1ea5d6ec8896addc1b83d5241`
+- Completion date: 2026-07-23
+
+## Completion notes
+
+The planning package is the approved delivery baseline. Individual product,
+legal, privacy, architecture, and design decisions remain gated by their own
+tickets; closing ARG-000 does not approve those downstream decisions.
