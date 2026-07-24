@@ -3,16 +3,16 @@
 - **Epic:** Product strategy
 - **Capability/requirement IDs:** CAP-001; CAP-002; CAP-003; CAP-004
 - **Priority:** P0
-- **Status:** Proposed
+- **Status:** In review
 - **Named owner:** Project owner
 - **Named approver/reviewer:** Project owner
 - **Target milestone:** Decision gate
 - **Estimate band:** S
 - **Dependencies:** ARG-000
 - **Decision/risk links:** DEC-002; DEC-003; DEC-004; DEC-008; DEC-009;
-  R-002; R-019; R-021; R-023; R-025
-- **Blocked reason/review date:** Awaiting project-owner review of four
-  recommendations
+  DEC-015; DEC-016; R-002; R-019; R-021; R-023; R-025; R-041
+- **Blocked reason/review date:** Owner decisions recorded on 2026-07-24;
+  awaiting PR review/merge.
 
 ## Outcome
 
@@ -49,8 +49,8 @@ eligibility, or implementation.
   as unverified.
 - [x] Pricing, policy, legal, research, and metric decisions remain assigned to
   downstream tickets.
-- [ ] Project owner approves or revises each of the four recommendations.
-- [ ] Approved decisions are reflected in canonical product, scope, decision,
+- [x] Project owner approves or revises each of the four recommendations.
+- [x] Approved decisions are reflected in canonical product, scope, decision,
   risk, and backlog documents.
 - [ ] Intended changes are reviewed and merged in a ticket PR.
 
@@ -75,14 +75,15 @@ eligibility, or implementation.
 - [x] Reconcile existing product/scope/experience material.
 - [x] Perform a current first-party market-position check.
 - [x] Prepare explicit recommendations and defer unresolved decisions.
-- [ ] Obtain project-owner decisions.
-- [ ] Update canonical approved documents and decision log.
+- [x] Obtain project-owner decisions.
+- [x] Update canonical approved documents and decision log.
 
 ## Verification evidence
 
 - [x] Focused review:
   [product strategy decision packet](../product-strategy-decision.md)
-- [x] Static/quality checks: Repository formatting and `git diff --check` pass.
+- [x] Static/quality checks: `pnpm plans:check`; `pnpm plans:next`;
+  `git diff --check`.
 - [x] Security/privacy checks: No real applicant/client data or operational
   access is introduced.
 - [x] Accessibility/visual checks: Not applicable; no UI change.
@@ -102,9 +103,7 @@ eligibility, or implementation.
 
 ## Completion notes
 
-Merging the decision packet does not mark ARG-001 `Done`. The ticket remains
-`Proposed` until the project owner records a decision on all four
-recommendations.
+ARG-001 can be marked `Done` after the owner-decision updates merge.
 
 - Follow-up owner: Project owner, then ARG-002/ARG-003/ARG-005/ARG-006/ARG-010
   and ARG-011 owners
