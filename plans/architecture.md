@@ -12,9 +12,9 @@ Start with a modular monolith plus independently scalable background workers. Th
 
 ```mermaid
 flowchart LR
-    Applicant["Applicant or member"] --> Web["Argent web"]
+    Applicant["Applicant or member"] --> Web["Public Argent web"]
     Member["Accepted mobile member"] --> Mobile["Flutter app"]
-    Staff["Argent staff"] --> Admin["Staff web surface"]
+    Staff["Argent staff"] --> Admin["Separate Argent admin app"]
     Partner["Campaign partner"] --> PartnerView["Restricted partner view"]
     Web --> API["Argent API"]
     Mobile --> API
@@ -33,7 +33,8 @@ Authorization, consent, campaign scope, safety blocks, and deterministic eligibi
 
 ```text
 apps/
-  web/              Public, applicant, accepted-member, and staff web surfaces
+  web/              Public, applicant, and accepted-member web surface
+  admin/            Separately deployed staff and owner admin application
   mobile/           Flutter iOS and Android application
 services/
   api/              Versioned application API and domain modules
@@ -50,7 +51,11 @@ infra/
 plans/              Canonical planning, tickets, ADRs, and checklists
 ```
 
-Whether staff administration is a route area in `apps/web` or a separate app should be decided based on security boundaries, deployment needs, and UX—not aesthetics.
+Staff administration is a separate deployable application at `apps/admin`, not
+a route area inside `apps/web`. This preserves independent deployment, a
+dedicated future authentication/authorization boundary, and an operational UX
+that is not exposed through public navigation. It does not replace server-side
+role enforcement; that remains required before any production access.
 
 Client-safe packages may contain generated contracts, public validation schemas, and design tokens. Authorization rules, sensitive matchmaking policy, provider credentials, and server domain logic must never be shipped in web or mobile bundles.
 

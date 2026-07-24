@@ -3,11 +3,9 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
 import {
-  prototypeAdminReadiness,
   prototypeApplicants,
   prototypeCampaign,
   prototypeGuardrails,
-  prototypeOperations,
 } from "./prototype-data";
 
 describe("synthetic concept prototype data", () => {
@@ -29,14 +27,6 @@ describe("synthetic concept prototype data", () => {
     expect(
       prototypeApplicants.every((applicant) => applicant.id.startsWith("A-")),
     ).toBe(true);
-  });
-
-  test("keeps owner operations visibly disconnected", () => {
-    expect(prototypeAdminReadiness).toHaveLength(3);
-    expect(prototypeOperations).toHaveLength(3);
-    expect(prototypeOperations.map((operation) => operation.title)).toContain(
-      "Pricing is not connected",
-    );
   });
 
   test("keeps the review experience client-local", () => {

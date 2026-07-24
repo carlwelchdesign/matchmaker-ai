@@ -9,7 +9,8 @@ workflow. Do not use it to collect personal information.
 ## Workspace
 
 ```text
-apps/web               Next.js web surface
+apps/web               Public/applicant Next.js web surface
+apps/admin             Separately deployed owner/staff Next.js admin surface
 apps/mobile            Flutter iOS and Android application
 services/api           Fastify HTTP API
 services/worker        Background worker process
@@ -48,7 +49,8 @@ Redis:
 docker compose up --build --wait
 ```
 
-The web surface is available at `http://localhost:3000` and API liveness at
+The public web surface is available at `http://localhost:3000`, the separately
+deployed admin surface at `http://localhost:3002`, and API liveness at
 `http://localhost:3001/health/live`. PostgreSQL and Redis bind to loopback only.
 Override local ports and credentials with environment variables shown in
 `compose.yaml`.
@@ -95,7 +97,7 @@ No application, admission, matching, AI, or conversational-intake feature should
 ## Continuous integration
 
 Pull requests run named quality, secret, dependency, CodeQL, and container
-security checks. Container checks build the web, API, and worker images, reject
+security checks. Container checks build the public web, admin, API, and worker images, reject
 high or critical vulnerabilities, and retain an SPDX JSON SBOM for each image.
 All third-party workflow actions and application base images are immutable
 pins.

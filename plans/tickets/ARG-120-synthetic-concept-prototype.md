@@ -21,7 +21,8 @@ workspace without collecting, processing, or presenting real personal data.
 ## Scope
 
 - Build a Nocturne public splash screen, public campaign/application prototype,
-  and separate synthetic operational admin route with fictional data.
+  and separately deployable synthetic operational admin application with
+  fictional data.
 - Include a public campaign landing view, a reviewable application path, a
   submission/status moment, and an operational matchmaker workspace view.
 - Add a Flutter concept screen that demonstrates the same applicant-facing
@@ -44,7 +45,8 @@ workspace without collecting, processing, or presenting real personal data.
 - [x] Public root uses the Nocturne public splash composition and does not expose operational navigation.
 - [x] Web application path has clear synthetic/demo and non-submission behavior.
 - [x] Web operational view demonstrates human-led review and candidate discovery without scores or match claims.
-- [x] Jenny's operational concept is isolated at `/admin`, separate from the public/member experience.
+- [x] Jenny's operational concept is isolated in `apps/admin`, separately deployed from the public/member experience.
+- [x] Local Docker exposes the public surface and the separate owner-admin application on different loopback ports.
 - [x] Jenny's concept admin distinguishes overview, review, campaigns, and disconnected operations without implying production control.
 - [x] Flutter screen uses the shared token adapter and represents the same prototype boundary.
 - [x] All sample records are fictional and contain no personal or sensitive data.
@@ -71,22 +73,22 @@ workspace without collecting, processing, or presenting real personal data.
 - [x] Implement the smallest coherent cross-platform prototype.
 - [x] Add positive, negative, and failure-path tests.
 - [x] Add observability without sensitive payloads; intentionally none because the prototype makes no network, storage, or consequential action.
-- [x] Update contracts, docs, decisions, risks, and runbooks; no contract, risk, or runbook change is needed because no system boundary changed.
+- [x] Update contracts, docs, decisions, risks, and runbooks; architecture, deployment, smoke, and local-runtime documentation now record the separate admin app.
 - [x] Define rollout, feature-flag, migration, rollback, and recovery behavior; local-only, no migration/flag, refresh resets interaction state, rollback is a revert.
 
 ## Verification evidence
 
-- [x] Focused tests: `pnpm --filter @argent/web test`; `flutter test`.
-- [x] Static/quality checks: `pnpm format:check`; `pnpm --filter @argent/web typecheck`; `pnpm --filter @argent/web build`; `flutter analyze`; `pnpm plans:check`; `git diff --check`.
+- [x] Focused tests: `pnpm --filter @argent/web test`; `pnpm --filter @argent/admin test`; `flutter test`.
+- [x] Static/quality checks: `pnpm format:check`; `pnpm --filter @argent/web typecheck`; `pnpm --filter @argent/admin typecheck`; both Next.js builds; `flutter analyze`; `pnpm plans:check`; `git diff --check`.
 - [x] Security/privacy checks: static test asserts no `fetch`, `localStorage`, or HTML form in the interactive prototype; no API, persistence, analytics, or real data changed.
-- [x] Accessibility/visual checks: semantic headings, visible focus, responsive CSS, reduced-motion rule, and local Docker web runtime verified at `http://localhost:3000`.
-- [x] Runtime/deployment checks: Docker web, API, worker, PostgreSQL, and Redis started locally on 2026-07-24; Argent PostgreSQL is isolated on localhost port 5434 because port 5432 is already in use by another local service.
+- [x] Accessibility/visual checks: semantic headings, visible focus, responsive CSS, reduced-motion rule, public Docker runtime verified at `http://localhost:3000`, and separate admin runtime verified at `http://localhost:3002`.
+- [x] Runtime/deployment checks: Docker public web, admin, API, worker, PostgreSQL, and Redis started locally on 2026-07-24; public `/admin` returns `404`; Argent PostgreSQL is isolated on localhost port 5434 because port 5432 is already in use by another local service.
 - [x] Rollout/rollback evidence: local Docker review only; refresh clears browser interaction state; reverting this ticket restores the foundation screen.
 
 ## Delivery evidence
 
 - Branch: `ticket/ARG-120-synthetic-concept-prototype`
-- Commit: `71f484f` (`ARG-120 expand synthetic owner admin shell`)
+- Commit: branch HEAD (separate admin-app commit pending)
 - PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/38
 - Merge:
 - Deployment: Local Docker concept prototype only

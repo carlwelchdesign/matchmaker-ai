@@ -126,53 +126,6 @@ a:focus-visible {
   letter-spacing: 0.03em;
   text-transform: none;
 }
-.admin-shell {
-  background: var(--argent-semantic-surface-canvas);
-  min-height: 100svh;
-}
-.admin-header {
-  align-items: center;
-  border-bottom: 1px solid var(--argent-semantic-border-subtle);
-  display: grid;
-  gap: var(--argent-primitive-space-200);
-  grid-template-columns: 1fr auto 1fr;
-  margin-inline: auto;
-  max-width: var(--argent-layout-content-wide);
-  min-height: 76px;
-  padding-inline: var(--argent-layout-gutter-compact);
-}
-.admin-header p,
-.admin-header > span:last-child {
-  color: var(--argent-semantic-text-muted);
-  font-family: var(--argent-type-family-mono);
-  font-size: var(--argent-type-size-label);
-  margin: 0;
-  text-align: center;
-}
-.admin-header > span:last-child {
-  text-align: right;
-}
-.admin-nav {
-  border-bottom: 1px solid var(--argent-semantic-border-subtle);
-  display: flex;
-  gap: var(--argent-primitive-space-100);
-  margin-inline: auto;
-  max-width: var(--argent-layout-content-wide);
-  padding: var(--argent-primitive-space-100) var(--argent-layout-gutter-compact);
-}
-.admin-nav-button {
-  background: transparent;
-  border: 0;
-  color: var(--argent-semantic-text-muted);
-  font-size: var(--argent-type-size-compact);
-  padding: var(--argent-primitive-space-100);
-}
-.admin-nav-button[aria-current="page"] {
-  color: var(--argent-semantic-text-primary);
-  text-decoration: underline;
-  text-underline-offset: 6px;
-}
-
 .prototype-header {
   align-items: center;
   border-bottom: 1px solid var(--argent-semantic-border-subtle);
@@ -446,209 +399,6 @@ h3 {
   margin-top: var(--argent-primitive-space-600);
 }
 
-.workspace-heading {
-  align-items: end;
-  display: grid;
-  gap: var(--argent-primitive-space-300);
-  grid-template-columns: 1.3fr 0.7fr;
-}
-.admin-view {
-  display: grid;
-  gap: clamp(2.5rem, 6vw, 5rem);
-}
-.admin-intro {
-  align-items: end;
-  display: grid;
-  gap: var(--argent-primitive-space-300);
-  grid-template-columns: 1.3fr 0.7fr;
-}
-.admin-intro > p {
-  color: var(--argent-primitive-color-silver-200);
-  line-height: var(--argent-type-line-height-body);
-  margin: 0 0 var(--argent-primitive-space-100);
-}
-.readiness-grid {
-  display: grid;
-  gap: var(--argent-primitive-space-200);
-  grid-template-columns: repeat(3, 1fr);
-}
-.readiness-card,
-.admin-boundary,
-.campaign-admin-card {
-  background: var(--argent-semantic-surface-raised);
-  border: 1px solid var(--argent-semantic-border-subtle);
-  border-radius: var(--argent-component-panel-radius);
-  padding: clamp(1.5rem, 3vw, 2.5rem);
-}
-.readiness-card strong {
-  display: block;
-  font-family: var(--argent-type-family-display);
-  font-size: clamp(2.5rem, 5vw, 4rem);
-  font-weight: var(--argent-type-weight-semibold);
-  line-height: 1;
-  margin-block: var(--argent-primitive-space-300);
-}
-.readiness-card > p:last-child,
-.admin-boundary > p:last-child,
-.campaign-admin-card > div > p:last-child,
-.operations-list p {
-  color: var(--argent-semantic-text-secondary);
-  line-height: var(--argent-type-line-height-body);
-  margin-bottom: 0;
-}
-.admin-boundary {
-  max-width: 52rem;
-}
-.admin-boundary h2,
-.campaign-admin-card h2 {
-  font-size: clamp(2rem, 4vw, 3rem);
-  margin-block: var(--argent-primitive-space-150);
-}
-.campaign-admin-card {
-  display: grid;
-  gap: var(--argent-primitive-space-400);
-  grid-template-columns: 1.2fr 0.8fr;
-}
-.campaign-admin-card dl {
-  display: grid;
-  gap: var(--argent-primitive-space-200);
-  margin: 0;
-}
-.campaign-admin-card dl div {
-  border-top: 1px solid var(--argent-semantic-border-subtle);
-  padding-top: var(--argent-primitive-space-150);
-}
-.campaign-admin-card dt {
-  color: var(--argent-semantic-text-muted);
-  font-family: var(--argent-type-family-mono);
-  font-size: var(--argent-type-size-label);
-  text-transform: uppercase;
-}
-.campaign-admin-card dd {
-  color: var(--argent-semantic-text-secondary);
-  margin: var(--argent-primitive-space-100) 0 0;
-}
-.campaign-admin-card .workspace-note {
-  grid-column: 1 / -1;
-}
-.operations-list {
-  border-top: 1px solid var(--argent-semantic-border-subtle);
-}
-.operations-list article {
-  border-bottom: 1px solid var(--argent-semantic-border-subtle);
-  display: grid;
-  gap: var(--argent-primitive-space-300);
-  grid-template-columns: 4ch 1fr;
-  padding-block: var(--argent-primitive-space-300);
-}
-.operations-list article > span {
-  color: var(--argent-semantic-text-muted);
-  font-family: var(--argent-type-family-mono);
-  font-size: var(--argent-type-size-label);
-}
-.operations-list h2 {
-  font-size: clamp(1.6rem, 3vw, 2.3rem);
-  margin-bottom: var(--argent-primitive-space-100);
-}
-.workspace-heading > p {
-  color: var(--argent-primitive-color-silver-200);
-  line-height: var(--argent-type-line-height-body);
-  margin: 0 0 var(--argent-primitive-space-100);
-}
-.workspace-grid {
-  display: grid;
-  gap: var(--argent-primitive-space-200);
-  grid-template-columns: 1.25fr 0.75fr;
-}
-.panel-heading {
-  align-items: start;
-  display: flex;
-  justify-content: space-between;
-}
-.panel-heading h2,
-.briefing-panel h2 {
-  font-size: 2rem;
-  margin-bottom: var(--argent-primitive-space-300);
-}
-.count-badge {
-  color: var(--argent-semantic-text-muted);
-  font-family: var(--argent-type-family-mono);
-}
-.queue-list {
-  border-top: 1px solid var(--argent-semantic-border-subtle);
-}
-.queue-item {
-  align-items: center;
-  background: transparent;
-  border: 0;
-  border-bottom: 1px solid var(--argent-semantic-border-subtle);
-  color: var(--argent-semantic-text-secondary);
-  display: grid;
-  gap: var(--argent-primitive-space-150);
-  grid-template-columns: auto 1fr auto;
-  padding: var(--argent-primitive-space-200) 0;
-  text-align: left;
-  width: 100%;
-}
-.queue-item.is-selected {
-  color: var(--argent-semantic-text-primary);
-}
-.queue-item:hover {
-  color: var(--argent-semantic-action-primary-hover);
-}
-.initials {
-  align-items: center;
-  background: var(--argent-semantic-surface-overlay);
-  border-radius: 50%;
-  display: inline-flex;
-  font-family: var(--argent-type-family-mono);
-  font-size: var(--argent-type-size-label);
-  height: 2.4rem;
-  justify-content: center;
-  width: 2.4rem;
-}
-.queue-item strong,
-.queue-item small {
-  display: block;
-}
-.queue-item small {
-  color: var(--argent-semantic-text-muted);
-  font-size: var(--argent-type-size-label);
-  margin-top: var(--argent-primitive-space-050);
-}
-.queue-state {
-  color: var(--argent-semantic-text-muted);
-  font-size: var(--argent-type-size-label);
-  max-width: 10ch;
-  text-align: right;
-}
-.briefing-panel dl {
-  display: grid;
-  gap: var(--argent-primitive-space-200);
-}
-.briefing-panel dl div {
-  border-top: 1px solid var(--argent-semantic-border-subtle);
-  padding-top: var(--argent-primitive-space-150);
-}
-.briefing-panel dt {
-  color: var(--argent-semantic-text-muted);
-  font-family: var(--argent-type-family-mono);
-  font-size: var(--argent-type-size-label);
-  text-transform: uppercase;
-}
-.briefing-panel dd {
-  color: var(--argent-semantic-text-secondary);
-  line-height: var(--argent-type-line-height-compact);
-  margin: var(--argent-primitive-space-100) 0 0;
-}
-.workspace-note {
-  border-left: 2px solid var(--argent-semantic-status-warning);
-  color: var(--argent-primitive-color-silver-200);
-  line-height: var(--argent-type-line-height-body);
-  margin: var(--argent-primitive-space-400) 0 0;
-  padding-left: var(--argent-primitive-space-150);
-}
-
 @media (max-width: 44rem) {
   .splash-hero {
     background-position: 62% center;
@@ -674,16 +424,6 @@ h3 {
     flex-direction: column;
     gap: var(--argent-primitive-space-100);
   }
-  .admin-header {
-    grid-template-columns: 1fr auto;
-    padding-block: var(--argent-primitive-space-150);
-  }
-  .admin-header p {
-    display: none;
-  }
-  .admin-nav {
-    overflow-x: auto;
-  }
   .prototype-header {
     grid-template-columns: 1fr;
     padding-block: var(--argent-primitive-space-150);
@@ -700,12 +440,7 @@ h3 {
   }
   .brief-grid,
   .choice-grid,
-  .application-layout,
-  .admin-intro,
-  .readiness-grid,
-  .campaign-admin-card,
-  .workspace-heading,
-  .workspace-grid {
+  .application-layout {
     grid-template-columns: 1fr;
   }
   .brief-grid {
@@ -721,13 +456,6 @@ h3 {
   }
   .panel-actions button {
     width: 100%;
-  }
-  .queue-item {
-    grid-template-columns: auto 1fr;
-  }
-  .queue-state {
-    grid-column: 2;
-    text-align: left;
   }
 }
 

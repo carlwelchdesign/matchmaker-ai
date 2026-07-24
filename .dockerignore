@@ -1,7 +1,7 @@
 .git
 .github
-.next
-.turbo
+**/.next
+**/.turbo
 .dart_tool
 **/build
 **/dist
