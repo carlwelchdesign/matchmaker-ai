@@ -4,6 +4,7 @@ import {
   canonicalJson,
   DeliveryValidationError,
   jsonSha256,
+  type JsonObject,
 } from "./delivery.js";
 
 describe("delivery payload identity", () => {
@@ -29,6 +30,73 @@ describe("delivery payload identity", () => {
 
   it("rejects non-finite JSON numbers", () => {
     expect(() => canonicalJson({ unsafe: Number.NaN })).toThrow(
+      DeliveryValidationError,
+    );
+  });
+
+  it("rejects non-JSON objects instead of silently changing their meaning", () => {
+    expect(() =>
+      canonicalJson({
+        when: new Date("2026-01-01T00:00:00.000Z"),
+      } as unknown as JsonObject),
+    ).toThrow(DeliveryValidationError);
+  });
+
+  it("rejects sparse arrays instead of producing invalid JSON", () => {
+    const sparse: string[] = [];
+    sparse[1] = "second";
+    const augmented = ["first"] as string[] & { extra?: boolean };
+    augmented.extra = true;
+
+    expect(() =>
+      canonicalJson({ values: sparse } as unknown as JsonObject),
+    ).toThrow(DeliveryValidationError);
+    expect(() =>
+      canonicalJson({ values: augmented } as unknown as JsonObject),
+    ).toThrow(DeliveryValidationError);
+  });
+
+  it("rejects accessors without evaluating them", () => {
+    let getterEvaluated = false;
+    const value = {};
+    Object.defineProperty(value, "secret", {
+      enumerable: true,
+      get() {
+        getterEvaluated = true;
+        return "must-not-run";
+      },
+    });
+
+    expect(() => canonicalJson(value as JsonObject)).toThrow(
+      DeliveryValidationError,
+    );
+    expect(getterEvaluated).toBe(false);
+  });
+
+  it("rejects non-JSON primitive values", () => {
+    expect(() =>
+      canonicalJson({ unsafe: undefined } as unknown as JsonObject),
+    ).toThrow(DeliveryValidationError);
+    expect(() =>
+      canonicalJson({ unsafe: 1n } as unknown as JsonObject),
+    ).toThrow(DeliveryValidationError);
+  });
+
+  it("rejects cyclic and excessively deep payloads with bounded errors", () => {
+    const cyclic: Record<string, unknown> = {};
+    cyclic.self = cyclic;
+    expect(() => canonicalJson(cyclic as unknown as JsonObject)).toThrow(
+      DeliveryValidationError,
+    );
+
+    const deep: Record<string, unknown> = {};
+    let cursor = deep;
+    for (let index = 0; index <= 100; index += 1) {
+      const child: Record<string, unknown> = {};
+      cursor.child = child;
+      cursor = child;
+    }
+    expect(() => canonicalJson(deep as unknown as JsonObject)).toThrow(
       DeliveryValidationError,
     );
   });

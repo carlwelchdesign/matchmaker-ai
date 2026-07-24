@@ -103,6 +103,8 @@ interface OutboxRow {
   lease_expires_at: Date;
 }
 
+const MAX_JSON_DEPTH = 100;
+
 function assertText(value: string, field: string): string {
   const normalized = value.trim();
   if (normalized.length === 0 || normalized.length > 200) {
@@ -134,26 +136,111 @@ function compareCodeUnits(left: string, right: string): number {
   return left < right ? -1 : left > right ? 1 : 0;
 }
 
-function serializeCanonical(value: JsonValue): string {
+function serializeCanonical(
+  value: unknown,
+  depth = 0,
+  ancestors = new WeakSet<object>(),
+): string {
+  if (depth > MAX_JSON_DEPTH) {
+    throw new DeliveryValidationError(
+      `JSON payloads must not exceed ${MAX_JSON_DEPTH} levels`,
+    );
+  }
   if (Array.isArray(value)) {
-    return `[${value.map(serializeCanonical).join(",")}]`;
+    const keys = Object.keys(value);
+    const propertyNames = Object.getOwnPropertyNames(value);
+    if (
+      Object.getOwnPropertySymbols(value).length > 0 ||
+      keys.length !== value.length ||
+      keys.some((key, index) => key !== index.toString()) ||
+      propertyNames.length !== value.length + 1
+    ) {
+      throw new DeliveryValidationError(
+        "JSON arrays must be dense and contain no extra properties",
+      );
+    }
+    const children = keys.map((key) => {
+      const descriptor = Object.getOwnPropertyDescriptor(value, key);
+      if (
+        descriptor === undefined ||
+        !descriptor.enumerable ||
+        !("value" in descriptor)
+      ) {
+        throw new DeliveryValidationError(
+          "JSON arrays must contain only data properties",
+        );
+      }
+      return descriptor.value as unknown;
+    });
+    if (ancestors.has(value)) {
+      throw new DeliveryValidationError("JSON payloads must not be cyclic");
+    }
+    ancestors.add(value);
+    try {
+      return `[${children
+        .map((child) => serializeCanonical(child, depth + 1, ancestors))
+        .join(",")}]`;
+    } finally {
+      ancestors.delete(value);
+    }
   }
   if (value !== null && typeof value === "object") {
-    return `{${Object.entries(value)
-      .sort(([left], [right]) => compareCodeUnits(left, right))
-      .map(
-        ([key, child]) => `${JSON.stringify(key)}:${serializeCanonical(child)}`,
-      )
-      .join(",")}}`;
+    const prototype = Object.getPrototypeOf(value);
+    const keys = Object.keys(value);
+    if (
+      (prototype !== Object.prototype && prototype !== null) ||
+      Object.getOwnPropertySymbols(value).length > 0 ||
+      Object.getOwnPropertyNames(value).length !== keys.length
+    ) {
+      throw new DeliveryValidationError(
+        "JSON objects must contain only enumerable data properties",
+      );
+    }
+    const entries = keys.map((key): readonly [string, unknown] => {
+      const descriptor = Object.getOwnPropertyDescriptor(value, key);
+      if (
+        descriptor === undefined ||
+        !descriptor.enumerable ||
+        !("value" in descriptor)
+      ) {
+        throw new DeliveryValidationError(
+          "JSON objects must not contain accessor properties",
+        );
+      }
+      return [key, descriptor.value];
+    });
+    if (ancestors.has(value)) {
+      throw new DeliveryValidationError("JSON payloads must not be cyclic");
+    }
+    ancestors.add(value);
+    try {
+      return `{${entries
+        .sort(([left], [right]) => compareCodeUnits(left, right))
+        .map(
+          ([key, child]) =>
+            `${JSON.stringify(key)}:${serializeCanonical(
+              child,
+              depth + 1,
+              ancestors,
+            )}`,
+        )
+        .join(",")}}`;
+    } finally {
+      ancestors.delete(value);
+    }
   }
   if (typeof value === "number" && !Number.isFinite(value)) {
     throw new DeliveryValidationError("JSON numbers must be finite");
   }
-  const serialized = JSON.stringify(value);
-  if (serialized === undefined) {
-    throw new DeliveryValidationError("Value is not valid JSON");
+  if (
+    value !== null &&
+    typeof value !== "string" &&
+    typeof value !== "boolean" &&
+    typeof value !== "number"
+  ) {
+    throw new DeliveryValidationError("JSON values must use JSON data types");
   }
-  return serialized;
+  return JSON.stringify(value);
 }
 
 export function canonicalJson(value: JsonObject): string {
