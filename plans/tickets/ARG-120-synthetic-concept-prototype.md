@@ -51,6 +51,7 @@ workspace without collecting, processing, or presenting real personal data.
 - [x] Flutter screen uses the shared token adapter and represents the same prototype boundary.
 - [x] Flutter opening state mirrors the Nocturne public splash posture before revealing the local-only application preview.
 - [x] Flutter opening state renders the bundled Nocturne coastal-residence hero image; no network image request is used.
+- [x] Flutter preview includes a clearly labeled, non-decisional sample status moment.
 - [x] All sample records are fictional and contain no personal or sensitive data.
 - [x] Keyboard, focus, responsive, reduced-motion, and non-production states are represented proportionately; no asynchronous data action exists, so loading/error recovery is not simulated.
 - [x] Tests prove prototype data is local/synthetic and the public flow does not submit information.
@@ -89,9 +90,9 @@ workspace without collecting, processing, or presenting real personal data.
 
 ## Delivery evidence
 
-- Branch: `codex/ARG-120-mobile-hero-image`
-- Commit: `32eb96d` (`ARG-120 add bundled mobile splash image`)
-- PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/41
+- Branch: `codex/ARG-120-mobile-status-moment`
+- Commit: `c1ae1f5` (`ARG-120 add mobile sample status moment`)
+- PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/42
 - Merge: https://github.com/carlwelchdesign/matchmaker-ai/pull/39
 - Deployment: Local Docker concept prototype only
 - Evidence URLs/paths:
