@@ -48,7 +48,8 @@ workflow decisions are based on evidence rather than dating-app assumptions.
 - [ ] Founder/operator interview is documented with sensitive details redacted.
 - [ ] At least two matchmaker/operator interviews are documented or a gap and
   fallback are explicitly approved.
-- [ ] Five case walkthroughs are synthesized.
+- [x] Five explicitly synthetic case walkthroughs are synthesized; real
+  founder/matchmaker evidence is still required before `Done`.
 - [ ] Findings separate evidence, inference, and unresolved assumptions.
 - [ ] Human-versus-system responsibilities are mapped.
 - [ ] Downstream impacts are recorded for `ARG-005`, `ARG-011`, `ARG-012`,
@@ -115,11 +116,14 @@ workflow decisions are based on evidence rather than dating-app assumptions.
   - [Consent and session script](../research/consent-and-session-script.md)
   - [Synthesis tracker](../research/research-synthesis-tracker.md)
   - [ARG-002 moderator guide](../research/session-materials/ARG-002-moderator-guide.md)
+  - [ARG-002 synthetic case walkthroughs](../research/synthetic-dry-runs/ARG-002-synthetic-case-walkthroughs.md)
 - Completion date:
 
 ## Completion notes
 
-This ticket is `Ready`, not `Done`. It requires real founder/matchmaker
-research evidence before lifecycle or matchmaking implementation can start.
+This ticket is `Ready`, not `Done`. The synthetic case walkthroughs exercise
+the protocol but do not replace real founder/matchmaker research evidence.
+Lifecycle or matchmaking implementation must remain blocked until that evidence
+is captured and synthesized.
 
 - Follow-up owner: Project owner
