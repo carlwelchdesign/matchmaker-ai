@@ -43,7 +43,7 @@ When a ticket moves to `Ready`, copy [the ticket template](../templates/ticket.m
 - [x] `ARG-101` Scaffold the TypeScript/Flutter monorepo and module boundaries.
 - [x] `ARG-102` Establish OpenAPI contracts and generated TypeScript/Dart clients.
 - [x] `ARG-103` Build the reproducible Docker development environment.
-- [ ] `ARG-104` Establish CI quality, test, secret, dependency, and container gates.
+- [x] `ARG-104` Establish CI quality, test, secret, dependency, and container gates.
 - [ ] `ARG-105` Select the cloud/deployment approach and provision staging.
 - [ ] `ARG-106` Establish environment configuration and managed secrets.
 - [x] `ARG-107` Establish database migrations, seed data, and synthetic fixtures.
