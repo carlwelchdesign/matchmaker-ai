@@ -3,7 +3,7 @@
 - **Epic:** Platform foundation
 - **Capability/requirement IDs:** CAP-006, CAP-007, CAP-008
 - **Priority:** P0
-- **Status:** In progress
+- **Status:** In review
 - **Named owner:** Codex
 - **Named approver/reviewer:** Project owner
 - **Target milestone:** Operational alpha
@@ -44,7 +44,7 @@ Create a reproducible TypeScript and Flutter monorepo with explicit web, mobile,
 - [x] Flutter foundation renders under a widget test and passes static analysis.
 - [x] Root TypeScript format, type, test, and build checks pass.
 - [x] Runtime smoke checks pass for built web, API, and worker entry points.
-- [ ] Intended changes are committed and reviewed in a ticket PR.
+- [x] Intended changes are committed and reviewed in a ticket PR.
 
 ## Security, privacy, AI, data, and accessibility
 
@@ -67,7 +67,7 @@ Create a reproducible TypeScript and Flutter monorepo with explicit web, mobile,
 - [x] Install from the lockfile on the pinned runtime.
 - [x] Run all static, test, build, and runtime checks.
 - [x] Review diff for generated noise and forbidden coupling.
-- [ ] Update delivery evidence and move to review.
+- [x] Update delivery evidence and move to review.
 
 ## Verification evidence
 
@@ -81,8 +81,8 @@ Create a reproducible TypeScript and Flutter monorepo with explicit web, mobile,
 ## Delivery evidence
 
 - Branch: `ticket/ARG-101-platform-foundation`
-- Commit:
-- PR:
+- Commit: `666de18` (`ARG-101: scaffold platform foundation`)
+- PR: [#2 — ARG-101 — Scaffold platform foundation](https://github.com/carlwelchdesign/matchmaker-ai/pull/2)
 - Merge:
 - Deployment: Not in scope
 - Evidence URLs/paths:
