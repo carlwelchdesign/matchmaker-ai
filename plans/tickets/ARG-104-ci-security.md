@@ -118,4 +118,9 @@ The Debian 12 distroless digest was also rejected after the scan identified
 fixed OpenSSL findings; the final runtime uses a clean Debian 13 distroless
 digest.
 
+Enabling GitHub's dependency graph exposed two pre-existing development-only
+`shell-quote` alerts that the package audit did not report. A narrow resolution
+override raises the transitive package to patched version `1.9.0`; GitHub alert
+closure is part of the completion evidence.
+
 - Follow-up owner: ARG-100, ARG-111, ARG-113, and ARG-117
