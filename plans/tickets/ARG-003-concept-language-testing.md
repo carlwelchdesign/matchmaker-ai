@@ -23,6 +23,8 @@ flows are built.
 ## Scope
 
 - Use [ARG-003 testing protocol](../research/ARG-003-concept-language-testing.md).
+- Use the shared research operations runbook, participant screener, consent
+  script, session-note template, and synthesis tracker.
 - Test public application, local campaign, intake-mode choice, and status/outcome
   language.
 - Include applicant/candidate, potential client, founder/operator, and
@@ -52,6 +54,8 @@ flows are built.
   `ARG-016`, `ARG-018`, `ARG-026`, and `ARG-027`.
 - [ ] No real participant sensitive data is stored in planning files without
   approved consent and redaction.
+- [x] Run-ready screener, consent script, note template, and synthesis tracker
+  exist.
 
 ## Security, privacy, AI, data, and accessibility
 
@@ -103,6 +107,10 @@ flows are built.
 - Deployment: Planning only
 - Evidence URLs/paths:
   - [ARG-003 testing protocol](../research/ARG-003-concept-language-testing.md)
+  - [Research operations runbook](../research/research-operations-runbook.md)
+  - [Participant screener](../research/participant-screener.md)
+  - [Consent and session script](../research/consent-and-session-script.md)
+  - [Synthesis tracker](../research/research-synthesis-tracker.md)
 - Completion date:
 
 ## Completion notes

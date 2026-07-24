@@ -93,6 +93,13 @@ If real participants are unavailable, synthetic or internal review may unblock
 prototype iteration but must not unblock real applicant intake, brand claims, or
 conversational/voice implementation.
 
+Use the shared research operations files before scheduling:
+
+- [Research operations runbook](research-operations-runbook.md)
+- [Participant screener](participant-screener.md)
+- [Consent and session script](consent-and-session-script.md)
+- [Research synthesis tracker](research-synthesis-tracker.md)
+
 ## Test method
 
 Use low-fidelity copy and wireframe prompts. Avoid collecting sensitive personal

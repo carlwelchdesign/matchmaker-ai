@@ -42,6 +42,13 @@ If practicing matchmakers are not available, record that limitation and keep
 ARG-005, ARG-012, and matchmaking implementation tickets blocked until the gap
 is resolved or an owner approves a narrower fallback.
 
+Use the shared research operations files before scheduling:
+
+- [Research operations runbook](research-operations-runbook.md)
+- [Participant screener](participant-screener.md)
+- [Consent and session script](consent-and-session-script.md)
+- [Research synthesis tracker](research-synthesis-tracker.md)
+
 ## Interview guide
 
 ### Founder/operator interview
