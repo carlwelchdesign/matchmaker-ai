@@ -20,7 +20,7 @@ This is the phase-level view. Check an item only when all linked tickets are `Do
 
 - [x] Monorepo and generated contract workflow established.
 - [ ] Cross-platform design tokens, generated platform outputs, and foundational components established.
-- [ ] Docker local environment is reproducible.
+- [x] Docker local environment is reproducible.
 - [ ] CI, branch protection, scans, and release checks established.
 - [ ] Staging and production deployment foundations established.
 - [ ] Authentication, RBAC, partner scopes, and audit foundation complete.
