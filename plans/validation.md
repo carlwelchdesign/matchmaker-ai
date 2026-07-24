@@ -15,15 +15,22 @@
 ## Automated/local checks
 
 - Backlog CSV parsed successfully.
-- 127 ticket IDs are unique.
+- 128 ticket IDs are unique.
 - All required backlog columns are present.
 - Every dependency references an existing ticket.
 - The dependency graph is acyclic.
-- The human checklist covers all 126 tickets other than the active planning ticket.
-- All local Markdown links resolve across 27 planning files.
+- The human checklist covers all 127 tickets other than the active planning ticket.
+- All local Markdown links resolve across 31 planning files.
 - Every risk-register row has the expected schema.
 - Git diff whitespace validation passes.
 - No empty planning files exist.
+
+## Design direction evidence
+
+- Earlier ivory/forest concepts were removed after founder review.
+- Direction `02`, now Nocturne, was selected provisionally on 2026-07-23.
+- The expanded specimen covers the token foundation, public web, accepted-member mobile, and matchmaker workspace.
+- Final approval remains open under `ARG-004`; implementation is owned by `ARG-118` and linked platform tickets.
 
 ## GitHub delivery evidence
 

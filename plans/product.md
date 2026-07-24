@@ -72,7 +72,11 @@ Needs limited campaign visibility, attribution, and reporting without broad acce
 
 ## Experience and brand direction
 
-The visual system should express restrained luxury: editorial typography, generous space, excellent photography, disciplined color, accessible contrast, and calm interactions. Avoid generic gold-on-black “VIP” motifs, status theatrics, gamification, public popularity metrics, and swipe-based interaction.
+The selected visual direction is **Nocturne**: a discreet cinematic system using near-black aubergine, smoked plum, parchment, muted silver, and sparing oxblood. It combines condensed display typography with readable humanist interface typography, asymmetric grids, hairline structure, controlled imagery, and an operational density mode for staff work. The same semantic token system governs public web, staff web, iOS, and Android while allowing native platform behavior.
+
+Nocturne is selected but remains pending final `ARG-004` approval. The canonical visual and token contract is [design-system.md](design-system.md).
+
+Avoid generic gold-on-black “VIP” motifs, cream-and-forest luxury templates, centered editorial-serif hero defaults, decorative card grids, status theatrics, gamification, public popularity metrics, and swipe-based interaction.
 
 “Elite” should be demonstrated through discretion, service quality, curation, and confidence—not exclusionary copy.
 

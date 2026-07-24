@@ -41,7 +41,7 @@ services/
 packages/
   contracts/        OpenAPI/schema source and generated TypeScript/Dart clients
   domain/           Server-only framework-light domain policy
-  design-system/    Web tokens/components and cross-platform design tokens
+  design-system/    Canonical tokens, generated web/Dart outputs, and web foundations
   config/           Shared lint, formatting, testing, and build configuration
 infra/
   docker/           Development and production container definitions
@@ -52,6 +52,8 @@ plans/              Canonical planning, tickets, ADRs, and checklists
 Whether staff administration is a route area in `apps/web` or a separate app should be decided based on security boundaries, deployment needs, and UX—not aesthetics.
 
 Client-safe packages may contain generated contracts, public validation schemas, and design tokens. Authorization rules, sensitive matchmaking policy, provider credentials, and server domain logic must never be shipped in web or mobile bundles.
+
+The design system uses one human-readable, vendor-neutral canonical token source. CI generates semantic CSS variables for web, typed Dart values and theme extensions for Flutter, and Figma-compatible variables. Public, operational, iOS, and Android surfaces consume the same semantic names while platform adapters preserve native navigation, input, safe-area, text-scaling, and accessibility behavior. Generated artifacts are not hand-edited; token drift and stale outputs should fail CI. See [design-system.md](design-system.md).
 
 ## Proposed technology baseline
 
@@ -205,3 +207,4 @@ The deployment ADR must define network boundaries, workload identities, ingress 
 - Server-only versus client-safe package boundary.
 - Production topology and capacity/SLO policy.
 - AI workflow/tool and authorization boundary.
+- Canonical cross-platform design-token format, generation, and drift governance.

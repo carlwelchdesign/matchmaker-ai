@@ -6,7 +6,7 @@
 - **Owner:** Codex
 - **Reviewer:** Project owner
 - **Dependencies:** None
-- **Decision/risk links:** DEC-001 through DEC-010, R-020
+- **Decision/risk links:** DEC-001 through DEC-011, R-020, R-037
 
 ## Outcome
 

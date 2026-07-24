@@ -9,7 +9,7 @@ When a ticket moves to `Ready`, copy [the ticket template](../templates/ticket.m
 - [ ] `ARG-001` Approve product brief, ICP, service model, and success measures.
 - [ ] `ARG-002` Research founder and matchmaker operating workflows.
 - [ ] `ARG-003` Test applicant, candidate, and client concepts and language.
-- [ ] `ARG-004` Approve restrained-luxury brand and content direction.
+- [ ] `ARG-004` Approve Nocturne brand and cross-platform design direction.
 - [ ] `ARG-005` Approve admission, candidate, client, and campaign lifecycles.
 - [ ] `ARG-006` Complete privacy/legal requirements assessment.
 - [ ] `ARG-007` Complete threat model and data-flow diagrams.
@@ -52,6 +52,7 @@ When a ticket moves to `Ready`, copy [the ticket template](../templates/ticket.m
 - [ ] `ARG-115` Establish data-quality monitoring and reconciliation.
 - [ ] `ARG-116` Define production topology, SLOs, capacity envelope, and scaling policy.
 - [ ] `ARG-117` Establish documentation governance and drift checks.
+- [ ] `ARG-118` Establish cross-platform design tokens and foundational components.
 - [ ] `ARG-201` Integrate authentication, MFA, recovery, and session management.
 - [ ] `ARG-202` Implement deny-by-default RBAC and object-scoped authorization.
 - [ ] `ARG-203` Implement staff administration and privileged-access review.

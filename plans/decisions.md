@@ -14,6 +14,7 @@
 | DEC-008 | 2026-07-23 | AI remains human-assistive for consequential decisions | Trust, fairness, and service quality | Only after explicit governance review; autonomous admission/matching remains prohibited |
 | DEC-009 | 2026-07-23 | The first proof is a web/concierge operational alpha followed by a consenting service pilot | Validates the human service before AI/mobile expansion | Pilot evidence supports changing the sequence |
 | DEC-010 | 2026-07-23 | Pilot campaign partners receive aggregate reporting only | Reduces consent, contract, breach, and UX complexity | Purpose-specific person access becomes proven and legally approved |
+| DEC-011 | 2026-07-23 | Nocturne direction `02` is selected provisionally for public web, staff web, iOS, and Android | Founder selected the more distinctive discreet-cinematic direction; one shared semantic system prevents platform drift | `ARG-004` validation fails or founder gives final approval and this row is promoted from provisional to approved |
 
 ## Proposed ADRs
 
@@ -37,3 +38,4 @@
 | ADR-016 | AI workflow, tool, authorization, and evaluation boundary | AI + security + privacy | Before AI implementation | Proposed |
 | ADR-017 | Pilot commerce and service-contract boundary | Founder + legal + product | Before accepting payment | Proposed |
 | ADR-018 | Campaign content, taxonomy, rights, and publishing | Product + privacy + design | Before campaign implementation | Proposed |
+| ADR-019 | Canonical design-token format, web/Dart/Figma generation, and drift governance | Design systems + web + mobile owners | Before `ARG-118` | Proposed |

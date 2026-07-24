@@ -33,6 +33,7 @@ The initial planning package requires independent review across all areas below.
 | REV-010 Consent revocation was not executable | Critical | Added downstream invalidation matrix and drills | `security-privacy.md`, risks R-034 | ARG-212 ARG-611 |
 | REV-011 Campaign branding lacked publishing/version/rights governance | High | Added content model and rights provenance | `content-model.md`, `data-model.md`, ADR-018 | ARG-023 ARG-311 |
 | REV-012 Backlog and governance lacked executable ownership/traceability | High | Added milestone/import columns, capability map, owner gate, drift plan | `delivery.md`, `traceability.md`, `documentation-governance.md` | ARG-024 ARG-025 ARG-117 |
+| REV-013 Initial visual direction was generic and lacked cross-platform token governance | High | Replaced the concept set with Nocturne; added semantic tokens, platform adaptation, approval evidence, drift governance, and a foundation ticket | `design-system.md`, `product.md`, DEC-011, ADR-019 | ARG-004 ARG-118 ARG-801 |
 
 ## Validation checklist
 

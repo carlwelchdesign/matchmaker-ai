@@ -1,35 +1,40 @@
-# Argent Visual Concept Set
+# Argent Nocturne Visual Direction
 
 ## Purpose
 
-These deterministic wireframes predict a possible Argent product direction. They are review artifacts, not approved UI specifications or implemented screens.
+This folder contains the selected Nocturne direction for Argent. The specimen is directional evidence for `ARG-004`, not an implemented interface or final approval.
 
-## Visual direction
+The previous ivory/forest wireframe set was rejected as too generic and removed. Git history retains it if historical comparison is needed.
 
-- Restrained luxury rather than decorative “VIP” styling.
-- Warm ivory, deep forest, stone, and subtle brass.
-- Editorial serif headlines paired with quiet, readable interface typography.
-- Generous spacing, calm states, and limited ornament.
-- Privacy, human review, and user control made visible in the interface.
-- Argent remains the primary platform brand while campaigns may be clearly co-branded.
+## Selected specimen
 
-## Screens
+[Nocturne design-system and representative views](nocturne-system-specimen.png)
 
-1. [Campaign landing page](png/01-campaign-landing.png)
-2. [Selective application](png/02-selective-application.png)
-3. [Applicant status on mobile](png/03-applicant-status-mobile.png)
-4. [Controlled campaign administration](png/04-campaign-admin.png)
-5. [Matchmaker workspace](png/05-matchmaker-workspace.png)
-6. [Member introduction on mobile](png/06-member-introduction-mobile.png)
+The specimen covers:
 
-Editable SVG sources are stored beside the `png` folder.
+- human-readable foundation tokens and component states;
+- a controlled public campaign view;
+- an accepted-member mobile introduction view;
+- a professional matchmaker workspace;
+- visible human review, rationale, uncertainty, privacy, and separate-consent cues.
 
-## Review questions
+## Cross-platform direction
 
-- Does the visual tone feel genuinely elite, discreet, and contemporary?
-- Should Argent feel warmer and more romantic or remain this editorial and restrained?
-- Is the campaign partner visible enough without weakening Argent’s ownership?
-- Does the application communicate selectivity without feeling judgmental?
-- Do the staff surfaces feel operationally serious enough for a professional matchmaker?
-- Does the mobile introduction flow preserve enough mystery and privacy?
-- Which screen should be explored in greater detail first?
+Nocturne is the required direction for:
+
+- public, applicant/member, and staff web;
+- Flutter on iOS;
+- Flutter on Android;
+- controlled campaign branding inside Argent.
+
+All platforms consume the semantic system in [design-system.md](../design-system.md). Native mobile behavior may adapt to iOS and Android conventions without creating a separate visual language.
+
+## Approval status
+
+- Direction selected: yes
+- Final brand approval: pending
+- Decision: `DEC-011`
+- Approval ticket: [ARG-004](../tickets/ARG-004-nocturne-brand-direction.md)
+- Implementation ticket: `ARG-118`
+
+The direction is approved only after the `ARG-004` gate is complete, including measured accessibility, responsive web, iOS, Android, real-content, operational-density, and campaign co-branding review.

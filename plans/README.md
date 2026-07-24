@@ -26,6 +26,7 @@ Deliver a secure, privacy-conscious private beta that supports:
 | Document | Purpose |
 | --- | --- |
 | [product.md](product.md) | Vision, users, positioning, jobs, principles, and success measures |
+| [design-system.md](design-system.md) | Selected Nocturne direction, cross-platform tokens, governance, and approval gate |
 | [mvp-scope.md](mvp-scope.md) | Private-beta scope, non-goals, assumptions, and release gates |
 | [experience.md](experience.md) | Lifecycle, campaign, applicant, client, matchmaker, and partner workflows |
 | [architecture.md](architecture.md) | Proposed system boundaries, monorepo, deployment, and scaling approach |
@@ -44,7 +45,7 @@ Deliver a secure, privacy-conscious private beta that supports:
 | [decisions.md](decisions.md) | Architecture and product decision log |
 | [reviews.md](reviews.md) | Specialist review findings and validation traceability |
 | [validation.md](validation.md) | Current validation evidence and known repository prerequisite |
-| [visuals/README.md](visuals/README.md) | Reviewable visual concept set for public, admin, and mobile experiences |
+| [visuals/README.md](visuals/README.md) | Selected Nocturne specimen for public, staff, and mobile review |
 
 ## Status vocabulary
 

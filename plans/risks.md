@@ -40,6 +40,7 @@ Scoring: impact and likelihood are `1` (low) to `5` (critical/high). Score is th
 | R-034 | Consent deletion succeeds operationally but not in analytics or AI artifacts | 5 | 3 | 15 | ARG-114 ARG-212 ARG-611 restore/revocation tests | Privacy/data | Before real profiles | Open |
 | R-035 | Founder is a key-person dependency for decisions and incidents | 4 | 4 | 16 | ARG-025 named deputies RACI and escalation | Founder | Before pilot | Open |
 | R-036 | App-store approval delays private beta | 3 | 3 | 9 | Mobile is not on pilot critical path; web fallback | Mobile/product | Before private beta | Open |
+| R-037 | Web, iOS, and Android drift into inconsistent or inaccessible visual systems | 4 | 3 | 12 | DEC-011 ADR-019 ARG-004 ARG-118 ARG-701 ARG-801 token generation drift checks and platform review | Design systems/engineering | Before user-facing implementation | Open |
 
 ## Escalation policy
 

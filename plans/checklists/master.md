@@ -7,7 +7,7 @@ This is the phase-level view. Check an item only when all linked tickets are `Do
 - [ ] Product brief, ICP, service model, and success metrics approved.
 - [ ] Founder and matchmaker workflow research completed.
 - [ ] Applicant/client concept and consent testing completed.
-- [ ] Brand direction and content principles approved.
+- [ ] Nocturne direction, cross-platform token contract, and content principles approved.
 - [ ] Architecture ADRs required for foundation approved.
 - [ ] Threat model and data-flow review approved.
 - [ ] Privacy/legal requirements and partner terms identified.
@@ -17,6 +17,7 @@ This is the phase-level view. Check an item only when all linked tickets are `Do
 ## Phase 1 — Foundation
 
 - [ ] Monorepo and generated contract workflow established.
+- [ ] Cross-platform design tokens, generated platform outputs, and foundational components established.
 - [ ] Docker local environment is reproducible.
 - [ ] CI, branch protection, scans, and release checks established.
 - [ ] Staging and production deployment foundations established.

@@ -26,7 +26,7 @@ Validate the operating model, workflows, brand, legal/privacy posture, security 
 
 ### Phase 1 — Engineering foundation
 
-Create the monorepo, contracts, Docker development environment, CI/CD, environments, identity, permissions, audit, observability, and data-protection foundations.
+Create the monorepo, contracts, cross-platform design-token foundation, Docker development environment, CI/CD, environments, identity, permissions, audit, observability, and data-protection foundations.
 
 ### Phase 2 — Application and campaign intake
 
@@ -70,6 +70,7 @@ A ticket may enter implementation only when:
 - API/data/permission dependencies are identified;
 - external-provider assumptions are verified or gated;
 - designs or copy exist when necessary;
+- user-facing work references the approved semantic tokens, component states, responsive behavior, and platform adaptation rules;
 - required user research or prototype evidence exists for user-facing workflows;
 - dependencies are `Done` or a fallback is approved;
 - verification evidence is specified;
