@@ -26,6 +26,7 @@ Deliver a secure, privacy-conscious private beta that supports:
 | Document | Purpose |
 | --- | --- |
 | [product.md](product.md) | Vision, users, positioning, jobs, principles, and success measures |
+| [product-strategy-decision.md](product-strategy-decision.md) | ARG-001 owner-review packet for ICP, payer, promise, and pilot proof |
 | [design-system.md](design-system.md) | Selected Nocturne direction, cross-platform tokens, governance, and approval gate |
 | [mvp-scope.md](mvp-scope.md) | Private-beta scope, non-goals, assumptions, and release gates |
 | [experience.md](experience.md) | Lifecycle, campaign, applicant, client, matchmaker, and partner workflows |
