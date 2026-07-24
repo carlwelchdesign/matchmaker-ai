@@ -3,12 +3,15 @@
 import { useState } from "react";
 
 import {
+  prototypeAdminReadiness,
   prototypeApplicants,
   prototypeCampaign,
   prototypeGuardrails,
+  prototypeOperations,
 } from "./prototype-data";
 
 type PrototypeView = "application" | "campaign";
+type AdminView = "campaigns" | "overview" | "operations" | "review";
 
 const steps = ["Your approach", "What matters", "Review"] as const;
 
@@ -263,6 +266,7 @@ function Choice({
 }
 
 export function AdminPrototype() {
+  const [adminView, setAdminView] = useState<AdminView>("overview");
   const [selectedApplicantId, setSelectedApplicantId] = useState<string>(
     prototypeApplicants[0].id,
   );
@@ -278,14 +282,168 @@ export function AdminPrototype() {
         <p>Operations workspace · concept only</p>
         <span>Jenny’s admin</span>
       </header>
+      <nav aria-label="Jenny’s concept workspace" className="admin-nav">
+        <AdminNavButton
+          active={adminView === "overview"}
+          onClick={() => setAdminView("overview")}
+        >
+          Overview
+        </AdminNavButton>
+        <AdminNavButton
+          active={adminView === "review"}
+          onClick={() => setAdminView("review")}
+        >
+          Review
+        </AdminNavButton>
+        <AdminNavButton
+          active={adminView === "campaigns"}
+          onClick={() => setAdminView("campaigns")}
+        >
+          Campaigns
+        </AdminNavButton>
+        <AdminNavButton
+          active={adminView === "operations"}
+          onClick={() => setAdminView("operations")}
+        >
+          Operations
+        </AdminNavButton>
+      </nav>
       <section className="prototype-content">
-        <Matchmaker
-          onSelect={setSelectedApplicantId}
-          selectedApplicant={selectedApplicant}
-          selectedApplicantId={selectedApplicantId}
-        />
+        {adminView === "overview" ? <AdminOverview /> : null}
+        {adminView === "review" ? (
+          <Matchmaker
+            onSelect={setSelectedApplicantId}
+            selectedApplicant={selectedApplicant}
+            selectedApplicantId={selectedApplicantId}
+          />
+        ) : null}
+        {adminView === "campaigns" ? <AdminCampaigns /> : null}
+        {adminView === "operations" ? <AdminOperations /> : null}
       </section>
     </main>
+  );
+}
+
+function AdminNavButton({
+  active,
+  children,
+  onClick,
+}: Readonly<{ active: boolean; children: string; onClick: () => void }>) {
+  return (
+    <button
+      aria-current={active ? "page" : undefined}
+      className="admin-nav-button"
+      onClick={onClick}
+      type="button"
+    >
+      {children}
+    </button>
+  );
+}
+
+function AdminOverview() {
+  return (
+    <div className="admin-view">
+      <section className="admin-intro" aria-labelledby="admin-overview-title">
+        <div>
+          <p className="eyebrow">Owner overview / local concept</p>
+          <h1 id="admin-overview-title">A calm place to begin the work.</h1>
+        </div>
+        <p>
+          A future owner workspace should make its boundaries visible: what is
+          ready to review, what still needs a human decision, and what is not
+          connected yet.
+        </p>
+      </section>
+      <section aria-label="Concept readiness" className="readiness-grid">
+        {prototypeAdminReadiness.map((item) => (
+          <article className="readiness-card" key={item.label}>
+            <p className="detail-label">{item.label}</p>
+            <strong>{item.value}</strong>
+            <p>{item.detail}</p>
+          </article>
+        ))}
+      </section>
+      <section className="admin-boundary" aria-labelledby="boundary-title">
+        <p className="detail-label">This is intentionally incomplete</p>
+        <h2 id="boundary-title">No live work can happen here.</h2>
+        <p>
+          There are no accounts, invitations, applications, prices, payments,
+          notifications, or permissions behind these screens. They are a
+          product-review aid, not an operational tool.
+        </p>
+      </section>
+    </div>
+  );
+}
+
+function AdminCampaigns() {
+  return (
+    <div className="admin-view">
+      <section className="admin-intro" aria-labelledby="campaigns-title">
+        <div>
+          <p className="eyebrow">Campaigns / local concept</p>
+          <h1 id="campaigns-title">Controlled campaigns, clearly bounded.</h1>
+        </div>
+        <p>
+          Santa Barbara County is a first test ground for this concept, not a
+          permanent service boundary or a live recruitment campaign.
+        </p>
+      </section>
+      <article className="campaign-admin-card">
+        <div>
+          <p className="detail-label">{prototypeCampaign.status}</p>
+          <h2>{prototypeCampaign.name}</h2>
+          <p>{prototypeCampaign.audience}</p>
+        </div>
+        <dl>
+          <div>
+            <dt>Test ground</dt>
+            <dd>{prototypeCampaign.location}</dd>
+          </div>
+          <div>
+            <dt>Invite codes</dt>
+            <dd>Not generated or connected</dd>
+          </div>
+          <div>
+            <dt>Geofence</dt>
+            <dd>Not configured or enforced</dd>
+          </div>
+        </dl>
+        <p className="workspace-note">{prototypeCampaign.regionBoundary}</p>
+      </article>
+    </div>
+  );
+}
+
+function AdminOperations() {
+  return (
+    <div className="admin-view">
+      <section className="admin-intro" aria-labelledby="operations-title">
+        <div>
+          <p className="eyebrow">Operations / local concept</p>
+          <h1 id="operations-title">Make readiness visible before control.</h1>
+        </div>
+        <p>
+          This is where Jenny would eventually manage operational systems. In
+          the concept, each system states its disconnected state plainly.
+        </p>
+      </section>
+      <section
+        aria-label="Disconnected operational systems"
+        className="operations-list"
+      >
+        {prototypeOperations.map((operation, index) => (
+          <article key={operation.title}>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <div>
+              <h2>{operation.title}</h2>
+              <p>{operation.detail}</p>
+            </div>
+          </article>
+        ))}
+      </section>
+    </div>
   );
 }
 

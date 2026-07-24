@@ -45,6 +45,7 @@ workspace without collecting, processing, or presenting real personal data.
 - [x] Web application path has clear synthetic/demo and non-submission behavior.
 - [x] Web operational view demonstrates human-led review and candidate discovery without scores or match claims.
 - [x] Jenny's operational concept is isolated at `/admin`, separate from the public/member experience.
+- [x] Jenny's concept admin distinguishes overview, review, campaigns, and disconnected operations without implying production control.
 - [x] Flutter screen uses the shared token adapter and represents the same prototype boundary.
 - [x] All sample records are fictional and contain no personal or sensitive data.
 - [x] Keyboard, focus, responsive, reduced-motion, and non-production states are represented proportionately; no asynchronous data action exists, so loading/error recovery is not simulated.
@@ -85,7 +86,7 @@ workspace without collecting, processing, or presenting real personal data.
 ## Delivery evidence
 
 - Branch: `ticket/ARG-120-synthetic-concept-prototype`
-- Commit: branch HEAD (`ARG-120 build synthetic concept prototype`)
+- Commit: branch HEAD (`ARG-120 build synthetic concept prototype`); follow-up admin-shell commit pending verification
 - PR:
 - Merge:
 - Deployment: Local Docker concept prototype only

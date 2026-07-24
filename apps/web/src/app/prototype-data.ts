@@ -8,6 +8,42 @@ export const prototypeCampaign = {
   status: "Concept review only",
 } as const;
 
+export const prototypeAdminReadiness = [
+  {
+    detail: "One fictional campaign is available for layout review only.",
+    label: "Campaigns",
+    value: "01",
+  },
+  {
+    detail: "Example records are visible only in this local concept.",
+    label: "Review queue",
+    value: "03",
+  },
+  {
+    detail: "No payment provider or price configuration is connected.",
+    label: "Pricing",
+    value: "—",
+  },
+] as const;
+
+export const prototypeOperations = [
+  {
+    detail:
+      "Stripe configuration will be an admin responsibility in the production product; it is intentionally unavailable here.",
+    title: "Pricing is not connected",
+  },
+  {
+    detail:
+      "This screen does not authenticate anyone or grant a real operational role.",
+    title: "Access is not connected",
+  },
+  {
+    detail:
+      "No activity is recorded, exported, or retained by this local prototype.",
+    title: "Audit history is not connected",
+  },
+] as const;
+
 export const prototypeApplicants = [
   {
     detail: "Introduced through a fictional local referral",
