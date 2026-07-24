@@ -3,7 +3,7 @@
 - **Epic:** Event delivery
 - **Capability/requirement IDs:** CAP-007
 - **Priority:** P0
-- **Status:** In Progress
+- **Status:** Done
 - **Named owner:** Codex
 - **Named approver/reviewer:** Project owner
 - **Target milestone:** Operational alpha
@@ -21,6 +21,12 @@ produced invalid JSON text. ARG-112 is reopened narrowly until canonical
 serialization rejects non-JSON objects, sparse or augmented arrays, accessor
 properties, cycles, excessive nesting, and non-JSON primitive values with
 bounded validation errors.
+
+The remediation is complete. Pull request
+[#23](https://github.com/carlwelchdesign/matchmaker-ai/pull/23) was
+squash-merged as `3ca77f296779193c3037a6740e2f5b8ae214c43f`. Canonical
+serialization now validates the runtime value graph before hashing or database
+use, without evaluating getters.
 
 ## Outcome
 
@@ -91,13 +97,14 @@ events or job requests cannot create different work under the same identity.
 
 ## Verification evidence
 
-- [x] Focused tests: 20 database unit tests and 12 real-PostgreSQL integration
+- [x] Focused tests: 25 database unit tests and 12 real-PostgreSQL integration
   tests pass.
 - [x] Static/quality checks: `pnpm verify`, repository formatting, TypeScript,
   Flutter analysis/tests, builds, generated-contract drift, full dependency
   audit, and `git diff --check` pass.
 - [x] Security/privacy checks: Forged receipts, idempotency collisions,
-  non-machine-readable errors, wrong lease owners, and non-object payloads fail
+  non-machine-readable errors, wrong lease owners, non-object payloads,
+  non-JSON runtime values, accessors, cycles, and excessive nesting fail
   closed.
 - [x] Accessibility/visual checks: Not applicable; no UI change.
 - [x] Runtime/deployment checks: Disposable PostgreSQL smoke passes locally.
@@ -141,6 +148,16 @@ Remediation delivery:
   [Quality and database smoke](https://github.com/carlwelchdesign/matchmaker-ai/actions/runs/30072376332),
   [Security](https://github.com/carlwelchdesign/matchmaker-ai/actions/runs/30072376317),
   [Secret scan](https://github.com/carlwelchdesign/matchmaker-ai/actions/runs/30072376319)
+
+JSON-boundary remediation delivery:
+
+- Commit: `bb0e15437a7d21be3ad1222b1b035974ebda8b03`
+- PR: [#23](https://github.com/carlwelchdesign/matchmaker-ai/pull/23)
+- Merge: `3ca77f296779193c3037a6740e2f5b8ae214c43f`
+- Evidence:
+  [Quality and database smoke](https://github.com/carlwelchdesign/matchmaker-ai/actions/runs/30073398934),
+  [Security](https://github.com/carlwelchdesign/matchmaker-ai/actions/runs/30073398943),
+  [Secret scan](https://github.com/carlwelchdesign/matchmaker-ai/actions/runs/30073398997)
 
 - Follow-up owner: ARG-106, ARG-108, ARG-110, ARG-113, ARG-115, and provider
   integration tickets
