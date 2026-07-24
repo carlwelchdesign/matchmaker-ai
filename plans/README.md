@@ -49,6 +49,7 @@ Deliver a secure, privacy-conscious private beta that supports:
 | [reviews.md](reviews.md) | Specialist review findings and validation traceability |
 | [validation.md](validation.md) | Current validation evidence and known repository prerequisite |
 | [visuals/README.md](visuals/README.md) | Selected Nocturne specimen for public, staff, and mobile review |
+| [research/](research/) | Research protocols, evidence templates, and synthesis criteria for Phase 0 gates |
 
 ## Status vocabulary
 
