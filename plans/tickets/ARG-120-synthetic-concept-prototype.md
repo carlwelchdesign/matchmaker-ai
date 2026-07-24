@@ -88,7 +88,7 @@ workspace without collecting, processing, or presenting real personal data.
 ## Delivery evidence
 
 - Branch: `ticket/ARG-120-synthetic-concept-prototype`
-- Commit: branch HEAD (separate admin-app commit pending)
+- Commit: `00f27a8` (`ARG-120 separate owner admin application`)
 - PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/38
 - Merge:
 - Deployment: Local Docker concept prototype only
