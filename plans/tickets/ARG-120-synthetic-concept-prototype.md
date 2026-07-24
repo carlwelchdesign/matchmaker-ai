@@ -90,8 +90,8 @@ workspace without collecting, processing, or presenting real personal data.
 ## Delivery evidence
 
 - Branch: `codex/ARG-120-mobile-hero-image`
-- Commit: branch HEAD (mobile hero-image fix pending)
-- PR:
+- Commit: `32eb96d` (`ARG-120 add bundled mobile splash image`)
+- PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/41
 - Merge: https://github.com/carlwelchdesign/matchmaker-ai/pull/39
 - Deployment: Local Docker concept prototype only
 - Evidence URLs/paths:
