@@ -58,6 +58,8 @@ flows are built.
 - [x] Run-ready screener, consent script, note template, and synthesis tracker
   exist.
 - [x] Moderator guide and low-fidelity concept stimuli exist.
+- [x] Synthetic concept/language dry run is documented; real participant
+  evidence is still required before `Done`.
 
 ## Security, privacy, AI, data, and accessibility
 
@@ -115,12 +117,13 @@ flows are built.
   - [Synthesis tracker](../research/research-synthesis-tracker.md)
   - [ARG-003 moderator guide](../research/session-materials/ARG-003-moderator-guide.md)
   - [ARG-003 concept stimuli](../research/session-materials/ARG-003-concept-stimuli.md)
+  - [ARG-003 synthetic concept review](../research/synthetic-dry-runs/ARG-003-synthetic-concept-review.md)
 - Completion date:
 
 ## Completion notes
 
-This ticket is `Ready`, not `Done`. It requires real concept/language evidence
-before brand, intake, campaign, consent, or conversational implementation can
-start.
+This ticket is `Ready`, not `Done`. The synthetic concept review identifies
+hypotheses to test but does not replace real applicant/candidate/client,
+founder, or accessibility evidence.
 
 - Follow-up owner: Project owner

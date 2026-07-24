@@ -19,6 +19,10 @@ synthesis criteria for Phase 0 decision gates.
   concept/language moderator guide.
 - [session-materials/ARG-003-concept-stimuli.md](session-materials/ARG-003-concept-stimuli.md) —
   low-fidelity copy stimuli for testing.
+- [synthetic-dry-runs/ARG-002-synthetic-case-walkthroughs.md](synthetic-dry-runs/ARG-002-synthetic-case-walkthroughs.md) —
+  synthetic workflow dry run, not participant evidence.
+- [synthetic-dry-runs/ARG-003-synthetic-concept-review.md](synthetic-dry-runs/ARG-003-synthetic-concept-review.md) —
+  synthetic language and concept dry run, not participant evidence.
 
 Research artifacts must separate:
 
