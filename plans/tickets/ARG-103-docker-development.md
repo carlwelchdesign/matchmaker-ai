@@ -3,7 +3,7 @@
 - **Epic:** Platform foundation
 - **Capability/requirement IDs:** CAP-007, CAP-008
 - **Priority:** P0
-- **Status:** Done
+- **Status:** In Progress
 - **Named owner:** Codex
 - **Named approver/reviewer:** Project owner
 - **Target milestone:** Operational alpha
@@ -11,6 +11,16 @@
 - **Dependencies:** ARG-101
 - **Decision/risk links:** ADR-001, ADR-002, R-008, R-015, R-020
 - **Blocked reason/review date:** None
+
+## Build-context remediation — 2026-07-23
+
+Post-completion review found that Git ignored local environment files but the
+Docker build context did not. A developer's untracked `.env.local` or common
+private-key file could therefore be sent to a local or remote BuildKit builder
+and retained in build cache even though it never reached the final image.
+ARG-103 is reopened narrowly until sensitive context patterns are excluded,
+non-secret `.env.example` files remain available, the policy is enforced in
+CI, and the container smoke path passes remotely.
 
 ## Outcome
 

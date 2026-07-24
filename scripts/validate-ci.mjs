@@ -69,6 +69,29 @@ if (!/^ARG RUNTIME_NODE_IMAGE=\S+@sha256:[0-9a-f]{64}$/mu.test(dockerfile)) {
   throw new Error("Application runtime image must be pinned by digest");
 }
 
+const dockerignore = await readFile(
+  resolve(repositoryRoot, ".dockerignore"),
+  "utf8",
+);
+const dockerignorePatterns = dockerignore.split(/\r?\n/u);
+for (const sensitivePattern of [
+  "**/.env",
+  "**/.env.*",
+  "**/*.key",
+  "**/*.p12",
+  "**/*.pfx",
+  "**/*.pem",
+]) {
+  if (!dockerignorePatterns.includes(sensitivePattern)) {
+    throw new Error(
+      `.dockerignore must exclude sensitive build-context pattern: ${sensitivePattern}`,
+    );
+  }
+}
+if (!dockerignorePatterns.includes("!**/.env.example")) {
+  throw new Error(".dockerignore must permit non-secret environment examples");
+}
+
 const compose = await readFile(resolve(repositoryRoot, "compose.yaml"), "utf8");
 for (const service of ["postgres", "redis"]) {
   const servicePattern = new RegExp(

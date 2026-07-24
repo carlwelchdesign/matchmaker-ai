@@ -9,5 +9,12 @@
 coverage
 apps/mobile
 plans
+**/.env
+**/.env.*
+!**/.env.example
+**/*.key
+**/*.p12
+**/*.pfx
+**/*.pem
 *.log
 .DS_Store
