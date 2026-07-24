@@ -12,6 +12,8 @@ This is the phase-level view. Check an item only when all linked tickets are `Do
 - [ ] Threat model and data-flow review approved.
 - [ ] Privacy/legal requirements and partner terms identified.
 - [ ] Provider/API feasibility matrix completed.
+- [ ] Match-science evidence review, construct register, outcome taxonomy, and prospective pilot approved.
+- [ ] Optional conversational-intake concept, consent boundary, and speech feasibility approved.
 - [ ] Private-beta scope and go/no-go gates approved.
 
 ## Phase 1 — Foundation
@@ -30,6 +32,7 @@ This is the phase-level view. Check an item only when all linked tickets are `Do
 - [ ] Campaign configuration and controlled branding complete.
 - [ ] Public campaign landing and eligibility complete.
 - [ ] Application, save/resume, uploads, and consent complete.
+- [ ] Optional conversational/hybrid intake and field-by-field approval complete if the research gate passes.
 - [ ] Invite codes, referrals, quotas, and waitlist complete.
 - [ ] Applicant review and lifecycle transitions complete.
 - [ ] Interview, verification, status, and notification workflows complete.

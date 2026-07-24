@@ -41,6 +41,9 @@ Scoring: impact and likelihood are `1` (low) to `5` (critical/high). Score is th
 | R-035 | Founder is a key-person dependency for decisions and incidents | 4 | 4 | 16 | ARG-025 named deputies RACI and escalation | Founder | Before pilot | Open |
 | R-036 | App-store approval delays private beta | 3 | 3 | 9 | Mobile is not on pilot critical path; web fallback | Mobile/product | Before private beta | Open |
 | R-037 | Web, iOS, and Android drift into inconsistent or inaccessible visual systems | 4 | 3 | 12 | DEC-011 ADR-019 ARG-004 ARG-118 ARG-701 ARG-801 token generation drift checks and platform review | Design systems/engineering | Before user-facing implementation | Open |
+| R-038 | Pseudoscientific compatibility claims or scores harm participants and Argent's trust | 5 | 4 | 20 | DEC-012 ADR-021 ARG-026 ARG-020 ARG-502 ARG-605 ARG-606 | Product/science/AI | Before matching implementation | Open |
+| R-039 | Conversational intake causes oversharing, inaccurate profile data, unlawful recording, or source-data exposure | 5 | 4 | 20 | DEC-013 ADR-020 ARG-006 ARG-027 ARG-028 ARG-206 ARG-207 ARG-208 ARG-212 ARG-613 | Privacy/security/product | Before real-person voice testing | Open |
+| R-040 | Class, gender, voice, or presumed-personality stereotypes bias intake, admission, or matching | 5 | 3 | 15 | DEC-014 ARG-003 ARG-026 ARG-027 ARG-608 | Product/research/AI | Before applicant prototype | Open |
 
 ## Escalation policy
 

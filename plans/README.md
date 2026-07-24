@@ -33,6 +33,8 @@ Deliver a secure, privacy-conscious private beta that supports:
 | [data-model.md](data-model.md) | Conceptual entities, ownership, lifecycle, and audit requirements |
 | [security-privacy.md](security-privacy.md) | Security, privacy, consent, retention, and trust program |
 | [ai-governance.md](ai-governance.md) | AI boundaries, evaluations, human review, and prohibited uses |
+| [match-science.md](match-science.md) | Evidence review, construct policy, outcome taxonomy, and pre-implementation matching gate |
+| [conversational-intake.md](conversational-intake.md) | Optional text/voice intake research, consent boundary, speech feasibility, and prototype gate |
 | [operations.md](operations.md) | Reliability, support, incident response, and launch operations |
 | [metrics.md](metrics.md) | Metric definitions, event lineage, attribution, and privacy requirements |
 | [content-model.md](content-model.md) | Versioned campaign content, assets, taxonomies, and publishing |
@@ -76,5 +78,7 @@ Planning work uses `planning/*` branches. Application implementation uses ticket
 - Canonical decisions belong in this folder, not only in chat or PR comments.
 - New scope requires a ticket and dependency review.
 - Consequential AI actions remain human-reviewed.
+- Matching is evidence-informed candidate discovery, not a prediction of attraction or relationship success.
+- Conversational intake is optional and may only create user-reviewed, source-grounded profile proposals.
 - Partner campaigns never bypass Argent authorization or data-governance rules.
 - Sensitive data must not appear in logs, analytics payloads, fixtures, screenshots, or model prompts without an approved purpose and handling policy.

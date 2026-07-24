@@ -54,12 +54,26 @@ Capture distinct, versioned choices for:
 - sharing with a named partner or matchmaker;
 - identity or background verification;
 - interview recording or transcription;
+- conversational-intake recording, transcription, source retention, and AI structuring as distinct choices;
 - transactional communications;
 - marketing communications;
 - AI processing where disclosure or consent is required;
 - future reuse of de-identified or aggregate information.
 
 Do not bundle optional permissions into acceptance of required service terms.
+
+## Conversational intake controls
+
+- Recording is off by default, explicitly started and stopped for each response, and visibly active.
+- Counsel defines jurisdiction-specific notice and all-party consent behavior before testing with real applicants.
+- Typed and human-assisted alternatives remain available without admission penalty.
+- Raw audio, transcript revisions, approved fields, and research reuse have separate purposes and retention.
+- Raw audio is ephemeral by default; retained audio requires an approved purpose and short maximum retention.
+- Bystander or third-party speech is rejected, deleted, or handled through a counsel-approved path.
+- Speech vendors may not train on Argent data; on-device processing is preferred when target-device testing supports it.
+- Voiceprints, emotion recognition, accent classification, deception detection, and psychological inference are prohibited.
+- Transcripts are corrected by the applicant before AI structuring; proposed fields require field-level approval.
+- Withdrawal and deletion propagate through audio, transcripts, proposals, approved fields, search indexes, AI artifacts, and subprocessors.
 
 ## Privacy rights workflow
 
@@ -84,6 +98,7 @@ Purpose-specific withdrawal immediately prevents new processing for that purpose
 | Partner access | Revoke grants and invalidate active sessions/caches |
 | Media | Revoke signed access and queue deletion where applicable |
 | Search/vector indexes | Remove or suppress affected material |
+| Intake audio/transcripts | Stop processing, revoke access, delete eligible source artifacts, and invalidate unapproved proposals |
 | Queued jobs | Cancel or fail closed before execution |
 | AI artifacts | Mark invalidated and prevent reuse; request provider deletion where applicable |
 | Shortlists/recommendations | Re-evaluate availability and prevent new introductions |
@@ -106,6 +121,8 @@ Before production, every entity/data class requires:
 - owner and review date.
 
 Applicants who are declined or withdraw should not silently remain available for matching.
+
+Audio and transcript retention are not inherited from the submitted application. Each requires its own approved minimum/maximum period, access scope, deletion verification, provider behavior, and legal-hold rule.
 
 ## Partner campaign controls
 

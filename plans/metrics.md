@@ -40,6 +40,25 @@ Every beta KPI requires:
 | Campaign conversion | Attribution cohort | First-touch versus campaign membership |
 | Operational review time | Application review work session | Idle time and reopened reviews |
 
+## Conversational-intake metrics
+
+Compare structured, conversational, and hybrid modes without treating greater disclosure as inherently better:
+
+- completion, abandonment, save/resume, and mode-switch rate;
+- time and correction burden;
+- transcript word-error rate by approved language, accent cohort, device, and environment;
+- proposed-field support, applicant edit/reject, and extraction-error rates;
+- sensitive oversharing and third-party disclosure incidents;
+- accessibility failure and human-assistance requests;
+- matchmaker usefulness of approved fields;
+- audio/transcript deletion completion, latency, compute cost, and device impact.
+
+## Matching outcome taxonomy
+
+Use distinct denominators for retrieval review, shortlist inclusion, matchmaker recommendation, each participant's consent, delivered introduction, first meeting, interest in another meeting, respectful closure, safety concern, and self-reported relationship status at defined intervals.
+
+Do not create one “successful match” label. Record the selection policy, candidate set, missing feedback, and exposure opportunity so outcomes are not mistaken for unbiased training labels.
+
 ## Attribution model
 
 Preserve an immutable touchpoint chain:

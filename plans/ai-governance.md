@@ -9,6 +9,7 @@ Initial AI features are bounded model calls or deterministic workflows—not ope
 ## Allowed initial use cases
 
 - Draft a structured application summary from approved fields.
+- Transcribe an explicitly initiated intake response and propose source-grounded fields after the applicant reviews the transcript.
 - Identify missing, stale, or contradictory information.
 - Suggest interview questions with source references.
 - Retrieve candidate profiles matching explicit criteria.
@@ -24,6 +25,11 @@ Initial AI features are bounded model calls or deterministic workflows—not ope
 - Inferring race, ethnicity, religion, disability, sexual orientation, health, personality disorder, emotional maturity, honesty, or socioeconomic status from appearance.
 - Face recognition or biometric identification without a separately approved, lawful use case.
 - Hidden ranking based on ability to pay or partner pressure.
+- Compatibility percentages or predictions of attraction, date success, or relationship success.
+- Inferred personality type, narcissism, attachment style, honesty, intent, or character.
+- Ranking or interview behavior based on class, gender, occupation, accent, dialect, fluency, voice, or another demographic proxy.
+- Adding unapproved transcript content or raw audio to a profile, retrieval index, analytics event, or training corpus.
+- Emotion recognition, voice biometrics, deception detection, or psychological inference from speech.
 - Training provider models on private Argent data without explicit contractual and governance approval.
 - Sending safety, screening, legal, or highly restricted notes to a general model.
 
@@ -60,6 +66,24 @@ Every AI artifact records:
 - Recommendation explanations cite the actual profile fields or matchmaker evidence used.
 - Missing data lowers completeness; it is not treated as a negative trait.
 - Protected or prohibited attributes must not enter ranking features.
+- Structured facts and user-approved narrative fields remain distinct from inferred traits.
+- Semantic embeddings may index only purpose-approved, allowlisted, user-approved text.
+- The system presents evidence, conflicts, unknowns, and freshness—not a universal compatibility score.
+
+The matching evidence and validation gate is [match-science.md](match-science.md).
+
+## Conversational intake
+
+- The applicant chooses structured, conversational, or hybrid entry and can switch modes.
+- Recording is explicit, bounded to one response, and separately consented from transcription and retention.
+- The applicant corrects or deletes the transcript before field extraction.
+- Every proposed field includes the supporting passage and requires explicit approval.
+- Rejected content is not retained for retrieval, analytics, or model improvement.
+- Raw audio and transcript are separate restricted artifacts with independently approved retention.
+- A text-only and human-assisted path remains available.
+- The agent identifies itself as AI and does not simulate therapy, manipulate disclosure, or flatter status.
+
+Production speech processing remains blocked by [conversational-intake.md](conversational-intake.md), the privacy assessment, ASR feasibility testing, and an approved provider/on-device ADR.
 
 ## Evaluation program
 

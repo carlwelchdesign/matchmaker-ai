@@ -31,6 +31,9 @@ When a ticket moves to `Ready`, copy [the ticket template](../templates/ticket.m
 - [ ] `ARG-023` Approve content, taxonomy, rights, and publishing governance.
 - [ ] `ARG-024` Establish requirement-to-delivery traceability.
 - [ ] `ARG-025` Assign launch RACI and critical-risk ownership.
+- [ ] `ARG-026` Complete match-science evidence review, construct register, and prospective validation plan.
+- [ ] `ARG-027` Prototype and test optional structured, conversational, and hybrid intake.
+- [ ] `ARG-028` Evaluate on-device and server speech recognition for privacy, accuracy, cost, and accessibility.
 
 ## Phase 1 — Repository, platform, and trust foundation
 
@@ -125,6 +128,7 @@ When a ticket moves to `Ready`, copy [the ticket template](../templates/ticket.m
 - [ ] `ARG-610` Implement AI edit, override, disposition, and audit history.
 - [ ] `ARG-611` Enforce consent, authorization, and provenance at AI execution time.
 - [ ] `ARG-612` Implement AI sampling, drift detection, quarantine, and rollback.
+- [ ] `ARG-613` Implement optional conversational intake with transcript correction and field-by-field approval.
 
 ## Phase 5 — Flutter member experience
 

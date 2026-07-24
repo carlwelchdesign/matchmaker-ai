@@ -53,17 +53,21 @@ Campaign membership is an attributed relationship to an Argent person/profile, n
 1. Arrive through a campaign or Argent link.
 2. Understand selectivity, privacy, eligibility, and expected time.
 3. Create/resume an application.
-4. Provide profile, preferences, consent, and media.
-5. Review and submit.
-6. Receive status without misleading guarantees.
-7. Respond to requests for information or interview.
-8. Complete approved verification steps.
-9. Accept network/client terms if admitted.
-10. Control profile visibility, communication preferences, withdrawal, and deletion requests.
+4. Choose a structured, conversational, or hybrid intake path without affecting admission treatment.
+5. Provide profile, preferences, consent, and media; if speaking, explicitly start each recording and correct its transcript.
+6. Review each source-grounded proposed field, then approve, edit, reject, or mark it private.
+7. Review the same normalized application regardless of intake mode and submit.
+8. Receive status without misleading guarantees.
+9. Respond to requests for information or interview.
+10. Complete approved verification steps.
+11. Accept network/client terms if admitted.
+12. Control profile visibility, source retention, communication preferences, withdrawal, and deletion requests.
 
 Required states include loading, saved, unsaved, offline/interrupted, upload failure, expired invite, ineligible geography, duplicate identity, verification failure, permission denied, waitlisted, declined, withdrawn, and support escalation.
 
 Consent UX requires layered notices, a plain-language “who can see this” explanation, separate optional choices, a receipt, revocation consequences, and confirmation.
+
+Conversational intake must remain optional, visibly AI-assisted, non-anthropomorphic by default, and interchangeable with typed entry. It may clarify or summarize what the applicant said but may not infer a diagnosis, personality type, honesty, emotional state, or hidden preference. The full prototype and evaluation boundary is in [conversational-intake.md](conversational-intake.md).
 
 ## Matchmaker workflow
 
@@ -123,6 +127,8 @@ A partner cannot:
 - Prototype admission status and consent explanations before finalizing the data model.
 - Produce a service blueprint separating human/concierge work from system work.
 - Test the first-time application and consent prototype before implementation estimates are treated as reliable.
+- Compare structured, conversational, and hybrid intake for control, completion, accuracy, oversharing, accessibility, and correction burden.
+- Validate match constructs and claims with relationship-science or psychometrics expertise before implementing retrieval or recommendation logic.
 
 ## Role-based information architecture to prototype
 

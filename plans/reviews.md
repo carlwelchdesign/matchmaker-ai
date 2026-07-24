@@ -34,6 +34,8 @@ The initial planning package requires independent review across all areas below.
 | REV-011 Campaign branding lacked publishing/version/rights governance | High | Added content model and rights provenance | `content-model.md`, `data-model.md`, ADR-018 | ARG-023 ARG-311 |
 | REV-012 Backlog and governance lacked executable ownership/traceability | High | Added milestone/import columns, capability map, owner gate, drift plan | `delivery.md`, `traceability.md`, `documentation-governance.md` | ARG-024 ARG-025 ARG-117 |
 | REV-013 Initial visual direction was generic and lacked cross-platform token governance | High | Replaced the concept set with Nocturne; added semantic tokens, platform adaptation, approval evidence, drift governance, and a foundation ticket | `design-system.md`, `product.md`, DEC-011, ADR-019 | ARG-004 ARG-118 ARG-801 |
+| REV-014 Matching-science assumptions and personality-vector scope were not evidence-gated | Critical | Defined evidence-informed retrieval, prohibited predictive scoring and MBTI pairing, added construct register and prospective validation gate | `match-science.md`, `ai-governance.md`, DEC-012, ADR-021, risks R-038 R-040 | ARG-026 ARG-020 ARG-502 ARG-605 ARG-606 |
+| REV-015 Conversational intake lacked consent, source-data, accessibility, and ASR boundaries | Critical | Made it optional; separated recording/transcription/structuring consent; required transcript correction and field approval; added speech feasibility gate | `conversational-intake.md`, `security-privacy.md`, `data-model.md`, DEC-013, ADR-020, R-039 | ARG-027 ARG-028 ARG-613 |
 
 ## Validation checklist
 
@@ -49,3 +51,5 @@ The initial planning package requires independent review across all areas below.
 - [x] External integration assumptions have feasibility gates and fallbacks.
 - [x] Backlog tickets have dependencies and completion checklists.
 - [x] Decision-owner roles and deadlines are visible; named assignments are gated by `ARG-025`.
+- [x] Match-science claims, constructs, outcomes, and implementation blockers are explicit.
+- [x] Conversational intake preserves mode choice, source review, consent, accessibility, and deletion boundaries.

@@ -59,10 +59,12 @@ Needs limited campaign visibility, attribution, and reporting without broad acce
 - **Trust is part of luxury:** security, verification, responsive service, and accurate language matter more than decorative exclusivity.
 - **Operations before spectacle:** optimize the matchmaking workflow before adding broad social or marketplace features.
 - **Evidence over intuition:** product decisions should be tested with applicants, candidates, clients, and matchmakers.
+- **No demographic diagnosis:** class, gender, identity, occupation, appearance, and voice are not proxies for character or personality.
 
 ## Jobs to be done
 
 - Apply to be considered without exposing a public dating profile.
+- Choose a structured, conversational, or hybrid application path and approve what the system records about you.
 - Understand what Argent needs, what happens next, and how information will be used.
 - Review applicants consistently and move them through a visible lifecycle.
 - Find plausible candidates using hard constraints, soft preferences, context, and matchmaker judgment.
@@ -79,6 +81,14 @@ Nocturne is selected but remains pending final `ARG-004` approval. The canonical
 Avoid generic gold-on-black “VIP” motifs, cream-and-forest luxury templates, centered editorial-serif hero defaults, decorative card grids, status theatrics, gamification, public popularity metrics, and swipe-based interaction.
 
 “Elite” should be demonstrated through discretion, service quality, curation, and confidence—not exclusionary copy.
+
+## Matching-science position
+
+Argent is an evidence-informed, human-led service. Technology may apply explicit constraints, retrieve candidates from approved information, and present evidence and uncertainty. It must not promise to predict love or convert a person into a personality or compatibility score.
+
+MBTI, love languages, zodiac signs, inferred personality, and demographic stereotypes are not ranking systems. Validated continuous measures may be researched only under the construct, license, privacy, and evaluation gates in [match-science.md](match-science.md).
+
+An optional conversational application may help people dictate or type fuller answers. It remains grounded in standardized questions and creates only proposed fields that the applicant can edit, reject, or approve. The research and privacy gate is defined in [conversational-intake.md](conversational-intake.md).
 
 ## Business-model questions requiring validation
 

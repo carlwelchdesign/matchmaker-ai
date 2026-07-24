@@ -15,6 +15,9 @@
 | DEC-009 | 2026-07-23 | The first proof is a web/concierge operational alpha followed by a consenting service pilot | Validates the human service before AI/mobile expansion | Pilot evidence supports changing the sequence |
 | DEC-010 | 2026-07-23 | Pilot campaign partners receive aggregate reporting only | Reduces consent, contract, breach, and UX complexity | Purpose-specific person access becomes proven and legally approved |
 | DEC-011 | 2026-07-23 | Nocturne direction `02` is selected provisionally for public web, staff web, iOS, and Android | Founder selected the more distinctive discreet-cinematic direction; one shared semantic system prevents platform drift | `ARG-004` validation fails or founder gives final approval and this row is promoted from provisional to approved |
+| DEC-012 | 2026-07-23 | Matching is evidence-informed candidate discovery with human judgment, not a predictive compatibility score | Current relationship research does not support reliable pre-meeting prediction of person-specific attraction or success | Strong prospective evidence and a new legal, scientific, product, and ethics review |
+| DEC-013 | 2026-07-23 | Research conversational intake as an optional structured, text, voice, or hybrid path; only applicant-approved fields become profile data | Conversation may reduce writing burden while transcript review and field approval preserve accuracy and control | Applicant research rejects the concept or approved privacy/accessibility thresholds cannot be met |
+| DEC-014 | 2026-07-23 | Do not encode wealth, gender, or presumed narcissism as a persona, prompt strategy, score, or matching feature | Group-level hypotheses cannot diagnose individuals and would create biased treatment | Never for diagnosis; segment-service hypotheses may be tested neutrally with approved research |
 
 ## Proposed ADRs
 
@@ -39,3 +42,5 @@
 | ADR-017 | Pilot commerce and service-contract boundary | Founder + legal + product | Before accepting payment | Proposed |
 | ADR-018 | Campaign content, taxonomy, rights, and publishing | Product + privacy + design | Before campaign implementation | Proposed |
 | ADR-019 | Canonical design-token format, web/Dart/Figma generation, and drift governance | Design systems + web + mobile owners | Before `ARG-118` | Proposed |
+| ADR-020 | Conversational intake ASR deployment, provider, consent, source retention, and deletion boundary | Privacy + security + mobile + AI owners | Before `ARG-613` | Proposed |
+| ADR-021 | Deterministic filtering, semantic retrieval, evidence bundle, human ranking, and outcome-evaluation boundary | AI + product + data + privacy owners | Before `ARG-502` or `ARG-605` | Proposed |

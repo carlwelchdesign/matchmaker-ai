@@ -18,6 +18,11 @@
 | `Profile` | Matchmaking-relevant information and preferences | Versioned; visibility and provenance per field where needed |
 | `Application` | A submission for consideration | Belongs to a person and entry source; drives admission lifecycle |
 | `ApplicationAnswer` | Versioned structured/form response | Stores schema version and source |
+| `IntakeSession` | One resumable structured, conversational, or hybrid application session | Records mode, notice/consent versions, status, locale, and mode changes |
+| `ConversationTurn` | One bounded question and typed or spoken response | Links the exact question schema and restricted source artifacts |
+| `IntakeRecording` | Optional raw audio for one explicitly recorded response | Separate consent, access policy, expiry, deletion state, and no biometric purpose |
+| `TranscriptRevision` | Applicant-reviewable transcription of a response | Immutable revisions, corrections, confidence metadata, approval, and deletion state |
+| `ProfileFieldProposal` | Source-grounded candidate field derived from approved text | Supporting passage, schema, proposer, and applicant disposition |
 | `Campaign` | Controlled Argent recruiting initiative | Has branding, rules, geography, dates, quotas, and partner permissions |
 | `CampaignMembership` | Person/application relationship to a campaign | Prevents duplicate people and records attribution |
 | `InviteCode` | Controlled campaign/referral access or attribution | Has scope, limits, expiration, issuer, and use history |
@@ -69,6 +74,12 @@
 ## Important relationships
 
 - `Person 1—N Application`
+- `Application 1—N IntakeSession`
+- `IntakeSession 1—N ConversationTurn`
+- `ConversationTurn 0—1 IntakeRecording`
+- `ConversationTurn 0—N TranscriptRevision`
+- `TranscriptRevision 0—N ProfileFieldProposal`
+- `ProfileFieldProposal 0—1 ApplicationAnswer` only after applicant approval
 - `Application N—1 Campaign` where applicable
 - `Person N—M Campaign` through `CampaignMembership`
 - `Person 0—1 CandidateMembership`
@@ -105,6 +116,7 @@ Geographic campaigns should prefer coarse eligibility evidence, such as county o
 
 - Deterministic and reviewed duplicate resolution.
 - Provenance for imported, applicant-entered, staff-entered, partner-entered, provider-returned, and AI-derived values.
+- Unapproved transcripts and recordings are source artifacts, not profile assertions, and cannot be indexed for matching.
 - `unknown` distinct from `false`, `none`, and `not applicable`.
 - Versioned application schemas and match criteria.
 - Expiration/refresh rules for stale preferences, photos, verification, and availability.
