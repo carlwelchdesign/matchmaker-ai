@@ -44,7 +44,7 @@ When a ticket moves to `Ready`, copy [the ticket template](../templates/ticket.m
 - [x] `ARG-104` Establish CI quality, test, secret, dependency, and container gates.
 - [ ] `ARG-105` Select the cloud/deployment approach and provision staging.
 - [ ] `ARG-106` Establish environment configuration and managed secrets.
-- [ ] `ARG-107` Establish database migrations, seed data, and synthetic fixtures.
+- [x] `ARG-107` Establish database migrations, seed data, and synthetic fixtures.
 - [ ] `ARG-108` Establish structured logs, metrics, traces, redaction, and alerts.
 - [ ] `ARG-109` Establish backups, point-in-time recovery, and restore reconciliation.
 - [ ] `ARG-110` Establish durable job processing, retries, and dead-letter recovery.
