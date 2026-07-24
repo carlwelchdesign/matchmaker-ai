@@ -3,7 +3,7 @@
 - **Epic:** Platform foundation
 - **Capability/requirement IDs:** CAP-006, CAP-007, CAP-008
 - **Priority:** P0
-- **Status:** In review
+- **Status:** Done
 - **Named owner:** Codex
 - **Named approver/reviewer:** Project owner
 - **Target milestone:** Operational alpha
@@ -83,10 +83,10 @@ Create a reproducible TypeScript and Flutter monorepo with explicit web, mobile,
 - Branch: `ticket/ARG-101-platform-foundation`
 - Commit: `666de18` (`ARG-101: scaffold platform foundation`)
 - PR: [#2 — ARG-101 — Scaffold platform foundation](https://github.com/carlwelchdesign/matchmaker-ai/pull/2)
-- Merge:
+- Merge: PR #2 squash-merged as `b742960`
 - Deployment: Not in scope
 - Evidence URLs/paths:
-- Completion date:
+- Completion date: 2026-07-23
 
 ## Completion notes
 
