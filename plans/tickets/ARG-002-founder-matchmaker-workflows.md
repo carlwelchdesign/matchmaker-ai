@@ -59,6 +59,8 @@ workflow decisions are based on evidence rather than dating-app assumptions.
 - [x] Run-ready screener, consent script, note template, and synthesis tracker
   exist.
 - [x] Moderator guide exists for required session types.
+- [x] Private field-research execution packet defines recruitment, session,
+  evidence, and gate-review handling; real operator sessions remain required.
 
 ## Security, privacy, AI, data, and accessibility
 
@@ -117,6 +119,7 @@ workflow decisions are based on evidence rather than dating-app assumptions.
   - [Synthesis tracker](../research/research-synthesis-tracker.md)
   - [ARG-002 moderator guide](../research/session-materials/ARG-002-moderator-guide.md)
   - [ARG-002 synthetic case walkthroughs](../research/synthetic-dry-runs/ARG-002-synthetic-case-walkthroughs.md)
+  - [Field research execution packet](../research/field-research-execution-packet.md)
 - Completion date:
 
 ## Completion notes

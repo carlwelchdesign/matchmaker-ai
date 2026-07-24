@@ -60,6 +60,8 @@ flows are built.
 - [x] Moderator guide and low-fidelity concept stimuli exist.
 - [x] Synthetic concept/language dry run is documented; real participant
   evidence is still required before `Done`.
+- [x] Private field-research execution packet defines recruitment, session,
+  evidence, and gate-review handling; real participant sessions remain required.
 
 ## Security, privacy, AI, data, and accessibility
 
@@ -118,6 +120,7 @@ flows are built.
   - [ARG-003 moderator guide](../research/session-materials/ARG-003-moderator-guide.md)
   - [ARG-003 concept stimuli](../research/session-materials/ARG-003-concept-stimuli.md)
   - [ARG-003 synthetic concept review](../research/synthetic-dry-runs/ARG-003-synthetic-concept-review.md)
+  - [Field research execution packet](../research/field-research-execution-packet.md)
 - Completion date:
 
 ## Completion notes

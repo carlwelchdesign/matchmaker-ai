@@ -13,6 +13,8 @@ synthesis criteria for Phase 0 decision gates.
   language readout and consent confirmation.
 - [research-synthesis-tracker.md](research-synthesis-tracker.md) — coverage,
   finding, and decision tracker.
+- [field-research-execution-packet.md](field-research-execution-packet.md) —
+  private recruiting, session, evidence-quality, and gate-review playbook.
 - [session-materials/ARG-002-moderator-guide.md](session-materials/ARG-002-moderator-guide.md) —
   founder/matchmaker workflow moderator guide.
 - [session-materials/ARG-003-moderator-guide.md](session-materials/ARG-003-moderator-guide.md) —

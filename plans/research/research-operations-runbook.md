@@ -77,6 +77,8 @@ retention date, deletion process, and access list before use.
 
 ## Pre-session checklist
 
+- [ ] Use the [field research execution packet](field-research-execution-packet.md)
+  to assign a non-identifying session ID and keep contact data outside Git.
 - [ ] Confirm participant segment and session ID.
 - [ ] Confirm the session maps to `ARG-002`, `ARG-003`, or both.
 - [ ] Send the plain-language purpose and consent/readout script.
@@ -107,6 +109,8 @@ retention date, deletion process, and access list before use.
 - [ ] Record whether a finding is evidence, inference, or open question.
 - [ ] Remove or isolate raw sensitive material.
 - [ ] Update synthesis tracker.
+- [ ] After every two sessions, review prompts and privacy handling before
+  inviting the next cohort.
 
 ## Synthesis threshold
 
