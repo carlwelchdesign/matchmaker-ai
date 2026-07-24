@@ -3,14 +3,14 @@
 - **Epic:** Product prototype
 - **Capability/requirement IDs:** CAP-001; CAP-003; CAP-004
 - **Priority:** P0
-- **Status:** Done
+- **Status:** In progress
 - **Named owner:** Codex
 - **Named approver/reviewer:** Project owner
 - **Target milestone:** Prototype review
 - **Estimate band:** M
 - **Dependencies:** ARG-101; ARG-118
 - **Decision/risk links:** DEC-011; DEC-012; DEC-013; DEC-014; R-025; R-038; R-039; R-040
-- **Blocked reason/review date:** None; explicit project-owner authorization on 2026-07-24 for a non-production concept prototype.
+- **Blocked reason/review date:** None; reopened on 2026-07-24 to correct the missing Flutter splash image after visual review.
 
 ## Outcome
 
@@ -50,6 +50,7 @@ workspace without collecting, processing, or presenting real personal data.
 - [x] Jenny's concept admin distinguishes overview, review, campaigns, and disconnected operations without implying production control.
 - [x] Flutter screen uses the shared token adapter and represents the same prototype boundary.
 - [x] Flutter opening state mirrors the Nocturne public splash posture before revealing the local-only application preview.
+- [x] Flutter opening state renders the bundled Nocturne coastal-residence hero image; no network image request is used.
 - [x] All sample records are fictional and contain no personal or sensitive data.
 - [x] Keyboard, focus, responsive, reduced-motion, and non-production states are represented proportionately; no asynchronous data action exists, so loading/error recovery is not simulated.
 - [x] Tests prove prototype data is local/synthetic and the public flow does not submit information.
@@ -88,13 +89,13 @@ workspace without collecting, processing, or presenting real personal data.
 
 ## Delivery evidence
 
-- Branch: `codex/ARG-120-mobile-nocturne-splash`
-- Commit: `a905dd0` (`ARG-120 record mobile splash pull request`)
-- PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/39
+- Branch: `codex/ARG-120-mobile-hero-image`
+- Commit: `32eb96d` (`ARG-120 add bundled mobile splash image`)
+- PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/41
 - Merge: https://github.com/carlwelchdesign/matchmaker-ai/pull/39
 - Deployment: Local Docker concept prototype only
 - Evidence URLs/paths:
-- Completion date: 2026-07-24
+- Completion date:
 
 ## Completion notes
 
@@ -102,10 +103,11 @@ This ticket intentionally creates a review artifact, not a pathway to collect
 real data or bypass ARG-002/ARG-003, privacy, lifecycle, matching, or launch
 gates.
 
-Both implementation PRs passed their required checks before merge: the
+The initial implementation PRs passed their required checks before merge: the
 separate owner admin application in PR #38 and the Flutter Nocturne opening
 state in PR #39. The local Docker stack and iPhone simulator build were
 verified. No production workflow, personal data, or consequential action was
-introduced.
+introduced. The ticket was reopened after visual review revealed the mobile
+landing did not render its approved local hero image.
 
 - Follow-up owner: Project owner
