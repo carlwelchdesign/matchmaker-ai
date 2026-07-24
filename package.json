@@ -1,0 +1,35 @@
+{
+  "name": "argent-matchmaking",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "pnpm@10.34.5",
+  "engines": {
+    "node": "20.20.1",
+    "pnpm": "10.34.5"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "audit:prod": "pnpm audit --prod --audit-level high",
+    "check": "pnpm format:check && pnpm typecheck && pnpm test && pnpm mobile:analyze && pnpm mobile:test",
+    "dev": "turbo run dev --parallel",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "mobile:analyze": "cd apps/mobile && flutter analyze",
+    "mobile:test": "cd apps/mobile && flutter test",
+    "test": "turbo run test",
+    "typecheck": "turbo run typecheck",
+    "verify": "pnpm check && pnpm build && pnpm audit:prod"
+  },
+  "devDependencies": {
+    "prettier": "3.9.6",
+    "turbo": "2.10.6",
+    "typescript": "6.0.3",
+    "vitest": "4.1.10"
+  },
+  "pnpm": {
+    "overrides": {
+      "postcss": "8.5.22",
+      "sharp": "0.35.3"
+    }
+  }
+}

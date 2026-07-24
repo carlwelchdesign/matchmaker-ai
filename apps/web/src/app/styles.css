@@ -1,0 +1,90 @@
+:root {
+  color-scheme: dark;
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  background: #130f14;
+  color: #f3eee8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+main {
+  display: grid;
+  min-height: 100svh;
+  align-content: center;
+  gap: 1.5rem;
+  width: min(100% - 3rem, 52rem);
+  margin-inline: auto;
+}
+
+.eyebrow {
+  margin: 0;
+  color: #aaa1a9;
+  font-size: 0.75rem;
+  font-weight: 650;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+h1 {
+  max-width: 10ch;
+  margin: 0;
+  font-family: "Arial Narrow", "Roboto Condensed", sans-serif;
+  font-size: clamp(3rem, 9vw, 7rem);
+  font-stretch: condensed;
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  line-height: 0.88;
+}
+
+.summary {
+  max-width: 42rem;
+  margin: 0;
+  color: #cfc5cc;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  line-height: 1.6;
+}
+
+dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 1rem 0 0;
+  border-block: 1px solid #453a44;
+}
+
+dl div {
+  padding: 1rem 0;
+}
+
+dt {
+  color: #aaa1a9;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+dd {
+  margin: 0.4rem 0 0;
+}
+
+@media (max-width: 40rem) {
+  dl {
+    grid-template-columns: 1fr;
+  }
+
+  dl div + div {
+    border-top: 1px solid #453a44;
+  }
+}

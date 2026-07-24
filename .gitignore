@@ -1,0 +1,24 @@
+# JavaScript / TypeScript
+node_modules/
+.next/
+.turbo/
+dist/
+coverage/
+*.tsbuildinfo
+
+# Environment and local state
+.env
+.env.*
+!.env.example
+.DS_Store
+
+# Flutter / Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+**/build/
+
+# Editors
+.idea/
+.vscode/

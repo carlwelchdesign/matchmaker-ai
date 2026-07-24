@@ -23,8 +23,8 @@
 
 | ADR | Question | Decision owner | Required by | Status |
 | --- | --- | --- | --- | --- |
-| ADR-001 | Modular monolith and worker boundaries | Engineering lead | Foundation scaffold | Proposed |
-| ADR-002 | Web/API framework and monorepo tooling | Engineering lead | Foundation scaffold | Proposed |
+| ADR-001 | Modular monolith and worker boundaries | Engineering lead | Foundation scaffold | Accepted |
+| ADR-002 | Web/API framework and monorepo tooling | Engineering lead | Foundation scaffold | Accepted |
 | ADR-003 | Cloud, deployment, and infrastructure-as-code | Platform owner | Environment build | Proposed |
 | ADR-004 | Identity provider and authorization enforcement | Security + engineering | Auth build | Proposed |
 | ADR-005 | Queue and job delivery semantics | Platform owner | Worker build | Proposed |
@@ -36,7 +36,7 @@
 | ADR-011 | API evolution and supported-mobile compatibility | API + mobile owners | Before contract generation | Proposed |
 | ADR-012 | Transactional outbox/inbox and job delivery semantics | Platform + data owners | Before worker foundation | Proposed |
 | ADR-013 | Analytics event architecture and deletion behavior | Data + privacy owners | Before instrumentation | Proposed |
-| ADR-014 | Server-only and client-safe package boundaries | Engineering + security | Before foundation scaffold | Proposed |
+| ADR-014 | Server-only and client-safe package boundaries | Engineering + security | Before foundation scaffold | Accepted |
 | ADR-015 | Production topology, SLOs, capacity, and scaling | Platform + security | Before staging provisioning | Proposed |
 | ADR-016 | AI workflow, tool, authorization, and evaluation boundary | AI + security + privacy | Before AI implementation | Proposed |
 | ADR-017 | Pilot commerce and service-contract boundary | Founder + legal + product | Before accepting payment | Proposed |
