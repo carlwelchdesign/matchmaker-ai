@@ -3,7 +3,7 @@
 - **Epic:** Platform foundation
 - **Capability/requirement IDs:** CAP-006, CAP-007
 - **Priority:** P0
-- **Status:** In review
+- **Status:** Done
 - **Named owner:** Codex
 - **Named approver/reviewer:** Project owner
 - **Target milestone:** Operational alpha
@@ -40,7 +40,7 @@ clients, with drift and consumer-behavior checks.
 - [x] Regeneration is deterministic and a drift check is part of verification.
 - [x] API compatibility and package-boundary ADRs are accepted.
 - [x] Security and production dependency checks pass.
-- [ ] Intended changes are committed and reviewed in a ticket PR.
+- [x] Intended changes are committed and reviewed in a ticket PR.
 
 ## Security, privacy, AI, data, and accessibility
 
@@ -77,12 +77,12 @@ clients, with drift and consumer-behavior checks.
 ## Delivery evidence
 
 - Branch: `ticket/ARG-102-api-contracts`
-- Commit:
-- PR:
-- Merge:
+- Commit: `efbffe5` (`ARG-102: generate typed API clients`)
+- PR: [#4 — ARG-102 — Generate typed API clients](https://github.com/carlwelchdesign/matchmaker-ai/pull/4)
+- Merge: PR #4 squash-merged as `49fb9a5`
 - Deployment: Not in scope
 - Evidence URLs/paths:
-- Completion date:
+- Completion date: 2026-07-23
 
 ## Completion notes
 
