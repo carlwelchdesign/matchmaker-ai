@@ -49,6 +49,7 @@ workspace without collecting, processing, or presenting real personal data.
 - [x] Local Docker exposes the public surface and the separate owner-admin application on different loopback ports.
 - [x] Jenny's concept admin distinguishes overview, review, campaigns, and disconnected operations without implying production control.
 - [x] Flutter screen uses the shared token adapter and represents the same prototype boundary.
+- [x] Flutter opening state mirrors the Nocturne public splash posture before revealing the local-only application preview.
 - [x] All sample records are fictional and contain no personal or sensitive data.
 - [x] Keyboard, focus, responsive, reduced-motion, and non-production states are represented proportionately; no asynchronous data action exists, so loading/error recovery is not simulated.
 - [x] Tests prove prototype data is local/synthetic and the public flow does not submit information.
