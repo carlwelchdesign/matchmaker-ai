@@ -58,7 +58,7 @@ When a ticket moves to `Ready`, copy [the ticket template](../templates/ticket.m
 - [ ] `ARG-116` Define production topology, SLOs, capacity envelope, and scaling policy.
 - [x] `ARG-117` Establish documentation governance and drift checks.
 - [x] `ARG-118` Establish cross-platform design tokens and foundational components.
-- [ ] `ARG-119` Report safe next development work from the backlog.
+- [x] `ARG-119` Report safe next development work from the backlog.
 - [ ] `ARG-201` Integrate authentication, MFA, recovery, and session management.
 - [ ] `ARG-202` Implement deny-by-default RBAC and object-scoped authorization.
 - [ ] `ARG-203` Implement staff administration and privileged-access review.

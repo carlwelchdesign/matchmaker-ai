@@ -3,7 +3,7 @@
 - **Epic:** Planning
 - **Capability/requirement IDs:** CAP-007
 - **Priority:** P0
-- **Status:** In review
+- **Status:** Done
 - **Named owner:** Codex
 - **Named approver/reviewer:** Project owner
 - **Target milestone:** Operational alpha
@@ -74,8 +74,9 @@ The repository can report which tickets are safe for implementation and which ti
 - Branch: `ticket/ARG-119-backlog-readiness-report`
 - Commit: `4f1911a`
 - PR: <https://github.com/carlwelchdesign/matchmaker-ai/pull/30>
-- Merge:
+- Merge: `f53759e` on 2026-07-24
 - Deployment:
 - Evidence URLs/paths:
   - [PR #30 checks](https://github.com/carlwelchdesign/matchmaker-ai/pull/30/checks)
 - Completion date:
+  2026-07-24
