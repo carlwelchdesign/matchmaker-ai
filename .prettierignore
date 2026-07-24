@@ -1,0 +1,11 @@
+.dart_tool
+.next
+.turbo
+apps/mobile
+build
+coverage
+dist
+node_modules
+pnpm-lock.yaml
+plans
+plans/visuals
