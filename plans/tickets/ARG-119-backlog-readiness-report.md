@@ -36,7 +36,7 @@ The repository can report which tickets are safe for implementation and which ti
 - [x] The report distinguishes dependency-ready decision work from safe implementation work.
 - [x] The report lists unfinished dependencies for blocked tickets.
 - [x] `pnpm plans:check` runs report tests.
-- [ ] PR checks pass before merge.
+- [x] PR checks pass before merge.
 
 ## Security, privacy, AI, data, and accessibility
 
@@ -63,7 +63,7 @@ The repository can report which tickets are safe for implementation and which ti
 ## Verification evidence
 
 - [x] Focused tests: `pnpm plans:check`; `pnpm plans:next`.
-- [x] Static/quality checks: `pnpm format:check`; `pnpm ci:check`; `git diff --check`.
+- [x] Static/quality checks: `pnpm format:check`; `pnpm ci:check`; `git diff --check`; PR #30 checks.
 - [x] Security/privacy checks: No secrets, user data, providers, logs, permissions, or production data paths changed.
 - [x] Accessibility/visual checks: Not applicable; no UI change.
 - [x] Runtime/deployment checks: Not applicable; planning report only.
@@ -72,9 +72,10 @@ The repository can report which tickets are safe for implementation and which ti
 ## Delivery evidence
 
 - Branch: `ticket/ARG-119-backlog-readiness-report`
-- Commit:
-- PR:
+- Commit: `4f1911a`
+- PR: <https://github.com/carlwelchdesign/matchmaker-ai/pull/30>
 - Merge:
 - Deployment:
 - Evidence URLs/paths:
+  - [PR #30 checks](https://github.com/carlwelchdesign/matchmaker-ai/pull/30/checks)
 - Completion date:
