@@ -1,0 +1,186 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "name": "Argent Nocturne",
+  "primitive": {
+    "color": {
+      "aubergine": {
+        "950": { "$type": "color", "$value": "#130f14" },
+        "900": { "$type": "color", "$value": "#1a141b" },
+        "850": { "$type": "color", "$value": "#211922" }
+      },
+      "plum": {
+        "800": { "$type": "color", "$value": "#332832" },
+        "700": { "$type": "color", "$value": "#453a44" },
+        "600": { "$type": "color", "$value": "#5c4f5b" }
+      },
+      "parchment": {
+        "050": { "$type": "color", "$value": "#f3eee8" },
+        "100": { "$type": "color", "$value": "#e8ded3" }
+      },
+      "silver": {
+        "200": { "$type": "color", "$value": "#cfc5cc" },
+        "300": { "$type": "color", "$value": "#aaa1a9" },
+        "500": { "$type": "color", "$value": "#7d747c" }
+      },
+      "oxblood": {
+        "500": { "$type": "color", "$value": "#b36a70" },
+        "600": { "$type": "color", "$value": "#8f3e46" },
+        "700": { "$type": "color", "$value": "#6f2b33" }
+      },
+      "moss": {
+        "500": { "$type": "color", "$value": "#80886e" }
+      },
+      "amber": {
+        "500": { "$type": "color", "$value": "#b9925c" }
+      }
+    },
+    "space": {
+      "050": { "$type": "dimension", "$value": "4px" },
+      "100": { "$type": "dimension", "$value": "8px" },
+      "150": { "$type": "dimension", "$value": "12px" },
+      "200": { "$type": "dimension", "$value": "16px" },
+      "300": { "$type": "dimension", "$value": "24px" },
+      "400": { "$type": "dimension", "$value": "32px" },
+      "600": { "$type": "dimension", "$value": "48px" },
+      "800": { "$type": "dimension", "$value": "64px" }
+    },
+    "radius": {
+      "sm": { "$type": "dimension", "$value": "4px" },
+      "md": { "$type": "dimension", "$value": "8px" }
+    },
+    "border": {
+      "hairline": { "$type": "dimension", "$value": "1px" }
+    },
+    "motion": {
+      "fast": { "$type": "duration", "$value": "120ms" },
+      "standard": { "$type": "duration", "$value": "180ms" }
+    },
+    "font": {
+      "display": {
+        "$type": "fontFamily",
+        "$value": "Arial Narrow, Roboto Condensed, ui-sans-serif, system-ui, sans-serif"
+      },
+      "body": {
+        "$type": "fontFamily",
+        "$value": "Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
+      },
+      "mono": {
+        "$type": "fontFamily",
+        "$value": "SFMono-Regular, Consolas, Liberation Mono, monospace"
+      }
+    }
+  },
+  "semantic": {
+    "surface": {
+      "canvas": {
+        "$type": "color",
+        "$value": "{primitive.color.aubergine.950}"
+      },
+      "raised": {
+        "$type": "color",
+        "$value": "{primitive.color.aubergine.900}"
+      },
+      "overlay": {
+        "$type": "color",
+        "$value": "{primitive.color.aubergine.850}"
+      }
+    },
+    "text": {
+      "primary": {
+        "$type": "color",
+        "$value": "{primitive.color.parchment.050}"
+      },
+      "secondary": {
+        "$type": "color",
+        "$value": "{primitive.color.parchment.100}"
+      },
+      "muted": { "$type": "color", "$value": "{primitive.color.silver.300}" },
+      "subtle": { "$type": "color", "$value": "{primitive.color.silver.500}" },
+      "inverse": {
+        "$type": "color",
+        "$value": "{primitive.color.aubergine.950}"
+      }
+    },
+    "border": {
+      "subtle": { "$type": "color", "$value": "{primitive.color.plum.700}" },
+      "strong": { "$type": "color", "$value": "{primitive.color.plum.600}" }
+    },
+    "action": {
+      "primary": {
+        "$type": "color",
+        "$value": "{primitive.color.oxblood.600}"
+      },
+      "primaryHover": {
+        "$type": "color",
+        "$value": "{primitive.color.oxblood.500}"
+      },
+      "onPrimary": {
+        "$type": "color",
+        "$value": "{primitive.color.parchment.050}"
+      }
+    },
+    "focus": {
+      "ring": { "$type": "color", "$value": "{primitive.color.oxblood.500}" }
+    },
+    "status": {
+      "success": { "$type": "color", "$value": "{primitive.color.moss.500}" },
+      "warning": { "$type": "color", "$value": "{primitive.color.amber.500}" },
+      "danger": { "$type": "color", "$value": "{primitive.color.oxblood.500}" }
+    }
+  },
+  "component": {
+    "button": {
+      "radius": { "$type": "dimension", "$value": "{primitive.radius.md}" },
+      "height": { "$type": "dimension", "$value": "44px" }
+    },
+    "panel": {
+      "radius": { "$type": "dimension", "$value": "{primitive.radius.md}" },
+      "borderWidth": {
+        "$type": "dimension",
+        "$value": "{primitive.border.hairline}"
+      }
+    },
+    "input": {
+      "radius": { "$type": "dimension", "$value": "{primitive.radius.sm}" },
+      "height": { "$type": "dimension", "$value": "44px" }
+    }
+  },
+  "layout": {
+    "content": {
+      "standard": { "$type": "dimension", "$value": "832px" },
+      "wide": { "$type": "dimension", "$value": "1184px" }
+    },
+    "gutter": {
+      "compact": { "$type": "dimension", "$value": "24px" },
+      "expanded": { "$type": "dimension", "$value": "48px" }
+    }
+  },
+  "type": {
+    "family": {
+      "display": {
+        "$type": "fontFamily",
+        "$value": "{primitive.font.display}"
+      },
+      "body": { "$type": "fontFamily", "$value": "{primitive.font.body}" },
+      "mono": { "$type": "fontFamily", "$value": "{primitive.font.mono}" }
+    },
+    "size": {
+      "display": { "$type": "dimension", "$value": "72px" },
+      "displayMobile": { "$type": "dimension", "$value": "48px" },
+      "section": { "$type": "dimension", "$value": "32px" },
+      "body": { "$type": "dimension", "$value": "18px" },
+      "compact": { "$type": "dimension", "$value": "14px" },
+      "label": { "$type": "dimension", "$value": "12px" }
+    },
+    "lineHeight": {
+      "display": { "$type": "number", "$value": 0.92 },
+      "body": { "$type": "number", "$value": 1.6 },
+      "compact": { "$type": "number", "$value": 1.4 }
+    },
+    "weight": {
+      "regular": { "$type": "number", "$value": 400 },
+      "medium": { "$type": "number", "$value": 550 },
+      "semibold": { "$type": "number", "$value": 650 }
+    }
+  }
+}
