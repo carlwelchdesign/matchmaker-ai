@@ -1,0 +1,28 @@
+{
+  "$schema": "./node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+  "spaces": 2,
+  "generator-cli": {
+    "version": "7.24.0",
+    "generators": {
+      "dart": {
+        "generatorName": "dart-dio",
+        "inputSpec": "packages/contracts/openapi/argent-v1.json",
+        "output": "apps/mobile/packages/argent_api_client",
+        "additionalProperties": {
+          "pubName": "argent_api_client",
+          "pubVersion": "0.0.0"
+        }
+      },
+      "typescript": {
+        "generatorName": "typescript-fetch",
+        "inputSpec": "packages/contracts/openapi/argent-v1.json",
+        "output": "packages/contracts/generated/typescript",
+        "additionalProperties": {
+          "npmName": "@argent/api-client",
+          "npmVersion": "0.0.0",
+          "supportsES6": "true"
+        }
+      }
+    }
+  }
+}

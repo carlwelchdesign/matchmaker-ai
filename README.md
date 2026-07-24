@@ -34,4 +34,11 @@ pnpm verify
 
 The Flutter application is intentionally outside the pnpm workspace. Root checks invoke `flutter analyze` and `flutter test` explicitly.
 
+When an API route schema changes, regenerate both checked-in clients:
+
+```bash
+pnpm contracts:generate
+pnpm contracts:check
+```
+
 No application, admission, matching, AI, or conversational-intake feature should be added without its ticket and documented readiness gates.

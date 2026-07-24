@@ -7,6 +7,8 @@ environment:
   sdk: ^3.12.2
 
 dependencies:
+  argent_api_client:
+    path: packages/argent_api_client
   flutter:
     sdk: flutter
 

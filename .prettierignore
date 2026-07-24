@@ -9,3 +9,5 @@ node_modules
 pnpm-lock.yaml
 plans
 plans/visuals
+packages/contracts/generated
+packages/contracts/openapi

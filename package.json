@@ -11,6 +11,8 @@
     "build": "turbo run build",
     "audit:prod": "pnpm audit --prod --audit-level high",
     "check": "pnpm format:check && pnpm typecheck && pnpm test && pnpm mobile:analyze && pnpm mobile:test",
+    "contracts:check": "pnpm contracts:generate && git diff --exit-code -- packages/contracts/openapi packages/contracts/generated apps/mobile/packages/argent_api_client",
+    "contracts:generate": "pnpm --filter @argent/api openapi:write && node packages/contracts/scripts/clean-generated.mjs && openapi-generator-cli generate && node packages/contracts/scripts/postprocess-dart.mjs && node packages/contracts/scripts/normalize-generated.mjs",
     "dev": "turbo run dev --parallel",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -18,9 +20,10 @@
     "mobile:test": "cd apps/mobile && flutter test",
     "test": "turbo run test",
     "typecheck": "turbo run typecheck",
-    "verify": "pnpm check && pnpm build && pnpm audit:prod"
+    "verify": "pnpm check && pnpm build && pnpm contracts:check && pnpm audit:prod"
   },
   "devDependencies": {
+    "@openapitools/openapi-generator-cli": "2.35.0",
     "prettier": "3.9.6",
     "turbo": "2.10.6",
     "typescript": "6.0.3",
