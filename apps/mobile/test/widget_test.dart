@@ -35,6 +35,12 @@ void main() {
       find.textContaining('no account, form submission, storage'),
       findsOneWidget,
     );
+
+    await tester.tap(find.text('View sample review status'));
+    await tester.pump();
+
+    expect(find.text('Received for\nhuman review.'), findsOneWidget);
+    expect(find.textContaining('not an admission decision'), findsOneWidget);
   });
 
   testWidgets('uses generated Nocturne theme tokens', (tester) async {

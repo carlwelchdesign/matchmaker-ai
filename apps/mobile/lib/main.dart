@@ -38,7 +38,7 @@ class ConceptLandingScreen extends StatefulWidget {
   State<ConceptLandingScreen> createState() => _ConceptLandingScreenState();
 }
 
-enum _ConceptView { applicationPreview, landing }
+enum _ConceptView { applicationPreview, landing, status }
 
 class _ConceptLandingScreenState extends State<ConceptLandingScreen> {
   var _view = _ConceptView.landing;
@@ -57,10 +57,19 @@ class _ConceptLandingScreenState extends State<ConceptLandingScreen> {
               )
             : Padding(
                 padding: const EdgeInsets.all(ArgentTokens.primitiveSpace300),
-                child: _ApplicationPreview(
-                  onReturn: () => setState(() => _view = _ConceptView.landing),
-                  textTheme: textTheme,
-                ),
+                child: _view == _ConceptView.applicationPreview
+                    ? _ApplicationPreview(
+                        onReturn: () =>
+                            setState(() => _view = _ConceptView.landing),
+                        onViewStatus: () =>
+                            setState(() => _view = _ConceptView.status),
+                        textTheme: textTheme,
+                      )
+                    : _StatusMoment(
+                        onReturn: () =>
+                            setState(() => _view = _ConceptView.landing),
+                        textTheme: textTheme,
+                      ),
               ),
       ),
     );
@@ -175,9 +184,14 @@ class _Landing extends StatelessWidget {
 }
 
 class _ApplicationPreview extends StatelessWidget {
-  const _ApplicationPreview({required this.onReturn, required this.textTheme});
+  const _ApplicationPreview({
+    required this.onReturn,
+    required this.onViewStatus,
+    required this.textTheme,
+  });
 
   final VoidCallback onReturn;
+  final VoidCallback onViewStatus;
   final TextTheme textTheme;
 
   @override
@@ -223,6 +237,78 @@ class _ApplicationPreview extends StatelessWidget {
         const SizedBox(height: ArgentTokens.primitiveSpace300),
         SizedBox(
           width: double.infinity,
+          child: FilledButton(
+            onPressed: onViewStatus,
+            child: const Text('View sample review status'),
+          ),
+        ),
+        const SizedBox(height: ArgentTokens.primitiveSpace150),
+        SizedBox(
+          width: double.infinity,
+          child: OutlinedButton(
+            onPressed: onReturn,
+            child: const Text('Return to campaign concept'),
+          ),
+        ),
+        const Spacer(),
+      ],
+    );
+  }
+}
+
+class _StatusMoment extends StatelessWidget {
+  const _StatusMoment({required this.onReturn, required this.textTheme});
+
+  final VoidCallback onReturn;
+  final TextTheme textTheme;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'ARGENT',
+          style: textTheme.labelLarge?.copyWith(
+            fontWeight: FontWeight.w600,
+            letterSpacing: 5,
+          ),
+        ),
+        const Spacer(),
+        Text(
+          'SAMPLE STATUS · LOCAL ONLY',
+          style: textTheme.labelSmall?.copyWith(
+            color: ArgentTokens.semanticTextMuted,
+            letterSpacing: 0.8,
+          ),
+        ),
+        const SizedBox(height: ArgentTokens.primitiveSpace200),
+        Text(
+          'Received for\nhuman review.',
+          style: textTheme.displayMedium?.copyWith(
+            fontWeight: FontWeight.w600,
+            height: ArgentTokens.typeLineHeightDisplay,
+          ),
+        ),
+        const SizedBox(height: ArgentTokens.primitiveSpace300),
+        _BoundaryPanel(
+          textTheme: textTheme,
+          text:
+              'This is a sample status only. It is not an admission decision, '
+              'a verification result, or a promise of an introduction.',
+        ),
+        const SizedBox(height: ArgentTokens.primitiveSpace300),
+        Text(
+          'In a live service, a person would see what happens next, who can '
+          'review their information, and how to correct or withdraw it.',
+          style: textTheme.bodyMedium?.copyWith(
+            color: ArgentTokens.semanticTextSecondary,
+            height: ArgentTokens.typeLineHeightBody,
+          ),
+        ),
+        const SizedBox(height: ArgentTokens.primitiveSpace400),
+        SizedBox(
+          width: double.infinity,
           child: OutlinedButton(
             onPressed: onReturn,
             child: const Text('Return to campaign concept'),
@@ -235,9 +321,16 @@ class _ApplicationPreview extends StatelessWidget {
 }
 
 class _BoundaryPanel extends StatelessWidget {
-  const _BoundaryPanel({required this.textTheme});
+  const _BoundaryPanel({
+    required this.textTheme,
+    this.text =
+        'A future live application would give people clear review, '
+        'correction, and withdrawal controls before any information is '
+        'considered.',
+  });
 
   final TextTheme textTheme;
+  final String text;
 
   @override
   Widget build(BuildContext context) {
@@ -250,9 +343,7 @@ class _BoundaryPanel extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(ArgentTokens.primitiveSpace200),
         child: Text(
-          'A future live application would give people clear review, '
-          'correction, and withdrawal controls before any information is '
-          'considered.',
+          text,
           style: textTheme.bodyMedium?.copyWith(
             color: ArgentTokens.semanticTextSecondary,
             height: ArgentTokens.typeLineHeightBody,
