@@ -3,14 +3,14 @@
 - **Epic:** Product prototype
 - **Capability/requirement IDs:** CAP-001; CAP-003; CAP-004
 - **Priority:** P0
-- **Status:** In progress
+- **Status:** Done
 - **Named owner:** Codex
 - **Named approver/reviewer:** Project owner
 - **Target milestone:** Prototype review
 - **Estimate band:** M
 - **Dependencies:** ARG-101; ARG-118
 - **Decision/risk links:** DEC-011; DEC-012; DEC-013; DEC-014; R-025; R-038; R-039; R-040
-- **Blocked reason/review date:** None; reopened on 2026-07-24 to correct the missing Flutter splash image after visual review.
+- **Blocked reason/review date:** None; final mobile status moment merged on 2026-07-24.
 
 ## Outcome
 
@@ -93,10 +93,10 @@ workspace without collecting, processing, or presenting real personal data.
 - Branch: `codex/ARG-120-mobile-status-moment`
 - Commit: `c1ae1f5` (`ARG-120 add mobile sample status moment`)
 - PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/42
-- Merge: https://github.com/carlwelchdesign/matchmaker-ai/pull/39
+- Merge: https://github.com/carlwelchdesign/matchmaker-ai/pull/42 (`b6cc103`)
 - Deployment: Local Docker concept prototype only
 - Evidence URLs/paths:
-- Completion date:
+- Completion date: 2026-07-24
 
 ## Completion notes
 
@@ -110,5 +110,9 @@ state in PR #39. The local Docker stack and iPhone simulator build were
 verified. No production workflow, personal data, or consequential action was
 introduced. The ticket was reopened after visual review revealed the mobile
 landing did not render its approved local hero image.
+
+The approved bundled mobile hero image and non-decisional sample-status moment
+were added in PRs #41 and #42. PR #42 passed Quality, secret scanning,
+dependency review, and CodeQL before its merge.
 
 - Follow-up owner: Project owner
