@@ -3,7 +3,7 @@
 - **Epic:** Platform foundation
 - **Capability/requirement IDs:** CAP-007, CAP-008
 - **Priority:** P0
-- **Status:** In Progress
+- **Status:** Done
 - **Named owner:** Codex
 - **Named approver/reviewer:** Project owner
 - **Target milestone:** Operational alpha
@@ -21,6 +21,12 @@ and retained in build cache even though it never reached the final image.
 ARG-103 is reopened narrowly until sensitive context patterns are excluded,
 non-secret `.env.example` files remain available, the policy is enforced in
 CI, and the container smoke path passes remotely.
+
+The remediation is complete. Pull request
+[#25](https://github.com/carlwelchdesign/matchmaker-ai/pull/25) was
+squash-merged as `98ec9acf08d97a3aa1204fb8f2a00f77e226f8d4`. A Docker
+sentinel build proved that root and nested secret-like environment files were
+absent from the build workspace while `.env.example` remained available.
 
 ## Outcome
 
@@ -82,8 +88,13 @@ worker, PostgreSQL, and Redis, plus one disposable end-to-end smoke path.
 
 - [x] Focused tests: Disposable five-service Docker smoke passes; existing 11 TypeScript and 2 Flutter tests pass.
 - [x] Static/quality checks: Compose validation, Prettier, strict TypeScript, Flutter analysis, builds, contract drift, and `git diff --check` pass.
-- [x] Security/privacy checks: Application images run as UID 1000 with read-only roots, all capabilities dropped, no-new-privileges, loopback port binds, pinned image digests, and no test/source deployment artifacts; production dependency audit reports no known vulnerabilities. Container CVE scanning remains an `ARG-104` CI gate because local Docker Scout requires authenticated access.
-- [ ] Accessibility/visual checks: No UI change; existing web response is smoke-tested.
+- [x] Security/privacy checks: Application images run as UID 65532 with
+  read-only roots, all capabilities dropped, no-new-privileges, loopback port
+  binds, pinned image digests, excluded secret-like build-context files, and no
+  test/source deployment artifacts; production dependency audit and remote
+  image scans report no known high/critical vulnerabilities.
+- [x] Accessibility/visual checks: Not applicable; no UI change. The existing
+  web response is smoke-tested.
 - [x] Runtime/deployment checks: Five services become healthy; web/API/data probes, worker start, API/worker graceful stop, and isolated volume cleanup pass. Final image sizes are 74.5 MB web, 72.9 MB API, and 71.2 MB worker.
 - [x] Rollout/rollback evidence: Local-only additive environment; rollback removes Compose/Docker definitions. Smoke state is synthetic and automatically destroyed.
 
@@ -95,6 +106,10 @@ worker, PostgreSQL, and Redis, plus one disposable end-to-end smoke path.
 - Merge: PR #6 squash-merged as `32ea1f8`
 - Deployment: Local Docker only
 - Evidence URLs/paths:
+  - [Build-context remediation and container smoke](https://github.com/carlwelchdesign/matchmaker-ai/actions/runs/30073877734)
+  - [Remediation repository verification](https://github.com/carlwelchdesign/matchmaker-ai/actions/runs/30073877813)
+  - [Remediation security checks](https://github.com/carlwelchdesign/matchmaker-ai/actions/runs/30073877757)
+  - [Remediation secret scan](https://github.com/carlwelchdesign/matchmaker-ai/actions/runs/30073877778)
 - Completion date: 2026-07-23
 
 ## Completion notes
@@ -102,5 +117,11 @@ worker, PostgreSQL, and Redis, plus one disposable end-to-end smoke path.
 PostgreSQL and Redis are healthy supporting services in this slice but are not
 yet application dependencies. The API liveness route still does not claim
 dependency readiness.
+
+Build-context remediation delivery:
+
+- Commit: `2df07454548c4027999e0d71644bcb1f49e5af0b`
+- PR: [#25](https://github.com/carlwelchdesign/matchmaker-ai/pull/25)
+- Merge: `98ec9acf08d97a3aa1204fb8f2a00f77e226f8d4`
 
 - Follow-up owner: ARG-104 and ARG-108
