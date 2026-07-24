@@ -99,6 +99,8 @@ Use the shared research operations files before scheduling:
 - [Participant screener](participant-screener.md)
 - [Consent and session script](consent-and-session-script.md)
 - [Research synthesis tracker](research-synthesis-tracker.md)
+- [ARG-003 moderator guide](session-materials/ARG-003-moderator-guide.md)
+- [ARG-003 concept stimuli](session-materials/ARG-003-concept-stimuli.md)
 
 ## Test method
 

@@ -24,6 +24,8 @@ workflow decisions are based on evidence rather than dating-app assumptions.
 - Use [ARG-002 research protocol](../research/ARG-002-founder-matchmaker-workflow.md).
 - Use the shared research operations runbook, participant screener, consent
   script, session-note template, and synthesis tracker.
+- Use the ARG-002 moderator guide for founder/operator, matchmaker/operator,
+  and case-walkthrough sessions.
 - Conduct founder/operator workflow interview.
 - Conduct at least two matchmaker or equivalent high-touch service workflow
   interviews.
@@ -55,6 +57,7 @@ workflow decisions are based on evidence rather than dating-app assumptions.
   notes are stored.
 - [x] Run-ready screener, consent script, note template, and synthesis tracker
   exist.
+- [x] Moderator guide exists for required session types.
 
 ## Security, privacy, AI, data, and accessibility
 
@@ -111,6 +114,7 @@ workflow decisions are based on evidence rather than dating-app assumptions.
   - [Participant screener](../research/participant-screener.md)
   - [Consent and session script](../research/consent-and-session-script.md)
   - [Synthesis tracker](../research/research-synthesis-tracker.md)
+  - [ARG-002 moderator guide](../research/session-materials/ARG-002-moderator-guide.md)
 - Completion date:
 
 ## Completion notes

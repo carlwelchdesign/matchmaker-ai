@@ -13,6 +13,12 @@ synthesis criteria for Phase 0 decision gates.
   language readout and consent confirmation.
 - [research-synthesis-tracker.md](research-synthesis-tracker.md) — coverage,
   finding, and decision tracker.
+- [session-materials/ARG-002-moderator-guide.md](session-materials/ARG-002-moderator-guide.md) —
+  founder/matchmaker workflow moderator guide.
+- [session-materials/ARG-003-moderator-guide.md](session-materials/ARG-003-moderator-guide.md) —
+  concept/language moderator guide.
+- [session-materials/ARG-003-concept-stimuli.md](session-materials/ARG-003-concept-stimuli.md) —
+  low-fidelity copy stimuli for testing.
 
 Research artifacts must separate:
 
