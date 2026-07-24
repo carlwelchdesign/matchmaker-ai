@@ -8,7 +8,7 @@ When a ticket moves to `Ready`, copy [the ticket template](../templates/ticket.m
 
 ## Phase 0 — Decisions and validation
 
-- [ ] `ARG-001` Approve product brief, ICP, service model, and success measures.
+- [x] `ARG-001` Approve product brief, ICP, service model, and success measures.
 - [ ] `ARG-002` Research founder and matchmaker operating workflows.
 - [ ] `ARG-003` Test applicant, candidate, and client concepts and language.
 - [ ] `ARG-004` Approve Nocturne brand and cross-platform design direction.
