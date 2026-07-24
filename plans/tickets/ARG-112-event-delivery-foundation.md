@@ -3,7 +3,7 @@
 - **Epic:** Event delivery
 - **Capability/requirement IDs:** CAP-007
 - **Priority:** P0
-- **Status:** In progress
+- **Status:** Done
 - **Named owner:** Codex
 - **Named approver/reviewer:** Project owner
 - **Target milestone:** Operational alpha
@@ -47,8 +47,8 @@ events or job requests cannot create different work under the same identity.
 - [x] Job identity, class, priority, availability, and lifecycle state are
   durable without implementing the future queue.
 - [x] Migration reversal and reapplication preserve the foundation.
-- [ ] Root verification and disposable database integration smoke pass in CI.
-- [ ] Intended changes are committed and reviewed in a ticket PR.
+- [x] Root verification and disposable database integration smoke pass in CI.
+- [x] Intended changes are committed and reviewed in a ticket PR.
 
 ## Security, privacy, AI, data, and accessibility
 
@@ -97,17 +97,24 @@ events or job requests cannot create different work under the same identity.
 ## Delivery evidence
 
 - Branch: `ticket/ARG-112-event-delivery-foundation`
-- Commit:
-- PR:
-- Merge:
+- Commit: `f13cacfc44279ac859c7cacb151dcb7f08f87d9e`
+- PR: [#15](https://github.com/carlwelchdesign/matchmaker-ai/pull/15)
+- Merge: `7118d071f9015c235228019a77048efaca9356bb`
 - Deployment: Local/CI event-delivery foundation only
 - Evidence URLs/paths:
-- Completion date:
+  [Quality and database smoke](https://github.com/carlwelchdesign/matchmaker-ai/actions/runs/30071451656),
+  [Security](https://github.com/carlwelchdesign/matchmaker-ai/actions/runs/30071451661),
+  [Secret scan](https://github.com/carlwelchdesign/matchmaker-ai/actions/runs/30071451655)
+- Completion date: 2026-07-23
 
 ## Completion notes
 
 Exactly-once claims are prohibited. Publication and downstream effects require
 separate idempotency and reconciliation evidence.
+
+The first cold CI run exposed a readiness race against PostgreSQL's temporary
+initialization server. The smoke probe now waits for the final TCP listener and
+prints container diagnostics only on timeout.
 
 - Follow-up owner: ARG-106, ARG-108, ARG-110, ARG-113, ARG-115, and provider
   integration tickets
