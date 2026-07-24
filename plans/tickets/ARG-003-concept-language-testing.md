@@ -25,6 +25,7 @@ flows are built.
 - Use [ARG-003 testing protocol](../research/ARG-003-concept-language-testing.md).
 - Use the shared research operations runbook, participant screener, consent
   script, session-note template, and synthesis tracker.
+- Use the ARG-003 moderator guide and low-fidelity concept stimuli.
 - Test public application, local campaign, intake-mode choice, and status/outcome
   language.
 - Include applicant/candidate, potential client, founder/operator, and
@@ -56,6 +57,7 @@ flows are built.
   approved consent and redaction.
 - [x] Run-ready screener, consent script, note template, and synthesis tracker
   exist.
+- [x] Moderator guide and low-fidelity concept stimuli exist.
 
 ## Security, privacy, AI, data, and accessibility
 
@@ -111,6 +113,8 @@ flows are built.
   - [Participant screener](../research/participant-screener.md)
   - [Consent and session script](../research/consent-and-session-script.md)
   - [Synthesis tracker](../research/research-synthesis-tracker.md)
+  - [ARG-003 moderator guide](../research/session-materials/ARG-003-moderator-guide.md)
+  - [ARG-003 concept stimuli](../research/session-materials/ARG-003-concept-stimuli.md)
 - Completion date:
 
 ## Completion notes
