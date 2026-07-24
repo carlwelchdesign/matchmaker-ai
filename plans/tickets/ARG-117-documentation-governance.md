@@ -3,7 +3,7 @@
 - **Epic:** Documentation
 - **Capability/requirement IDs:** CAP-007
 - **Priority:** P0
-- **Status:** In review
+- **Status:** Done
 - **Named owner:** Codex
 - **Named approver/reviewer:** Project owner
 - **Target milestone:** Operational alpha
@@ -75,10 +75,12 @@ The planning package has an automated drift check in the local and CI quality pa
 - Branch: `ticket/ARG-117-documentation-drift-checks`
 - Commit:
 - PR: <https://github.com/carlwelchdesign/matchmaker-ai/pull/28>
-- Merge:
+- Merge: `5467f3f` on 2026-07-24
 - Deployment:
 - Evidence URLs/paths:
+  - [PR #28 checks](https://github.com/carlwelchdesign/matchmaker-ai/pull/28/checks)
 - Completion date:
+  2026-07-24
 
 ## Completion notes
 
