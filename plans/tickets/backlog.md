@@ -4,6 +4,8 @@ The ordered source for import and reporting is [backlog.csv](backlog.csv). This 
 
 When a ticket moves to `Ready`, copy [the ticket template](../templates/ticket.md) to `plans/tickets/ARG-###-short-name.md`. Update that file during implementation. A checkbox below is checked only after the ticket is `Done` under [the Definition of Done](../delivery.md).
 
+- [x] `ARG-000` Establish the planning and delivery foundation.
+
 ## Phase 0 — Decisions and validation
 
 - [ ] `ARG-001` Approve product brief, ICP, service model, and success measures.

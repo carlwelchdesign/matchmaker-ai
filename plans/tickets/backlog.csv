@@ -1,5 +1,5 @@
 id,epic,phase,priority,status,outcome,dependencies,release_gate,milestone,epic_id,owner,reviewer,estimate_band,acceptance_artifact,risk_decision_links,blocked_reason
-ARG-000,Planning governance,0,P0,In progress,Create and harden canonical planning package,None,Planning,Decision gate,EPIC-0,Unassigned,Unassigned,TBD,Required at Ready,"",""
+ARG-000,Planning governance,0,P0,Done,Create and harden canonical planning package,None,Planning,Decision gate,EPIC-0,Codex,Project owner,M,plans/tickets/ARG-000-planning-foundation.md,R-020;R-037,"PR #1; merge 5212d0df1d8ba7a1ea5d6ec8896addc1b83d5241"
 ARG-001,Product strategy,0,P0,Proposed,Approve product brief ICP service model and success measures,ARG-000,Product,Decision gate,EPIC-0,Unassigned,Unassigned,TBD,Required at Ready,"",""
 ARG-002,Research,0,P0,Proposed,Document founder and matchmaker operating workflows,ARG-001,Product,Decision gate,EPIC-0,Unassigned,Unassigned,TBD,Required at Ready,"",""
 ARG-003,Research,0,P0,Proposed,Test applicant candidate and client concepts and language,ARG-001,Product,Decision gate,EPIC-0,Unassigned,Unassigned,TBD,Required at Ready,"",""

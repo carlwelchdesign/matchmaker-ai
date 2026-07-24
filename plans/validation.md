@@ -47,6 +47,11 @@
 - Remote: `git@github.com:carlwelchdesign/matchmaker-ai.git`
 - Pull request: [#1 — ARG-000 — Establish Argent planning foundation](https://github.com/carlwelchdesign/matchmaker-ai/pull/1)
 - PR state at creation: draft, clean, and mergeable
-- Merge: pending project-owner review
+- Final reviewed branch commit:
+  `55b3207b25e3e922a2837b7834fc0ac58d929b50`
+- Merge: `5212d0df1d8ba7a1ea5d6ec8896addc1b83d5241` on 2026-07-23
 
 `ARG-100` still owns branch protection, required CI, reviewer policy, and the long-term PR workflow before implementation tickets begin.
+
+This file records the planning-baseline validation snapshot. Later tickets may
+add files and backlog records without invalidating the checks reported above.
