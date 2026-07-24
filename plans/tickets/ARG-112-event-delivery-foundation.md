@@ -3,7 +3,7 @@
 - **Epic:** Event delivery
 - **Capability/requirement IDs:** CAP-007
 - **Priority:** P0
-- **Status:** In progress
+- **Status:** Done
 - **Named owner:** Codex
 - **Named approver/reviewer:** Project owner
 - **Target milestone:** Operational alpha
@@ -120,7 +120,17 @@ Post-merge review reopened ARG-112 on 2026-07-23 with concrete failed
 acceptance evidence: an expired lease owner could still release an event before
 another worker reclaimed it, canonical payload sorting used host-locale
 behavior, and immediate job availability used the application clock.
-Remediation is active on `ticket/ARG-112-lease-hash-remediation`.
+Remediation was completed on `ticket/ARG-112-lease-hash-remediation`.
+
+Remediation delivery:
+
+- Commit: `71ddaef3afb77075e4bc3101d63d8607c66e1ac5`
+- PR: [#19](https://github.com/carlwelchdesign/matchmaker-ai/pull/19)
+- Merge: `b0119445fbf3b2cf0cbc21405527a1b7ad166cde`
+- Evidence:
+  [Quality and database smoke](https://github.com/carlwelchdesign/matchmaker-ai/actions/runs/30072376332),
+  [Security](https://github.com/carlwelchdesign/matchmaker-ai/actions/runs/30072376317),
+  [Secret scan](https://github.com/carlwelchdesign/matchmaker-ai/actions/runs/30072376319)
 
 - Follow-up owner: ARG-106, ARG-108, ARG-110, ARG-113, ARG-115, and provider
   integration tickets
