@@ -360,13 +360,36 @@ h3 {
   grid-template-columns: repeat(3, 1fr);
 }
 .choice-card {
+  background: transparent;
+  border: 0;
   border-top: 1px solid var(--argent-semantic-border-strong);
+  color: var(--argent-semantic-text-secondary);
   padding-top: var(--argent-primitive-space-150);
+  text-align: left;
+}
+.choice-card[aria-pressed="true"] {
+  border-color: var(--argent-semantic-action-primary);
+  color: var(--argent-semantic-text-primary);
 }
 .choice-card p {
   color: var(--argent-semantic-text-muted);
   font-size: var(--argent-type-size-compact);
   line-height: var(--argent-type-line-height-compact);
+}
+.mode-boundary,
+.transcript-note {
+  color: var(--argent-semantic-text-muted);
+  font-size: var(--argent-type-size-compact);
+  line-height: var(--argent-type-line-height-compact);
+}
+.mode-boundary {
+  border-left: 2px solid var(--argent-semantic-status-warning);
+  margin: var(--argent-primitive-space-300) 0 0;
+  padding-left: var(--argent-primitive-space-150);
+}
+.conversation-prompt {
+  color: var(--argent-semantic-text-primary);
+  font-weight: var(--argent-type-weight-semibold);
 }
 .sample-response,
 .status-sample {

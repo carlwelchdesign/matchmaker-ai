@@ -10,7 +10,7 @@
 - **Estimate band:** M
 - **Dependencies:** ARG-003, ARG-006, ARG-018, ARG-026
 - **Decision/risk links:** DEC-013, DEC-014, ADR-020, R-039, R-040
-- **Blocked reason/review date:** Real-person testing awaits research protocol, counsel review, and approved source-data handling
+- **Blocked reason/review date:** Real-person testing, recording, and speech processing await research protocol, counsel review, and approved source-data handling. Local text-only comparison concepts may proceed.
 
 ## Outcome
 
@@ -60,7 +60,9 @@ Applicants can be evaluated for a lower-burden conversational or hybrid path tha
 - [x] Define the source-grounded extraction boundary.
 - [x] Identify open speech-recognition candidates without selecting one.
 - [x] Define privacy, accessibility, inclusion, and evaluation questions.
-- [ ] Prototype structured, conversational, and hybrid concepts.
+- [x] Prototype structured, conversational, and hybrid concepts as a local,
+  text-only comparison in the public application preview; no audio, transcript,
+  personal data, provider call, or persistence is used.
 - [ ] Conduct approved user research and accessibility review.
 - [ ] Complete counsel-reviewed recording and data-purpose requirements.
 - [ ] Hand target-device ASR protocol to ARG-028.
@@ -88,4 +90,3 @@ Applicants can be evaluated for a lower-burden conversational or hybrid path tha
 The recommended first prototype is faceless text conversation plus ordinary dictation, not an anthropomorphic voice avatar. Production implementation remains blocked.
 
 - Follow-up owner: ARG-025 assignment required
-

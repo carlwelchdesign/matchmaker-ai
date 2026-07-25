@@ -38,5 +38,8 @@ describe("synthetic concept prototype data", () => {
     expect(prototypeSource).not.toContain("fetch(");
     expect(prototypeSource).not.toContain("localStorage");
     expect(prototypeSource).not.toContain("<form");
+    expect(prototypeSource).toContain("Voice remains research-gated");
+    expect(prototypeSource).toContain("review or edit the transcript");
+    expect(prototypeSource).toContain("proposed profile field separately");
   });
 });
