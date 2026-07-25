@@ -391,6 +391,35 @@ h3 {
   color: var(--argent-semantic-text-primary);
   font-weight: var(--argent-type-weight-semibold);
 }
+.field-proposal {
+  border-top: 1px solid var(--argent-semantic-border-subtle);
+  margin-top: var(--argent-primitive-space-200);
+  padding-top: var(--argent-primitive-space-200);
+}
+.field-proposal > strong {
+  display: block;
+  margin-top: var(--argent-primitive-space-100);
+}
+.field-proposal > p:not(.detail-label) {
+  color: var(--argent-semantic-text-secondary);
+  font-size: var(--argent-type-size-compact);
+  line-height: var(--argent-type-line-height-compact);
+  margin: var(--argent-primitive-space-100) 0 0;
+}
+.field-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--argent-primitive-space-100);
+  margin-top: var(--argent-primitive-space-150);
+}
+.field-actions button[aria-pressed="true"] {
+  border-color: var(--argent-semantic-action-primary);
+  color: var(--argent-semantic-text-primary);
+}
+.approval-status {
+  border-left: 2px solid var(--argent-semantic-status-success);
+  padding-left: var(--argent-primitive-space-150);
+}
 .sample-response,
 .status-sample {
   background: var(--argent-semantic-surface-overlay);

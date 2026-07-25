@@ -41,5 +41,7 @@ describe("synthetic concept prototype data", () => {
     expect(prototypeSource).toContain("Voice remains research-gated");
     expect(prototypeSource).toContain("review or edit the transcript");
     expect(prototypeSource).toContain("proposed profile field separately");
+    expect(prototypeSource).toContain("Approve sample field");
+    expect(prototypeSource).toContain("Nothing is saved or shared");
   });
 });
