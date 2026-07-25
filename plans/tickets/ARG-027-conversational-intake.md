@@ -85,6 +85,14 @@ Applicants can be evaluated for a lower-burden conversational or hybrid path tha
 - Evidence paths: `plans/conversational-intake.md`
 - Completion date: Pending
 
+### Local comparison-concept increment
+
+- Branch: `codex/ARG-027-intake-mode-concept`
+- Commit: `9ab1f24` (`ARG-027 prototype intake mode comparison`)
+- PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/44
+- Scope: local text-only Structured, Conversation, and Hybrid comparison;
+  no recording, transcription, persistence, provider, model, or personal data.
+
 ## Completion notes
 
 The recommended first prototype is faceless text conversation plus ordinary dictation, not an anthropomorphic voice avatar. Production implementation remains blocked.
