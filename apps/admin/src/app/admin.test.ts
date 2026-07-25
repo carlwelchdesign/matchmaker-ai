@@ -11,6 +11,11 @@ describe("separate synthetic admin application", () => {
 
     expect(source).toContain("Owner workspace · local concept only");
     expect(source).toContain("Pricing is not connected");
+    expect(source).toContain("Candidate discovery / synthetic map");
+    expect(source).toContain("Nearness does not mean a better fit");
+    expect(source).toContain(
+      "A matchmaker decides whether to clarify information",
+    );
     expect(source).not.toContain("fetch(");
     expect(source).not.toContain("localStorage");
     expect(source).not.toContain("<form");

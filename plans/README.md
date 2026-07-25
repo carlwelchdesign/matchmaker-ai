@@ -83,4 +83,5 @@ Planning work uses `planning/*` branches. Application implementation uses ticket
 - Matching is evidence-informed candidate discovery, not a prediction of attraction or relationship success.
 - Conversational intake is optional and may only create user-reviewed, source-grounded profile proposals.
 - Partner campaigns never bypass Argent authorization or data-governance rules.
+- External matchmaking networks, registries, and CRMs are future opt-in B2B integrations only. They are not a public profile API, and they require source-specific consent, contractual rights, minimum disclosure, auditability, revocation, and a manual fallback before any implementation.
 - Sensitive data must not appear in logs, analytics payloads, fixtures, screenshots, or model prompts without an approved purpose and handling policy.

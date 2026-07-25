@@ -55,14 +55,219 @@ const operations = [
   ],
 ] as const;
 
-type AdminView = "campaigns" | "overview" | "operations" | "review";
+type DiscoverySignal = {
+  evidence: string;
+  label: string;
+  state: "Known concern" | "Passed" | "Unknown";
+};
+
+const discoveryCandidates = [
+  {
+    clientSignals: [
+      {
+        evidence: "Approved fictional profile · refreshed 6 days ago",
+        label: "Long-term relationship intention",
+        state: "Passed",
+      },
+      {
+        evidence: "No fictional answer has been collected",
+        label: "Preferred travel cadence",
+        state: "Unknown",
+      },
+      {
+        evidence: "Fictional staff note · needs a conversation",
+        label: "Weekday availability overlap",
+        state: "Known concern",
+      },
+    ],
+    detail: "A fictional candidate with a small amount of reviewable context.",
+    humanContext:
+      "Not shortlisted. A matchmaker could decide to clarify availability before considering a private introduction.",
+    id: "C-204",
+    initials: "EL",
+    mapPosition: "north",
+    name: "Ember Lane",
+    reverseSignals: [
+      {
+        evidence: "Approved fictional profile · refreshed 8 days ago",
+        label: "Relationship intention is compatible",
+        state: "Passed",
+      },
+      {
+        evidence: "No fictional answer has been collected",
+        label: "Interest in a first introduction",
+        state: "Unknown",
+      },
+      {
+        evidence: "Fictional staff note · verify directly",
+        label: "Travel schedule fit",
+        state: "Known concern",
+      },
+    ],
+    shortlistState: "Not shortlisted",
+  },
+  {
+    clientSignals: [
+      {
+        evidence: "Approved fictional profile · refreshed 3 days ago",
+        label: "Coarse geography preference",
+        state: "Passed",
+      },
+      {
+        evidence: "Approved fictional profile · refreshed 3 days ago",
+        label: "Interest in a thoughtful introduction",
+        state: "Passed",
+      },
+      {
+        evidence: "No fictional answer has been collected",
+        label: "Family-planning preference",
+        state: "Unknown",
+      },
+    ],
+    detail:
+      "A fictional candidate used to demonstrate a human-curated shortlist.",
+    humanContext:
+      "On a private fictional shortlist. This is an internal work state, not an approval or promise of an introduction.",
+    id: "C-219",
+    initials: "NS",
+    mapPosition: "east",
+    name: "Noor Sable",
+    reverseSignals: [
+      {
+        evidence: "Approved fictional profile · refreshed 4 days ago",
+        label: "Coarse geography preference",
+        state: "Passed",
+      },
+      {
+        evidence: "Approved fictional profile · refreshed 4 days ago",
+        label: "Relationship intention is compatible",
+        state: "Passed",
+      },
+      {
+        evidence: "No fictional answer has been collected",
+        label: "Family-planning preference",
+        state: "Unknown",
+      },
+    ],
+    shortlistState: "Private shortlist",
+  },
+  {
+    clientSignals: [
+      {
+        evidence: "Approved fictional profile · refreshed 11 days ago",
+        label: "Relationship intention",
+        state: "Passed",
+      },
+      {
+        evidence: "Fictional staff note · requires review",
+        label: "Introduction timing",
+        state: "Known concern",
+      },
+      {
+        evidence: "No fictional answer has been collected",
+        label: "Preferred social rhythm",
+        state: "Unknown",
+      },
+    ],
+    detail:
+      "A fictional candidate showing that concerns and unknowns stay visible.",
+    humanContext:
+      "Held for matchmaker review. The map does not resolve the concern or make a recommendation.",
+    id: "C-233",
+    initials: "TV",
+    mapPosition: "south",
+    name: "Tarin Vale",
+    reverseSignals: [
+      {
+        evidence: "Approved fictional profile · refreshed 12 days ago",
+        label: "Relationship intention is compatible",
+        state: "Passed",
+      },
+      {
+        evidence: "Fictional staff note · requires review",
+        label: "Current availability",
+        state: "Known concern",
+      },
+      {
+        evidence: "No fictional answer has been collected",
+        label: "Preferred social rhythm",
+        state: "Unknown",
+      },
+    ],
+    shortlistState: "Held for review",
+  },
+  {
+    clientSignals: [
+      {
+        evidence: "Approved fictional profile · refreshed 9 days ago",
+        label: "Coarse geography preference",
+        state: "Passed",
+      },
+      {
+        evidence: "No fictional answer has been collected",
+        label: "Preferred pace of connection",
+        state: "Unknown",
+      },
+      {
+        evidence: "No fictional answer has been collected",
+        label: "Family-planning preference",
+        state: "Unknown",
+      },
+    ],
+    detail: "A fictional candidate with intentionally limited information.",
+    humanContext:
+      "Not shortlisted. A matchmaker may decide that there is not yet enough information to consider a private introduction.",
+    id: "C-241",
+    initials: "IS",
+    mapPosition: "west",
+    name: "Indigo Shore",
+    reverseSignals: [
+      {
+        evidence: "Approved fictional profile · refreshed 10 days ago",
+        label: "Coarse geography preference",
+        state: "Passed",
+      },
+      {
+        evidence: "No fictional answer has been collected",
+        label: "Preferred pace of connection",
+        state: "Unknown",
+      },
+      {
+        evidence: "No fictional answer has been collected",
+        label: "Family-planning preference",
+        state: "Unknown",
+      },
+    ],
+    shortlistState: "Not shortlisted",
+  },
+] as const satisfies readonly {
+  clientSignals: readonly DiscoverySignal[];
+  detail: string;
+  humanContext: string;
+  id: string;
+  initials: string;
+  mapPosition: "east" | "north" | "south" | "west";
+  name: string;
+  reverseSignals: readonly DiscoverySignal[];
+  shortlistState: string;
+}[];
+
+type AdminView =
+  "campaigns" | "discovery" | "overview" | "operations" | "review";
 
 export default function AdminHome() {
   const [view, setView] = useState<AdminView>("overview");
   const [selectedId, setSelectedId] = useState<string>(applicants[0].id);
+  const [selectedCandidateId, setSelectedCandidateId] = useState<string>(
+    discoveryCandidates[0].id,
+  );
   const selected =
     applicants.find((applicant) => applicant.id === selectedId) ??
     applicants[0];
+  const selectedCandidate =
+    discoveryCandidates.find(
+      (candidate) => candidate.id === selectedCandidateId,
+    ) ?? discoveryCandidates[0];
 
   return (
     <main className="shell">
@@ -83,6 +288,12 @@ export default function AdminHome() {
         </NavButton>
         <NavButton active={view === "review"} onClick={() => setView("review")}>
           Review
+        </NavButton>
+        <NavButton
+          active={view === "discovery"}
+          onClick={() => setView("discovery")}
+        >
+          Discovery map
         </NavButton>
         <NavButton
           active={view === "campaigns"}
@@ -106,10 +317,127 @@ export default function AdminHome() {
             onSelect={setSelectedId}
           />
         ) : null}
+        {view === "discovery" ? (
+          <DiscoveryMap
+            onSelect={setSelectedCandidateId}
+            selected={selectedCandidate}
+            selectedId={selectedCandidateId}
+          />
+        ) : null}
         {view === "campaigns" ? <Campaigns /> : null}
         {view === "operations" ? <Operations /> : null}
       </section>
     </main>
+  );
+}
+
+function DiscoveryMap({
+  onSelect,
+  selected,
+  selectedId,
+}: Readonly<{
+  onSelect: (id: string) => void;
+  selected: (typeof discoveryCandidates)[number];
+  selectedId: string;
+}>) {
+  return (
+    <div className="view">
+      <Intro
+        eyebrow="Candidate discovery / synthetic map"
+        title="Explore context. Keep judgment human."
+      >
+        This map is a private way to orient to fictional records around one
+        fictional client engagement. It is not a score, a prediction, or a
+        recommendation.
+      </Intro>
+      <section
+        aria-label="Synthetic candidate discovery map"
+        className="map-panel"
+      >
+        <div className="map-canvas">
+          <div className="map-client" role="note">
+            <p className="eyebrow">Fictional client engagement</p>
+            <strong>Sol Ardent</strong>
+            <span>Review context only</span>
+          </div>
+          {discoveryCandidates.map((candidate) => (
+            <button
+              aria-pressed={selectedId === candidate.id}
+              className={`map-node map-node-${candidate.mapPosition}`}
+              key={candidate.id}
+              onClick={() => onSelect(candidate.id)}
+              type="button"
+            >
+              <span className="initials">{candidate.initials}</span>
+              <span>
+                <strong>{candidate.name}</strong>
+                <small>{candidate.shortlistState}</small>
+              </span>
+            </button>
+          ))}
+        </div>
+        <p className="note">
+          The arrangement is only a visual grouping for a small fictional set.
+          Nearness does not mean a better fit, and the map never decides who is
+          appropriate to shortlist or introduce.
+        </p>
+      </section>
+      <section
+        aria-label="Selected candidate evidence"
+        className="discovery-briefing"
+      >
+        <div className="discovery-heading">
+          <div>
+            <p className="eyebrow">Selected fictional candidate</p>
+            <h2>{selected.name}</h2>
+            <p>{selected.detail}</p>
+          </div>
+          <span className="shortlist-state">{selected.shortlistState}</span>
+        </div>
+        <div className="signal-grid">
+          <SignalList
+            heading="From client criteria"
+            signals={selected.clientSignals}
+          />
+          <SignalList
+            heading="From candidate criteria"
+            signals={selected.reverseSignals}
+          />
+        </div>
+        <aside className="human-context">
+          <p className="eyebrow">Matchmaker context</p>
+          <p>{selected.humanContext}</p>
+          <p className="note">
+            A matchmaker decides whether to clarify information, curate a
+            shortlist, or seek separate permission for an introduction.
+          </p>
+        </aside>
+      </section>
+    </div>
+  );
+}
+
+function SignalList({
+  heading,
+  signals,
+}: Readonly<{ heading: string; signals: readonly DiscoverySignal[] }>) {
+  return (
+    <section className="signal-list">
+      <p className="eyebrow">{heading}</p>
+      <ul>
+        {signals.map((signal) => (
+          <li key={signal.label}>
+            <span
+              className={`signal-state signal-${signal.state.toLowerCase().replaceAll(" ", "-")}`}
+            >
+              {signal.state}
+            </span>
+            <strong>{signal.label}</strong>
+            <small>{signal.evidence}</small>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }
 
