@@ -264,6 +264,9 @@ function Choice({
 }
 
 function IntakePreview({ mode }: Readonly<{ mode: IntakeMode }>) {
+  const [approvedField, setApprovedField] = useState<
+    "approved" | "not-approved" | null
+  >(null);
   const isConversation = mode === "conversation";
   const isHybrid = mode === "hybrid";
 
@@ -302,6 +305,41 @@ function IntakePreview({ mode }: Readonly<{ mode: IntakeMode }>) {
               Future flow: review or edit the transcript, then approve each
               proposed profile field separately.
             </p>
+            <div className="field-proposal" aria-label="Sample field approval">
+              <p className="detail-label">Proposed profile field</p>
+              <strong>
+                Preferred introduction pace: intentional and unhurried
+              </strong>
+              <p>
+                Derived only from the fictional excerpt above. This proposal is
+                not saved in the local concept.
+              </p>
+              <div className="field-actions">
+                <button
+                  aria-pressed={approvedField === "approved"}
+                  className="secondary-button"
+                  onClick={() => setApprovedField("approved")}
+                  type="button"
+                >
+                  Approve sample field
+                </button>
+                <button
+                  aria-pressed={approvedField === "not-approved"}
+                  className="secondary-button"
+                  onClick={() => setApprovedField("not-approved")}
+                  type="button"
+                >
+                  Leave it out
+                </button>
+              </div>
+              {approvedField ? (
+                <p className="approval-status" role="status">
+                  {approvedField === "approved"
+                    ? "Sample field approved locally. Nothing is saved or shared."
+                    : "Sample field left out locally. Nothing is saved or shared."}
+                </p>
+              ) : null}
+            </div>
           </>
         ) : (
           <p>

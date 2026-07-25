@@ -63,6 +63,8 @@ Applicants can be evaluated for a lower-burden conversational or hybrid path tha
 - [x] Prototype structured, conversational, and hybrid concepts as a local,
   text-only comparison in the public application preview; no audio, transcript,
   personal data, provider call, or persistence is used.
+- [x] Add a local-only, source-linked proposed-field review moment with explicit
+  approve/leave-out actions; neither action persists or shares data.
 - [ ] Conduct approved user research and accessibility review.
 - [ ] Complete counsel-reviewed recording and data-purpose requirements.
 - [ ] Hand target-device ASR protocol to ARG-028.
@@ -92,6 +94,13 @@ Applicants can be evaluated for a lower-burden conversational or hybrid path tha
 - PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/44
 - Scope: local text-only Structured, Conversation, and Hybrid comparison;
   no recording, transcription, persistence, provider, model, or personal data.
+
+### Local field-approval concept increment
+
+- Branch: `codex/ARG-027-field-approval-concept`
+- Scope: a fictional transcript excerpt, one fictional source-linked proposed
+  field, and local approve/leave-out controls; no input, recording, storage,
+  provider, model, or personal data.
 
 ## Completion notes
 
