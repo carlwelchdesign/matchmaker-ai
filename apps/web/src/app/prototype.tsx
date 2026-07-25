@@ -5,6 +5,7 @@ import { useState } from "react";
 import { prototypeCampaign, prototypeGuardrails } from "./prototype-data";
 
 type PrototypeView = "application" | "campaign";
+type IntakeMode = "conversation" | "hybrid" | "structured";
 
 const steps = ["Your approach", "What matters", "Review"] as const;
 
@@ -125,6 +126,7 @@ function Application({
   onStepChange: (step: number) => void;
   step: number;
 }>) {
+  const [mode, setMode] = useState<IntakeMode>("structured");
   const isReview = step === steps.length - 1;
 
   return (
@@ -160,41 +162,32 @@ function Application({
               <h2>Choose the way you would prefer to begin.</h2>
               <div className="choice-grid">
                 <Choice
+                  active={mode === "structured"}
                   title="Structured"
                   detail="A concise, guided set of questions."
+                  onSelect={() => setMode("structured")}
                 />
                 <Choice
+                  active={mode === "conversation"}
                   title="Conversation"
-                  detail="A future optional path; not enabled here."
+                  detail="A paced text interview with review before anything is used."
+                  onSelect={() => setMode("conversation")}
                 />
                 <Choice
+                  active={mode === "hybrid"}
                   title="Hybrid"
                   detail="A paced combination of both approaches."
+                  onSelect={() => setMode("hybrid")}
                 />
               </div>
-            </>
-          ) : null}
-          {step === 1 ? (
-            <>
-              <p className="detail-label">What matters</p>
-              <h2>Your application should make room for nuance.</h2>
-              <p className="panel-copy">
-                A future application would let you describe intentions,
-                practical preferences, and boundaries in your own words—with
-                clear review and correction before anything is considered.
+              <p className="mode-boundary">
+                This local concept does not record audio, create a transcript,
+                or collect information. Voice remains research-gated; typed and
+                human-assisted paths remain available.
               </p>
-              <div
-                className="sample-response"
-                aria-label="Illustrative response state"
-              >
-                <span>Illustrative only</span>
-                <p>
-                  “I want the process to feel intentional, candid, and
-                  unhurried.”
-                </p>
-              </div>
             </>
           ) : null}
+          {step === 1 ? <IntakePreview mode={mode} /> : null}
           {isReview ? (
             <>
               <p className="detail-label">Review</p>
@@ -247,13 +240,75 @@ function Application({
 }
 
 function Choice({
+  active,
   detail,
+  onSelect,
   title,
-}: Readonly<{ detail: string; title: string }>) {
+}: Readonly<{
+  active: boolean;
+  detail: string;
+  onSelect: () => void;
+  title: string;
+}>) {
   return (
-    <article className="choice-card">
+    <button
+      aria-pressed={active}
+      className="choice-card"
+      onClick={onSelect}
+      type="button"
+    >
       <h3>{title}</h3>
       <p>{detail}</p>
-    </article>
+    </button>
+  );
+}
+
+function IntakePreview({ mode }: Readonly<{ mode: IntakeMode }>) {
+  const isConversation = mode === "conversation";
+  const isHybrid = mode === "hybrid";
+
+  return (
+    <>
+      <p className="detail-label">
+        {isConversation ? "Conversation" : isHybrid ? "Hybrid" : "What matters"}
+      </p>
+      <h2>
+        {isConversation
+          ? "A calm question, answered in your own words."
+          : isHybrid
+            ? "A guided core, with room for your own words."
+            : "Your application should make room for nuance."}
+      </h2>
+      <p className="panel-copy">
+        {isConversation
+          ? "A future text conversation uses bounded questions and lets you pause, switch modes, correct the text, or ask for human assistance."
+          : isHybrid
+            ? "A future hybrid path keeps required fields comparable while using short prompts for the context that matters to you."
+            : "A future application would let you describe intentions, practical preferences, and boundaries in your own words—with clear review and correction before anything is considered."}
+      </p>
+      <div className="sample-response" aria-label="Illustrative response state">
+        <span>Illustrative only · nothing is saved</span>
+        {isConversation ? (
+          <>
+            <p className="conversation-prompt">
+              Argent: What would make an introduction feel considered and
+              worthwhile to you?
+            </p>
+            <p>
+              You: “I want the process to feel intentional, candid, and
+              unhurried.”
+            </p>
+            <p className="transcript-note">
+              Future flow: review or edit the transcript, then approve each
+              proposed profile field separately.
+            </p>
+          </>
+        ) : (
+          <p>
+            “I want the process to feel intentional, candid, and unhurried.”
+          </p>
+        )}
+      </div>
+    </>
   );
 }
