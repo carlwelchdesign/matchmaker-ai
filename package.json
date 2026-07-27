@@ -33,7 +33,7 @@
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "2.40.1",
     "prettier": "3.9.6",
-    "turbo": "2.10.6",
+    "turbo": "2.10.7",
     "typescript": "6.0.3",
     "vitest": "4.1.10"
   },
