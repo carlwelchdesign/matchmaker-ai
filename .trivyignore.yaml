@@ -1,0 +1,9 @@
+vulnerabilities:
+  - id: CVE-2026-14456
+    expired_at: 2026-09-30
+    statement: >-
+      Temporary exception for the fix-deferred OpenSSL QUIC-listener denial of
+      service finding. Argent containers expose HTTP over TCP and do not create
+      an OpenSSL QUIC listener. The latest distroless Debian 13 runtime remains
+      affected; remove this exception when Debian publishes OpenSSL 3.5.8 or a
+      later fixed package.
