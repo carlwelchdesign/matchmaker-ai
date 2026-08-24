@@ -48,7 +48,7 @@ test "$(compose port admin 3002)" = "127.0.0.1:${admin_port}"
 test "$(compose port api 3001)" = "127.0.0.1:${api_port}"
 
 curl --fail --silent --show-error "http://127.0.0.1:${web_port}" |
-  grep --quiet "Argent Matchmaking"
+  grep --quiet "The Montecito Matchmaker"
 curl --fail --silent --show-error "http://127.0.0.1:${admin_port}" |
   grep --quiet "Owner workspace"
 curl --fail --silent --show-error "http://127.0.0.1:${api_port}/health/live" |

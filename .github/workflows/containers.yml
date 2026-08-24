@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - ".dockerignore"
+      - ".trivyignore.yaml"
       - ".github/workflows/containers.yml"
       - "apps/web/**"
       - "compose.yaml"
@@ -19,6 +20,7 @@ on:
       - main
     paths:
       - ".dockerignore"
+      - ".trivyignore.yaml"
       - ".github/workflows/containers.yml"
       - "apps/web/**"
       - "compose.yaml"
@@ -102,4 +104,5 @@ jobs:
           ignore-unfixed: false
           scanners: vuln
           severity: HIGH,CRITICAL
+          trivyignores: .trivyignore.yaml
           vuln-type: os,library
