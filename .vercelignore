@@ -1,0 +1,20 @@
+.git
+.vercel
+**/.vercel
+**/.env*
+**/node_modules
+**/.next
+**/.turbo
+**/.dart_tool
+**/build
+**/dist
+**/coverage
+
+# This Vercel project deploys only the public web app and its shared packages.
+apps/admin
+apps/mobile
+infra
+output
+plans
+services
+tmp
