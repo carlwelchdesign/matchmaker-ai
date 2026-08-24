@@ -34,7 +34,7 @@
     "@openapitools/openapi-generator-cli": "2.40.1",
     "prettier": "3.9.6",
     "turbo": "2.10.6",
-    "typescript": "6.0.3",
+    "typescript": "7.0.2",
     "vitest": "4.1.10"
   },
   "pnpm": {
