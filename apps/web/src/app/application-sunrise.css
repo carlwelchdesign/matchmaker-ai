@@ -15,6 +15,8 @@
   --argent-semantic-text-muted: var(--landing-muted);
   --argent-semantic-text-primary: var(--landing-ink);
   --argent-semantic-text-secondary: var(--landing-copy);
+  --argent-primitive-space-250: 20px;
+  --argent-primitive-space-500: 40px;
   --argent-type-family-body: var(--landing-body-font);
   --argent-type-family-display: var(--landing-display-font);
   --argent-type-family-mono: var(--landing-body-font);
@@ -316,6 +318,31 @@
 .prototype-shell[data-theme="sunrise"] .interview-help-trigger,
 .prototype-shell[data-theme="sunrise"] .text-button {
   color: var(--landing-muted);
+}
+
+.prototype-shell[data-theme="sunrise"] .interview-assistance-control {
+  margin-bottom: var(--argent-primitive-space-400);
+}
+
+.prototype-shell[data-theme="sunrise"]
+  .interview-assistance-control:has(.interview-assistance),
+.prototype-shell[data-theme="sunrise"]
+  .structured-worksheet
+  .interview-assistance-control {
+  margin-bottom: 0;
+}
+
+.prototype-shell[data-theme="sunrise"] .interview-help-trigger {
+  align-items: center;
+  display: inline-flex;
+  min-height: 2.75rem;
+  padding-block: 0.35rem;
+}
+
+.prototype-shell[data-theme="sunrise"]
+  .structured-worksheet
+  .interview-assistance {
+  margin-bottom: 0;
 }
 
 .prototype-shell[data-theme="sunrise"] .interview-assistance,
