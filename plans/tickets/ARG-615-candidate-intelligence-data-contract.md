@@ -22,7 +22,7 @@ Argent can build a deduplicated, permission-aware candidate database from approv
 - [x] Raw audio, unapproved transcript, rejected proposals, safety data, and private notes cannot enter search or product analytics.
 - [x] Unknown, declined, stale, superseded, disputed, and withdrawn values remain distinct.
 - [ ] Candidate identity is deduplicated without broadening campaign or partner consent.
-- [x] Field purpose, classification, allowed roles, retention, deletion, freshness, and provenance are enforced and testable.
+- [ ] Field purpose, classification, allowed roles, retention, deletion, freshness, and provenance are enforced and testable.
 - [ ] Synthetic migrations and fixtures cover correction, withdrawal, deletion propagation, duplicate resolution, and historical versioning.
 - [x] No universal candidate-value, desirability, personality, wealth, or compatibility score exists.
 
@@ -57,6 +57,9 @@ See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-intervie
   identity, duplicate assertion lineage, private/rejected source exclusion, and
   prohibited-score absence. This remains a synthetic in-memory boundary rather
   than production authorization or persistence.
+- Purpose, classification, role, freshness, retention, provenance, and
+  withdrawn-state access are enforced at the projection boundary. This broader
+  criterion remains open until persistent deletion and propagation are tested.
 
 ## Current development increment
 
