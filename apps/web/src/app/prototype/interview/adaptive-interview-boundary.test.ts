@@ -19,4 +19,23 @@ describe("adaptive interview prototype boundary", () => {
     expect(source).toContain("nothing is submitted, persisted, or sent");
     expect(source).toContain("use fictional details only");
   });
+
+  it("requires an explicit interview exit or reviewed continuation", () => {
+    const interviewSource = readFileSync(
+      fileURLToPath(new URL("./adaptive-interview.tsx", import.meta.url)),
+      "utf8",
+    );
+    const applicationSource = readFileSync(
+      fileURLToPath(new URL("../../prototype.tsx", import.meta.url)),
+      "utf8",
+    );
+
+    expect(interviewSource).toContain("Choose another approach");
+    expect(interviewSource).toContain("Continue without interview");
+    expect(interviewSource).toContain("Continue to application review");
+    expect(applicationSource).toContain("!isAdaptiveInterviewStep");
+    expect(applicationSource).toContain(
+      "hidden={usesAdaptiveInterview && step !== 1}",
+    );
+  });
 });

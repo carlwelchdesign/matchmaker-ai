@@ -134,6 +134,9 @@ function Application({
 }>) {
   const [mode, setMode] = useState<IntakeMode>("structured");
   const isReview = step === steps.length - 1;
+  const usesAdaptiveInterview =
+    interviewEnabled && (mode === "conversation" || mode === "hybrid");
+  const isAdaptiveInterviewStep = step === 1 && usesAdaptiveInterview;
 
   return (
     <div className="application-view">
@@ -153,7 +156,11 @@ function Application({
         <ol aria-label="Application preview steps" className="step-list">
           {steps.map((label, index) => (
             <li className={index === step ? "is-current" : ""} key={label}>
-              <button onClick={() => onStepChange(index)} type="button">
+              <button
+                disabled={usesAdaptiveInterview && index > step}
+                onClick={() => onStepChange(index)}
+                type="button"
+              >
                 <span>{String(index + 1).padStart(2, "0")}</span>
                 {label}
               </button>
@@ -193,8 +200,17 @@ function Application({
               </p>
             </>
           ) : null}
-          {step === 1 ? (
-            <IntakePreview interviewEnabled={interviewEnabled} mode={mode} />
+          {usesAdaptiveInterview || step === 1 ? (
+            <div hidden={usesAdaptiveInterview && step !== 1}>
+              <IntakePreview
+                interviewEnabled={interviewEnabled}
+                key={mode}
+                mode={mode}
+                onChooseApproach={() => onStepChange(0)}
+                onContinueToReview={() => onStepChange(2)}
+                onContinueWithoutInterview={() => onStepChange(2)}
+              />
+            </div>
           ) : null}
           {isReview ? (
             <>
@@ -214,33 +230,35 @@ function Application({
             </>
           ) : null}
 
-          <div className="panel-actions">
-            <button
-              className="secondary-button"
-              disabled={step === 0}
-              onClick={() => onStepChange(Math.max(0, step - 1))}
-              type="button"
-            >
-              Back
-            </button>
-            {isReview ? (
+          {!isAdaptiveInterviewStep ? (
+            <div className="panel-actions">
               <button
-                className="action-button"
-                onClick={() => onStepChange(0)}
+                className="secondary-button"
+                disabled={step === 0}
+                onClick={() => onStepChange(Math.max(0, step - 1))}
                 type="button"
               >
-                Restart preview <span aria-hidden="true">↺</span>
+                Back
               </button>
-            ) : (
-              <button
-                className="action-button"
-                onClick={() => onStepChange(step + 1)}
-                type="button"
-              >
-                Continue <span aria-hidden="true">↗</span>
-              </button>
-            )}
-          </div>
+              {isReview ? (
+                <button
+                  className="action-button"
+                  onClick={() => onStepChange(0)}
+                  type="button"
+                >
+                  Restart preview <span aria-hidden="true">↺</span>
+                </button>
+              ) : (
+                <button
+                  className="action-button"
+                  onClick={() => onStepChange(step + 1)}
+                  type="button"
+                >
+                  Continue <span aria-hidden="true">↗</span>
+                </button>
+              )}
+            </div>
+          ) : null}
         </section>
       </div>
     </div>
@@ -274,7 +292,16 @@ function Choice({
 function IntakePreview({
   interviewEnabled,
   mode,
-}: Readonly<{ interviewEnabled: boolean; mode: IntakeMode }>) {
+  onChooseApproach,
+  onContinueToReview,
+  onContinueWithoutInterview,
+}: Readonly<{
+  interviewEnabled: boolean;
+  mode: IntakeMode;
+  onChooseApproach: () => void;
+  onContinueToReview: () => void;
+  onContinueWithoutInterview: () => void;
+}>) {
   const [approvedField, setApprovedField] = useState<
     "approved" | "not-approved" | null
   >(null);
@@ -285,6 +312,9 @@ function IntakePreview({
     return (
       <AdaptiveInterview
         initialMode={isConversation ? "conversation" : "guided"}
+        onChooseApproach={onChooseApproach}
+        onContinueToReview={onContinueToReview}
+        onContinueWithoutInterview={onContinueWithoutInterview}
       />
     );
   }

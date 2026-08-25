@@ -26,7 +26,15 @@ const dispositionLabels: Record<CandidateFieldDisposition, string> = {
 
 export function AdaptiveInterview({
   initialMode,
-}: Readonly<{ initialMode: InterviewMode }>) {
+  onChooseApproach,
+  onContinueToReview,
+  onContinueWithoutInterview,
+}: Readonly<{
+  initialMode: InterviewMode;
+  onChooseApproach: () => void;
+  onContinueToReview: () => void;
+  onContinueWithoutInterview: () => void;
+}>) {
   const [answers, setAnswers] = useState<InterviewAnswer[]>([]);
   const [completed, setCompleted] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -484,10 +492,37 @@ export function AdaptiveInterview({
               >
                 Begin again
               </button>
+              <button
+                className="action-button"
+                onClick={onContinueToReview}
+                type="button"
+              >
+                Continue to application review
+                <span aria-hidden="true">→</span>
+              </button>
             </div>
           </div>
         ) : null}
       </section>
+
+      {!completed ? (
+        <div className="interview-route-actions">
+          <button
+            className="secondary-button"
+            onClick={onChooseApproach}
+            type="button"
+          >
+            Choose another approach
+          </button>
+          <button
+            className="text-button"
+            onClick={onContinueWithoutInterview}
+            type="button"
+          >
+            Continue without interview
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 }

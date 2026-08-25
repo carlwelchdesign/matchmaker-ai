@@ -898,6 +898,19 @@ h3 {
   margin: var(--argent-primitive-space-300) 0 0;
   padding-left: var(--argent-primitive-space-150);
 }
+.interview-route-actions {
+  align-items: center;
+  border-top: 1px solid var(--argent-semantic-border-subtle);
+  display: flex;
+  gap: var(--argent-primitive-space-150);
+  justify-content: space-between;
+  margin-top: var(--argent-primitive-space-500);
+  padding-top: var(--argent-primitive-space-300);
+}
+.step-list button:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
+}
 @media (max-width: 44rem) {
   .landing-shell {
     max-width: 100vw;
@@ -985,6 +998,13 @@ h3 {
     flex-direction: column-reverse;
   }
   .interview-actions > * {
+    width: 100%;
+  }
+  .interview-route-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .interview-route-actions > * {
     width: 100%;
   }
   .prototype-notice {

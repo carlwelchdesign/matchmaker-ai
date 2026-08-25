@@ -32,6 +32,11 @@ each source-grounded field before submission.
 - [x] The guide and grounded follow-up behavior are deterministic and tested.
 - [x] Follow-up selection is transparent: the candidate sees why a question was
   chosen, and arbitrary or declined text falls back to the fixed guide.
+- [x] Active interviews own their navigation: future-step shortcuts and the
+  generic application CTA cannot bypass the interview accidentally.
+- [x] Candidates can explicitly choose another approach, continue without the
+  interview, or continue after final review; local page memory survives
+  skip/back and completed-review/back navigation.
 - [ ] Approved persistence stores source, proposal, approval, provenance, and
   version data through the ARG-615 contract.
 - [ ] Provider-backed adaptive generation passes ARG-607, ARG-608, and ARG-611.
@@ -49,7 +54,7 @@ each source-grounded field before submission.
   audio, telemetry content, or personal-data handling
 - Review boundary: approved, private, rejected, and declined states remain
   distinct; every displayed field cites its exact response revision
-- Verification: 9 domain tests, 10 web tests, domain/web TypeScript, production
+- Verification: 9 domain tests, 13 web tests, domain/web TypeScript, production
   build, planning validation, formatting, Docker, and full browser review path
 - Deployment: none; local review only
 
