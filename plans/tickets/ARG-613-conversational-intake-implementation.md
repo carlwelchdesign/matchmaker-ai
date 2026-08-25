@@ -40,6 +40,9 @@ each source-grounded field before submission.
 - [x] Candidates can explicitly choose another approach, continue without the
   interview, or continue after final review; local page memory survives
   skip/back and completed-review/back navigation.
+- [x] Structured, conversation, and hybrid modes provide deterministic local
+  clarification, privacy guidance, and a truthful future human-assistance
+  boundary without claiming that a handoff occurred.
 - [ ] Approved persistence stores source, proposal, approval, provenance, and
   version data through the ARG-615 contract.
 - [ ] Provider-backed adaptive generation passes ARG-607, ARG-608, and ARG-611.
@@ -53,13 +56,14 @@ each source-grounded field before submission.
 - Candidate-controlled final-review commit: `c43febf`
 - Explicit navigation and local restoration commit: `c6fcded`
 - Structured worksheet and shared review-contract commit: `4c3af04`
+- Deterministic interview-assistance commit: `facb39b`
 - Surface: existing `/prototype` Application flow only
 - Flag: `candidate-interviewing`
 - Runtime boundary: local page state only; no database, provider, transcript,
   audio, telemetry content, or personal-data handling
 - Review boundary: approved, private, rejected, and declined states remain
   distinct; every displayed field cites its exact response revision
-- Verification: 9 domain tests, 17 web tests, domain/web TypeScript, production
+- Verification: 22 domain tests, 19 web tests, domain/web TypeScript, production
   build, planning validation, formatting, Docker, and full browser review path
 - Deployment: none; local review only
 

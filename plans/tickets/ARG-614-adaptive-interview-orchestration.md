@@ -3,7 +3,7 @@
 - **Epic:** Governed AI assistance
 - **Capability/requirement IDs:** CAP-005, CAP-010
 - **Priority:** P1
-- **Status:** Proposed
+- **Status:** In progress
 - **Named owner:** Unassigned
 - **Named approver/reviewer:** Unassigned product, AI, privacy, and research reviewers
 - **Target milestone:** Private beta
@@ -29,8 +29,10 @@ See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-intervie
 
 ## Foundation evidence
 
-- Branch: `codex/ARG-613-text-interview`
+- Foundation branch: `codex/ARG-613-text-interview`
 - Foundation commit: `5f17f5b`
+- Candidate-assistance branch: `codex/ARG-614-interview-assistance`
+- Candidate-assistance commit: `facb39b`
 - The local ARG-613 prototype now uses `argent-template-planner-2026-08-25`
   with the versioned `argent-text-guide-2026-08-25` core.
 - Each local question plan records the guide and planner versions, explicit
@@ -41,6 +43,13 @@ See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-intervie
 - Declined answers and unsupported or prompt-injection-like text fall back to
   the required core question without source references.
 - The candidate sees a plain-language “Why this question” explanation.
-- This does not complete the provider-backed planner, evaluation thresholds,
-  stored question disposition, human handoff, or approval-gated policy work;
-  ARG-614 remains proposed until its dependencies are ready.
+- Structured, conversation, and hybrid modes now expose one deterministic help
+  control for clarification, privacy boundaries, approach switching, and
+  continuing without an interview.
+- The local human-assistance explanation is deliberately non-operative: it
+  states that no person was contacted and no answers were sent, while defining
+  the permission and context-preview boundary a future handoff must meet.
+- This does not complete a real human handoff, the provider-backed planner,
+  evaluation thresholds, stored question disposition, or approval-gated policy
+  work. Those acceptance criteria remain open until their dependencies are
+  approved.
