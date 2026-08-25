@@ -7,11 +7,40 @@ export type InterviewTopic =
   | "personal-boundaries";
 
 export type InterviewAnswer = {
+  planningPermission: "candidate-confirmed" | "declined";
   questionId: string;
   revision: number;
   sourceText: string;
   topic: InterviewTopic;
 };
+
+export type InterviewPlanningInput =
+  | {
+      kind: "candidate-confirmed-fact";
+      questionId: string;
+      responseRevision: number;
+      sourceText: string;
+      topic: InterviewTopic;
+    }
+  | {
+      kind: "explicit-unknown";
+      questionId: string;
+      responseRevision: number;
+      topic: InterviewTopic;
+    }
+  | {
+      kind: "documented-contradiction";
+      questionIds: readonly [string, string];
+      sourceReferences: ReadonlyArray<{
+        questionId: string;
+        responseRevision: number;
+      }>;
+    }
+  | {
+      kind: "uncovered-required-topic";
+      questionId: string;
+      topic: InterviewTopic;
+    };
 
 export type InterviewQuestion = {
   fieldLabel: string;
@@ -259,7 +288,8 @@ export function getInterviewQuestion(
     return null;
   }
 
-  const groundedSelection = findApprovedAdaptation(question.id, answers);
+  const planningInputs = getInterviewPlanningInputs(index, answers);
+  const groundedSelection = findApprovedAdaptation(question.id, planningInputs);
   if (groundedSelection) {
     return {
       ...question,
@@ -273,8 +303,8 @@ export function getInterviewQuestion(
         reasonCode: groundedSelection.adaptation.reasonCode,
         sourceReferences: [
           {
-            questionId: groundedSelection.answer.questionId,
-            responseRevision: groundedSelection.answer.revision,
+            questionId: groundedSelection.input.questionId,
+            responseRevision: groundedSelection.input.responseRevision,
           },
         ],
       },
@@ -296,22 +326,72 @@ export function getInterviewQuestion(
   };
 }
 
+export function getInterviewPlanningInputs(
+  index: number,
+  answers: ReadonlyArray<InterviewAnswer>,
+): ReadonlyArray<InterviewPlanningInput> {
+  const question = questions[index];
+  if (!question) return [];
+
+  const priorQuestionIds = new Set(
+    questions.slice(0, index).map((candidate) => candidate.id),
+  );
+  const answerInputs: InterviewPlanningInput[] = [];
+  for (const answer of answers) {
+    if (!priorQuestionIds.has(answer.questionId)) continue;
+    if (answer.planningPermission === "declined") {
+      answerInputs.push({
+        kind: "explicit-unknown",
+        questionId: answer.questionId,
+        responseRevision: answer.revision,
+        topic: answer.topic,
+      });
+      continue;
+    }
+
+    answerInputs.push({
+      kind: "candidate-confirmed-fact",
+      questionId: answer.questionId,
+      responseRevision: answer.revision,
+      sourceText: answer.sourceText,
+      topic: answer.topic,
+    });
+  }
+
+  return [
+    ...answerInputs,
+    {
+      kind: "uncovered-required-topic",
+      questionId: question.id,
+      topic: question.topic,
+    },
+  ];
+}
+
 function findApprovedAdaptation(
   questionId: string,
-  answers: ReadonlyArray<InterviewAnswer>,
-): { adaptation: ApprovedAdaptation; answer: InterviewAnswer } | null {
+  planningInputs: ReadonlyArray<InterviewPlanningInput>,
+): {
+  adaptation: ApprovedAdaptation;
+  input: Extract<InterviewPlanningInput, { kind: "candidate-confirmed-fact" }>;
+} | null {
   const adaptations = approvedAdaptations[questionId] ?? [];
-  const eligibleAnswers = answers.filter(
-    (answer) => answer.sourceText !== "Prefer not to answer",
+  const eligibleInputs = planningInputs.filter(
+    (
+      input,
+    ): input is Extract<
+      InterviewPlanningInput,
+      { kind: "candidate-confirmed-fact" }
+    > => input.kind === "candidate-confirmed-fact",
   );
 
   for (const adaptation of adaptations) {
-    for (const answer of eligibleAnswers.toReversed()) {
-      const normalized = answer.sourceText.toLocaleLowerCase();
+    for (const input of eligibleInputs.toReversed()) {
+      const normalized = input.sourceText.toLocaleLowerCase();
       if (
         adaptation.sourceTerms.some((term) => hasWholeTerm(normalized, term))
       ) {
-        return { adaptation, answer };
+        return { adaptation, input };
       }
     }
   }

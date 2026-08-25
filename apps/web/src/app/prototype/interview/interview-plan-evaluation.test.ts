@@ -13,6 +13,7 @@ import {
 } from "./interview-guide";
 
 const groundedAnswer: InterviewAnswer = {
+  planningPermission: "candidate-confirmed",
   questionId: "intentions",
   revision: 2,
   sourceText: "I would prefer an intentional beginning.",
@@ -127,6 +128,19 @@ describe("interview plan evaluation", () => {
       questionId: "pace",
       turnIndex: 0,
     });
+  });
+
+  it("rejects source grounding when the candidate did not confirm the fact", () => {
+    const groundedQuestion = getInterviewQuestion(1, [groundedAnswer]);
+    expect(groundedQuestion).not.toBeNull();
+
+    const result = evaluateInterviewPlanRun({
+      answers: [{ ...groundedAnswer, planningPermission: "declined" }],
+      status: "active",
+      turns: [groundedQuestion!],
+    });
+
+    expect(result.metrics.unsupportedInferenceCount).toBe(1);
   });
 
   it("rejects question IDs or topics that drift outside the guide", () => {

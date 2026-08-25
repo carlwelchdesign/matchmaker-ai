@@ -136,6 +136,10 @@ export function AdaptiveInterview({
       (answer) => answer.questionId === currentQuestion.id,
     );
     const nextAnswer = {
+      planningPermission:
+        questionDisposition === "declined"
+          ? ("declined" as const)
+          : ("candidate-confirmed" as const),
       questionId: currentQuestion.id,
       revision:
         existingIndex === -1 ? 1 : (answers[existingIndex]?.revision ?? 0) + 1,
@@ -344,7 +348,8 @@ export function AdaptiveInterview({
             />
             <p className="answer-boundary" id="answer-boundary">
               Avoid names, addresses, financial information, or details about
-              another person. You will review this before it is considered.
+              another person. Continuing confirms this response for local
+              question planning only; you review profile use separately.
             </p>
             {error ? (
               <p className="answer-error" id="answer-error" role="alert">

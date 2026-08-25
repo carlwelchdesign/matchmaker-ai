@@ -36,6 +36,10 @@ export function buildStructuredAnswers({
 
     return [
       {
+        planningPermission:
+          sourceText === "Prefer not to answer"
+            ? ("declined" as const)
+            : ("candidate-confirmed" as const),
         questionId: question.id,
         revision:
           previous && previous.sourceText === sourceText

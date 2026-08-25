@@ -19,7 +19,7 @@ A versioned guide and constrained planner generate relevant, one-at-a-time follo
 
 - [x] Required topics, approved optional probes, sensitive-topic boundaries, stop conditions, and source-to-field mappings are versioned.
 - [x] Every proposed question stores guide, prompt, model, source references, reason code, and disposition.
-- [ ] Candidate-approved facts, explicit unknowns, contradictions, and uncovered required topics are the only permitted planning inputs.
+- [x] Candidate-approved facts, explicit unknowns, contradictions, and uncovered required topics are the only permitted planning inputs.
 - [x] Compound questions, repetitive acknowledgement, premature termination, unsupported inference, and topic drift have evaluation thresholds.
 - [ ] Human handoff, skip, clarification, and structured-form fallback are deterministic.
 - [ ] No protected-trait, emotion, accent, deception, attractiveness, wealth, diagnosis, or compatibility inference is produced.
@@ -46,6 +46,13 @@ See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-intervie
 - Editing an earlier answer supersedes its downstream question history, clears
   downstream field approvals, and replans from prior answers only; stale source
   grounding cannot silently survive a revision.
+- Planner input is now a closed discriminated union of candidate-confirmed
+  facts, explicit unknowns, documented contradictions, and uncovered required
+  topics. The current deterministic builder emits only prior confirmed/declined
+  responses plus the current uncovered topic; later answers are excluded.
+- Candidate confirmation for question planning is stored separately from the
+  later field-level decision about profile use, and the interface explains that
+  boundary before the candidate continues.
 - Adaptive prompts may use only a closed, approved vocabulary for pace, life
   rhythm, and introduction-boundary follow-ups; arbitrary candidate text is
   never interpolated into a prompt.

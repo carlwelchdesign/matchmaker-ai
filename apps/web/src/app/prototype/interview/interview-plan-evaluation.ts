@@ -168,7 +168,7 @@ function hasSupportedSelection(
     (answer) =>
       answer.questionId === reference.questionId &&
       answer.revision === reference.responseRevision &&
-      answer.sourceText !== "Prefer not to answer",
+      answer.planningPermission === "candidate-confirmed",
   );
 }
 

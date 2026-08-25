@@ -53,6 +53,7 @@ describe("interview question records", () => {
 
   it("records an exact source reference before settling a declined follow-up", () => {
     const answer: InterviewAnswer = {
+      planningPermission: "candidate-confirmed",
       questionId: "intentions",
       revision: 3,
       sourceText: "An intentional beginning would suit me.",
