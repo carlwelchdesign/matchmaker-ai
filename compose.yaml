@@ -23,6 +23,8 @@ services:
       target: web
     environment:
       APP_VERSION: ${APP_VERSION:-0.0.0-local}
+      FLAGS: ${FLAGS:-}
+      FLAGS_SECRET: ${FLAGS_SECRET:-}
     ports:
       - "127.0.0.1:${WEB_PORT:-3000}:3000"
     tmpfs:

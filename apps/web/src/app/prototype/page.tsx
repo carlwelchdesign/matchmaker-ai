@@ -1,5 +1,8 @@
 import { ConceptPrototype } from "../prototype";
+import { isCandidateInterviewingEnabled } from "../../flag-evaluation";
 
-export default function PrototypePage() {
-  return <ConceptPrototype />;
+export default async function PrototypePage() {
+  const interviewEnabled = await isCandidateInterviewingEnabled();
+
+  return <ConceptPrototype interviewEnabled={interviewEnabled} />;
 }

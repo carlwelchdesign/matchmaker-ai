@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@argent/design-system": "workspace:*",
+    "@flags-sdk/vercel": "1.4.6",
+    "flags": "4.3.0",
     "next": "16.2.11",
     "react": "19.2.8",
     "react-dom": "19.2.8"

@@ -3,13 +3,16 @@
 import { useState } from "react";
 
 import { prototypeCampaign, prototypeGuardrails } from "./prototype-data";
+import { AdaptiveInterview } from "./prototype/interview/adaptive-interview";
 
 type PrototypeView = "application" | "campaign";
 type IntakeMode = "conversation" | "hybrid" | "structured";
 
 const steps = ["Your approach", "What matters", "Review"] as const;
 
-export function ConceptPrototype() {
+export function ConceptPrototype({
+  interviewEnabled = false,
+}: Readonly<{ interviewEnabled?: boolean }>) {
   const [applicationStep, setApplicationStep] = useState(0);
   const [view, setView] = useState<PrototypeView>("campaign");
 
@@ -47,6 +50,7 @@ export function ConceptPrototype() {
         ) : null}
         {view === "application" ? (
           <Application
+            interviewEnabled={interviewEnabled}
             onStepChange={setApplicationStep}
             step={applicationStep}
           />
@@ -120,11 +124,13 @@ function Campaign({ onExplore }: Readonly<{ onExplore: () => void }>) {
 }
 
 function Application({
+  interviewEnabled,
   onStepChange,
   step,
 }: Readonly<{
   onStepChange: (step: number) => void;
   step: number;
+  interviewEnabled: boolean;
 }>) {
   const [mode, setMode] = useState<IntakeMode>("structured");
   const isReview = step === steps.length - 1;
@@ -187,7 +193,9 @@ function Application({
               </p>
             </>
           ) : null}
-          {step === 1 ? <IntakePreview mode={mode} /> : null}
+          {step === 1 ? (
+            <IntakePreview interviewEnabled={interviewEnabled} mode={mode} />
+          ) : null}
           {isReview ? (
             <>
               <p className="detail-label">Review</p>
@@ -263,12 +271,23 @@ function Choice({
   );
 }
 
-function IntakePreview({ mode }: Readonly<{ mode: IntakeMode }>) {
+function IntakePreview({
+  interviewEnabled,
+  mode,
+}: Readonly<{ interviewEnabled: boolean; mode: IntakeMode }>) {
   const [approvedField, setApprovedField] = useState<
     "approved" | "not-approved" | null
   >(null);
   const isConversation = mode === "conversation";
   const isHybrid = mode === "hybrid";
+
+  if (interviewEnabled && (isConversation || isHybrid)) {
+    return (
+      <AdaptiveInterview
+        initialMode={isConversation ? "conversation" : "guided"}
+      />
+    );
+  }
 
   return (
     <>
