@@ -65,6 +65,7 @@ each source-grounded field before submission.
 
 ## Next increment
 
-Define and implement the ARG-615 candidate-record and provenance contract before
-adding persistence or a model provider. Keep the approved source-edit and
-field-disposition controls as the write boundary.
+Integrate only after the ARG-615 persistence, consent, deletion, and role-policy
+dependencies are approved. Keep the approved source-edit and field-disposition
+controls as the write boundary; do not add a model provider or database write
+from this prototype.
