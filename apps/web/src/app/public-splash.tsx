@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import sunriseHero from "../../public/images/argent-sunrise-hero.png";
+import sunriseHero from "../../public/images/argent-sunrise-couple-hero-selected.jpg";
 
 export function PublicSplash() {
   return (
@@ -55,7 +55,7 @@ export function PublicSplash() {
         </div>
         <figure className="landing-hero__visual">
           <Image
-            alt="A quiet terrace overlooking the Pacific in pale sunrise light"
+            alt="A couple sharing an intimate moment on a terrace overlooking the Pacific at sunrise"
             className="landing-hero__image"
             fill
             placeholder="blur"
