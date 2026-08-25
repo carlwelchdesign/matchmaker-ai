@@ -20,7 +20,9 @@ import {
 import { InterviewAssistance } from "./interview-assistance";
 import {
   createInterviewFallbackTransfer,
+  createInterviewProgressSnapshot,
   type InterviewFallbackTransfer,
+  type InterviewProgressSnapshot,
 } from "./structured-interview-state";
 import {
   proposeInterviewQuestion,
@@ -57,14 +59,14 @@ function createInitialQuestionRecords(
 
 export function AdaptiveInterview({
   initialMode,
-  onAnswersChange,
+  onProgressChange,
   onChooseApproach,
   onContinueToReview,
   onContinueWithoutInterview,
   onUseStructuredFallback,
 }: Readonly<{
   initialMode: InterviewMode;
-  onAnswersChange: (answers: readonly InterviewAnswer[]) => void;
+  onProgressChange: (progress: InterviewProgressSnapshot) => void;
   onChooseApproach: () => void;
   onContinueToReview: () => void;
   onContinueWithoutInterview: () => void;
@@ -155,6 +157,23 @@ export function AdaptiveInterview({
     });
   }, [answers, completed, dispositions]);
 
+  function snapshotProgress(
+    nextAnswers: readonly InterviewAnswer[] = answers,
+    nextDraft: string = draft,
+    draftQuestionId: string | undefined = currentQuestion?.id,
+  ): InterviewProgressSnapshot {
+    return createInterviewProgressSnapshot({
+      answers: nextAnswers,
+      declinedQuestionIds: nextAnswers
+        .filter((answer) => answer.planningPermission === "declined")
+        .map((answer) => answer.questionId),
+      drafts:
+        draftQuestionId && nextDraft.length > 0
+          ? { [draftQuestionId]: nextDraft }
+          : {},
+    });
+  }
+
   function recordAnswer(
     sourceText: string,
     questionDisposition: Extract<
@@ -186,7 +205,7 @@ export function AdaptiveInterview({
             index === existingIndex ? nextAnswer : answer,
           );
     setAnswers(nextAnswers);
-    onAnswersChange(nextAnswers);
+    onProgressChange(snapshotProgress(nextAnswers, ""));
     let nextQuestionRecords = settleInterviewQuestion(
       questionRecords,
       currentQuestionRecord.recordId,
@@ -226,7 +245,10 @@ export function AdaptiveInterview({
     if (proposal.decision.action === "structured-fallback") {
       setQuestionRecords(nextQuestionRecords);
       onUseStructuredFallback(
-        createInterviewFallbackTransfer(nextAnswers, proposal.decision.reason),
+        createInterviewFallbackTransfer(
+          snapshotProgress(nextAnswers, ""),
+          proposal.decision.reason,
+        ),
       );
       return;
     }
@@ -282,7 +304,10 @@ export function AdaptiveInterview({
     );
     if (proposal.decision.action === "structured-fallback") {
       onUseStructuredFallback(
-        createInterviewFallbackTransfer(answers, proposal.decision.reason),
+        createInterviewFallbackTransfer(
+          snapshotProgress(answers, answer.sourceText, answer.questionId),
+          proposal.decision.reason,
+        ),
       );
       return;
     }
@@ -348,7 +373,10 @@ export function AdaptiveInterview({
             onContinueWithoutInterview={onContinueWithoutInterview}
             onUseStructuredFallback={() =>
               onUseStructuredFallback(
-                createInterviewFallbackTransfer(answers, "candidate-choice"),
+                createInterviewFallbackTransfer(
+                  snapshotProgress(),
+                  "candidate-choice",
+                ),
               )
             }
             question={currentQuestion}
@@ -406,7 +434,9 @@ export function AdaptiveInterview({
               id="candidate-answer"
               maxLength={4000}
               onChange={(event) => {
-                setDraft(event.target.value);
+                const nextDraft = event.target.value;
+                setDraft(nextDraft);
+                onProgressChange(snapshotProgress(answers, nextDraft));
                 setError(null);
               }}
               placeholder={
@@ -608,7 +638,13 @@ export function AdaptiveInterview({
                 onClick={() => {
                   const proposedAt = new Date().toISOString();
                   setAnswers([]);
-                  onAnswersChange([]);
+                  onProgressChange(
+                    createInterviewProgressSnapshot({
+                      answers: [],
+                      declinedQuestionIds: [],
+                      drafts: {},
+                    }),
+                  );
                   setCompleted(false);
                   setCurrentIndex(0);
                   setDispositions({});

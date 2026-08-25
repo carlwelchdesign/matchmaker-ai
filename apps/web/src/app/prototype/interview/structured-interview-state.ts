@@ -4,6 +4,12 @@ import type { InterviewAnswer, InterviewQuestion } from "./interview-guide";
 
 export type StructuredAnswerDrafts = Readonly<Record<string, string>>;
 
+export type InterviewProgressSnapshot = {
+  answers: readonly InterviewAnswer[];
+  declinedQuestionIds: readonly string[];
+  drafts: StructuredAnswerDrafts;
+};
+
 export type StructuredAnswerResult = {
   answers: InterviewAnswer[];
   errors: Record<string, string>;
@@ -11,6 +17,8 @@ export type StructuredAnswerResult = {
 
 export type InterviewFallbackTransfer = {
   answers: readonly InterviewAnswer[];
+  declinedQuestionIds: readonly string[];
+  drafts: StructuredAnswerDrafts;
   reason: InterviewBudgetFallbackReason | "candidate-choice";
 };
 
@@ -21,20 +29,36 @@ export type StructuredFallbackState = {
 };
 
 export function createInterviewFallbackTransfer(
-  answers: ReadonlyArray<InterviewAnswer>,
+  progress: InterviewProgressSnapshot,
   reason: InterviewFallbackTransfer["reason"],
 ): InterviewFallbackTransfer {
   return {
-    answers: answers.map((answer) => ({ ...answer })),
+    ...createInterviewProgressSnapshot(progress),
     reason,
+  };
+}
+
+export function createInterviewProgressSnapshot({
+  answers,
+  declinedQuestionIds,
+  drafts,
+}: InterviewProgressSnapshot): InterviewProgressSnapshot {
+  return {
+    answers: answers.map((answer) => ({ ...answer })),
+    declinedQuestionIds: [...new Set(declinedQuestionIds)].sort(),
+    drafts: { ...drafts },
   };
 }
 
 export function buildStructuredFallbackState({
   answers,
+  declinedQuestionIds: transferredDeclinedQuestionIds = [],
+  drafts: transferredDrafts = {},
   questions,
 }: Readonly<{
   answers: ReadonlyArray<InterviewAnswer>;
+  declinedQuestionIds?: ReadonlyArray<string>;
+  drafts?: StructuredAnswerDrafts;
   questions: ReadonlyArray<InterviewQuestion>;
 }>): StructuredFallbackState {
   const questionIds = new Set(questions.map((question) => question.id));
@@ -61,6 +85,21 @@ export function buildStructuredFallbackState({
     }
     if (declined) declinedQuestionIds.add(answer.questionId);
     else drafts[answer.questionId] = answer.sourceText;
+  }
+
+  for (const [questionId, draft] of Object.entries(transferredDrafts)) {
+    if (!questionIds.has(questionId)) {
+      throw new Error(`Fallback draft ${questionId} is not in the guide`);
+    }
+    drafts[questionId] = draft;
+  }
+
+  for (const questionId of transferredDeclinedQuestionIds) {
+    if (!questionIds.has(questionId)) {
+      throw new Error(`Fallback decline ${questionId} is not in the guide`);
+    }
+    declinedQuestionIds.add(questionId);
+    delete drafts[questionId];
   }
 
   return {

@@ -15,14 +15,20 @@ describe("interview availability transition", () => {
   it("routes an on-to-off transition to the structured guide", () => {
     expect(
       resolveInterviewAvailabilityTransition({
-        answers: [answer],
         interviewEnabled: false,
+        progress: {
+          answers: [answer],
+          declinedQuestionIds: ["practical-preferences"],
+          drafts: { intentions: "An unfinished local draft." },
+        },
         previouslyEnabled: true,
       }),
     ).toEqual({
       action: "structured-fallback",
       transfer: {
         answers: [answer],
+        declinedQuestionIds: ["practical-preferences"],
+        drafts: { intentions: "An unfinished local draft." },
         reason: "feature-kill-switch",
       },
     });
@@ -37,8 +43,12 @@ describe("interview availability transition", () => {
     ({ interviewEnabled, previouslyEnabled }) => {
       expect(
         resolveInterviewAvailabilityTransition({
-          answers: [answer],
           interviewEnabled,
+          progress: {
+            answers: [answer],
+            declinedQuestionIds: [],
+            drafts: {},
+          },
           previouslyEnabled,
         }),
       ).toEqual({ action: "continue" });
@@ -47,15 +57,27 @@ describe("interview availability transition", () => {
 
   it("snapshots progress so later mutation cannot alter the fallback", () => {
     const mutableAnswer = { ...answer };
+    const mutableDrafts = { intentions: "Original draft" };
+    const mutableDeclines = ["practical-preferences"];
     const result = resolveInterviewAvailabilityTransition({
-      answers: [mutableAnswer],
       interviewEnabled: false,
+      progress: {
+        answers: [mutableAnswer],
+        declinedQuestionIds: mutableDeclines,
+        drafts: mutableDrafts,
+      },
       previouslyEnabled: true,
     });
     mutableAnswer.sourceText = "Changed after transition";
+    mutableDrafts.intentions = "Changed after transition";
+    mutableDeclines.push("relationship-style");
 
     expect(result.action).toBe("structured-fallback");
     if (result.action !== "structured-fallback") return;
     expect(result.transfer.answers[0]?.sourceText).toBe(answer.sourceText);
+    expect(result.transfer.drafts.intentions).toBe("Original draft");
+    expect(result.transfer.declinedQuestionIds).toEqual([
+      "practical-preferences",
+    ]);
   });
 });

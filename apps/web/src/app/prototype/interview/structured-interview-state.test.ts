@@ -115,10 +115,15 @@ describe("structured interview answers", () => {
         },
       ];
 
-      const transfer = createInterviewFallbackTransfer(answers, reason);
+      const transfer = createInterviewFallbackTransfer(
+        { answers, declinedQuestionIds: [], drafts: {} },
+        reason,
+      );
       answers[0]!.sourceText = "Changed after transfer";
       const state = buildStructuredFallbackState({
         answers: transfer.answers,
+        declinedQuestionIds: transfer.declinedQuestionIds,
+        drafts: transfer.drafts,
         questions,
       });
 
@@ -156,5 +161,51 @@ describe("structured interview answers", () => {
         questions,
       }),
     ).toThrow("inconsistent permission");
+  });
+
+  it("preserves newer drafts and explicit declines during fallback", () => {
+    const firstQuestion = questions[0]!;
+    const secondQuestion = questions[1]!;
+    const answer = {
+      planningPermission: "candidate-confirmed" as const,
+      questionId: firstQuestion.id,
+      revision: 1,
+      sourceText: "A previously reviewed fictional answer.",
+      topic: firstQuestion.topic,
+    };
+
+    const state = buildStructuredFallbackState({
+      answers: [answer],
+      declinedQuestionIds: [secondQuestion.id],
+      drafts: {
+        [firstQuestion.id]: "A newer in-progress fictional revision.",
+        [secondQuestion.id]: "This draft is superseded by the decline.",
+      },
+      questions,
+    });
+
+    expect(state.answers).toEqual([answer]);
+    expect(state.drafts[firstQuestion.id]).toBe(
+      "A newer in-progress fictional revision.",
+    );
+    expect(state.drafts[secondQuestion.id]).toBeUndefined();
+    expect(state.declinedQuestionIds.has(secondQuestion.id)).toBe(true);
+  });
+
+  it("rejects draft and decline IDs outside the fixed guide", () => {
+    expect(() =>
+      buildStructuredFallbackState({
+        answers: [],
+        drafts: { unknown: "A fictional draft." },
+        questions,
+      }),
+    ).toThrow("Fallback draft unknown is not in the guide");
+    expect(() =>
+      buildStructuredFallbackState({
+        answers: [],
+        declinedQuestionIds: ["unknown"],
+        questions,
+      }),
+    ).toThrow("Fallback decline unknown is not in the guide");
   });
 });

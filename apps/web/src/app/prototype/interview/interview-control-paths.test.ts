@@ -73,11 +73,13 @@ describe("deterministic interview control paths", () => {
       topic: question.topic,
     };
     const transfer = createInterviewFallbackTransfer(
-      [answer],
+      { answers: [answer], declinedQuestionIds: [], drafts: {} },
       "candidate-choice",
     );
     const structured = buildStructuredFallbackState({
       answers: transfer.answers,
+      declinedQuestionIds: transfer.declinedQuestionIds,
+      drafts: transfer.drafts,
       questions: getStructuredInterviewQuestions(),
     });
 
@@ -117,11 +119,13 @@ describe("deterministic interview control paths", () => {
       throw new Error("Expected structured fallback decision");
     }
     const transfer = createInterviewFallbackTransfer(
-      [firstAnswer],
+      { answers: [firstAnswer], declinedQuestionIds: [], drafts: {} },
       result.decision.reason,
     );
     const structured = buildStructuredFallbackState({
       answers: transfer.answers,
+      declinedQuestionIds: transfer.declinedQuestionIds,
+      drafts: transfer.drafts,
       questions: getStructuredInterviewQuestions(),
     });
 

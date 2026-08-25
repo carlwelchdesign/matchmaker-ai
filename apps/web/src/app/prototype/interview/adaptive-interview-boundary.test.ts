@@ -52,7 +52,7 @@ describe("adaptive interview prototype boundary", () => {
       "The conversational preview was paused by a usage control",
     );
     expect(applicationSource).toContain(
-      "initialAnswers={interviewFallback?.answers}",
+      "initialTransfer={interviewFallback ?? undefined}",
     );
   });
 });

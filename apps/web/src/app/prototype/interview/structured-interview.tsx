@@ -15,6 +15,9 @@ import { InterviewAssistance } from "./interview-assistance";
 import {
   buildStructuredAnswers,
   buildStructuredFallbackState,
+  createInterviewProgressSnapshot,
+  type InterviewFallbackTransfer,
+  type InterviewProgressSnapshot,
 } from "./structured-interview-state";
 
 type FieldDisposition = Exclude<CandidateFieldDisposition, "declined">;
@@ -28,32 +31,33 @@ const dispositionLabels: Record<CandidateFieldDisposition, string> = {
 };
 
 const questions = getPolicyCompliantStructuredQuestions();
-const noInitialAnswers: readonly InterviewAnswer[] = [];
 
 export function StructuredInterview({
   entryNotice,
-  initialAnswers = noInitialAnswers,
-  onAnswersChange,
+  initialTransfer,
   onBeginAgain,
   onChooseApproach,
   onContinueToReview,
   onContinueWithoutInterview,
+  onProgressChange,
 }: Readonly<{
   entryNotice?: string | null;
-  initialAnswers?: readonly InterviewAnswer[];
-  onAnswersChange: (answers: readonly InterviewAnswer[]) => void;
+  initialTransfer?: InterviewFallbackTransfer;
   onBeginAgain: () => void;
   onChooseApproach: () => void;
   onContinueToReview: () => void;
   onContinueWithoutInterview: () => void;
+  onProgressChange: (progress: InterviewProgressSnapshot) => void;
 }>) {
   const fallbackState = useMemo(
     () =>
       buildStructuredFallbackState({
-        answers: initialAnswers,
+        answers: initialTransfer?.answers ?? [],
+        declinedQuestionIds: initialTransfer?.declinedQuestionIds,
+        drafts: initialTransfer?.drafts,
         questions,
       }),
-    [initialAnswers],
+    [initialTransfer],
   );
   const [answers, setAnswers] = useState<InterviewAnswer[]>(() =>
     fallbackState.answers.map((answer) => ({ ...answer })),
@@ -130,6 +134,20 @@ export function StructuredInterview({
     });
   }, [answers, dispositions, stage]);
 
+  function reportProgress(
+    nextAnswers: readonly InterviewAnswer[] = answers,
+    nextDeclinedQuestionIds: ReadonlySet<string> = declinedQuestionIds,
+    nextDrafts: Readonly<Record<string, string>> = drafts,
+  ) {
+    onProgressChange(
+      createInterviewProgressSnapshot({
+        answers: nextAnswers,
+        declinedQuestionIds: [...nextDeclinedQuestionIds],
+        drafts: nextDrafts,
+      }),
+    );
+  }
+
   function reviewAnswers() {
     const result = buildStructuredAnswers({
       declinedQuestionIds,
@@ -154,17 +172,16 @@ export function StructuredInterview({
       return next;
     });
     setAnswers(result.answers);
-    onAnswersChange(result.answers);
+    reportProgress(result.answers);
     setStage("review");
   }
 
   function toggleDeclined(questionId: string) {
-    setDeclinedQuestionIds((current) => {
-      const next = new Set(current);
-      if (next.has(questionId)) next.delete(questionId);
-      else next.add(questionId);
-      return next;
-    });
+    const next = new Set(declinedQuestionIds);
+    if (next.has(questionId)) next.delete(questionId);
+    else next.add(questionId);
+    setDeclinedQuestionIds(next);
+    reportProgress(answers, next, drafts);
     setErrors((current) => {
       const next = { ...current };
       delete next[questionId];
@@ -180,7 +197,13 @@ export function StructuredInterview({
     setErrors({});
     setShowEntryNotice(false);
     setStage("worksheet");
-    onAnswersChange([]);
+    onProgressChange(
+      createInterviewProgressSnapshot({
+        answers: [],
+        declinedQuestionIds: [],
+        drafts: {},
+      }),
+    );
     onBeginAgain();
   }
 
@@ -274,10 +297,16 @@ export function StructuredInterview({
                       id={question.id}
                       maxLength={4000}
                       onChange={(event) => {
-                        setDrafts((current) => ({
-                          ...current,
+                        const nextDrafts = {
+                          ...drafts,
                           [question.id]: event.target.value,
-                        }));
+                        };
+                        setDrafts(nextDrafts);
+                        reportProgress(
+                          answers,
+                          declinedQuestionIds,
+                          nextDrafts,
+                        );
                         setErrors((current) => {
                           const next = { ...current };
                           delete next[question.id];

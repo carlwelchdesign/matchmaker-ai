@@ -42,21 +42,25 @@ Risky capabilities can be enabled for explicit cohorts, measured, stopped, and s
 
 ## Current development increment
 
-- Branch: `codex/ARG-111-flag-evaluation`
+- Branch: `codex/ARG-111-mid-session-fallback`
 - Runtime boundary: server page evaluation plus pure typed policy; no sensitive
   targeting attributes, persistence, provider logging, or client-side flag SDK
 - Tests: explicit on, explicit off, malformed/stale-shaped values, and provider
   error all resolve deterministically; every non-true state fails closed
 - When an on-to-off availability signal reaches the application, it snapshots
-  completed exact-source answers into the existing structured fallback with
-  reason `feature-kill-switch`.
+  completed exact-source answers, the active local draft, and explicit decline
+  choices into the existing structured fallback with reason
+  `feature-kill-switch`. The fixed guide rejects transferred draft or decline
+  IDs that are not part of its versioned question set.
   Initial-off and enabled states do not invent a transition; once disabled, the
   fixed Sunrise guide remains active until the candidate explicitly begins
   again or chooses another approach.
-- Verification: 70 web tests across 15 files, web TypeScript, production build,
+- Verification: 72 web tests across 15 files, web TypeScript, production build,
   planning validation, formatting, diff checks, rebuilt local web container,
-  and `/prototype` HTTP 200
-- Still open: live flag refresh/polling, independent authorization and consent
+  `/prototype` HTTP 200, and a light Sunrise browser smoke check with no
+  framework overlay or console errors
+- Still open: live flag refresh/polling or streaming (the preservation path is
+  ready once a signal reaches the component), independent authorization and consent
   enforcement, production/preview configuration verification, cohort
   governance, audit/expiry, evaluation-volume monitoring, and rollback drills
 

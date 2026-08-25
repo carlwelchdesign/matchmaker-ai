@@ -1,7 +1,7 @@
-import type { InterviewAnswer } from "./interview-guide";
 import {
   createInterviewFallbackTransfer,
   type InterviewFallbackTransfer,
+  type InterviewProgressSnapshot,
 } from "./structured-interview-state";
 
 export type InterviewAvailabilityTransition =
@@ -12,18 +12,18 @@ export type InterviewAvailabilityTransition =
     };
 
 export function resolveInterviewAvailabilityTransition({
-  answers,
   interviewEnabled,
+  progress,
   previouslyEnabled,
 }: Readonly<{
-  answers: readonly InterviewAnswer[];
   interviewEnabled: boolean;
+  progress: InterviewProgressSnapshot;
   previouslyEnabled: boolean;
 }>): InterviewAvailabilityTransition {
   if (!previouslyEnabled || interviewEnabled) return { action: "continue" };
 
   return {
     action: "structured-fallback",
-    transfer: createInterviewFallbackTransfer(answers, "feature-kill-switch"),
+    transfer: createInterviewFallbackTransfer(progress, "feature-kill-switch"),
   };
 }
