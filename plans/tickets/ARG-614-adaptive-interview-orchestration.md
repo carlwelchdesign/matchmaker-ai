@@ -21,7 +21,7 @@ A versioned guide and constrained planner generate relevant, one-at-a-time follo
 - [x] Every proposed question stores guide, prompt, model, source references, reason code, and disposition.
 - [x] Candidate-approved facts, explicit unknowns, contradictions, and uncovered required topics are the only permitted planning inputs.
 - [x] Compound questions, repetitive acknowledgement, premature termination, unsupported inference, and topic drift have evaluation thresholds.
-- [x] Human handoff, skip, clarification, and structured-form fallback are deterministic.
+- [ ] Human handoff, skip, clarification, and structured-form fallback are deterministic.
 - [x] No protected-trait, emotion, accent, deception, attractiveness, wealth, diagnosis, or compatibility inference is produced.
 - [x] No admission, rejection, ranking, matching, or profile mutation occurs without the existing human/applicant approvals.
 
@@ -109,5 +109,8 @@ See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-intervie
   the candidate chooses the fixed guide, while a budget-triggered fallback
   preserves prior question history, source text, and revision lineage. No
   provider, persistence, submission, or operative human handoff is introduced.
+- This strengthens the deterministic local boundary but does not complete the
+  combined criterion: an operative, consented staff handoff and its transport,
+  failure, cancellation, and retry states remain approval-gated.
 - Verification: 57 web tests across 13 files, web TypeScript, production build,
   planning validation, formatting, diff checks, and local prototype HTTP 200.
