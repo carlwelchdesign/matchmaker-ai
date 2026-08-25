@@ -31,3 +31,17 @@ export {
   type ServiceHealth,
   type ServiceState,
 } from "./health.js";
+export {
+  evaluateInterviewBudget,
+  interviewUsageSchemaVersion,
+  recordInterviewUsageExecution,
+  type InterviewBudgetDecision,
+  type InterviewBudgetFallbackReason,
+  type InterviewBudgetPolicy,
+  type InterviewCacheBehavior,
+  type InterviewExecutionKind,
+  type InterviewUsageEnvironment,
+  type InterviewUsageExecution,
+  type InterviewUsageExecutionInput,
+  type InterviewUsageMode,
+} from "./interview-usage.js";

@@ -3,7 +3,7 @@
 - **Epic:** Governed AI assistance
 - **Capability/requirement IDs:** CAP-005, CAP-007, CAP-010
 - **Priority:** P1
-- **Status:** Proposed
+- **Status:** In progress
 - **Named owner:** Unassigned
 - **Named approver/reviewer:** Unassigned founder, product, finance, platform, and privacy reviewers
 - **Target milestone:** Private beta
@@ -17,7 +17,7 @@ The team knows the real cost per completed interview and can cap or stop spend w
 
 ## Acceptance criteria
 
-- [ ] Per session and execution, record provider/model, input/output tokens, audio minutes, latency, retries, cache behavior, and estimated cost without source content.
+- [x] Per session and execution, record provider/model, input/output tokens, audio minutes, latency, retries, cache behavior, and estimated cost without source content.
 - [ ] Define budgets and alerts by environment, mode, cohort, candidate, day, and provider.
 - [ ] Enforce maximum turn/time/token/audio limits and deterministic structured-form fallback.
 - [ ] Exercise provider and feature kill switches without data loss.
@@ -27,3 +27,20 @@ The team knows the real cost per completed interview and can cap or stop spend w
 - [ ] Use account verification, invitations, and rate limits before considering a fee as abuse control.
 
 See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-interviewing.md).
+
+## Foundation evidence
+
+- Branch: `codex/ARG-616-interview-cost-controls`
+- `interview-usage-ledger/v1` records environment, session/execution IDs,
+  interview mode, provider/model, token and audio usage, latency, retries, cache
+  behavior, and estimated micro-USD cost with `sourceContentStored: false`.
+- Runtime validation accepts only the exact content-free execution shape. Tests
+  reject candidate source text, inconsistent cache claims, and deterministic
+  executions that falsely claim provider usage or cost.
+- A pure budget evaluator returns either `allow` or `structured-fallback` for
+  feature/provider kill switches and execution, session-time, token, latency,
+  audio, and session-cost limits without mutating recorded history.
+- The current planner is representable as a zero-token, zero-cost
+  deterministic-template execution. Provider selection, pricing configuration,
+  persistence, telemetry transport, payment, and production enforcement remain
+  unimplemented and approval-gated.
