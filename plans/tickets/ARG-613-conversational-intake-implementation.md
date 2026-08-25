@@ -52,7 +52,7 @@ each source-grounded field before submission.
 - Initial interview commit: `96e8c61`
 - Candidate-controlled final-review commit: `c43febf`
 - Explicit navigation and local restoration commit: `c6fcded`
-- Structured worksheet and shared review-contract commit: pending
+- Structured worksheet and shared review-contract commit: `4c3af04`
 - Surface: existing `/prototype` Application flow only
 - Flag: `candidate-interviewing`
 - Runtime boundary: local page state only; no database, provider, transcript,
