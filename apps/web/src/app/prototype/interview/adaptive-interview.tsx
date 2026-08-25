@@ -15,6 +15,13 @@ import {
   type InterviewMode,
 } from "./interview-guide";
 import { InterviewAssistance } from "./interview-assistance";
+import {
+  proposeInterviewQuestion,
+  reopenInterviewQuestion,
+  settleInterviewQuestion,
+  type InterviewQuestionDisposition,
+  type InterviewQuestionRecord,
+} from "./interview-question-record";
 
 type FieldDisposition = Exclude<CandidateFieldDisposition, "declined">;
 
@@ -24,6 +31,12 @@ const dispositionLabels: Record<CandidateFieldDisposition, string> = {
   private: "Kept private",
   rejected: "Rejected",
 };
+
+function createInitialQuestionRecords(): InterviewQuestionRecord[] {
+  const question = getInterviewQuestion(0, []);
+  if (!question) throw new Error("The interview guide has no first question");
+  return proposeInterviewQuestion([], question);
+}
 
 export function AdaptiveInterview({
   initialMode,
@@ -46,10 +59,17 @@ export function AdaptiveInterview({
   const [error, setError] = useState<string | null>(null);
   const [mode, setMode] = useState<InterviewMode>(initialMode);
   const [paused, setPaused] = useState(false);
+  const [questionRecords, setQuestionRecords] = useState<
+    InterviewQuestionRecord[]
+  >(createInitialQuestionRecords);
   const [reviewing, setReviewing] = useState(false);
 
   const questionCount = getInterviewQuestionCount();
-  const currentQuestion = getInterviewQuestion(currentIndex, answers);
+  const currentQuestionRecord = questionRecords.at(-1);
+  const currentQuestion =
+    currentQuestionRecord?.disposition === "proposed"
+      ? currentQuestionRecord.question
+      : null;
   const proposals = useMemo(
     () =>
       answers.flatMap((answer, index) => {
@@ -102,14 +122,15 @@ export function AdaptiveInterview({
     });
   }, [answers, completed, dispositions]);
 
-  function saveAnswer() {
+  function recordAnswer(
+    sourceText: string,
+    questionDisposition: Extract<
+      InterviewQuestionDisposition,
+      "answered" | "declined"
+    >,
+  ) {
     if (!currentQuestion) return;
-
-    const sourceText = draft.trim();
-    if (sourceText.length < 8) {
-      setError("Add a little more detail, or choose Prefer not to answer.");
-      return;
-    }
+    if (!currentQuestionRecord) return;
 
     const existingIndex = answers.findIndex(
       (answer) => answer.questionId === currentQuestion.id,
@@ -128,45 +149,48 @@ export function AdaptiveInterview({
             index === existingIndex ? nextAnswer : answer,
           );
     setAnswers(nextAnswers);
+    let nextQuestionRecords = settleInterviewQuestion(
+      questionRecords,
+      currentQuestionRecord.recordId,
+      questionDisposition,
+    );
     setDraft("");
     setError(null);
 
     if (currentIndex === questionCount - 1) {
+      setQuestionRecords(nextQuestionRecords);
       setReviewing(true);
       return;
     }
 
-    setCurrentIndex(currentIndex + 1);
+    const nextIndex = currentIndex + 1;
+    const nextQuestion = getInterviewQuestion(
+      nextIndex,
+      nextAnswers.slice(0, nextIndex),
+    );
+    if (!nextQuestion) {
+      throw new Error(`Missing interview question at index ${nextIndex}`);
+    }
+    nextQuestionRecords = proposeInterviewQuestion(
+      nextQuestionRecords,
+      nextQuestion,
+    );
+    setQuestionRecords(nextQuestionRecords);
+    setCurrentIndex(nextIndex);
+  }
+
+  function saveAnswer() {
+    const sourceText = draft.trim();
+    if (sourceText.length < 8) {
+      setError("Add a little more detail, or choose Prefer not to answer.");
+      return;
+    }
+
+    recordAnswer(sourceText, "answered");
   }
 
   function preferNotToAnswer() {
-    if (!currentQuestion) return;
-
-    const existingIndex = answers.findIndex(
-      (answer) => answer.questionId === currentQuestion.id,
-    );
-    const nextAnswer = {
-      questionId: currentQuestion.id,
-      revision:
-        existingIndex === -1 ? 1 : (answers[existingIndex]?.revision ?? 0) + 1,
-      sourceText: "Prefer not to answer",
-      topic: currentQuestion.topic,
-    };
-    const nextAnswers =
-      existingIndex === -1
-        ? [...answers, nextAnswer]
-        : answers.map((answer, index) =>
-            index === existingIndex ? nextAnswer : answer,
-          );
-    setAnswers(nextAnswers);
-    setDraft("");
-    setError(null);
-
-    if (currentIndex === questionCount - 1) {
-      setReviewing(true);
-    } else {
-      setCurrentIndex(currentIndex + 1);
-    }
+    recordAnswer("Prefer not to answer", "declined");
   }
 
   function editAnswer(index: number) {
@@ -179,9 +203,25 @@ export function AdaptiveInterview({
     );
     setReviewing(false);
     setCompleted(false);
+    const reopenedQuestion = getInterviewQuestion(
+      index,
+      answers.slice(0, index),
+    );
+    if (!reopenedQuestion) {
+      throw new Error(`Missing interview question at index ${index}`);
+    }
+    setQuestionRecords(
+      reopenInterviewQuestion(
+        questionRecords,
+        reopenedQuestion,
+        new Set(answers.slice(index).map((candidate) => candidate.questionId)),
+      ),
+    );
     setDispositions((current) => {
       const next = { ...current };
-      delete next[answer.questionId];
+      for (const candidate of answers.slice(index)) {
+        delete next[candidate.questionId];
+      }
       return next;
     });
   }
@@ -495,6 +535,7 @@ export function AdaptiveInterview({
                   setCurrentIndex(0);
                   setDispositions({});
                   setDraft("");
+                  setQuestionRecords(createInitialQuestionRecords());
                   setReviewing(false);
                 }}
                 type="button"

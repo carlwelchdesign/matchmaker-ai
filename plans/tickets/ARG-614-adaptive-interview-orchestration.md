@@ -18,7 +18,7 @@ A versioned guide and constrained planner generate relevant, one-at-a-time follo
 ## Acceptance criteria
 
 - [x] Required topics, approved optional probes, sensitive-topic boundaries, stop conditions, and source-to-field mappings are versioned.
-- [ ] Every proposed question stores guide, prompt, model, source references, reason code, and disposition.
+- [x] Every proposed question stores guide, prompt, model, source references, reason code, and disposition.
 - [ ] Candidate-approved facts, explicit unknowns, contradictions, and uncovered required topics are the only permitted planning inputs.
 - [x] Compound questions, repetitive acknowledgement, premature termination, unsupported inference, and topic drift have evaluation thresholds.
 - [ ] Human handoff, skip, clarification, and structured-form fallback are deterministic.
@@ -40,6 +40,12 @@ See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-intervie
   and exact question-to-field/topic mappings.
 - Each local question plan records the guide and planner versions, explicit
   `model: null`, a reason code, and exact question/revision source references.
+- The adaptive interview now snapshots each proposed question into a local
+  lifecycle record with the complete planner payload and an explicit proposed,
+  answered, declined, or superseded disposition.
+- Editing an earlier answer supersedes its downstream question history, clears
+  downstream field approvals, and replans from prior answers only; stale source
+  grounding cannot silently survive a revision.
 - Adaptive prompts may use only a closed, approved vocabulary for pace, life
   rhythm, and introduction-boundary follow-ups; arbitrary candidate text is
   never interpolated into a prompt.
@@ -58,6 +64,6 @@ See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-intervie
 - The local human-assistance explanation is deliberately non-operative: it
   states that no person was contacted and no answers were sent, while defining
   the permission and context-preview boundary a future handoff must meet.
-- This does not complete a real human handoff, the provider-backed planner,
-  stored question disposition, or approval-gated policy work. Those acceptance
-  criteria remain open until their dependencies are approved.
+- This does not complete a real human handoff, the provider-backed planner, or
+  approval-gated policy work. Those acceptance criteria remain open until their
+  dependencies are approved.
