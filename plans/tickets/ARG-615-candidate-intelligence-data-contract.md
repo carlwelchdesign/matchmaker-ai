@@ -19,10 +19,10 @@ Argent can build a deduplicated, permission-aware candidate database from approv
 
 - [x] Interview guide, planned question, response source, transcript revision, approved assertion, and AI execution/cost lineage are modeled and versioned.
 - [x] Only applicant-approved assertions are eligible for matchmaker discovery and analytics dimensions.
-- [ ] Raw audio, unapproved transcript, rejected proposals, safety data, and private notes cannot enter search or product analytics.
+- [x] Raw audio, unapproved transcript, rejected proposals, safety data, and private notes cannot enter search or product analytics.
 - [x] Unknown, declined, stale, superseded, disputed, and withdrawn values remain distinct.
 - [ ] Candidate identity is deduplicated without broadening campaign or partner consent.
-- [ ] Field purpose, classification, allowed roles, retention, deletion, freshness, and provenance are enforced and testable.
+- [x] Field purpose, classification, allowed roles, retention, deletion, freshness, and provenance are enforced and testable.
 - [ ] Synthetic migrations and fixtures cover correction, withdrawal, deletion propagation, duplicate resolution, and historical versioning.
 - [x] No universal candidate-value, desirability, personality, wealth, or compatibility score exists.
 
@@ -44,13 +44,28 @@ See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-intervie
   retained, purpose-granted, and requested by the role assigned to that purpose.
 - Immutable lifecycle transitions distinguish disputed, stale, superseded, and
   withdrawn assertions; unknown remains a distinct source-free state.
+- `candidate-purpose-projection/v1` is the only domain projection from candidate
+  intelligence into matchmaker discovery or candidate analytics. It emits
+  active, candidate-approved assertions only after purpose, role, consent,
+  freshness, retention, classification, provenance, and lifecycle checks.
+- Private, rejected, declined, unknown, stale, disputed, superseded, and
+  withdrawn states contribute no source value to the projection. The output
+  records aggregate state counts, `approvedAssertionsOnly: true`, and
+  `rawSourceIncluded: false`; raw audio, unapproved transcripts, private notes,
+  safety records, and rejected proposal content have no input path.
+- Projection tests cover purpose/role mismatch, withdrawal, duplicate candidate
+  identity, duplicate assertion lineage, private/rejected source exclusion, and
+  prohibited-score absence. This remains a synthetic in-memory boundary rather
+  than production authorization or persistence.
 
 ## Current development increment
 
-- Branch: `codex/ARG-615-candidate-record-contract`
-- Contract commit: `245a37b`
+- Branch: `codex/ARG-615-purpose-projection`
+- Contract commits: `245a37b`, `c25c73c`, and current branch HEAD
 - Runtime boundary: pure domain code and synthetic fixtures only
-- Verification: 22 domain tests, domain TypeScript, and package build
+- Verification: 74 domain tests across 9 files, domain TypeScript, package
+  build, planning validation, formatting, diff checks, and local prototype HTTP
+  200
 - Deployment: none; no database, migration, provider, real candidate data,
   submission, analytics event, or production access path
 

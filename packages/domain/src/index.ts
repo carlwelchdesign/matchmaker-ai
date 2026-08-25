@@ -27,6 +27,13 @@ export {
   type CandidateUsePurpose,
 } from "./candidate-intelligence.js";
 export {
+  buildCandidatePurposeProjection,
+  candidatePurposeProjectionSchemaVersion,
+  type CandidatePurposeAssertion,
+  type CandidatePurposeProjection,
+  type CandidatePurposeProjectionRequest,
+} from "./candidate-purpose-projection.js";
+export {
   buildServiceHealth,
   type ServiceHealth,
   type ServiceState,
