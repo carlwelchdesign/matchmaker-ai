@@ -61,6 +61,7 @@ each source-grounded field before submission.
 - Structured worksheet and shared review-contract commit: `4c3af04`
 - Deterministic interview-assistance commit: `facb39b`
 - Sunrise application alignment commit: `1314102`
+- Sunrise spacing-rhythm correction commit: `59f7382`
 - Surface: existing `/prototype` Application flow only
 - Flag: `candidate-interviewing`
 - Runtime boundary: local page state only; no database, provider, transcript,
