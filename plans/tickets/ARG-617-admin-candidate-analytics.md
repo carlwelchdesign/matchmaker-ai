@@ -17,7 +17,7 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
 
 ## Acceptance criteria
 
-- [ ] Define metric contracts for candidate supply, completeness/freshness, consent/availability, funnel by mode, correction burden, search coverage, shortlist throughput, and introduction outcomes. Candidate supply, approved-field coverage, field-state counts, assertion access/freshness, interview funnel by mode, and correction burden now have synthetic aggregate contracts; candidate availability, search, and downstream operational metrics remain open.
+- [ ] Define metric contracts for candidate supply, completeness/freshness, consent/availability, funnel by mode, correction burden, search coverage, shortlist throughput, and introduction outcomes. Candidate supply, approved-field coverage, field-state counts, assertion access/freshness, interview funnel by mode, correction burden, and search coverage now have synthetic aggregate contracts; candidate availability and downstream shortlist/introduction metrics remain open.
 - [ ] Every dashboard value links to authoritative source lineage, cohort, time window, freshness, and missing-data state. The first aggregate contract includes source projection lineage, opaque cohort, bounded time window, and explicit small-cohort suppression; per-metric freshness and missing-data semantics remain open.
 - [ ] Staff can filter and inspect approved facts with provenance and uncertainty; raw interview content is not exposed by default.
 - [ ] Permissions and aggregate thresholds prevent inappropriate small-cohort or partner disclosure.
@@ -58,6 +58,20 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
 - Candidate availability remains explicitly unimplemented because no approved
   lifecycle contract exists yet; the fictional admin display is not treated as
   operational evidence.
+- `candidate-search-observation/v1` records only opaque search, criteria, policy,
+  projection, time, data-quality, and count lineage. It rejects query content,
+  candidate identifiers, impossible eligible/retrieved/reviewed counts, and a
+  source projection newer than the search.
+- `candidate-search-coverage/v1` reports complete-search count, zero-result rate,
+  eligible-to-retrieved coverage, and retrieved-to-reviewed rate against the
+  approved discovery projection. Candidate counts summed across searches are
+  labeled opportunities rather than unique people. Partial, delayed, stale,
+  backfilled, and quarantined observations are counted separately and excluded
+  from metric denominators rather than silently treated as complete.
+- Search reports preserve criteria/policy version sets, reject duplicate search
+  IDs or mismatched projection lineage, and suppress all metric and data-quality
+  counts for cohorts smaller than five. This defines measurement only; ARG-503
+  and ARG-605 search/retrieval implementation remain gated.
 - This is pure synthetic domain code. It does not add persistence, analytics
   transport, an admin dashboard, real candidate data, or production access.
 

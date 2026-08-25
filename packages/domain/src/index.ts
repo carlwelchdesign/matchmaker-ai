@@ -52,6 +52,17 @@ export {
   type CandidatePurposeProjectionRequest,
 } from "./candidate-purpose-projection.js";
 export {
+  buildCandidateSearchCoverageSnapshot,
+  candidateSearchCoverageSchemaVersion,
+  candidateSearchObservationSchemaVersion,
+  recordCandidateSearchObservation,
+  validateCandidateSearchObservation,
+  type CandidateSearchCoverageSnapshot,
+  type CandidateSearchDataQualityState,
+  type CandidateSearchObservation,
+  type CandidateSearchObservationInput,
+} from "./candidate-search-coverage.js";
+export {
   buildServiceHealth,
   type ServiceHealth,
   type ServiceState,
