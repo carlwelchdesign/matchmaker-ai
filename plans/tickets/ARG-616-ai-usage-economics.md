@@ -22,7 +22,7 @@ The team knows the real cost per completed interview and can cap or stop spend w
 - [x] Enforce maximum turn/time/token/audio limits and deterministic structured-form fallback.
 - [x] Exercise provider and feature kill switches without data loss.
 - [x] Report cost per start, completion, approved field, correction, and human-review minute saved.
-- [ ] Measure storage, evaluation, support, and payment overhead beyond API unit prices.
+- [x] Measure storage, evaluation, support, and payment overhead beyond API unit prices.
 - [ ] Keep first-pilot candidate application free unless DEC-016 is explicitly superseded after legal/fairness/refund review.
 - [ ] Use account verification, invitations, and rate limits before considering a fee as abuse control.
 
@@ -88,3 +88,21 @@ See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-intervie
 - Report lineage rejects duplicate sessions or executions, unlinked usage, and
   usage outside the measured session window. The contract stores no response,
   prompt, transcript, profile field value, or other candidate content.
+- `interview-operating-cost/v1` records storage, evaluation, support, and
+  payment overhead as either actual or estimated micro-USD costs. Actual costs
+  require both an approval reference and receipt or invoice evidence.
+- One-time purchases, recurring subscriptions, usage charges, and internal
+  labor are distinguished by kind and billing cadence. Subscription reporting
+  derives the current active or trial register from the latest recorded state,
+  so cancellation evidence removes a service from the active list without
+  deleting its history.
+- Vendor, service, subscription, approval, evidence, and payment-source values
+  are opaque operational aliases. The schema rejects extra fields and always
+  reports `paymentCredentialsStored: false`; card numbers, images, CVV values,
+  billing credentials, and candidate content do not belong in this ledger.
+- `interview-fully-loaded-economics/v1` combines API usage estimates with
+  operating overhead and recomputes cost per start, completion, approved field,
+  correction, and human-review minute saved.
+- No vendor account, purchase, subscription, or charge was created as part of
+  this implementation. The initial operational register is empty until a
+  specific service and exact purchase receive review and approval.
