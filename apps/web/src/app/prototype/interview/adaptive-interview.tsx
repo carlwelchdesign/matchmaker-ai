@@ -260,6 +260,10 @@ export function AdaptiveInterview({
             </p>
             <h2>{currentQuestion.prompt}</h2>
             <p className="question-purpose">{currentQuestion.purpose}</p>
+            <div className="question-rationale">
+              <p className="detail-label">Why this question</p>
+              <p>{currentQuestion.selection.explanation}</p>
+            </div>
             <label className="answer-label" htmlFor="candidate-answer">
               {mode === "conversation" ? "Your response" : "Your answer"}
             </label>

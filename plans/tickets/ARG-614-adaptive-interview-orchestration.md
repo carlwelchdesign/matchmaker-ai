@@ -26,3 +26,19 @@ A versioned guide and constrained planner generate relevant, one-at-a-time follo
 - [ ] No admission, rejection, ranking, matching, or profile mutation occurs without the existing human/applicant approvals.
 
 See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-interviewing.md).
+
+## Foundation evidence
+
+- The local ARG-613 prototype now uses `argent-template-planner-2026-08-25`
+  with the versioned `argent-text-guide-2026-08-25` core.
+- Each local question plan records the guide and planner versions, explicit
+  `model: null`, a reason code, and exact question/revision source references.
+- Adaptive prompts may use only a closed, approved vocabulary for pace, life
+  rhythm, and introduction-boundary follow-ups; arbitrary candidate text is
+  never interpolated into a prompt.
+- Declined answers and unsupported or prompt-injection-like text fall back to
+  the required core question without source references.
+- The candidate sees a plain-language “Why this question” explanation.
+- This does not complete the provider-backed planner, evaluation thresholds,
+  stored question disposition, human handoff, or approval-gated policy work;
+  ARG-614 remains proposed until its dependencies are ready.

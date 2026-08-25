@@ -30,6 +30,8 @@ each source-grounded field before submission.
   approved, source-exact fields eligible for later profile use or analytics.
 - [x] The local slice makes no provider call and stores or submits no response.
 - [x] The guide and grounded follow-up behavior are deterministic and tested.
+- [x] Follow-up selection is transparent: the candidate sees why a question was
+  chosen, and arbitrary or declined text falls back to the fixed guide.
 - [ ] Approved persistence stores source, proposal, approval, provenance, and
   version data through the ARG-615 contract.
 - [ ] Provider-backed adaptive generation passes ARG-607, ARG-608, and ARG-611.

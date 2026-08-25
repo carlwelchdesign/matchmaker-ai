@@ -791,6 +791,20 @@ h3 {
   font-size: var(--argent-type-size-compact);
   line-height: var(--argent-type-line-height-compact);
 }
+.question-rationale {
+  border-left: 2px solid var(--argent-semantic-border-strong);
+  margin-top: var(--argent-primitive-space-200);
+  padding-left: var(--argent-primitive-space-150);
+}
+.question-rationale p {
+  color: var(--argent-semantic-text-secondary);
+  font-size: var(--argent-type-size-compact);
+  margin: var(--argent-primitive-space-100) 0 0;
+}
+.question-rationale .detail-label {
+  color: var(--argent-semantic-text-muted);
+  margin-top: 0;
+}
 .answer-label {
   display: block;
   font-size: var(--argent-type-size-compact);

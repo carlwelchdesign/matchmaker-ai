@@ -18,7 +18,27 @@ export type InterviewQuestion = {
   id: string;
   prompt: string;
   purpose: string;
+  selection: InterviewQuestionSelection;
   topic: InterviewTopic;
+};
+
+export type InterviewQuestionReasonCode =
+  | "required-core"
+  | "source-grounded-boundaries"
+  | "source-grounded-pace"
+  | "source-grounded-rhythm";
+
+export type InterviewQuestionSelection = {
+  explanation: string;
+  guideVersion: string;
+  model: null;
+  planner: "deterministic-template";
+  plannerVersion: string;
+  reasonCode: InterviewQuestionReasonCode;
+  sourceReferences: ReadonlyArray<{
+    questionId: string;
+    responseRevision: number;
+  }>;
 };
 
 export type FieldProposal = {
@@ -28,9 +48,19 @@ export type FieldProposal = {
   value: string;
 };
 
-export const interviewGuideVersion = "argent-text-guide-2026-08-24";
+export const interviewGuideVersion = "argent-text-guide-2026-08-25";
+export const interviewPlannerVersion = "argent-template-planner-2026-08-25";
 
-const questions: ReadonlyArray<InterviewQuestion> = [
+type InterviewQuestionDefinition = Omit<InterviewQuestion, "selection">;
+
+type ApprovedAdaptation = {
+  displayTerm: string;
+  prompt: string;
+  reasonCode: Exclude<InterviewQuestionReasonCode, "required-core">;
+  sourceTerms: readonly string[];
+};
+
+const questions: ReadonlyArray<InterviewQuestionDefinition> = [
   {
     fieldLabel: "Relationship intentions",
     id: "intentions",
@@ -69,6 +99,87 @@ const questions: ReadonlyArray<InterviewQuestion> = [
   },
 ];
 
+const approvedAdaptations: Readonly<
+  Partial<Record<InterviewQuestion["id"], readonly ApprovedAdaptation[]>>
+> = {
+  pace: [
+    {
+      displayTerm: "intentional",
+      prompt:
+        "You described an intentional beginning. What would that pace look like during the first few weeks?",
+      reasonCode: "source-grounded-pace",
+      sourceTerms: ["intentional"],
+    },
+    {
+      displayTerm: "unhurried",
+      prompt:
+        "You described an unhurried beginning. What would that pace look like during the first few weeks?",
+      reasonCode: "source-grounded-pace",
+      sourceTerms: ["unhurried", "slow", "gradual"],
+    },
+  ],
+  rhythm: [
+    {
+      displayTerm: "travel",
+      prompt:
+        "You mentioned travel. What rhythm around travel would you want a future partner to understand?",
+      reasonCode: "source-grounded-rhythm",
+      sourceTerms: ["travel", "traveling", "travelling"],
+    },
+    {
+      displayTerm: "work",
+      prompt:
+        "You mentioned work. What balance around work would you want a future partner to understand?",
+      reasonCode: "source-grounded-rhythm",
+      sourceTerms: ["work", "career"],
+    },
+    {
+      displayTerm: "weekends",
+      prompt:
+        "You mentioned weekends. What would an enjoyable shared weekly rhythm look like?",
+      reasonCode: "source-grounded-rhythm",
+      sourceTerms: ["weekend", "weekends"],
+    },
+    {
+      displayTerm: "family",
+      prompt:
+        "You mentioned family. How would you want family life to fit into a shared weekly rhythm?",
+      reasonCode: "source-grounded-rhythm",
+      sourceTerms: ["family"],
+    },
+  ],
+  boundaries: [
+    {
+      displayTerm: "communication",
+      prompt:
+        "You mentioned communication. What would respectful communication look like during an introduction?",
+      reasonCode: "source-grounded-boundaries",
+      sourceTerms: ["communication", "communicate"],
+    },
+    {
+      displayTerm: "privacy",
+      prompt:
+        "You mentioned privacy. What privacy boundary would help an introduction feel considered?",
+      reasonCode: "source-grounded-boundaries",
+      sourceTerms: ["privacy", "private"],
+    },
+    {
+      displayTerm: "honesty",
+      prompt:
+        "You mentioned honesty. What would candid, respectful communication look like at the beginning?",
+      reasonCode: "source-grounded-boundaries",
+      sourceTerms: ["honesty", "honest", "candid"],
+    },
+    {
+      displayTerm: "space",
+      prompt:
+        "You mentioned space. What would having enough space look like during the introduction process?",
+      reasonCode: "source-grounded-boundaries",
+      sourceTerms: ["space"],
+    },
+  ],
+};
+
 export function getInterviewQuestion(
   index: number,
   answers: ReadonlyArray<InterviewAnswer>,
@@ -79,30 +190,69 @@ export function getInterviewQuestion(
     return null;
   }
 
-  if (question.id !== "pace") {
-    return question;
-  }
-
-  const intention = answers.find(
-    (answer) => answer.questionId === "intentions",
-  );
-  if (!intention) {
-    return question;
-  }
-
-  const normalized = intention.sourceText.toLocaleLowerCase();
-  const paceLanguage = ["intentional", "unhurried", "slow", "gradual"].find(
-    (term) => normalized.includes(term),
-  );
-
-  if (!paceLanguage) {
-    return question;
+  const groundedSelection = findApprovedAdaptation(question.id, answers);
+  if (groundedSelection) {
+    return {
+      ...question,
+      prompt: groundedSelection.adaptation.prompt,
+      selection: {
+        explanation: `This approved follow-up appeared because you mentioned “${groundedSelection.adaptation.displayTerm}.” It does not interpret anything beyond that word.`,
+        guideVersion: interviewGuideVersion,
+        model: null,
+        planner: "deterministic-template",
+        plannerVersion: interviewPlannerVersion,
+        reasonCode: groundedSelection.adaptation.reasonCode,
+        sourceReferences: [
+          {
+            questionId: groundedSelection.answer.questionId,
+            responseRevision: groundedSelection.answer.revision,
+          },
+        ],
+      },
+    };
   }
 
   return {
     ...question,
-    prompt: `You described an ${paceLanguage === "intentional" ? "intentional" : "unhurried"} beginning. What would that pace look like during the first few weeks?`,
+    selection: {
+      explanation:
+        "This question is part of Argent’s fixed interview guide and does not rely on an inferred trait.",
+      guideVersion: interviewGuideVersion,
+      model: null,
+      planner: "deterministic-template",
+      plannerVersion: interviewPlannerVersion,
+      reasonCode: "required-core",
+      sourceReferences: [],
+    },
   };
+}
+
+function findApprovedAdaptation(
+  questionId: string,
+  answers: ReadonlyArray<InterviewAnswer>,
+): { adaptation: ApprovedAdaptation; answer: InterviewAnswer } | null {
+  const adaptations = approvedAdaptations[questionId] ?? [];
+  const eligibleAnswers = answers.filter(
+    (answer) => answer.sourceText !== "Prefer not to answer",
+  );
+
+  for (const adaptation of adaptations) {
+    for (const answer of eligibleAnswers.toReversed()) {
+      const normalized = answer.sourceText.toLocaleLowerCase();
+      if (
+        adaptation.sourceTerms.some((term) => hasWholeTerm(normalized, term))
+      ) {
+        return { adaptation, answer };
+      }
+    }
+  }
+
+  return null;
+}
+
+function hasWholeTerm(source: string, term: string): boolean {
+  const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`\\b${escaped}\\b`, "u").test(source);
 }
 
 export function getInterviewQuestionCount() {
