@@ -32,9 +32,20 @@ export {
   type ServiceState,
 } from "./health.js";
 export {
+  createInterviewBudgetAttribution,
+  createInterviewBudgetRule,
+  evaluateScopedInterviewBudgets,
+  type InterviewBudgetAlert,
+  type InterviewBudgetAttribution,
+  type InterviewBudgetDimension,
+  type InterviewBudgetRule,
+  type ScopedInterviewBudgetDecision,
+} from "./interview-budget-scopes.js";
+export {
   evaluateInterviewBudget,
   interviewUsageSchemaVersion,
   recordInterviewUsageExecution,
+  validateInterviewUsageExecution,
   type InterviewBudgetDecision,
   type InterviewBudgetFallbackReason,
   type InterviewBudgetPolicy,

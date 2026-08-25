@@ -18,7 +18,7 @@ The team knows the real cost per completed interview and can cap or stop spend w
 ## Acceptance criteria
 
 - [x] Per session and execution, record provider/model, input/output tokens, audio minutes, latency, retries, cache behavior, and estimated cost without source content.
-- [ ] Define budgets and alerts by environment, mode, cohort, candidate, day, and provider.
+- [x] Define budgets and alerts by environment, mode, cohort, candidate, day, and provider.
 - [ ] Enforce maximum turn/time/token/audio limits and deterministic structured-form fallback.
 - [ ] Exercise provider and feature kill switches without data loss.
 - [ ] Report cost per start, completion, approved field, correction, and human-review minute saved.
@@ -52,3 +52,10 @@ See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-intervie
 - Editing an earlier response preserves prior zero-cost usage history and adds a
   new execution for the new question attempt. A tested projection rejects
   duplicate execution IDs instead of silently double-counting replans.
+- Scoped budget rules now cover environment, interaction mode, opaque cohort
+  key, opaque candidate key, UTC day, and provider. Each rule defines execution
+  and estimated-cost ceilings plus a warning threshold in basis points.
+- Evaluation aggregates only matching content-free usage, emits explicit
+  warning or exceeded alerts, and selects the structured fallback if any
+  applicable rule is exceeded. Runtime factories reject extra content,
+  identifiable candidate/cohort labels, and duplicate rule or execution IDs.

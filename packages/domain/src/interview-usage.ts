@@ -87,6 +87,11 @@ const executionKeys = [
   "retryCount",
   "sessionId",
 ] as const;
+const executionRecordKeys = [
+  ...executionKeys,
+  "schemaVersion",
+  "sourceContentStored",
+] as const;
 const validEnvironments = new Set<InterviewUsageEnvironment>([
   "development",
   "preview",
@@ -171,6 +176,27 @@ export function recordInterviewUsageExecution(
   validateCacheMetrics(execution);
   validateDeterministicExecution(execution);
   return execution;
+}
+
+export function validateInterviewUsageExecution(
+  input: unknown,
+): InterviewUsageExecution {
+  if (!isRecord(input) || !hasExactKeys(input, executionRecordKeys)) {
+    throw new Error("Interview usage record has unexpected or missing fields");
+  }
+  if (
+    input.schemaVersion !== interviewUsageSchemaVersion ||
+    input.sourceContentStored !== false
+  ) {
+    throw new Error("Interview usage record contract is invalid");
+  }
+
+  const {
+    schemaVersion: _schemaVersion,
+    sourceContentStored: _source,
+    ...raw
+  } = input;
+  return recordInterviewUsageExecution(raw);
 }
 
 export function evaluateInterviewBudget(
