@@ -60,6 +60,30 @@ type ApprovedAdaptation = {
   sourceTerms: readonly string[];
 };
 
+export type InterviewGuide = {
+  approvedOptionalProbes: ReadonlyArray<
+    ApprovedAdaptation & { questionId: string }
+  >;
+  requiredQuestionIds: ReadonlyArray<string>;
+  sensitiveTopicBoundaries: ReadonlyArray<{
+    code: "no-prohibited-inference" | "no-sensitive-identifiers";
+    guidance: string;
+  }>;
+  sourceToFieldMappings: ReadonlyArray<{
+    fieldLabel: string;
+    questionId: string;
+    topic: InterviewTopic;
+  }>;
+  stopConditions: ReadonlyArray<{
+    code:
+      | "candidate-continues-without-interview"
+      | "human-assistance-requested"
+      | "required-topics-covered";
+    guidance: string;
+  }>;
+  version: string;
+};
+
 const questions: ReadonlyArray<InterviewQuestionDefinition> = [
   {
     fieldLabel: "Relationship intentions",
@@ -178,6 +202,51 @@ const approvedAdaptations: Readonly<
       sourceTerms: ["space"],
     },
   ],
+};
+
+export const interviewGuide: InterviewGuide = {
+  approvedOptionalProbes: Object.entries(approvedAdaptations).flatMap(
+    ([questionId, adaptations]) =>
+      (adaptations ?? []).map((adaptation) => ({
+        ...adaptation,
+        questionId,
+      })),
+  ),
+  requiredQuestionIds: questions.map((question) => question.id),
+  sensitiveTopicBoundaries: [
+    {
+      code: "no-sensitive-identifiers",
+      guidance:
+        "Do not ask for names, addresses, financial information, or details about another person.",
+    },
+    {
+      code: "no-prohibited-inference",
+      guidance:
+        "Do not infer protected traits, health, sexual behavior, emotion, accent, deception, attractiveness, wealth, diagnosis, personality, or compatibility.",
+    },
+  ],
+  sourceToFieldMappings: questions.map((question) => ({
+    fieldLabel: question.fieldLabel,
+    questionId: question.id,
+    topic: question.topic,
+  })),
+  stopConditions: [
+    {
+      code: "required-topics-covered",
+      guidance: "Stop after every required question is answered or declined.",
+    },
+    {
+      code: "candidate-continues-without-interview",
+      guidance:
+        "Stop immediately when the candidate chooses to continue without the interview.",
+    },
+    {
+      code: "human-assistance-requested",
+      guidance:
+        "Pause question planning when the candidate requests human assistance.",
+    },
+  ],
+  version: interviewGuideVersion,
 };
 
 export function getInterviewQuestion(

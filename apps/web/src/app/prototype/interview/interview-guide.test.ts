@@ -4,6 +4,7 @@ import {
   createFieldProposal,
   getInterviewQuestion,
   getInterviewQuestionCount,
+  interviewGuide,
   interviewGuideVersion,
   interviewPlannerVersion,
   type InterviewAnswer,
@@ -30,6 +31,55 @@ describe("adaptive interview guide", () => {
       },
     });
     expect(getInterviewQuestion(4, [])).toBeNull();
+  });
+
+  it("versions the complete guide contract instead of leaving policy implicit", () => {
+    expect(interviewGuide.version).toBe(interviewGuideVersion);
+    expect(interviewGuide.requiredQuestionIds).toEqual([
+      "intentions",
+      "pace",
+      "rhythm",
+      "boundaries",
+    ]);
+    expect(interviewGuide.sourceToFieldMappings).toEqual([
+      {
+        fieldLabel: "Relationship intentions",
+        questionId: "intentions",
+        topic: "relationship-intention",
+      },
+      {
+        fieldLabel: "Preferred introduction pace",
+        questionId: "pace",
+        topic: "introduction-pace",
+      },
+      {
+        fieldLabel: "Life rhythm",
+        questionId: "rhythm",
+        topic: "life-rhythm",
+      },
+      {
+        fieldLabel: "Early boundaries",
+        questionId: "boundaries",
+        topic: "personal-boundaries",
+      },
+    ]);
+    expect(interviewGuide.approvedOptionalProbes).toHaveLength(10);
+    expect(
+      interviewGuide.approvedOptionalProbes.every(
+        (probe) =>
+          probe.prompt.endsWith("?") &&
+          probe.sourceTerms.length > 0 &&
+          probe.reasonCode.startsWith("source-grounded-"),
+      ),
+    ).toBe(true);
+    expect(
+      interviewGuide.sensitiveTopicBoundaries.map(({ code }) => code),
+    ).toEqual(["no-sensitive-identifiers", "no-prohibited-inference"]);
+    expect(interviewGuide.stopConditions.map(({ code }) => code)).toEqual([
+      "required-topics-covered",
+      "candidate-continues-without-interview",
+      "human-assistance-requested",
+    ]);
   });
 
   it("grounds the pace follow-up in the candidate's prior wording", () => {

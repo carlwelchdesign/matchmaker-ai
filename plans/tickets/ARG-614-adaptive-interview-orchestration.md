@@ -17,7 +17,7 @@ A versioned guide and constrained planner generate relevant, one-at-a-time follo
 
 ## Acceptance criteria
 
-- [ ] Required topics, approved optional probes, sensitive-topic boundaries, stop conditions, and source-to-field mappings are versioned.
+- [x] Required topics, approved optional probes, sensitive-topic boundaries, stop conditions, and source-to-field mappings are versioned.
 - [ ] Every proposed question stores guide, prompt, model, source references, reason code, and disposition.
 - [ ] Candidate-approved facts, explicit unknowns, contradictions, and uncovered required topics are the only permitted planning inputs.
 - [x] Compound questions, repetitive acknowledgement, premature termination, unsupported inference, and topic drift have evaluation thresholds.
@@ -35,6 +35,9 @@ See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-intervie
 - Candidate-assistance commit: `facb39b`
 - The local ARG-613 prototype now uses `argent-template-planner-2026-08-25`
   with the versioned `argent-text-guide-2026-08-25` core.
+- The exported guide contract now binds that version to its required question
+  IDs, ten controlled optional probes, stable sensitive-boundary and stop codes,
+  and exact question-to-field/topic mappings.
 - Each local question plan records the guide and planner versions, explicit
   `model: null`, a reason code, and exact question/revision source references.
 - Adaptive prompts may use only a closed, approved vocabulary for pace, life
