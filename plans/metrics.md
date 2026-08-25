@@ -52,6 +52,17 @@ Compare structured, conversational, and hybrid modes without treating greater di
 - accessibility failure and human-assistance requests;
 - matchmaker usefulness of approved fields;
 - audio/transcript deletion completion, latency, compute cost, and device impact.
+- guide-topic coverage, single-question-turn rate, unsupported-probe rate, clarification and human-handoff rate;
+- model/provider/token/audio-minute/retry and estimated cost per start, completion, and approved field;
+- feature-flag cohort, fallback success, mid-session disable recovery, and spend-cap activation.
+
+## Matchmaker candidate-intelligence metrics
+
+- candidate supply by approved, purpose-limited criteria and freshness state;
+- approved-profile completeness, stale/unknown/declined values, and availability refresh;
+- search coverage, zero-result searches, shortlist throughput, and human review time;
+- introduction-stage denominators from considered through mutual approval and reported outcome;
+- no candidate-value, desirability, personality, wealth, compatibility, or predicted-success score.
 
 ## Matching outcome taxonomy
 

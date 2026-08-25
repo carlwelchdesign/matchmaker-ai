@@ -46,6 +46,7 @@ Scoring: impact and likelihood are `1` (low) to `5` (critical/high). Score is th
 | R-039 | Conversational intake causes oversharing, inaccurate profile data, unlawful recording, or source-data exposure | 5 | 4 | 20 | DEC-013 ADR-020 ARG-006 ARG-027 ARG-028 ARG-206 ARG-207 ARG-208 ARG-212 ARG-613 | Privacy/security/product | Before real-person voice testing | Open |
 | R-040 | Class, gender, voice, or presumed-personality stereotypes bias intake, admission, or matching | 5 | 3 | 15 | DEC-014 ARG-003 ARG-026 ARG-027 ARG-608 | Product/research/AI | Before applicant prototype | Open |
 | R-042 | A partner network or CRM is mistaken for a public, reusable dating-profile API | 5 | 3 | 15 | DEC-019; ARG-008 provider/terms/security matrix; purpose-specific consent; manual fallback; no bulk import or identity disclosure before approved matchmaker workflow | Integration owner + privacy/legal | Before any external-network connector | Open |
+| R-043 | Adaptive interviewing creates opaque probing, sensitive oversharing, mode-based bias, cost abuse, or unapproved data entering candidate analytics | 5 | 4 | 20 | DEC-020 ARG-111 ARG-614–ARG-618; constrained guide; field approval; content-free cost ledger; text fallback; flag/provider kill switches | Product + privacy + AI + data owners | Before any real-person adaptive interview | Open |
 
 ## Escalation policy
 

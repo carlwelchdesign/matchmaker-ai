@@ -20,6 +20,8 @@
 | `ApplicationAnswer` | Versioned structured/form response | Stores schema version and source |
 | `IntakeSession` | One resumable structured, conversational, or hybrid application session | Records mode, notice/consent versions, status, locale, and mode changes |
 | `ConversationTurn` | One bounded question and typed or spoken response | Links the exact question schema and restricted source artifacts |
+| `InterviewGuideVersion` | Approved required topics, optional probes, boundaries, stop conditions, and field mappings | Immutable once used; locale, owner, approval, and supersession recorded |
+| `PlannedInterviewQuestion` | One constrained question proposed for a session | Stores guide/prompt/model versions, permitted source references, reason code, and disposition |
 | `IntakeRecording` | Optional raw audio for one explicitly recorded response | Separate consent, access policy, expiry, deletion state, and no biometric purpose |
 | `TranscriptRevision` | Applicant-reviewable transcription of a response | Immutable revisions, corrections, confidence metadata, approval, and deletion state |
 | `ProfileFieldProposal` | Source-grounded candidate field derived from approved text | Supporting passage, schema, proposer, and applicant disposition |
@@ -53,6 +55,7 @@
 | `MediaAsset` | Private photo/document metadata | Object key, owner, purpose, scan state, access policy, and retention |
 | `AIArtifact` | Generated summary/recommendation/evaluation | Immutable input references, output, versions, review, and disposition |
 | `AIExecutionAttempt` | One provider/model execution | Input classification, versions, latency, cost, outcome, and correlation |
+| `AIUsageLedgerEntry` | Content-free metering for one AI or speech execution | Provider/model, token/audio units, retries, latency, estimated cost, environment, cohort, and budget decision |
 | `AIEvaluationResult` | Evaluation of an artifact or model version | Fixture/rubric version, scores, zero-tolerance failures, reviewer |
 | `AuditEvent` | Append-only consequential action record | Separate restricted store and retention policy |
 | `StateTransitionEvent` | Historical lifecycle transition | Aggregate, previous/next state, actor, policy, reason, and effects |
@@ -83,6 +86,9 @@ remain deferred to their owning tickets.
 - `Person 1—N Application`
 - `Application 1—N IntakeSession`
 - `IntakeSession 1—N ConversationTurn`
+- `InterviewGuideVersion 1—N PlannedInterviewQuestion`
+- `IntakeSession 1—N PlannedInterviewQuestion`
+- `PlannedInterviewQuestion 0—1 ConversationTurn`
 - `ConversationTurn 0—1 IntakeRecording`
 - `ConversationTurn 0—N TranscriptRevision`
 - `TranscriptRevision 0—N ProfileFieldProposal`
@@ -96,6 +102,7 @@ remain deferred to their owning tickets.
 - `Introduction` references one approved recommendation/shortlist context and two independent participant decisions
 - `ConsentRecord` references a person, purpose, notice version, capture context, and optional campaign
 - `AIArtifact` references source versions without becoming their source of truth
+- `AIExecutionAttempt 1—N AIUsageLedgerEntry`; ledger dimensions never contain interview text or inferred traits
 - `AttributionTouch` preserves the touchpoint chain without overwriting first-touch evidence
 - `AnalyticsEvent`, `AuditEvent`, security telemetry, and raw provider payloads are separate systems/schemas
 - Every submission retains the exact campaign content, form schema, notice, and policy versions presented

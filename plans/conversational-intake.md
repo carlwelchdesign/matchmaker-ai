@@ -4,6 +4,8 @@
 
 This is a research and prototype brief for `ARG-027` and `ARG-028`. It does not approve production recording, speech processing, or automatic profile updates.
 
+The market, experience, data, rollout, and AI-cost findings are maintained in [adaptive-candidate-interviewing.md](research/adaptive-candidate-interviewing.md). That research recommends a constrained, text-first adaptive interview before any voice beta.
+
 Argent should test conversation as an **optional way to complete an application**, alongside a traditional structured path and a hybrid path. It may reduce writing burden and help people express nuance. It must not become an opaque personality assessment, a simulated therapist, or the only accessible route to apply.
 
 ## Experience principles
@@ -130,6 +132,8 @@ No prompt, score, model feature, agent persona, staff script, or service tier ma
 - [ ] Oversharing, third-party data, prompt-injection, and prohibited-inference tests pass.
 - [ ] Text-only and human-assisted alternatives verified.
 - [ ] Provider/on-device decision documented in an ADR.
+- [ ] `candidate-interviewing` is wired server-side with off/fallback/rollback tests; the Vercel flag alone is not a launch gate.
+- [ ] Per-session model, token, audio-minute, latency, retry, and estimated-cost metering is verified.
 
 ## References
 
@@ -144,4 +148,3 @@ No prompt, score, model feature, agent persona, staff script, or service tier ma
 - Vosk: <https://github.com/alphacep/vosk-api>
 - sherpa-onnx: <https://github.com/k2-fsa/sherpa-onnx>
 - Piff, 2014, social class and entitlement/narcissism: <https://pubmed.ncbi.nlm.nih.gov/23963971/>
-

@@ -134,6 +134,11 @@ When a ticket moves to `Ready`, copy [the ticket template](../templates/ticket.m
 - [ ] `ARG-611` Enforce consent, authorization, and provenance at AI execution time.
 - [ ] `ARG-612` Implement AI sampling, drift detection, quarantine, and rollback.
 - [ ] `ARG-613` Implement optional conversational intake with transcript correction and field-by-field approval.
+- [ ] `ARG-614` Implement a versioned guide and constrained, source-grounded next-question planner.
+- [ ] `ARG-615` Implement the approved-assertion, provenance, and candidate-database contract.
+- [ ] `ARG-616` Implement interview usage metering, budget controls, and fee-decision evidence.
+- [ ] `ARG-617` Implement permission-aware candidate supply, quality, and workflow analytics.
+- [ ] `ARG-618` Run a controlled text-first adaptive-interview beta before separately gating voice.
 
 ## Phase 5 — Flutter member experience
 

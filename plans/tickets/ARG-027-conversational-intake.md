@@ -35,6 +35,7 @@ Applicants can be evaluated for a lower-burden conversational or hybrid path tha
 ## Acceptance criteria
 
 - [x] Initial experience, data boundary, safety rules, feasibility candidates, metrics, and gates documented in [conversational-intake.md](../conversational-intake.md).
+- [x] Market, adaptive-interview, candidate-intelligence, rollout, and fee research documented in [adaptive-candidate-interviewing.md](../research/adaptive-candidate-interviewing.md).
 - [x] The wealthy-male/narcissism assumption is explicitly excluded from persona and model behavior.
 - [x] Transcript correction precedes structuring and each proposed field requires applicant approval.
 - [ ] Low-fidelity structured, conversational, and hybrid concepts are tested with an approved research cohort.
@@ -85,6 +86,7 @@ Applicants can be evaluated for a lower-burden conversational or hybrid path tha
 - Merge: Pending
 - Deployment: Not applicable
 - Evidence paths: `plans/conversational-intake.md`
+- Research evidence: `plans/research/adaptive-candidate-interviewing.md`
 - Completion date: Pending
 
 ### Local comparison-concept increment
