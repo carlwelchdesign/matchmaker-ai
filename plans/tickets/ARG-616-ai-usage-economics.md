@@ -44,3 +44,11 @@ See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-intervie
   deterministic-template execution. Provider selection, pricing configuration,
   persistence, telemetry transport, payment, and production enforcement remain
   unimplemented and approval-gated.
+- Every proposed question in the running local Conversation/Hybrid flow now
+  snapshots one validated deterministic usage entry beside its lifecycle
+  record. The entry contains proposal time, local session, interaction mode,
+  and a unique question-attempt execution ID, but no prompt, answer, source
+  reference, proposed field, or other interview content.
+- Editing an earlier response preserves prior zero-cost usage history and adds a
+  new execution for the new question attempt. A tested projection rejects
+  duplicate execution IDs instead of silently double-counting replans.

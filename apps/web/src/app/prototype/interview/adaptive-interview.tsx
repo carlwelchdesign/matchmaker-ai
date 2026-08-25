@@ -34,10 +34,18 @@ const dispositionLabels: Record<CandidateFieldDisposition, string> = {
   rejected: "Rejected",
 };
 
-function createInitialQuestionRecords(): InterviewQuestionRecord[] {
+const localUsageSessionId = "local-interview-preview";
+
+function createInitialQuestionRecords(
+  mode: InterviewMode,
+): InterviewQuestionRecord[] {
   const question = getPolicyCompliantInterviewQuestion(0, []);
   if (!question) throw new Error("The interview guide has no first question");
-  return proposeInterviewQuestion([], question);
+  return proposeInterviewQuestion([], question, {
+    mode,
+    proposedAt: new Date().toISOString(),
+    sessionId: localUsageSessionId,
+  });
 }
 
 export function AdaptiveInterview({
@@ -65,7 +73,7 @@ export function AdaptiveInterview({
   const [paused, setPaused] = useState(false);
   const [questionRecords, setQuestionRecords] = useState<
     InterviewQuestionRecord[]
-  >(createInitialQuestionRecords);
+  >(() => createInitialQuestionRecords(initialMode));
   const [reviewing, setReviewing] = useState(false);
 
   const questionCount = getInterviewQuestionCount();
@@ -191,6 +199,11 @@ export function AdaptiveInterview({
     nextQuestionRecords = proposeInterviewQuestion(
       nextQuestionRecords,
       nextQuestion,
+      {
+        mode,
+        proposedAt: new Date().toISOString(),
+        sessionId: localUsageSessionId,
+      },
     );
     setQuestionRecords(nextQuestionRecords);
     setCurrentIndex(nextIndex);
@@ -232,6 +245,11 @@ export function AdaptiveInterview({
         questionRecords,
         reopenedQuestion,
         new Set(answers.slice(index).map((candidate) => candidate.questionId)),
+        {
+          mode,
+          proposedAt: new Date().toISOString(),
+          sessionId: localUsageSessionId,
+        },
       ),
     );
     setDispositions((current) => {
@@ -554,7 +572,7 @@ export function AdaptiveInterview({
                   setCurrentIndex(0);
                   setDispositions({});
                   setDraft("");
-                  setQuestionRecords(createInitialQuestionRecords());
+                  setQuestionRecords(createInitialQuestionRecords(mode));
                   setReviewing(false);
                 }}
                 type="button"

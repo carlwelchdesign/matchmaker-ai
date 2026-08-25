@@ -1,4 +1,10 @@
-import type { InterviewQuestion } from "./interview-guide";
+import {
+  recordInterviewUsageExecution,
+  type InterviewUsageExecution,
+  type InterviewUsageMode,
+} from "@argent/domain";
+
+import type { InterviewMode, InterviewQuestion } from "./interview-guide";
 
 export type InterviewQuestionDisposition =
   "answered" | "declined" | "proposed" | "superseded";
@@ -8,11 +14,19 @@ export type InterviewQuestionRecord = {
   disposition: InterviewQuestionDisposition;
   question: InterviewQuestion;
   recordId: string;
+  usage: InterviewUsageExecution;
+};
+
+export type InterviewQuestionProposalContext = {
+  mode: InterviewMode;
+  proposedAt: string;
+  sessionId: string;
 };
 
 export function proposeInterviewQuestion(
   records: ReadonlyArray<InterviewQuestionRecord>,
   question: InterviewQuestion,
+  context: InterviewQuestionProposalContext,
 ): InterviewQuestionRecord[] {
   const attempt =
     records.filter((record) => record.question.id === question.id).length + 1;
@@ -24,6 +38,7 @@ export function proposeInterviewQuestion(
       disposition: "proposed",
       question: snapshotQuestion(question),
       recordId: `${question.id}:${attempt}`,
+      usage: createPlannerUsage(question, attempt, context),
     },
   ];
 }
@@ -52,6 +67,7 @@ export function reopenInterviewQuestion(
   records: ReadonlyArray<InterviewQuestionRecord>,
   question: InterviewQuestion,
   supersededQuestionIds: ReadonlySet<string>,
+  context: InterviewQuestionProposalContext,
 ): InterviewQuestionRecord[] {
   const supersededRecords = records.map((record) =>
     supersededQuestionIds.has(record.question.id) &&
@@ -60,7 +76,19 @@ export function reopenInterviewQuestion(
       : record,
   );
 
-  return proposeInterviewQuestion(supersededRecords, question);
+  return proposeInterviewQuestion(supersededRecords, question, context);
+}
+
+export function getInterviewUsageExecutions(
+  records: ReadonlyArray<InterviewQuestionRecord>,
+): ReadonlyArray<InterviewUsageExecution> {
+  const executionIds = new Set(
+    records.map((record) => record.usage.executionId),
+  );
+  if (executionIds.size !== records.length) {
+    throw new Error("Interview question usage contains duplicate executions");
+  }
+  return records.map((record) => record.usage);
 }
 
 function snapshotQuestion(question: InterviewQuestion): InterviewQuestion {
@@ -73,4 +101,34 @@ function snapshotQuestion(question: InterviewQuestion): InterviewQuestion {
       ),
     },
   };
+}
+
+function createPlannerUsage(
+  question: InterviewQuestion,
+  attempt: number,
+  context: InterviewQuestionProposalContext,
+): InterviewUsageExecution {
+  const mode: InterviewUsageMode =
+    context.mode === "conversation" ? "typed-conversation" : "hybrid";
+
+  return recordInterviewUsageExecution({
+    audioInputMs: 0,
+    audioOutputMs: 0,
+    cacheBehavior: "none",
+    cacheReadTokens: 0,
+    cacheWriteTokens: 0,
+    environment: "development",
+    estimatedCostMicrousd: 0,
+    executionId: `question-${question.id}-attempt-${attempt}`,
+    executionKind: "deterministic-template",
+    inputTokens: 0,
+    latencyMs: 0,
+    mode,
+    model: null,
+    occurredAt: context.proposedAt,
+    outputTokens: 0,
+    provider: null,
+    retryCount: 0,
+    sessionId: context.sessionId,
+  });
 }
