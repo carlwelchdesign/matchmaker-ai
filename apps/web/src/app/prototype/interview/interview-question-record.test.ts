@@ -1,9 +1,11 @@
 import { describe, expect, it } from "vitest";
 
 import { getInterviewQuestion, type InterviewAnswer } from "./interview-guide";
+import { localInterviewBudgetPolicy } from "./interview-budget-policy";
 import {
   getInterviewUsageExecutions,
   proposeInterviewQuestion,
+  proposeInterviewQuestionWithinBudget,
   reopenInterviewQuestion,
   settleInterviewQuestion,
 } from "./interview-question-record";
@@ -165,5 +167,28 @@ describe("interview question records", () => {
     expect(() => settleInterviewQuestion([], "missing:1", "answered")).toThrow(
       "does not exist",
     );
+  });
+
+  it("keeps the prior record and requests structured fallback at the turn limit", () => {
+    const records = proposeInterviewQuestion(
+      [],
+      requireQuestion(0),
+      proposalContext,
+    );
+    const result = proposeInterviewQuestionWithinBudget(
+      records,
+      requireQuestion(1),
+      { ...proposalContext, proposedAt: "2026-08-25T18:16:00.000Z" },
+      {
+        policy: { ...localInterviewBudgetPolicy, maxTurnsPerSession: 1 },
+        sessionElapsedMs: 60_000,
+      },
+    );
+
+    expect(result.decision).toMatchObject({
+      action: "structured-fallback",
+      reason: "turn-limit",
+    });
+    expect(result.records).toEqual(records);
   });
 });

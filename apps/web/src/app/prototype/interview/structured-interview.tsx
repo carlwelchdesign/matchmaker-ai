@@ -27,10 +27,12 @@ const dispositionLabels: Record<CandidateFieldDisposition, string> = {
 const questions = getPolicyCompliantStructuredQuestions();
 
 export function StructuredInterview({
+  entryNotice,
   onChooseApproach,
   onContinueToReview,
   onContinueWithoutInterview,
 }: Readonly<{
+  entryNotice?: string | null;
   onChooseApproach: () => void;
   onContinueToReview: () => void;
   onContinueWithoutInterview: () => void;
@@ -172,6 +174,11 @@ export function StructuredInterview({
       </div>
 
       <section aria-labelledby="structured-interview-title">
+        {entryNotice ? (
+          <p className="panel-copy" role="status">
+            {entryNotice}
+          </p>
+        ) : null}
         {stage === "worksheet" ? (
           <div className="structured-worksheet">
             <div className="interview-progress">

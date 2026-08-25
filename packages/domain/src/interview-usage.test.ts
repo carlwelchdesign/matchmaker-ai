@@ -32,12 +32,16 @@ const providerExecution: InterviewUsageExecutionInput = {
 const policy: InterviewBudgetPolicy = {
   featureEnabled: true,
   maxAudioMsPerExecution: 60_000,
+  maxAudioMsPerSession: 120_000,
   maxEstimatedCostMicrousdPerSession: 10_000,
   maxExecutionsPerSession: 4,
   maxInputTokensPerExecution: 2_000,
+  maxInputTokensPerSession: 4_000,
   maxLatencyMsPerExecution: 5_000,
   maxOutputTokensPerExecution: 500,
+  maxOutputTokensPerSession: 1_000,
   maxSessionElapsedMs: 900_000,
+  maxTurnsPerSession: 4,
   providerEnabled: true,
 };
 
@@ -103,6 +107,7 @@ describe("interview usage ledger", () => {
         existingExecutions: [],
         policy,
         sessionElapsedMs: 60_000,
+        sessionTurnCount: 0,
       }),
     ).toEqual({ action: "allow", estimatedSessionCostMicrousd: 2_500 });
   });
@@ -114,6 +119,7 @@ describe("interview usage ledger", () => {
     ["output-token-limit", { maxOutputTokensPerExecution: 299 }],
     ["latency-limit", { maxLatencyMsPerExecution: 899 }],
     ["audio-limit", { maxAudioMsPerExecution: 0 }],
+    ["turn-limit", { maxTurnsPerSession: 0 }],
     ["session-time-limit", { maxSessionElapsedMs: 59_999 }],
     ["cost-limit", { maxEstimatedCostMicrousdPerSession: 2_499 }],
   ] as const)("falls back deterministically for %s", (reason, override) => {
@@ -127,6 +133,7 @@ describe("interview usage ledger", () => {
         existingExecutions: [],
         policy: { ...policy, ...override },
         sessionElapsedMs: 60_000,
+        sessionTurnCount: 0,
       }),
     ).toMatchObject({ action: "structured-fallback", reason });
   });
@@ -144,6 +151,7 @@ describe("interview usage ledger", () => {
         existingExecutions,
         policy,
         sessionElapsedMs: 60_000,
+        sessionTurnCount: 0,
       }),
     ).toMatchObject({
       action: "structured-fallback",
@@ -161,7 +169,37 @@ describe("interview usage ledger", () => {
         existingExecutions: [execution],
         policy,
         sessionElapsedMs: 60_000,
+        sessionTurnCount: 0,
       }),
     ).toThrow("duplicate execution");
   });
+
+  it.each([
+    ["session-input-token-limit", { maxInputTokensPerSession: 2_999 }],
+    ["session-output-token-limit", { maxOutputTokensPerSession: 599 }],
+    ["session-audio-limit", { maxAudioMsPerSession: 1_999 }],
+  ] as const)(
+    "falls back when cumulative usage reaches %s",
+    (reason, override) => {
+      const existing = recordInterviewUsageExecution({
+        ...providerExecution,
+        audioInputMs: 1_000,
+        executionId: "execution-existing",
+      });
+      const execution = recordInterviewUsageExecution({
+        ...providerExecution,
+        audioInputMs: 1_000,
+      });
+
+      expect(
+        evaluateInterviewBudget({
+          execution,
+          existingExecutions: [existing],
+          policy: { ...policy, ...override },
+          sessionElapsedMs: 60_000,
+          sessionTurnCount: 1,
+        }),
+      ).toMatchObject({ action: "structured-fallback", reason });
+    },
+  );
 });

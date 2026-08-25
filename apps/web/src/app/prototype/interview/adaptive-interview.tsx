@@ -12,6 +12,7 @@ import {
   type InterviewAnswer,
   type InterviewMode,
 } from "./interview-guide";
+import { localInterviewBudgetPolicy } from "./interview-budget-policy";
 import {
   createPolicyCompliantFieldProposal,
   getPolicyCompliantInterviewQuestion,
@@ -19,7 +20,8 @@ import {
 import { InterviewAssistance } from "./interview-assistance";
 import {
   proposeInterviewQuestion,
-  reopenInterviewQuestion,
+  proposeInterviewQuestionWithinBudget,
+  reopenInterviewQuestionWithinBudget,
   settleInterviewQuestion,
   type InterviewQuestionDisposition,
   type InterviewQuestionRecord,
@@ -38,12 +40,13 @@ const localUsageSessionId = "local-interview-preview";
 
 function createInitialQuestionRecords(
   mode: InterviewMode,
+  proposedAt: string,
 ): InterviewQuestionRecord[] {
   const question = getPolicyCompliantInterviewQuestion(0, []);
   if (!question) throw new Error("The interview guide has no first question");
   return proposeInterviewQuestion([], question, {
     mode,
-    proposedAt: new Date().toISOString(),
+    proposedAt,
     sessionId: localUsageSessionId,
   });
 }
@@ -71,9 +74,12 @@ export function AdaptiveInterview({
   const [error, setError] = useState<string | null>(null);
   const [mode, setMode] = useState<InterviewMode>(initialMode);
   const [paused, setPaused] = useState(false);
+  const [sessionStartedAt, setSessionStartedAt] = useState(() =>
+    new Date().toISOString(),
+  );
   const [questionRecords, setQuestionRecords] = useState<
     InterviewQuestionRecord[]
-  >(() => createInitialQuestionRecords(initialMode));
+  >(() => createInitialQuestionRecords(initialMode, sessionStartedAt));
   const [reviewing, setReviewing] = useState(false);
 
   const questionCount = getInterviewQuestionCount();
@@ -196,16 +202,26 @@ export function AdaptiveInterview({
     if (!nextQuestion) {
       throw new Error(`Missing interview question at index ${nextIndex}`);
     }
-    nextQuestionRecords = proposeInterviewQuestion(
+    const proposedAt = new Date().toISOString();
+    const proposal = proposeInterviewQuestionWithinBudget(
       nextQuestionRecords,
       nextQuestion,
       {
         mode,
-        proposedAt: new Date().toISOString(),
+        proposedAt,
         sessionId: localUsageSessionId,
       },
+      {
+        policy: localInterviewBudgetPolicy,
+        sessionElapsedMs: elapsedSince(sessionStartedAt, proposedAt),
+      },
     );
-    setQuestionRecords(nextQuestionRecords);
+    if (proposal.decision.action === "structured-fallback") {
+      setQuestionRecords(nextQuestionRecords);
+      onUseStructuredFallback();
+      return;
+    }
+    setQuestionRecords(proposal.records);
     setCurrentIndex(nextIndex);
   }
 
@@ -240,18 +256,26 @@ export function AdaptiveInterview({
     if (!reopenedQuestion) {
       throw new Error(`Missing interview question at index ${index}`);
     }
-    setQuestionRecords(
-      reopenInterviewQuestion(
-        questionRecords,
-        reopenedQuestion,
-        new Set(answers.slice(index).map((candidate) => candidate.questionId)),
-        {
-          mode,
-          proposedAt: new Date().toISOString(),
-          sessionId: localUsageSessionId,
-        },
-      ),
+    const proposedAt = new Date().toISOString();
+    const proposal = reopenInterviewQuestionWithinBudget(
+      questionRecords,
+      reopenedQuestion,
+      new Set(answers.slice(index).map((candidate) => candidate.questionId)),
+      {
+        mode,
+        proposedAt,
+        sessionId: localUsageSessionId,
+      },
+      {
+        policy: localInterviewBudgetPolicy,
+        sessionElapsedMs: elapsedSince(sessionStartedAt, proposedAt),
+      },
     );
+    if (proposal.decision.action === "structured-fallback") {
+      onUseStructuredFallback();
+      return;
+    }
+    setQuestionRecords(proposal.records);
     setDispositions((current) => {
       const next = { ...current };
       for (const candidate of answers.slice(index)) {
@@ -567,12 +591,16 @@ export function AdaptiveInterview({
               <button
                 className="text-button"
                 onClick={() => {
+                  const proposedAt = new Date().toISOString();
                   setAnswers([]);
                   setCompleted(false);
                   setCurrentIndex(0);
                   setDispositions({});
                   setDraft("");
-                  setQuestionRecords(createInitialQuestionRecords(mode));
+                  setSessionStartedAt(proposedAt);
+                  setQuestionRecords(
+                    createInitialQuestionRecords(mode, proposedAt),
+                  );
                   setReviewing(false);
                 }}
                 type="button"
@@ -612,4 +640,8 @@ export function AdaptiveInterview({
       ) : null}
     </div>
   );
+}
+
+function elapsedSince(startedAt: string, occurredAt: string): number {
+  return Math.max(0, Date.parse(occurredAt) - Date.parse(startedAt));
 }

@@ -19,7 +19,7 @@ The team knows the real cost per completed interview and can cap or stop spend w
 
 - [x] Per session and execution, record provider/model, input/output tokens, audio minutes, latency, retries, cache behavior, and estimated cost without source content.
 - [x] Define budgets and alerts by environment, mode, cohort, candidate, day, and provider.
-- [ ] Enforce maximum turn/time/token/audio limits and deterministic structured-form fallback.
+- [x] Enforce maximum turn/time/token/audio limits and deterministic structured-form fallback.
 - [ ] Exercise provider and feature kill switches without data loss.
 - [ ] Report cost per start, completion, approved field, correction, and human-review minute saved.
 - [ ] Measure storage, evaluation, support, and payment overhead beyond API unit prices.
@@ -59,3 +59,12 @@ See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-intervie
   warning or exceeded alerts, and selects the structured fallback if any
   applicable rule is exceeded. Runtime factories reject extra content,
   identifiable candidate/cohort labels, and duplicate rule or execution IDs.
+- The session policy now distinguishes candidate turns from provider
+  executions and enforces cumulative input-token, output-token, and audio
+  ceilings alongside elapsed-time and per-execution limits. The deterministic
+  planner checks the policy before every follow-up or reopened question.
+- The local Conversation/Hybrid experience keeps its normal four-question
+  path, but a crossed guardrail returns the unchanged prior question history
+  and routes the candidate into the existing Structured Sunrise guide with a
+  clear local-preview notice. No provider call or content-bearing telemetry is
+  introduced.

@@ -47,5 +47,9 @@ describe("adaptive interview prototype boundary", () => {
     expect(applicationSource).toContain(
       "hidden={usesInterviewExperience && step !== 1}",
     );
+    expect(interviewSource).toContain("proposeInterviewQuestionWithinBudget");
+    expect(applicationSource).toContain(
+      "The conversational preview reached its usage limit",
+    );
   });
 });

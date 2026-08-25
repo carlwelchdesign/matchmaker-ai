@@ -1,5 +1,8 @@
 import {
+  evaluateInterviewBudget,
   recordInterviewUsageExecution,
+  type InterviewBudgetDecision,
+  type InterviewBudgetPolicy,
   type InterviewUsageExecution,
   type InterviewUsageMode,
 } from "@argent/domain";
@@ -23,6 +26,16 @@ export type InterviewQuestionProposalContext = {
   sessionId: string;
 };
 
+export type InterviewQuestionBudgetContext = {
+  policy: InterviewBudgetPolicy;
+  sessionElapsedMs: number;
+};
+
+export type InterviewQuestionBudgetResult = {
+  decision: InterviewBudgetDecision;
+  records: InterviewQuestionRecord[];
+};
+
 export function proposeInterviewQuestion(
   records: ReadonlyArray<InterviewQuestionRecord>,
   question: InterviewQuestion,
@@ -41,6 +54,16 @@ export function proposeInterviewQuestion(
       usage: createPlannerUsage(question, attempt, context),
     },
   ];
+}
+
+export function proposeInterviewQuestionWithinBudget(
+  records: ReadonlyArray<InterviewQuestionRecord>,
+  question: InterviewQuestion,
+  context: InterviewQuestionProposalContext,
+  budget: InterviewQuestionBudgetContext,
+): InterviewQuestionBudgetResult {
+  const proposedRecords = proposeInterviewQuestion(records, question, context);
+  return evaluateQuestionProposal(records, proposedRecords, budget);
 }
 
 export function settleInterviewQuestion(
@@ -79,6 +102,22 @@ export function reopenInterviewQuestion(
   return proposeInterviewQuestion(supersededRecords, question, context);
 }
 
+export function reopenInterviewQuestionWithinBudget(
+  records: ReadonlyArray<InterviewQuestionRecord>,
+  question: InterviewQuestion,
+  supersededQuestionIds: ReadonlySet<string>,
+  context: InterviewQuestionProposalContext,
+  budget: InterviewQuestionBudgetContext,
+): InterviewQuestionBudgetResult {
+  const proposedRecords = reopenInterviewQuestion(
+    records,
+    question,
+    supersededQuestionIds,
+    context,
+  );
+  return evaluateQuestionProposal(records, proposedRecords, budget);
+}
+
 export function getInterviewUsageExecutions(
   records: ReadonlyArray<InterviewQuestionRecord>,
 ): ReadonlyArray<InterviewUsageExecution> {
@@ -100,6 +139,28 @@ function snapshotQuestion(question: InterviewQuestion): InterviewQuestion {
         (reference) => ({ ...reference }),
       ),
     },
+  };
+}
+
+function evaluateQuestionProposal(
+  records: ReadonlyArray<InterviewQuestionRecord>,
+  proposedRecords: InterviewQuestionRecord[],
+  budget: InterviewQuestionBudgetContext,
+): InterviewQuestionBudgetResult {
+  const proposed = proposedRecords.at(-1);
+  if (!proposed) throw new Error("Interview question proposal is missing");
+
+  const decision = evaluateInterviewBudget({
+    execution: proposed.usage,
+    existingExecutions: getInterviewUsageExecutions(records),
+    policy: budget.policy,
+    sessionElapsedMs: budget.sessionElapsedMs,
+    sessionTurnCount: records.length,
+  });
+
+  return {
+    decision,
+    records: decision.action === "allow" ? proposedRecords : [...records],
   };
 }
 

@@ -62,6 +62,9 @@ function Application({
   interviewEnabled: boolean;
 }>) {
   const [mode, setMode] = useState<IntakeMode>("structured");
+  const [interviewRouteNotice, setInterviewRouteNotice] = useState<
+    string | null
+  >(null);
   const isReview = step === steps.length - 1;
   const usesInterviewExperience = interviewEnabled;
   const isInterviewStep = step === 1 && usesInterviewExperience;
@@ -106,19 +109,28 @@ function Application({
                   active={mode === "structured"}
                   title="Structured"
                   detail="A concise, guided set of questions."
-                  onSelect={() => setMode("structured")}
+                  onSelect={() => {
+                    setInterviewRouteNotice(null);
+                    setMode("structured");
+                  }}
                 />
                 <Choice
                   active={mode === "conversation"}
                   title="Conversation"
                   detail="A paced text interview with review before anything is used."
-                  onSelect={() => setMode("conversation")}
+                  onSelect={() => {
+                    setInterviewRouteNotice(null);
+                    setMode("conversation");
+                  }}
                 />
                 <Choice
                   active={mode === "hybrid"}
                   title="Hybrid"
                   detail="A paced combination of both approaches."
-                  onSelect={() => setMode("hybrid")}
+                  onSelect={() => {
+                    setInterviewRouteNotice(null);
+                    setMode("hybrid");
+                  }}
                 />
               </div>
               <p className="mode-boundary">
@@ -132,12 +144,18 @@ function Application({
             <div hidden={usesInterviewExperience && step !== 1}>
               <IntakePreview
                 interviewEnabled={interviewEnabled}
+                interviewRouteNotice={interviewRouteNotice}
                 key={mode}
                 mode={mode}
                 onChooseApproach={() => onStepChange(0)}
                 onContinueToReview={() => onStepChange(2)}
                 onContinueWithoutInterview={() => onStepChange(2)}
-                onUseStructuredFallback={() => setMode("structured")}
+                onUseStructuredFallback={() => {
+                  setInterviewRouteNotice(
+                    "The conversational preview reached its usage limit, so we moved you to the fixed guide. Nothing was submitted or sent to an AI provider.",
+                  );
+                  setMode("structured");
+                }}
               />
             </div>
           ) : null}
@@ -220,6 +238,7 @@ function Choice({
 
 function IntakePreview({
   interviewEnabled,
+  interviewRouteNotice,
   mode,
   onChooseApproach,
   onContinueToReview,
@@ -227,6 +246,7 @@ function IntakePreview({
   onUseStructuredFallback,
 }: Readonly<{
   interviewEnabled: boolean;
+  interviewRouteNotice: string | null;
   mode: IntakeMode;
   onChooseApproach: () => void;
   onContinueToReview: () => void;
@@ -242,6 +262,7 @@ function IntakePreview({
   if (interviewEnabled && mode === "structured") {
     return (
       <StructuredInterview
+        entryNotice={interviewRouteNotice}
         onChooseApproach={onChooseApproach}
         onContinueToReview={onContinueToReview}
         onContinueWithoutInterview={onContinueWithoutInterview}

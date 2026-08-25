@@ -36,12 +36,16 @@ export interface InterviewUsageExecution extends InterviewUsageExecutionInput {
 export interface InterviewBudgetPolicy {
   readonly featureEnabled: boolean;
   readonly maxAudioMsPerExecution: number;
+  readonly maxAudioMsPerSession: number;
   readonly maxEstimatedCostMicrousdPerSession: number;
   readonly maxExecutionsPerSession: number;
   readonly maxInputTokensPerExecution: number;
+  readonly maxInputTokensPerSession: number;
   readonly maxLatencyMsPerExecution: number;
   readonly maxOutputTokensPerExecution: number;
+  readonly maxOutputTokensPerSession: number;
   readonly maxSessionElapsedMs: number;
+  readonly maxTurnsPerSession: number;
   readonly providerEnabled: boolean;
 }
 
@@ -54,7 +58,11 @@ export type InterviewBudgetFallbackReason =
   | "latency-limit"
   | "output-token-limit"
   | "provider-kill-switch"
-  | "session-time-limit";
+  | "session-audio-limit"
+  | "session-input-token-limit"
+  | "session-output-token-limit"
+  | "session-time-limit"
+  | "turn-limit";
 
 export type InterviewBudgetDecision =
   | {
@@ -205,11 +213,16 @@ export function evaluateInterviewBudget(
     existingExecutions: readonly InterviewUsageExecution[];
     policy: InterviewBudgetPolicy;
     sessionElapsedMs: number;
+    sessionTurnCount: number;
   }>,
 ): InterviewBudgetDecision {
   const sessionElapsedMs = requireNonNegativeInteger(
     input.sessionElapsedMs,
     "Session elapsed milliseconds",
+  );
+  const sessionTurnCount = requireNonNegativeInteger(
+    input.sessionTurnCount,
+    "Session turn count",
   );
   validateBudgetPolicy(input.policy);
 
@@ -234,6 +247,21 @@ export function evaluateInterviewBudget(
     ...input.existingExecutions,
     input.execution,
   ].reduce((total, execution) => total + execution.estimatedCostMicrousd, 0);
+  const sessionInputTokens = sumUsage(
+    input.existingExecutions,
+    input.execution,
+    "inputTokens",
+  );
+  const sessionOutputTokens = sumUsage(
+    input.existingExecutions,
+    input.execution,
+    "outputTokens",
+  );
+  const sessionAudioMs = [...input.existingExecutions, input.execution].reduce(
+    (total, execution) =>
+      total + execution.audioInputMs + execution.audioOutputMs,
+    0,
+  );
   const fallback = (
     reason: InterviewBudgetFallbackReason,
   ): InterviewBudgetDecision => ({
@@ -248,6 +276,9 @@ export function evaluateInterviewBudget(
     !input.policy.providerEnabled
   ) {
     return fallback("provider-kill-switch");
+  }
+  if (sessionTurnCount >= input.policy.maxTurnsPerSession) {
+    return fallback("turn-limit");
   }
   if (input.existingExecutions.length >= input.policy.maxExecutionsPerSession) {
     return fallback("execution-limit");
@@ -270,6 +301,15 @@ export function evaluateInterviewBudget(
   ) {
     return fallback("audio-limit");
   }
+  if (sessionInputTokens > input.policy.maxInputTokensPerSession) {
+    return fallback("session-input-token-limit");
+  }
+  if (sessionOutputTokens > input.policy.maxOutputTokensPerSession) {
+    return fallback("session-output-token-limit");
+  }
+  if (sessionAudioMs > input.policy.maxAudioMsPerSession) {
+    return fallback("session-audio-limit");
+  }
   if (
     estimatedSessionCostMicrousd >
     input.policy.maxEstimatedCostMicrousdPerSession
@@ -288,6 +328,7 @@ function validateBudgetPolicy(policy: InterviewBudgetPolicy): void {
     throw new Error("Interview budget kill switches must be boolean");
   }
   requireNonNegativeInteger(policy.maxAudioMsPerExecution, "Audio limit");
+  requireNonNegativeInteger(policy.maxAudioMsPerSession, "Session audio limit");
   requireNonNegativeInteger(
     policy.maxEstimatedCostMicrousdPerSession,
     "Session cost limit",
@@ -300,12 +341,32 @@ function validateBudgetPolicy(policy: InterviewBudgetPolicy): void {
     policy.maxInputTokensPerExecution,
     "Input token limit",
   );
+  requireNonNegativeInteger(
+    policy.maxInputTokensPerSession,
+    "Session input token limit",
+  );
   requireNonNegativeInteger(policy.maxLatencyMsPerExecution, "Latency limit");
   requireNonNegativeInteger(
     policy.maxOutputTokensPerExecution,
     "Output token limit",
   );
+  requireNonNegativeInteger(
+    policy.maxOutputTokensPerSession,
+    "Session output token limit",
+  );
   requireNonNegativeInteger(policy.maxSessionElapsedMs, "Session time limit");
+  requireNonNegativeInteger(policy.maxTurnsPerSession, "Session turn limit");
+}
+
+function sumUsage(
+  existingExecutions: readonly InterviewUsageExecution[],
+  execution: InterviewUsageExecution,
+  field: "inputTokens" | "outputTokens",
+): number {
+  return [...existingExecutions, execution].reduce(
+    (total, candidate) => total + candidate[field],
+    0,
+  );
 }
 
 function validateCacheMetrics(execution: InterviewUsageExecution): void {
