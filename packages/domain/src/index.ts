@@ -1,4 +1,11 @@
 export {
+  buildCandidateAnalyticsSnapshot,
+  candidateAnalyticsSnapshotSchemaVersion,
+  type CandidateAnalyticsMetricSet,
+  type CandidateAnalyticsSnapshot,
+  type CandidateAnalyticsSnapshotRequest,
+} from "./candidate-analytics.js";
+export {
   buildCandidateInterviewReview,
   candidateInterviewReviewSchemaVersion,
   type CandidateFieldDisposition,
