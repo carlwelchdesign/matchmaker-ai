@@ -23,8 +23,8 @@ The team knows the real cost per completed interview and can cap or stop spend w
 - [x] Exercise provider and feature kill switches without data loss.
 - [x] Report cost per start, completion, approved field, correction, and human-review minute saved.
 - [x] Measure storage, evaluation, support, and payment overhead beyond API unit prices.
-- [ ] Keep first-pilot candidate application free unless DEC-016 is explicitly superseded after legal/fairness/refund review.
-- [ ] Use account verification, invitations, and rate limits before considering a fee as abuse control.
+- [x] Keep first-pilot candidate application free unless DEC-016 is explicitly superseded after legal/fairness/refund review.
+- [x] Use account verification, invitations, and rate limits before considering a fee as abuse control.
 
 See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-interviewing.md).
 
@@ -106,3 +106,12 @@ See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-intervie
 - No vendor account, purchase, subscription, or charge was created as part of
   this implementation. The initial operational register is empty until a
   specific service and exact purchase receive review and approval.
+- `interview-fee-decision/v1` keeps the candidate submission fee at zero by
+  default. Any nonzero fee is rejected unless account verification, invitation
+  controls, and rate limits are verified first and the decision carries an
+  explicit DEC-016 supersession plus founder, legal, fairness, pricing, and
+  refund-policy approval references.
+- The fee-decision contract contains policy state and opaque approval references
+  only. It rejects extra fields and stores no payment credentials. It does not
+  implement checkout, charge a candidate, or claim that the dependent abuse
+  controls are already operational.

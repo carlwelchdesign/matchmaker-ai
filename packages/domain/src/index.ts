@@ -84,3 +84,11 @@ export {
   type InterviewOperatingCostReport,
   type InterviewSubscriptionStatus,
 } from "./interview-operating-costs.js";
+export {
+  createInterviewFeeDecision,
+  interviewFeeDecisionSchemaVersion,
+  type InterviewAbuseControlState,
+  type InterviewFeeDecision,
+  type InterviewFeeDecisionInput,
+  type InterviewPilotPhase,
+} from "./interview-fee-policy.js";
