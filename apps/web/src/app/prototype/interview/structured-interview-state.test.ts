@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
 
 import { getStructuredInterviewQuestions } from "./interview-guide";
-import { buildStructuredAnswers } from "./structured-interview-state";
+import {
+  buildStructuredAnswers,
+  buildStructuredFallbackState,
+  createInterviewFallbackTransfer,
+} from "./structured-interview-state";
 
 const questions = getStructuredInterviewQuestions();
 
@@ -87,5 +91,70 @@ describe("structured interview answers", () => {
         ?.revision,
     ).toBe(2);
     expect(second.answers[0]?.revision).toBe(1);
+  });
+
+  it.each(["feature-kill-switch", "provider-kill-switch"] as const)(
+    "preserves source, declines, and revisions for %s fallback",
+    (reason) => {
+      const firstQuestion = questions[0]!;
+      const secondQuestion = questions[1]!;
+      const answers = [
+        {
+          planningPermission: "candidate-confirmed" as const,
+          questionId: firstQuestion.id,
+          revision: 2,
+          sourceText: "A thoughtful fictional answer worth preserving.",
+          topic: firstQuestion.topic,
+        },
+        {
+          planningPermission: "declined" as const,
+          questionId: secondQuestion.id,
+          revision: 1,
+          sourceText: "Prefer not to answer",
+          topic: secondQuestion.topic,
+        },
+      ];
+
+      const transfer = createInterviewFallbackTransfer(answers, reason);
+      answers[0]!.sourceText = "Changed after transfer";
+      const state = buildStructuredFallbackState({
+        answers: transfer.answers,
+        questions,
+      });
+
+      expect(transfer.reason).toBe(reason);
+      expect(state.answers[0]).toMatchObject({
+        revision: 2,
+        sourceText: "A thoughtful fictional answer worth preserving.",
+      });
+      expect(state.drafts[firstQuestion.id]).toBe(
+        "A thoughtful fictional answer worth preserving.",
+      );
+      expect(state.declinedQuestionIds.has(secondQuestion.id)).toBe(true);
+    },
+  );
+
+  it("rejects duplicate or inconsistent fallback answers", () => {
+    const question = questions[0]!;
+    const answer = {
+      planningPermission: "candidate-confirmed" as const,
+      questionId: question.id,
+      revision: 1,
+      sourceText: "A complete fictional answer.",
+      topic: question.topic,
+    };
+
+    expect(() =>
+      buildStructuredFallbackState({
+        answers: [answer, answer],
+        questions,
+      }),
+    ).toThrow("duplicated");
+    expect(() =>
+      buildStructuredFallbackState({
+        answers: [{ ...answer, sourceText: "Prefer not to answer" }],
+        questions,
+      }),
+    ).toThrow("inconsistent permission");
   });
 });

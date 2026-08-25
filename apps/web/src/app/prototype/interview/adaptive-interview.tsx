@@ -19,6 +19,10 @@ import {
 } from "./interview-output-policy";
 import { InterviewAssistance } from "./interview-assistance";
 import {
+  createInterviewFallbackTransfer,
+  type InterviewFallbackTransfer,
+} from "./structured-interview-state";
+import {
   proposeInterviewQuestion,
   proposeInterviewQuestionWithinBudget,
   reopenInterviewQuestionWithinBudget,
@@ -62,7 +66,7 @@ export function AdaptiveInterview({
   onChooseApproach: () => void;
   onContinueToReview: () => void;
   onContinueWithoutInterview: () => void;
-  onUseStructuredFallback: () => void;
+  onUseStructuredFallback: (transfer: InterviewFallbackTransfer) => void;
 }>) {
   const [answers, setAnswers] = useState<InterviewAnswer[]>([]);
   const [completed, setCompleted] = useState(false);
@@ -218,7 +222,9 @@ export function AdaptiveInterview({
     );
     if (proposal.decision.action === "structured-fallback") {
       setQuestionRecords(nextQuestionRecords);
-      onUseStructuredFallback();
+      onUseStructuredFallback(
+        createInterviewFallbackTransfer(nextAnswers, proposal.decision.reason),
+      );
       return;
     }
     setQuestionRecords(proposal.records);
@@ -272,7 +278,9 @@ export function AdaptiveInterview({
       },
     );
     if (proposal.decision.action === "structured-fallback") {
-      onUseStructuredFallback();
+      onUseStructuredFallback(
+        createInterviewFallbackTransfer(answers, proposal.decision.reason),
+      );
       return;
     }
     setQuestionRecords(proposal.records);
@@ -335,7 +343,11 @@ export function AdaptiveInterview({
           <InterviewAssistance
             onChooseApproach={onChooseApproach}
             onContinueWithoutInterview={onContinueWithoutInterview}
-            onUseStructuredFallback={onUseStructuredFallback}
+            onUseStructuredFallback={() =>
+              onUseStructuredFallback(
+                createInterviewFallbackTransfer(answers, "candidate-choice"),
+              )
+            }
             question={currentQuestion}
           />
         ) : null}

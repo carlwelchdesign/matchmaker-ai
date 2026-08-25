@@ -160,6 +160,32 @@ describe("interview usage ledger", () => {
     expect(existingExecutions).toHaveLength(4);
   });
 
+  it.each([
+    ["feature-kill-switch", { featureEnabled: false }],
+    ["provider-kill-switch", { providerEnabled: false }],
+  ] as const)(
+    "exercises %s without mutating usage history",
+    (reason, override) => {
+      const existing = recordInterviewUsageExecution({
+        ...providerExecution,
+        executionId: "execution-existing",
+      });
+      const history = [existing];
+      const before = JSON.stringify(history);
+
+      expect(
+        evaluateInterviewBudget({
+          execution: recordInterviewUsageExecution(providerExecution),
+          existingExecutions: history,
+          policy: { ...policy, ...override },
+          sessionElapsedMs: 60_000,
+          sessionTurnCount: 1,
+        }),
+      ).toMatchObject({ action: "structured-fallback", reason });
+      expect(JSON.stringify(history)).toBe(before);
+    },
+  );
+
   it("rejects duplicate executions instead of double-counting cost", () => {
     const execution = recordInterviewUsageExecution(providerExecution);
 

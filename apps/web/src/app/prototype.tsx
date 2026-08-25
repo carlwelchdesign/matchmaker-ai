@@ -5,6 +5,7 @@ import { useState } from "react";
 
 import { AdaptiveInterview } from "./prototype/interview/adaptive-interview";
 import { StructuredInterview } from "./prototype/interview/structured-interview";
+import type { InterviewFallbackTransfer } from "./prototype/interview/structured-interview-state";
 
 type IntakeMode = "conversation" | "hybrid" | "structured";
 
@@ -65,6 +66,8 @@ function Application({
   const [interviewRouteNotice, setInterviewRouteNotice] = useState<
     string | null
   >(null);
+  const [interviewFallback, setInterviewFallback] =
+    useState<InterviewFallbackTransfer | null>(null);
   const isReview = step === steps.length - 1;
   const usesInterviewExperience = interviewEnabled;
   const isInterviewStep = step === 1 && usesInterviewExperience;
@@ -110,6 +113,7 @@ function Application({
                   title="Structured"
                   detail="A concise, guided set of questions."
                   onSelect={() => {
+                    setInterviewFallback(null);
                     setInterviewRouteNotice(null);
                     setMode("structured");
                   }}
@@ -119,6 +123,7 @@ function Application({
                   title="Conversation"
                   detail="A paced text interview with review before anything is used."
                   onSelect={() => {
+                    setInterviewFallback(null);
                     setInterviewRouteNotice(null);
                     setMode("conversation");
                   }}
@@ -128,6 +133,7 @@ function Application({
                   title="Hybrid"
                   detail="A paced combination of both approaches."
                   onSelect={() => {
+                    setInterviewFallback(null);
                     setInterviewRouteNotice(null);
                     setMode("hybrid");
                   }}
@@ -144,15 +150,23 @@ function Application({
             <div hidden={usesInterviewExperience && step !== 1}>
               <IntakePreview
                 interviewEnabled={interviewEnabled}
+                interviewFallback={interviewFallback}
                 interviewRouteNotice={interviewRouteNotice}
                 key={mode}
                 mode={mode}
                 onChooseApproach={() => onStepChange(0)}
+                onClearInterviewFallback={() => {
+                  setInterviewFallback(null);
+                  setInterviewRouteNotice(null);
+                }}
                 onContinueToReview={() => onStepChange(2)}
                 onContinueWithoutInterview={() => onStepChange(2)}
-                onUseStructuredFallback={() => {
+                onUseStructuredFallback={(transfer) => {
+                  setInterviewFallback(transfer);
                   setInterviewRouteNotice(
-                    "The conversational preview reached its usage limit, so we moved you to the fixed guide. Nothing was submitted or sent to an AI provider.",
+                    transfer.reason === "candidate-choice"
+                      ? "We moved you to the fixed guide. Your completed responses remain in this page; nothing was submitted or sent to an AI provider."
+                      : "The conversational preview was paused by a usage control, so we moved you to the fixed guide. Your completed responses remain in this page; nothing was submitted or sent to an AI provider.",
                   );
                   setMode("structured");
                 }}
@@ -238,20 +252,24 @@ function Choice({
 
 function IntakePreview({
   interviewEnabled,
+  interviewFallback,
   interviewRouteNotice,
   mode,
   onChooseApproach,
+  onClearInterviewFallback,
   onContinueToReview,
   onContinueWithoutInterview,
   onUseStructuredFallback,
 }: Readonly<{
   interviewEnabled: boolean;
+  interviewFallback: InterviewFallbackTransfer | null;
   interviewRouteNotice: string | null;
   mode: IntakeMode;
   onChooseApproach: () => void;
+  onClearInterviewFallback: () => void;
   onContinueToReview: () => void;
   onContinueWithoutInterview: () => void;
-  onUseStructuredFallback: () => void;
+  onUseStructuredFallback: (transfer: InterviewFallbackTransfer) => void;
 }>) {
   const [approvedField, setApprovedField] = useState<
     "approved" | "not-approved" | null
@@ -263,6 +281,8 @@ function IntakePreview({
     return (
       <StructuredInterview
         entryNotice={interviewRouteNotice}
+        initialAnswers={interviewFallback?.answers}
+        onBeginAgain={onClearInterviewFallback}
         onChooseApproach={onChooseApproach}
         onContinueToReview={onContinueToReview}
         onContinueWithoutInterview={onContinueWithoutInterview}

@@ -20,7 +20,7 @@ The team knows the real cost per completed interview and can cap or stop spend w
 - [x] Per session and execution, record provider/model, input/output tokens, audio minutes, latency, retries, cache behavior, and estimated cost without source content.
 - [x] Define budgets and alerts by environment, mode, cohort, candidate, day, and provider.
 - [x] Enforce maximum turn/time/token/audio limits and deterministic structured-form fallback.
-- [ ] Exercise provider and feature kill switches without data loss.
+- [x] Exercise provider and feature kill switches without data loss.
 - [ ] Report cost per start, completion, approved field, correction, and human-review minute saved.
 - [ ] Measure storage, evaluation, support, and payment overhead beyond API unit prices.
 - [ ] Keep first-pilot candidate application free unless DEC-016 is explicitly superseded after legal/fairness/refund review.
@@ -68,3 +68,11 @@ See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-intervie
   and routes the candidate into the existing Structured Sunrise guide with a
   clear local-preview notice. No provider call or content-bearing telemetry is
   introduced.
+- Feature and provider kill-switch tests now prove that prior content-free
+  usage history is not mutated. The candidate-facing fallback clones the
+  current in-memory answer snapshot and validates it against the fixed guide
+  before restoring completed responses, explicit declines, and source revision
+  numbers in the Structured Sunrise worksheet.
+- Kill-switch transfer remains local React state only. It is distinct from the
+  content-free usage ledger, makes no provider or network call, and is cleared
+  when the page is refreshed or the candidate begins again.

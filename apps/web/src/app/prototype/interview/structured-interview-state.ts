@@ -1,3 +1,5 @@
+import type { InterviewBudgetFallbackReason } from "@argent/domain";
+
 import type { InterviewAnswer, InterviewQuestion } from "./interview-guide";
 
 export type StructuredAnswerDrafts = Readonly<Record<string, string>>;
@@ -6,6 +8,67 @@ export type StructuredAnswerResult = {
   answers: InterviewAnswer[];
   errors: Record<string, string>;
 };
+
+export type InterviewFallbackTransfer = {
+  answers: readonly InterviewAnswer[];
+  reason: InterviewBudgetFallbackReason | "candidate-choice";
+};
+
+export type StructuredFallbackState = {
+  answers: InterviewAnswer[];
+  declinedQuestionIds: Set<string>;
+  drafts: Record<string, string>;
+};
+
+export function createInterviewFallbackTransfer(
+  answers: ReadonlyArray<InterviewAnswer>,
+  reason: InterviewFallbackTransfer["reason"],
+): InterviewFallbackTransfer {
+  return {
+    answers: answers.map((answer) => ({ ...answer })),
+    reason,
+  };
+}
+
+export function buildStructuredFallbackState({
+  answers,
+  questions,
+}: Readonly<{
+  answers: ReadonlyArray<InterviewAnswer>;
+  questions: ReadonlyArray<InterviewQuestion>;
+}>): StructuredFallbackState {
+  const questionIds = new Set(questions.map((question) => question.id));
+  const answerIds = new Set<string>();
+  const drafts: Record<string, string> = {};
+  const declinedQuestionIds = new Set<string>();
+
+  for (const answer of answers) {
+    if (!questionIds.has(answer.questionId)) {
+      throw new Error(
+        `Fallback answer ${answer.questionId} is not in the guide`,
+      );
+    }
+    if (answerIds.has(answer.questionId)) {
+      throw new Error(`Fallback answer ${answer.questionId} is duplicated`);
+    }
+    answerIds.add(answer.questionId);
+
+    const declined = answer.sourceText === "Prefer not to answer";
+    if (declined !== (answer.planningPermission === "declined")) {
+      throw new Error(
+        `Fallback answer ${answer.questionId} has inconsistent permission`,
+      );
+    }
+    if (declined) declinedQuestionIds.add(answer.questionId);
+    else drafts[answer.questionId] = answer.sourceText;
+  }
+
+  return {
+    answers: answers.map((answer) => ({ ...answer })),
+    declinedQuestionIds,
+    drafts,
+  };
+}
 
 export function buildStructuredAnswers({
   declinedQuestionIds,

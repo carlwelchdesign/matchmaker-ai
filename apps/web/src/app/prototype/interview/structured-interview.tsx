@@ -12,7 +12,10 @@ import {
   getPolicyCompliantStructuredQuestions,
 } from "./interview-output-policy";
 import { InterviewAssistance } from "./interview-assistance";
-import { buildStructuredAnswers } from "./structured-interview-state";
+import {
+  buildStructuredAnswers,
+  buildStructuredFallbackState,
+} from "./structured-interview-state";
 
 type FieldDisposition = Exclude<CandidateFieldDisposition, "declined">;
 type StructuredStage = "complete" | "review" | "worksheet";
@@ -25,27 +28,45 @@ const dispositionLabels: Record<CandidateFieldDisposition, string> = {
 };
 
 const questions = getPolicyCompliantStructuredQuestions();
+const noInitialAnswers: readonly InterviewAnswer[] = [];
 
 export function StructuredInterview({
   entryNotice,
+  initialAnswers = noInitialAnswers,
+  onBeginAgain,
   onChooseApproach,
   onContinueToReview,
   onContinueWithoutInterview,
 }: Readonly<{
   entryNotice?: string | null;
+  initialAnswers?: readonly InterviewAnswer[];
+  onBeginAgain: () => void;
   onChooseApproach: () => void;
   onContinueToReview: () => void;
   onContinueWithoutInterview: () => void;
 }>) {
-  const [answers, setAnswers] = useState<InterviewAnswer[]>([]);
+  const fallbackState = useMemo(
+    () =>
+      buildStructuredFallbackState({
+        answers: initialAnswers,
+        questions,
+      }),
+    [initialAnswers],
+  );
+  const [answers, setAnswers] = useState<InterviewAnswer[]>(() =>
+    fallbackState.answers.map((answer) => ({ ...answer })),
+  );
   const [declinedQuestionIds, setDeclinedQuestionIds] = useState<Set<string>>(
-    () => new Set(),
+    () => new Set(fallbackState.declinedQuestionIds),
   );
   const [dispositions, setDispositions] = useState<
     Record<string, FieldDisposition>
   >({});
-  const [drafts, setDrafts] = useState<Record<string, string>>({});
+  const [drafts, setDrafts] = useState<Record<string, string>>(() => ({
+    ...fallbackState.drafts,
+  }));
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [showEntryNotice, setShowEntryNotice] = useState(Boolean(entryNotice));
   const [stage, setStage] = useState<StructuredStage>("worksheet");
 
   const proposals = useMemo(
@@ -154,7 +175,9 @@ export function StructuredInterview({
     setDispositions({});
     setDrafts({});
     setErrors({});
+    setShowEntryNotice(false);
     setStage("worksheet");
+    onBeginAgain();
   }
 
   return (
@@ -174,7 +197,7 @@ export function StructuredInterview({
       </div>
 
       <section aria-labelledby="structured-interview-title">
-        {entryNotice ? (
+        {entryNotice && showEntryNotice ? (
           <p className="panel-copy" role="status">
             {entryNotice}
           </p>

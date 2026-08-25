@@ -49,7 +49,10 @@ describe("adaptive interview prototype boundary", () => {
     );
     expect(interviewSource).toContain("proposeInterviewQuestionWithinBudget");
     expect(applicationSource).toContain(
-      "The conversational preview reached its usage limit",
+      "The conversational preview was paused by a usage control",
+    );
+    expect(applicationSource).toContain(
+      "initialAnswers={interviewFallback?.answers}",
     );
   });
 });
