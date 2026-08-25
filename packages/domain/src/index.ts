@@ -56,3 +56,13 @@ export {
   type InterviewUsageExecutionInput,
   type InterviewUsageMode,
 } from "./interview-usage.js";
+export {
+  buildInterviewUnitEconomicsReport,
+  interviewOutcomeSchemaVersion,
+  interviewUnitEconomicsSchemaVersion,
+  recordInterviewOutcomeMeasurement,
+  validateInterviewOutcomeMeasurement,
+  type InterviewOutcomeMeasurement,
+  type InterviewOutcomeMeasurementInput,
+  type InterviewUnitEconomicsReport,
+} from "./interview-unit-economics.js";

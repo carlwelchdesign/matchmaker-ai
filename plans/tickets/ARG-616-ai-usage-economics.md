@@ -21,7 +21,7 @@ The team knows the real cost per completed interview and can cap or stop spend w
 - [x] Define budgets and alerts by environment, mode, cohort, candidate, day, and provider.
 - [x] Enforce maximum turn/time/token/audio limits and deterministic structured-form fallback.
 - [x] Exercise provider and feature kill switches without data loss.
-- [ ] Report cost per start, completion, approved field, correction, and human-review minute saved.
+- [x] Report cost per start, completion, approved field, correction, and human-review minute saved.
 - [ ] Measure storage, evaluation, support, and payment overhead beyond API unit prices.
 - [ ] Keep first-pilot candidate application free unless DEC-016 is explicitly superseded after legal/fairness/refund review.
 - [ ] Use account verification, invitations, and rate limits before considering a fee as abuse control.
@@ -76,3 +76,15 @@ See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-intervie
 - Kill-switch transfer remains local React state only. It is distinct from the
   content-free usage ledger, makes no provider or network call, and is cleared
   when the page is refreshed or the candidate begins again.
+- `interview-outcome-measurement/v1` records one content-free session outcome:
+  start/completion timestamps, approved-field and correction counts, and an
+  explicitly estimated human-review-time saving. Incomplete sessions cannot
+  claim approved fields or review time saved.
+- `interview-unit-economics-report/v1` joins validated outcomes to validated
+  usage by opaque session ID and reports total estimated micro-USD cost plus
+  estimated cost per start, completion, approved field, correction, and saved
+  human-review minute. Missing denominators return `null`; a real zero-cost
+  start remains zero.
+- Report lineage rejects duplicate sessions or executions, unlinked usage, and
+  usage outside the measured session window. The contract stores no response,
+  prompt, transcript, profile field value, or other candidate content.
