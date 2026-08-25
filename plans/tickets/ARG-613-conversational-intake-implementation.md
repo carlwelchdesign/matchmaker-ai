@@ -22,6 +22,9 @@ each source-grounded field before submission.
 - [x] The interview is gated by `candidate-interviewing` and fails closed.
 - [x] Conversation and hybrid entry points remain inside the established
   Application flow; no parallel site or standalone interview route is created.
+- [x] The candidate-facing flow extends the approved light Sunrise system and
+  Montecito identity; the obsolete dark campaign-prototype shell is not part of
+  the interview experience.
 - [x] Structured entry presents the complete fixed guide, supports answering in
   any order or declining each question, and uses the same exact-source review
   and final disposition contract as conversation and hybrid.
@@ -57,13 +60,14 @@ each source-grounded field before submission.
 - Explicit navigation and local restoration commit: `c6fcded`
 - Structured worksheet and shared review-contract commit: `4c3af04`
 - Deterministic interview-assistance commit: `facb39b`
+- Sunrise application alignment commit: `1314102`
 - Surface: existing `/prototype` Application flow only
 - Flag: `candidate-interviewing`
 - Runtime boundary: local page state only; no database, provider, transcript,
   audio, telemetry content, or personal-data handling
 - Review boundary: approved, private, rejected, and declined states remain
   distinct; every displayed field cites its exact response revision
-- Verification: 22 domain tests, 19 web tests, domain/web TypeScript, production
+- Verification: 22 domain tests, 21 web tests, domain/web TypeScript, production
   build, planning validation, formatting, Docker, and full browser review path
 - Deployment: none; local review only
 
