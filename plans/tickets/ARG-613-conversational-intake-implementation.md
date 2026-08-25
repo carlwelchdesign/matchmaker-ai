@@ -39,14 +39,16 @@ each source-grounded field before submission.
 ## Current development increment
 
 - Branch: `codex/ARG-613-text-interview`
+- Initial interview commit: `96e8c61`
+- Candidate-controlled final-review commit: `c43febf`
 - Surface: existing `/prototype` Application flow only
 - Flag: `candidate-interviewing`
 - Runtime boundary: local page state only; no database, provider, transcript,
   audio, telemetry content, or personal-data handling
 - Review boundary: approved, private, rejected, and declined states remain
   distinct; every displayed field cites its exact response revision
-- Verification: unit and boundary tests, TypeScript, production build, Docker,
-  and browser path check
+- Verification: 9 domain tests, 10 web tests, domain/web TypeScript, production
+  build, planning validation, formatting, Docker, and full browser review path
 - Deployment: none; local review only
 
 ## Next increment
