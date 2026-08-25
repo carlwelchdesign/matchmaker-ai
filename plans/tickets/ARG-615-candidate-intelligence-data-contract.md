@@ -48,7 +48,7 @@ See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-intervie
 ## Current development increment
 
 - Branch: `codex/ARG-615-candidate-record-contract`
-- Contract commit: pending
+- Contract commit: `245a37b`
 - Runtime boundary: pure domain code and synthetic fixtures only
 - Verification: 22 domain tests, domain TypeScript, and package build
 - Deployment: none; no database, migration, provider, real candidate data,
