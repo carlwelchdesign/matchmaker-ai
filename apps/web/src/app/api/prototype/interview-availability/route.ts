@@ -1,9 +1,9 @@
-import { getCandidateInterviewingFlagDecision } from "../../../../flag-evaluation";
+import { getCandidateInterviewingRuntimeDecision } from "../../../../flag-evaluation";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const decision = await getCandidateInterviewingFlagDecision();
+  const decision = await getCandidateInterviewingRuntimeDecision();
 
   return Response.json(decision, {
     headers: {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { candidateInterviewFlagPolicyVersion } from "../../../candidate-interview-flag-policy";
+import { candidateInterviewRuntimePolicyVersion } from "../../../candidate-interview-runtime-policy";
 import {
   createInterviewAvailabilityTransportFailure,
   fetchInterviewAvailability,
@@ -10,20 +10,36 @@ import {
 
 describe("interview availability client boundary", () => {
   it.each([
-    { enabled: true, reason: "enabled" },
-    { enabled: false, reason: "disabled" },
-    { enabled: false, reason: "evaluation-error" },
-    { enabled: false, reason: "invalid-value" },
+    {
+      dataBoundary: "synthetic-development",
+      enabled: true,
+      reason: "enabled-synthetic-development",
+    },
+    {
+      dataBoundary: "release-blocked",
+      enabled: false,
+      reason: "feature-disabled",
+    },
+    {
+      dataBoundary: "release-blocked",
+      enabled: false,
+      reason: "flag-evaluation-error",
+    },
+    {
+      dataBoundary: "release-blocked",
+      enabled: false,
+      reason: "release-gates-closed",
+    },
   ] as const)("accepts the versioned $reason decision", (decision) => {
     expect(
       parseInterviewAvailabilityResponse({
         ...decision,
-        policyVersion: candidateInterviewFlagPolicyVersion,
+        policyVersion: candidateInterviewRuntimePolicyVersion,
         sensitiveAttributesStored: false,
       }),
     ).toEqual({
       ...decision,
-      policyVersion: candidateInterviewFlagPolicyVersion,
+      policyVersion: candidateInterviewRuntimePolicyVersion,
       sensitiveAttributesStored: false,
     });
   });
@@ -35,20 +51,23 @@ describe("interview availability client boundary", () => {
     {},
     {
       enabled: "true",
-      policyVersion: candidateInterviewFlagPolicyVersion,
-      reason: "enabled",
+      dataBoundary: "synthetic-development",
+      policyVersion: candidateInterviewRuntimePolicyVersion,
+      reason: "enabled-synthetic-development",
       sensitiveAttributesStored: false,
     },
     {
       enabled: true,
-      policyVersion: candidateInterviewFlagPolicyVersion,
+      dataBoundary: "synthetic-development",
+      policyVersion: candidateInterviewRuntimePolicyVersion,
       reason: "unknown",
       sensitiveAttributesStored: false,
     },
     {
       enabled: true,
-      policyVersion: candidateInterviewFlagPolicyVersion,
-      reason: "enabled",
+      dataBoundary: "synthetic-development",
+      policyVersion: candidateInterviewRuntimePolicyVersion,
+      reason: "enabled-synthetic-development",
       sensitiveAttributesStored: true,
     },
   ])("fails closed for malformed payload %#", (payload) => {
@@ -62,11 +81,38 @@ describe("interview availability client boundary", () => {
     expect(
       parseInterviewAvailabilityResponse({
         enabled: true,
-        policyVersion: "candidate-interview-flag-policy/v0",
-        reason: "enabled",
+        dataBoundary: "synthetic-development",
+        policyVersion: "candidate-interview-runtime-policy/v0",
+        reason: "enabled-synthetic-development",
         sensitiveAttributesStored: false,
       }),
     ).toMatchObject({ enabled: false, reason: "stale-policy" });
+  });
+
+  it.each([
+    {
+      dataBoundary: "release-blocked",
+      enabled: true,
+      reason: "feature-disabled",
+    },
+    {
+      dataBoundary: "real-person-release",
+      enabled: false,
+      reason: "release-gates-closed",
+    },
+    {
+      dataBoundary: "real-person-release",
+      enabled: true,
+      reason: "enabled-synthetic-development",
+    },
+  ] as const)("fails closed for contradictory decision %#", (decision) => {
+    expect(
+      parseInterviewAvailabilityResponse({
+        ...decision,
+        policyVersion: candidateInterviewRuntimePolicyVersion,
+        sensitiveAttributesStored: false,
+      }),
+    ).toMatchObject({ enabled: false, reason: "invalid-response" });
   });
 
   it("fails closed for transport errors", () => {
@@ -81,8 +127,9 @@ describe("interview availability client boundary", () => {
       new Response(
         JSON.stringify({
           enabled: true,
-          policyVersion: candidateInterviewFlagPolicyVersion,
-          reason: "enabled",
+          dataBoundary: "synthetic-development",
+          policyVersion: candidateInterviewRuntimePolicyVersion,
+          reason: "enabled-synthetic-development",
           sensitiveAttributesStored: false,
         }),
       );
@@ -92,7 +139,10 @@ describe("interview availability client boundary", () => {
         request,
         signal: new AbortController().signal,
       }),
-    ).resolves.toMatchObject({ enabled: true, reason: "enabled" });
+    ).resolves.toMatchObject({
+      enabled: true,
+      reason: "enabled-synthetic-development",
+    });
   });
 
   it.each([

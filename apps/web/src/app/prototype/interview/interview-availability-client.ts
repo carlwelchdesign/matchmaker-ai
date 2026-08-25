@@ -1,23 +1,31 @@
 import {
-  candidateInterviewFlagPolicyVersion,
-  type CandidateInterviewFlagDecision,
-} from "../../../candidate-interview-flag-policy";
+  candidateInterviewRuntimePolicyVersion,
+  type CandidateInterviewRuntimeDecision,
+} from "../../../candidate-interview-runtime-policy";
 
 export const interviewAvailabilityRefreshIntervalMs = 60_000;
 const availabilityEndpoint = "/api/prototype/interview-availability";
 
-const flagReasons = new Set<CandidateInterviewFlagDecision["reason"]>([
-  "disabled",
-  "enabled",
-  "evaluation-error",
-  "invalid-value",
+const runtimeReasons = new Set<CandidateInterviewRuntimeDecision["reason"]>([
+  "enabled-approved-release",
+  "enabled-synthetic-development",
+  "feature-disabled",
+  "flag-evaluation-error",
+  "flag-invalid-value",
+  "release-gates-closed",
+  "unknown-environment",
 ]);
 
+const dataBoundaries = new Set<
+  CandidateInterviewRuntimeDecision["dataBoundary"]
+>(["real-person-release", "release-blocked", "synthetic-development"]);
+
 export type InterviewAvailabilityResult =
-  | CandidateInterviewFlagDecision
+  | CandidateInterviewRuntimeDecision
   | {
+      dataBoundary: "release-blocked";
       enabled: false;
-      policyVersion: typeof candidateInterviewFlagPolicyVersion;
+      policyVersion: typeof candidateInterviewRuntimePolicyVersion;
       reason: "invalid-response" | "stale-policy" | "transport-error";
       sensitiveAttributesStored: false;
     };
@@ -29,25 +37,35 @@ export function parseInterviewAvailabilityResponse(
   if (typeof value.policyVersion !== "string") {
     return clientFailure("invalid-response");
   }
-  if (value.policyVersion !== candidateInterviewFlagPolicyVersion) {
+  if (value.policyVersion !== candidateInterviewRuntimePolicyVersion) {
     return clientFailure("stale-policy");
   }
   if (
+    !dataBoundaries.has(
+      value.dataBoundary as CandidateInterviewRuntimeDecision["dataBoundary"],
+    ) ||
     typeof value.enabled !== "boolean" ||
-    !flagReasons.has(
-      value.reason as CandidateInterviewFlagDecision["reason"],
+    !runtimeReasons.has(
+      value.reason as CandidateInterviewRuntimeDecision["reason"],
     ) ||
     value.sensitiveAttributesStored !== false
   ) {
     return clientFailure("invalid-response");
   }
 
-  return {
+  const decision = {
+    dataBoundary:
+      value.dataBoundary as CandidateInterviewRuntimeDecision["dataBoundary"],
     enabled: value.enabled,
-    policyVersion: candidateInterviewFlagPolicyVersion,
-    reason: value.reason as CandidateInterviewFlagDecision["reason"],
-    sensitiveAttributesStored: false,
+    policyVersion: candidateInterviewRuntimePolicyVersion,
+    reason: value.reason as CandidateInterviewRuntimeDecision["reason"],
+    sensitiveAttributesStored: false as const,
   };
+  if (!isConsistentRuntimeDecision(decision)) {
+    return clientFailure("invalid-response");
+  }
+
+  return decision;
 }
 
 export function createInterviewAvailabilityTransportFailure(): InterviewAvailabilityResult {
@@ -82,8 +100,9 @@ function clientFailure(
   >,
 ): InterviewAvailabilityResult {
   return {
+    dataBoundary: "release-blocked",
     enabled: false,
-    policyVersion: candidateInterviewFlagPolicyVersion,
+    policyVersion: candidateInterviewRuntimePolicyVersion,
     reason,
     sensitiveAttributesStored: false,
   };
@@ -91,4 +110,24 @@ function clientFailure(
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
+}
+
+function isConsistentRuntimeDecision(
+  decision: CandidateInterviewRuntimeDecision,
+): boolean {
+  if (decision.enabled) {
+    if (decision.reason === "enabled-synthetic-development") {
+      return decision.dataBoundary === "synthetic-development";
+    }
+    return (
+      decision.reason === "enabled-approved-release" &&
+      decision.dataBoundary === "real-person-release"
+    );
+  }
+
+  return (
+    decision.dataBoundary === "release-blocked" &&
+    decision.reason !== "enabled-approved-release" &&
+    decision.reason !== "enabled-synthetic-development"
+  );
 }

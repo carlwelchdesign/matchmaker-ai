@@ -33,8 +33,8 @@ Risky capabilities can be enabled for explicit cohorts, measured, stopped, and s
 
 - [x] Server-only flag evaluation and typed definitions are implemented with a local deterministic fallback.
 - [x] `candidate-interviewing=false` always routes to the structured application or human-assistance path without losing resumable work.
-- [ ] Authorization, consent, eligibility, retention, and provider kill switches remain enforced independently of flag state.
-- [ ] Production and preview default off until their corresponding approval gates pass.
+- [x] Authorization, consent, eligibility, retention, and provider kill switches remain enforced independently of flag state.
+- [x] Production and preview default off until their corresponding approval gates pass.
 - [ ] Cohort targeting, override access, audit, owner, expiry/review date, and rollback runbook are documented.
 - [ ] Flag evaluation volume and provider charges are monitored; no sensitive values enter flag attributes or telemetry.
 - [x] On/off, mid-session disable, provider outage, and stale-configuration tests pass.
@@ -61,13 +61,19 @@ Risky capabilities can be enabled for explicit cohorts, measured, stopped, and s
   candidate attributes or interview content. Hidden, initial-off, and fallback
   states do not poll. Malformed responses, stale policy versions, provider
   errors, HTTP failures, and network failures all fail closed.
-- Verification: 91 web tests across 16 files, web TypeScript, production build,
+- `candidate-interview-runtime-policy/v1` is evaluated after the feature flag.
+  Synthetic development can run locally, but preview, production, and unknown
+  environments remain closed even if the feature flag is on. A real-person
+  release requires separate authorization, consent, eligibility, retention,
+  and provider-kill-switch enforcement. All five gates remain hardcoded false
+  until their owning tickets and approvers authorize real implementations; no
+  environment variable can bypass them.
+- Verification: 113 web tests across 17 files, web TypeScript, production build,
   planning validation, formatting, diff checks, rebuilt local web container,
   `/prototype` HTTP 200, and a light Sunrise browser smoke check with no
   framework overlay or console errors
-- Still open: independent authorization and consent enforcement,
-  production/preview configuration verification, cohort governance,
-  audit/expiry, evaluation-volume monitoring, and rollback drills
+- Still open: production/preview configuration verification, cohort
+  governance, audit/expiry, evaluation-volume monitoring, and rollback drills
 
 ## Rollout order
 
