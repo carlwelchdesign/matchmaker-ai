@@ -17,7 +17,7 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
 
 ## Acceptance criteria
 
-- [ ] Define metric contracts for candidate supply, completeness/freshness, consent/availability, funnel by mode, correction burden, search coverage, shortlist throughput, and introduction outcomes. Candidate supply, approved-field coverage, field-state counts, interview funnel by mode, and correction burden now have synthetic aggregate contracts; search and downstream operational metrics remain open.
+- [ ] Define metric contracts for candidate supply, completeness/freshness, consent/availability, funnel by mode, correction burden, search coverage, shortlist throughput, and introduction outcomes. Candidate supply, approved-field coverage, field-state counts, assertion access/freshness, interview funnel by mode, and correction burden now have synthetic aggregate contracts; candidate availability, search, and downstream operational metrics remain open.
 - [ ] Every dashboard value links to authoritative source lineage, cohort, time window, freshness, and missing-data state. The first aggregate contract includes source projection lineage, opaque cohort, bounded time window, and explicit small-cohort suppression; per-metric freshness and missing-data semantics remain open.
 - [ ] Staff can filter and inspect approved facts with provenance and uncertainty; raw interview content is not exposed by default.
 - [ ] Permissions and aggregate thresholds prevent inappropriate small-cohort or partner disclosure.
@@ -47,6 +47,17 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   records outside the declared time window. Its aggregate payload contains no
   session/execution identifier, provider/model detail, or interview content and
   uses the same full small-cohort suppression boundary.
+- Candidate assertion access now returns a stable fail-closed reason for
+  lifecycle, freshness, retention, purpose grant, allowed role, and
+  purpose/role mismatch instead of only a boolean. Existing callers retain the
+  same boolean behavior through that decision contract.
+- `candidate-assertion-eligibility/v1` aggregates those reasons for the
+  analytics-only purpose and role. It carries the declared evaluation time and
+  candidate-intelligence lineage, suppresses all metrics for small cohorts, and
+  emits no candidate/assertion/consent identifiers or approved source values.
+- Candidate availability remains explicitly unimplemented because no approved
+  lifecycle contract exists yet; the fictional admin display is not treated as
+  operational evidence.
 - This is pure synthetic domain code. It does not add persistence, analytics
   transport, an admin dashboard, real candidate data, or production access.
 

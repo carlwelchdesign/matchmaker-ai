@@ -112,6 +112,23 @@ export interface CandidateAssertionAccessRequest {
   readonly role: CandidateAccessRole;
 }
 
+export type CandidateAssertionAccessReason =
+  | "eligible"
+  | "freshness-expired"
+  | "lifecycle-disputed"
+  | "lifecycle-stale"
+  | "lifecycle-superseded"
+  | "lifecycle-withdrawn"
+  | "purpose-not-granted"
+  | "purpose-role-mismatch"
+  | "retention-expired"
+  | "role-not-granted";
+
+export interface CandidateAssertionAccessDecision {
+  readonly eligible: boolean;
+  readonly reason: CandidateAssertionAccessReason;
+}
+
 const identifierPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const purposeRole: Record<CandidateUsePurpose, CandidateAccessRole> = {
   "candidate-analytics": "data-analyst",
@@ -249,13 +266,36 @@ export function canUseCandidateAssertion(
   assertion: CandidateApprovedAssertion,
   request: CandidateAssertionAccessRequest,
 ): boolean {
+  return evaluateCandidateAssertionAccess(assertion, request).eligible;
+}
+
+export function evaluateCandidateAssertionAccess(
+  assertion: CandidateApprovedAssertion,
+  request: CandidateAssertionAccessRequest,
+): CandidateAssertionAccessDecision {
   const at = requireIsoTimestamp(request.at, "Access time");
-  if (assertion.lifecycle.status !== "active") return false;
-  if (at > assertion.permission.freshUntil) return false;
-  if (at > assertion.permission.retainUntil) return false;
-  if (!assertion.permission.purposes.includes(request.purpose)) return false;
-  if (!assertion.permission.allowedRoles.includes(request.role)) return false;
-  return purposeRole[request.purpose] === request.role;
+  if (assertion.lifecycle.status !== "active") {
+    return {
+      eligible: false,
+      reason: `lifecycle-${assertion.lifecycle.status}`,
+    };
+  }
+  if (at > assertion.permission.retainUntil) {
+    return { eligible: false, reason: "retention-expired" };
+  }
+  if (at > assertion.permission.freshUntil) {
+    return { eligible: false, reason: "freshness-expired" };
+  }
+  if (!assertion.permission.purposes.includes(request.purpose)) {
+    return { eligible: false, reason: "purpose-not-granted" };
+  }
+  if (!assertion.permission.allowedRoles.includes(request.role)) {
+    return { eligible: false, reason: "role-not-granted" };
+  }
+  if (purposeRole[request.purpose] !== request.role) {
+    return { eligible: false, reason: "purpose-role-mismatch" };
+  }
+  return { eligible: true, reason: "eligible" };
 }
 
 export function transitionCandidateAssertion(

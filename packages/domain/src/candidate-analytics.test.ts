@@ -2,10 +2,17 @@ import { describe, expect, it } from "vitest";
 
 import {
   buildCandidateAnalyticsSnapshot,
+  buildCandidateAssertionEligibilitySnapshot,
   buildCandidateInterviewFunnelSnapshot,
   candidateAnalyticsSnapshotSchemaVersion,
   candidateInterviewFunnelSchemaVersion,
 } from "./candidate-analytics.js";
+import { candidateInterviewReviewSchemaVersion } from "./candidate-interview.js";
+import {
+  candidateIntelligenceSchemaVersion,
+  type CandidateAssertionStatus,
+  type CandidateIntelligenceRecord,
+} from "./candidate-intelligence.js";
 import {
   candidatePurposeProjectionSchemaVersion,
   type CandidatePurposeProjection,
@@ -359,5 +366,135 @@ describe("candidate interview funnel snapshot", () => {
         ],
       }),
     ).toThrow("outside its session");
+  });
+});
+
+function intelligenceRecord(
+  candidateNumber: number,
+  options: {
+    freshUntil?: string;
+    purposes?: readonly ("candidate-analytics" | "matchmaker-discovery")[];
+    status?: CandidateAssertionStatus;
+  } = {},
+): CandidateIntelligenceRecord {
+  const candidateId = `candidate-analytics-${candidateNumber}`;
+  return {
+    assertions: [
+      {
+        assertionId: `${candidateId}-intentions-r1`,
+        candidateId,
+        classification: "restricted-candidate-approved",
+        fieldLabel: "Relationship intentions",
+        lifecycle: {
+          history: [],
+          status: options.status ?? "active",
+        },
+        permission: {
+          allowedRoles:
+            options.purposes?.includes("candidate-analytics") === false
+              ? ["matchmaker"]
+              : ["data-analyst"],
+          consentGrantId: `consent-analytics-${candidateNumber}`,
+          freshUntil: options.freshUntil ?? "2026-09-25T12:00:00.000Z",
+          purposes: options.purposes ?? ["candidate-analytics"],
+          retainUntil: "2027-08-25T12:00:00.000Z",
+        },
+        provenance: {
+          automation: null,
+          derivation: "source-exact",
+          guideVersion: "guide-v1",
+          questionId: "intentions",
+          responseRevision: 1,
+          reviewedAt: "2026-08-20T12:00:00.000Z",
+          reviewSchemaVersion: candidateInterviewReviewSchemaVersion,
+        },
+        retentionClass: "candidate-controlled",
+        topic: "relationship-intention",
+        value: `Private candidate source ${candidateNumber}`,
+      },
+    ],
+    candidateId,
+    fieldStates: [],
+    schemaVersion: candidateIntelligenceSchemaVersion,
+  };
+}
+
+const eligibilityRecords = [
+  intelligenceRecord(1),
+  intelligenceRecord(2),
+  intelligenceRecord(3, { status: "stale" }),
+  intelligenceRecord(4, { freshUntil: "2026-08-24T12:00:00.000Z" }),
+  intelligenceRecord(5, { purposes: ["matchmaker-discovery"] }),
+];
+
+describe("candidate assertion eligibility snapshot", () => {
+  it("aggregates explicit access reasons without candidate data", () => {
+    const snapshot = buildCandidateAssertionEligibilitySnapshot({
+      access: {
+        at: "2026-08-25T12:00:00.000Z",
+        purpose: "candidate-analytics",
+        role: "data-analyst",
+      },
+      records: eligibilityRecords,
+      request,
+    });
+
+    expect(snapshot).toMatchObject({
+      cohortKey: "cohort-synthetic-pilot",
+      dataState: "available",
+      evaluatedAt: "2026-08-25T12:00:00.000Z",
+      metrics: {
+        assertionCount: 5,
+        decisionCounts: {
+          eligible: 2,
+          "freshness-expired": 1,
+          "lifecycle-stale": 1,
+          "purpose-not-granted": 1,
+        },
+        eligibleAssertionCount: 2,
+      },
+      schemaVersion: "candidate-assertion-eligibility/v1",
+    });
+    const serialized = JSON.stringify(snapshot);
+    expect(serialized).not.toMatch(/candidate-analytics-[1-5]/);
+    expect(serialized).not.toContain("Private candidate source");
+    expect(serialized).not.toContain("consent-analytics");
+  });
+
+  it("fully suppresses small cohorts and rejects broken lineage", () => {
+    const small = buildCandidateAssertionEligibilitySnapshot({
+      access: {
+        at: "2026-08-25T12:00:00.000Z",
+        purpose: "candidate-analytics",
+        role: "data-analyst",
+      },
+      records: eligibilityRecords.slice(0, 4),
+      request,
+    });
+    expect(small.dataState).toBe("suppressed-small-cohort");
+    expect(small.metrics).toBeNull();
+
+    expect(() =>
+      buildCandidateAssertionEligibilitySnapshot({
+        access: {
+          at: "2026-08-25T12:00:00.000Z",
+          purpose: "candidate-analytics",
+          role: "data-analyst",
+        },
+        records: [...eligibilityRecords, eligibilityRecords[0]!],
+        request,
+      }),
+    ).toThrow("duplicate candidates");
+    expect(() =>
+      buildCandidateAssertionEligibilitySnapshot({
+        access: {
+          at: "2026-08-25T12:00:00.000Z",
+          purpose: "matchmaker-discovery",
+          role: "matchmaker",
+        },
+        records: eligibilityRecords,
+        request,
+      }),
+    ).toThrow("analytics-only access");
   });
 });

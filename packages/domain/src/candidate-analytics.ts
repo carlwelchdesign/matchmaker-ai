@@ -2,7 +2,14 @@ import {
   candidatePurposeProjectionSchemaVersion,
   type CandidatePurposeProjection,
 } from "./candidate-purpose-projection.js";
-import type { CandidateFieldKnowledgeState } from "./candidate-intelligence.js";
+import {
+  candidateIntelligenceSchemaVersion,
+  evaluateCandidateAssertionAccess,
+  type CandidateAssertionAccessReason,
+  type CandidateAssertionAccessRequest,
+  type CandidateFieldKnowledgeState,
+  type CandidateIntelligenceRecord,
+} from "./candidate-intelligence.js";
 import {
   interviewOutcomeSchemaVersion,
   validateInterviewOutcomeMeasurement,
@@ -19,6 +26,8 @@ export const candidateAnalyticsSnapshotSchemaVersion =
   "candidate-analytics-snapshot/v1" as const;
 export const candidateInterviewFunnelSchemaVersion =
   "candidate-interview-funnel/v1" as const;
+export const candidateAssertionEligibilitySchemaVersion =
+  "candidate-assertion-eligibility/v1" as const;
 
 export interface CandidateAnalyticsSnapshotRequest {
   readonly cohortKey: string;
@@ -82,6 +91,27 @@ export interface CandidateInterviewFunnelSnapshot {
   } | null;
   readonly minimumCohortSize: number;
   readonly schemaVersion: typeof candidateInterviewFunnelSchemaVersion;
+  readonly windowEnd: string;
+  readonly windowStart: string;
+}
+
+export interface CandidateAssertionEligibilitySnapshot {
+  readonly cohortKey: string;
+  readonly dataState: "available" | "suppressed-small-cohort";
+  readonly evaluatedAt: string;
+  readonly lineage: {
+    readonly candidateIntelligenceSchemaVersion: typeof candidateIntelligenceSchemaVersion;
+    readonly sourceContentStored: false;
+  };
+  readonly metrics: {
+    readonly assertionCount: number;
+    readonly decisionCounts: Readonly<
+      Record<CandidateAssertionAccessReason, number>
+    >;
+    readonly eligibleAssertionCount: number;
+  } | null;
+  readonly minimumCohortSize: number;
+  readonly schemaVersion: typeof candidateAssertionEligibilitySchemaVersion;
   readonly windowEnd: string;
   readonly windowStart: string;
 }
@@ -215,6 +245,98 @@ export function buildCandidateInterviewFunnelSnapshot(input: {
   };
 }
 
+export function buildCandidateAssertionEligibilitySnapshot(input: {
+  readonly access: CandidateAssertionAccessRequest;
+  readonly records: readonly CandidateIntelligenceRecord[];
+  readonly request: CandidateAnalyticsSnapshotRequest;
+}): CandidateAssertionEligibilitySnapshot {
+  const scope = validateAnalyticsScope(input.request);
+  const evaluatedAt = requireIsoTimestamp(
+    input.access.at,
+    "Assertion eligibility evaluation time",
+  );
+  if (
+    input.access.purpose !== "candidate-analytics" ||
+    input.access.role !== "data-analyst"
+  ) {
+    throw new Error(
+      "Candidate assertion eligibility requires analytics-only access",
+    );
+  }
+  if (evaluatedAt < scope.windowStart || evaluatedAt > scope.windowEnd) {
+    throw new Error(
+      "Assertion eligibility evaluation must fall inside the analytics window",
+    );
+  }
+
+  const decisionCounts = createEmptyAccessDecisionCounts();
+  const candidateIds = new Set<string>();
+  const assertionIds = new Set<string>();
+  for (const record of input.records) {
+    if (record.schemaVersion !== candidateIntelligenceSchemaVersion) {
+      throw new Error("Candidate intelligence version is not supported");
+    }
+    if (candidateIds.has(record.candidateId)) {
+      throw new Error(
+        "Candidate assertion eligibility contains duplicate candidates",
+      );
+    }
+    candidateIds.add(record.candidateId);
+    for (const assertion of record.assertions) {
+      if (assertion.candidateId !== record.candidateId) {
+        throw new Error(
+          "Candidate assertion does not belong to its intelligence record",
+        );
+      }
+      if (assertionIds.has(assertion.assertionId)) {
+        throw new Error(
+          "Candidate assertion eligibility contains duplicate assertions",
+        );
+      }
+      assertionIds.add(assertion.assertionId);
+      const decision = evaluateCandidateAssertionAccess(
+        assertion,
+        input.access,
+      );
+      decisionCounts[decision.reason] += 1;
+    }
+  }
+
+  const base: Omit<
+    CandidateAssertionEligibilitySnapshot,
+    "dataState" | "metrics"
+  > = {
+    cohortKey: scope.cohortKey,
+    evaluatedAt,
+    lineage: {
+      candidateIntelligenceSchemaVersion,
+      sourceContentStored: false,
+    },
+    minimumCohortSize: scope.minimumCohortSize,
+    schemaVersion: candidateAssertionEligibilitySchemaVersion,
+    windowEnd: scope.windowEnd,
+    windowStart: scope.windowStart,
+  };
+
+  if (candidateIds.size < scope.minimumCohortSize) {
+    return {
+      ...base,
+      dataState: "suppressed-small-cohort",
+      metrics: null,
+    };
+  }
+
+  return {
+    ...base,
+    dataState: "available",
+    metrics: {
+      assertionCount: assertionIds.size,
+      decisionCounts,
+      eligibleAssertionCount: decisionCounts.eligible,
+    },
+  };
+}
+
 function validateProjection(projection: CandidatePurposeProjection): void {
   if (projection.schemaVersion !== candidatePurposeProjectionSchemaVersion) {
     throw new Error("Candidate analytics projection version is not supported");
@@ -336,6 +458,24 @@ function createEmptyModeBuckets(): Record<
     "typed-conversation": [],
     unobserved: [],
     voice: [],
+  };
+}
+
+function createEmptyAccessDecisionCounts(): Record<
+  CandidateAssertionAccessReason,
+  number
+> {
+  return {
+    eligible: 0,
+    "freshness-expired": 0,
+    "lifecycle-disputed": 0,
+    "lifecycle-stale": 0,
+    "lifecycle-superseded": 0,
+    "lifecycle-withdrawn": 0,
+    "purpose-not-granted": 0,
+    "purpose-role-mismatch": 0,
+    "retention-expired": 0,
+    "role-not-granted": 0,
   };
 }
 

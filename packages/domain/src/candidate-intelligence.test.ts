@@ -6,6 +6,7 @@ import {
   canUseCandidateAssertion,
   candidateIntelligenceSchemaVersion,
   createUnknownCandidateFieldState,
+  evaluateCandidateAssertionAccess,
   transitionCandidateAssertion,
   type CandidateIntelligenceInput,
 } from "./candidate-intelligence.js";
@@ -190,6 +191,69 @@ describe("candidate intelligence record", () => {
         role: "matchmaker",
       }),
     ).toBe(false);
+  });
+
+  it("explains each fail-closed assertion access decision", () => {
+    const assertion =
+      buildCandidateIntelligenceRecord(buildInput()).assertions[0];
+    if (!assertion) throw new Error("Expected approved assertion fixture");
+    const analyticsRequest = {
+      at: reviewedAt,
+      purpose: "candidate-analytics" as const,
+      role: "data-analyst" as const,
+    };
+
+    expect(
+      evaluateCandidateAssertionAccess(assertion, analyticsRequest),
+    ).toEqual({ eligible: true, reason: "eligible" });
+    expect(
+      evaluateCandidateAssertionAccess(
+        {
+          ...assertion,
+          permission: { ...assertion.permission, purposes: [] },
+        },
+        analyticsRequest,
+      ),
+    ).toEqual({ eligible: false, reason: "purpose-not-granted" });
+    expect(
+      evaluateCandidateAssertionAccess(
+        {
+          ...assertion,
+          permission: { ...assertion.permission, allowedRoles: [] },
+        },
+        analyticsRequest,
+      ),
+    ).toEqual({ eligible: false, reason: "role-not-granted" });
+    expect(
+      evaluateCandidateAssertionAccess(assertion, {
+        ...analyticsRequest,
+        role: "matchmaker",
+      }),
+    ).toEqual({ eligible: false, reason: "purpose-role-mismatch" });
+    expect(
+      evaluateCandidateAssertionAccess(assertion, {
+        ...analyticsRequest,
+        at: "2026-12-01T12:00:00.000Z",
+      }),
+    ).toEqual({ eligible: false, reason: "freshness-expired" });
+    expect(
+      evaluateCandidateAssertionAccess(assertion, {
+        ...analyticsRequest,
+        at: "2027-08-26T12:00:00.000Z",
+      }),
+    ).toEqual({ eligible: false, reason: "retention-expired" });
+
+    const withdrawn = transitionCandidateAssertion(assertion, {
+      at: "2026-08-26T12:00:00.000Z",
+      reasonCode: "candidate-withdrawal",
+      status: "withdrawn",
+    });
+    expect(
+      evaluateCandidateAssertionAccess(withdrawn, {
+        ...analyticsRequest,
+        at: "2026-08-27T12:00:00.000Z",
+      }),
+    ).toEqual({ eligible: false, reason: "lifecycle-withdrawn" });
   });
 
   it("records immutable disputed and withdrawn lifecycle history", () => {
