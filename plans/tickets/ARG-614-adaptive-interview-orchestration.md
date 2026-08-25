@@ -20,7 +20,7 @@ A versioned guide and constrained planner generate relevant, one-at-a-time follo
 - [ ] Required topics, approved optional probes, sensitive-topic boundaries, stop conditions, and source-to-field mappings are versioned.
 - [ ] Every proposed question stores guide, prompt, model, source references, reason code, and disposition.
 - [ ] Candidate-approved facts, explicit unknowns, contradictions, and uncovered required topics are the only permitted planning inputs.
-- [ ] Compound questions, repetitive acknowledgement, premature termination, unsupported inference, and topic drift have evaluation thresholds.
+- [x] Compound questions, repetitive acknowledgement, premature termination, unsupported inference, and topic drift have evaluation thresholds.
 - [ ] Human handoff, skip, clarification, and structured-form fallback are deterministic.
 - [ ] No protected-trait, emotion, accent, deception, attractiveness, wealth, diagnosis, or compatibility inference is produced.
 - [ ] No admission, rejection, ranking, matching, or profile mutation occurs without the existing human/applicant approvals.
@@ -43,6 +43,12 @@ See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-intervie
 - Declined answers and unsupported or prompt-injection-like text fall back to
   the required core question without source references.
 - The candidate sees a plain-language “Why this question” explanation.
+- `interview-plan-evaluation.ts` applies explicit zero-tolerance thresholds for
+  compound questions, repeated acknowledgement language, premature completion,
+  unsupported source grounding, and guide/topic drift.
+- Evaluation fixtures include one guide-aligned passing run and isolated failing
+  runs for every threshold, including an exact source-revision mismatch and a
+  reason code that claims support for the wrong topic.
 - Structured, conversation, and hybrid modes now expose one deterministic help
   control for clarification, privacy boundaries, approach switching, and
   continuing without an interview.
@@ -50,6 +56,5 @@ See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-intervie
   states that no person was contacted and no answers were sent, while defining
   the permission and context-preview boundary a future handoff must meet.
 - This does not complete a real human handoff, the provider-backed planner,
-  evaluation thresholds, stored question disposition, or approval-gated policy
-  work. Those acceptance criteria remain open until their dependencies are
-  approved.
+  stored question disposition, or approval-gated policy work. Those acceptance
+  criteria remain open until their dependencies are approved.
