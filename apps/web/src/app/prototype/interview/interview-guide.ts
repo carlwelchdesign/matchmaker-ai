@@ -259,6 +259,20 @@ export function getInterviewQuestionCount() {
   return questions.length;
 }
 
+export function getStructuredInterviewQuestions(): ReadonlyArray<InterviewQuestion> {
+  return questions.map((_, index) => {
+    const question = getInterviewQuestion(index, []);
+
+    if (!question) {
+      throw new Error(
+        `Missing structured interview question at index ${index}`,
+      );
+    }
+
+    return question;
+  });
+}
+
 export function createFieldProposal(
   question: InterviewQuestion,
   sourceText: string,

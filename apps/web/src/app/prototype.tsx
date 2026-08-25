@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { prototypeCampaign, prototypeGuardrails } from "./prototype-data";
 import { AdaptiveInterview } from "./prototype/interview/adaptive-interview";
+import { StructuredInterview } from "./prototype/interview/structured-interview";
 
 type PrototypeView = "application" | "campaign";
 type IntakeMode = "conversation" | "hybrid" | "structured";
@@ -134,9 +135,8 @@ function Application({
 }>) {
   const [mode, setMode] = useState<IntakeMode>("structured");
   const isReview = step === steps.length - 1;
-  const usesAdaptiveInterview =
-    interviewEnabled && (mode === "conversation" || mode === "hybrid");
-  const isAdaptiveInterviewStep = step === 1 && usesAdaptiveInterview;
+  const usesInterviewExperience = interviewEnabled;
+  const isInterviewStep = step === 1 && usesInterviewExperience;
 
   return (
     <div className="application-view">
@@ -157,7 +157,7 @@ function Application({
           {steps.map((label, index) => (
             <li className={index === step ? "is-current" : ""} key={label}>
               <button
-                disabled={usesAdaptiveInterview && index > step}
+                disabled={usesInterviewExperience && index > step}
                 onClick={() => onStepChange(index)}
                 type="button"
               >
@@ -200,8 +200,8 @@ function Application({
               </p>
             </>
           ) : null}
-          {usesAdaptiveInterview || step === 1 ? (
-            <div hidden={usesAdaptiveInterview && step !== 1}>
+          {usesInterviewExperience || step === 1 ? (
+            <div hidden={usesInterviewExperience && step !== 1}>
               <IntakePreview
                 interviewEnabled={interviewEnabled}
                 key={mode}
@@ -230,7 +230,7 @@ function Application({
             </>
           ) : null}
 
-          {!isAdaptiveInterviewStep ? (
+          {!isInterviewStep ? (
             <div className="panel-actions">
               <button
                 className="secondary-button"
@@ -308,7 +308,17 @@ function IntakePreview({
   const isConversation = mode === "conversation";
   const isHybrid = mode === "hybrid";
 
-  if (interviewEnabled && (isConversation || isHybrid)) {
+  if (interviewEnabled && mode === "structured") {
+    return (
+      <StructuredInterview
+        onChooseApproach={onChooseApproach}
+        onContinueToReview={onContinueToReview}
+        onContinueWithoutInterview={onContinueWithoutInterview}
+      />
+    );
+  }
+
+  if (interviewEnabled) {
     return (
       <AdaptiveInterview
         initialMode={isConversation ? "conversation" : "guided"}

@@ -783,6 +783,36 @@ h3 {
   margin: var(--argent-primitive-space-150) 0 var(--argent-primitive-space-200);
   max-width: 13ch;
 }
+.structured-interview .interview-introduction h2 {
+  font-weight: 400;
+  margin: var(--argent-primitive-space-150) 0 var(--argent-primitive-space-200);
+}
+.structured-question-list {
+  display: grid;
+  gap: var(--argent-primitive-space-500);
+  margin-top: var(--argent-primitive-space-400);
+}
+.structured-question {
+  border-top: 1px solid var(--argent-semantic-border-strong);
+  padding-top: var(--argent-primitive-space-250);
+}
+.structured-question-heading {
+  align-items: start;
+  display: flex;
+  gap: var(--argent-primitive-space-150);
+  justify-content: space-between;
+}
+.structured-question-heading .detail-label {
+  margin-top: 0;
+}
+.structured-question h3 {
+  font-family: var(--argent-type-family-display);
+  font-size: clamp(1.45rem, 2.8vw, 2rem);
+  font-weight: 400;
+  line-height: var(--argent-type-line-height-heading);
+  margin: var(--argent-primitive-space-150) 0 var(--argent-primitive-space-200);
+  max-width: 27ch;
+}
 .question-purpose,
 .answer-boundary,
 .proposal-source,
@@ -810,7 +840,8 @@ h3 {
   font-size: var(--argent-type-size-compact);
   margin: var(--argent-primitive-space-300) 0 var(--argent-primitive-space-100);
 }
-.interview-question textarea {
+.interview-question textarea,
+.structured-question textarea {
   background: var(--argent-semantic-surface-overlay);
   border: 1px solid var(--argent-semantic-border-strong);
   border-radius: 0;
@@ -822,10 +853,15 @@ h3 {
   resize: vertical;
   width: 100%;
 }
-.interview-question textarea:focus-visible {
+.interview-question textarea:focus-visible,
+.structured-question textarea:focus-visible {
   border-color: var(--argent-semantic-focus-ring);
   outline: 2px solid var(--argent-semantic-focus-ring);
   outline-offset: 2px;
+}
+.structured-question textarea:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
 }
 .answer-error {
   color: var(--argent-semantic-status-danger, #ff9a91);
@@ -1006,6 +1042,10 @@ h3 {
   }
   .interview-route-actions > * {
     width: 100%;
+  }
+  .structured-question-heading {
+    align-items: flex-start;
+    flex-direction: column;
   }
   .prototype-notice {
     order: 3;

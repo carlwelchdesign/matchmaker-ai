@@ -5,10 +5,14 @@ import { describe, expect, it } from "vitest";
 
 describe("adaptive interview prototype boundary", () => {
   it("keeps the first slice local and provider-free", () => {
-    const source = readFileSync(
-      fileURLToPath(new URL("./adaptive-interview.tsx", import.meta.url)),
-      "utf8",
-    );
+    const source = ["adaptive-interview.tsx", "structured-interview.tsx"]
+      .map((fileName) =>
+        readFileSync(
+          fileURLToPath(new URL(`./${fileName}`, import.meta.url)),
+          "utf8",
+        ),
+      )
+      .join("\n");
 
     expect(source).not.toContain("fetch(");
     expect(source).not.toContain("localStorage");
@@ -32,10 +36,16 @@ describe("adaptive interview prototype boundary", () => {
 
     expect(interviewSource).toContain("Choose another approach");
     expect(interviewSource).toContain("Continue without interview");
+    const structuredSource = readFileSync(
+      fileURLToPath(new URL("./structured-interview.tsx", import.meta.url)),
+      "utf8",
+    );
+    expect(structuredSource).toContain("Continue without structured questions");
+    expect(structuredSource).toContain("Continue to application review");
     expect(interviewSource).toContain("Continue to application review");
-    expect(applicationSource).toContain("!isAdaptiveInterviewStep");
+    expect(applicationSource).toContain("!isInterviewStep");
     expect(applicationSource).toContain(
-      "hidden={usesAdaptiveInterview && step !== 1}",
+      "hidden={usesInterviewExperience && step !== 1}",
     );
   });
 });

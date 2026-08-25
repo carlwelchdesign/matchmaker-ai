@@ -22,6 +22,9 @@ each source-grounded field before submission.
 - [x] The interview is gated by `candidate-interviewing` and fails closed.
 - [x] Conversation and hybrid entry points remain inside the established
   Application flow; no parallel site or standalone interview route is created.
+- [x] Structured entry presents the complete fixed guide, supports answering in
+  any order or declining each question, and uses the same exact-source review
+  and final disposition contract as conversation and hybrid.
 - [x] The first local slice supports one question at a time, pause/resume,
   mode switching, skip, source editing, and field-by-field approval or exclusion.
 - [x] Keep-private and reject remain separate candidate decisions, and the final
@@ -49,13 +52,14 @@ each source-grounded field before submission.
 - Initial interview commit: `96e8c61`
 - Candidate-controlled final-review commit: `c43febf`
 - Explicit navigation and local restoration commit: `c6fcded`
+- Structured worksheet and shared review-contract commit: pending
 - Surface: existing `/prototype` Application flow only
 - Flag: `candidate-interviewing`
 - Runtime boundary: local page state only; no database, provider, transcript,
   audio, telemetry content, or personal-data handling
 - Review boundary: approved, private, rejected, and declined states remain
   distinct; every displayed field cites its exact response revision
-- Verification: 9 domain tests, 13 web tests, domain/web TypeScript, production
+- Verification: 9 domain tests, 17 web tests, domain/web TypeScript, production
   build, planning validation, formatting, Docker, and full browser review path
 - Deployment: none; local review only
 
