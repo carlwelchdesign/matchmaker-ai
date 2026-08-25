@@ -21,18 +21,38 @@ Risky capabilities can be enabled for explicit cohorts, measured, stopped, and s
 - Production: off.
 - Preview: off.
 - Development: on.
-- No repository call site or SDK integration exists yet; the live application behavior is unchanged.
+- The `/prototype` server page evaluates the typed flag before rendering the
+  client application. `candidate-interview-flag-policy/v1` enables only an
+  explicit boolean `true`; false, malformed values, and evaluation errors fail
+  closed without storing sensitive flag attributes.
+- Without provider configuration, the local adapter enables only in the
+  development environment. The synthetic application boundary remains in
+  force; no real-person rollout is authorized.
 
 ## Acceptance criteria
 
-- [ ] Server-only flag evaluation and typed definitions are implemented with a local deterministic fallback.
+- [x] Server-only flag evaluation and typed definitions are implemented with a local deterministic fallback.
 - [ ] `candidate-interviewing=false` always routes to the structured application or human-assistance path without losing resumable work.
 - [ ] Authorization, consent, eligibility, retention, and provider kill switches remain enforced independently of flag state.
 - [ ] Production and preview default off until their corresponding approval gates pass.
 - [ ] Cohort targeting, override access, audit, owner, expiry/review date, and rollback runbook are documented.
 - [ ] Flag evaluation volume and provider charges are monitored; no sensitive values enter flag attributes or telemetry.
 - [ ] On/off, mid-session disable, provider outage, and stale-configuration tests pass.
-- [ ] Development enablement uses synthetic data until the research protocol permits real participants.
+- [x] Development enablement uses synthetic data until the research protocol permits real participants.
+
+## Current development increment
+
+- Branch: `codex/ARG-111-flag-evaluation`
+- Runtime boundary: server page evaluation plus pure typed policy; no sensitive
+  targeting attributes, persistence, provider logging, or client-side flag SDK
+- Tests: explicit on, explicit off, malformed/stale-shaped values, and provider
+  error all resolve deterministically; every non-true state fails closed
+- Verification: 65 web tests across 14 files, web TypeScript, production build,
+  planning validation, formatting, diff checks, rebuilt local web container,
+  and `/prototype` HTTP 200
+- Still open: resumable mid-session disable, independent authorization and
+  consent enforcement, production/preview configuration verification, cohort
+  governance, audit/expiry, evaluation-volume monitoring, and rollback drills
 
 ## Rollout order
 

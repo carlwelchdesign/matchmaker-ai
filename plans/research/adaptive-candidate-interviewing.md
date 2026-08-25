@@ -81,7 +81,11 @@ Vercel flag `candidate-interviewing` was created on 2026-08-24 for the linked `m
 - Rollout order: synthetic development fixtures, internal preview cohort, approved research cohort, invited text-first beta, then separately approved voice cohort.
 - Rollback: turn the flag off, preserve resumable drafts, stop new AI work, and route candidates to the structured form or human assistance.
 
-The current repository has no flag call site or provider SDK. Wiring the server-side flag, fallback behavior, and tests remains part of `ARG-111` and `ARG-613`; no dormant production route has been added.
+The repository now evaluates the flag on the `/prototype` server page and fails
+closed for false, malformed, or failed evaluations. Mid-session disable,
+resumable fallback, cohort governance, monitoring, and production rollout gates
+remain part of `ARG-111` and `ARG-613`; no real-person production route has been
+authorized.
 
 ## AI cost and fee analysis
 
