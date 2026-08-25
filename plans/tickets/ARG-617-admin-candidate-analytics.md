@@ -17,7 +17,7 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
 
 ## Acceptance criteria
 
-- [ ] Define metric contracts for candidate supply, completeness/freshness, consent/availability, funnel by mode, correction burden, search coverage, shortlist throughput, and introduction outcomes. Candidate supply, approved-field coverage, and field-state counts now have a synthetic aggregate contract; funnel and operational metrics remain open.
+- [ ] Define metric contracts for candidate supply, completeness/freshness, consent/availability, funnel by mode, correction burden, search coverage, shortlist throughput, and introduction outcomes. Candidate supply, approved-field coverage, field-state counts, interview funnel by mode, and correction burden now have synthetic aggregate contracts; search and downstream operational metrics remain open.
 - [ ] Every dashboard value links to authoritative source lineage, cohort, time window, freshness, and missing-data state. The first aggregate contract includes source projection lineage, opaque cohort, bounded time window, and explicit small-cohort suppression; per-metric freshness and missing-data semantics remain open.
 - [ ] Staff can filter and inspect approved facts with provenance and uncertainty; raw interview content is not exposed by default.
 - [ ] Permissions and aggregate thresholds prevent inappropriate small-cohort or partner disclosure.
@@ -37,6 +37,16 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
 - Cohorts smaller than the explicit minimum are fully suppressed: no count,
   ratio, candidate identifier, assertion identifier, or approved source value is
   emitted. The minimum cannot be configured below five.
+- `candidate-interview-funnel/v1` composes the existing content-free interview
+  outcome and usage ledgers into start, completion, approved-field, and
+  correction-burden metrics overall and by mode. Sessions that switch modes are
+  explicitly attributed to `mixed`; sessions without mode evidence remain
+  `unobserved` instead of being guessed. A corrections-per-completion value of
+  10,000 basis points means one correction per completed interview.
+- Funnel lineage rejects duplicate sessions or executions, orphaned usage, and
+  records outside the declared time window. Its aggregate payload contains no
+  session/execution identifier, provider/model detail, or interview content and
+  uses the same full small-cohort suppression boundary.
 - This is pure synthetic domain code. It does not add persistence, analytics
   transport, an admin dashboard, real candidate data, or production access.
 

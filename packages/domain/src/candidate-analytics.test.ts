@@ -2,12 +2,19 @@ import { describe, expect, it } from "vitest";
 
 import {
   buildCandidateAnalyticsSnapshot,
+  buildCandidateInterviewFunnelSnapshot,
   candidateAnalyticsSnapshotSchemaVersion,
+  candidateInterviewFunnelSchemaVersion,
 } from "./candidate-analytics.js";
 import {
   candidatePurposeProjectionSchemaVersion,
   type CandidatePurposeProjection,
 } from "./candidate-purpose-projection.js";
+import { recordInterviewOutcomeMeasurement } from "./interview-unit-economics.js";
+import {
+  recordInterviewUsageExecution,
+  type InterviewUsageMode,
+} from "./interview-usage.js";
 
 function projection(candidateCount = 5): CandidatePurposeProjection {
   return {
@@ -177,5 +184,180 @@ describe("candidate analytics snapshot", () => {
         windowEnd: "2026-08-25T11:00:00.000Z",
       }),
     ).toThrow("inside the analytics window");
+  });
+});
+
+function outcome(
+  sessionNumber: number,
+  input: {
+    approvedFieldCount: number;
+    completed: boolean;
+    correctionCount: number;
+  },
+) {
+  const minute = String(sessionNumber).padStart(2, "0");
+  return recordInterviewOutcomeMeasurement({
+    approvedFieldCount: input.approvedFieldCount,
+    completedAt: input.completed ? `2026-08-25T12:${minute}:30.000Z` : null,
+    correctionCount: input.correctionCount,
+    estimatedHumanReviewTimeSavedMs: input.completed ? 60_000 : 0,
+    sessionId: `session-synthetic-${sessionNumber}`,
+    startedAt: `2026-08-25T12:${minute}:00.000Z`,
+  });
+}
+
+function usage(
+  sessionNumber: number,
+  executionNumber: number,
+  mode: InterviewUsageMode,
+) {
+  const minute = String(sessionNumber).padStart(2, "0");
+  return recordInterviewUsageExecution({
+    audioInputMs: 0,
+    audioOutputMs: 0,
+    cacheBehavior: "none",
+    cacheReadTokens: 0,
+    cacheWriteTokens: 0,
+    environment: "test",
+    estimatedCostMicrousd: 0,
+    executionId: `execution-synthetic-${executionNumber}`,
+    executionKind: "deterministic-template",
+    inputTokens: 0,
+    latencyMs: 0,
+    mode,
+    model: null,
+    occurredAt: `2026-08-25T12:${minute}:15.000Z`,
+    outputTokens: 0,
+    provider: null,
+    retryCount: 0,
+    sessionId: `session-synthetic-${sessionNumber}`,
+  });
+}
+
+const funnelOutcomes = [
+  outcome(1, { approvedFieldCount: 2, completed: true, correctionCount: 1 }),
+  outcome(2, { approvedFieldCount: 0, completed: false, correctionCount: 1 }),
+  outcome(3, { approvedFieldCount: 3, completed: true, correctionCount: 0 }),
+  outcome(4, { approvedFieldCount: 1, completed: true, correctionCount: 2 }),
+  outcome(5, { approvedFieldCount: 4, completed: true, correctionCount: 0 }),
+];
+const funnelUsage = [
+  usage(1, 1, "typed-conversation"),
+  usage(2, 2, "typed-conversation"),
+  usage(3, 3, "hybrid"),
+  usage(4, 4, "hybrid"),
+  usage(4, 5, "structured"),
+];
+
+describe("candidate interview funnel snapshot", () => {
+  it("reports completion and correction burden by honest mode attribution", () => {
+    const snapshot = buildCandidateInterviewFunnelSnapshot({
+      outcomes: funnelOutcomes,
+      request,
+      usage: funnelUsage,
+    });
+
+    expect(snapshot).toMatchObject({
+      cohortKey: "cohort-synthetic-pilot",
+      dataState: "available",
+      lineage: {
+        outcomeSchemaVersion: "interview-outcome-measurement/v1",
+        sourceContentStored: false,
+        usageSchemaVersion: "interview-usage-ledger/v1",
+      },
+      minimumCohortSize: 5,
+      schemaVersion: candidateInterviewFunnelSchemaVersion,
+    });
+    expect(snapshot.metrics?.overall).toEqual({
+      approvedFieldCount: 10,
+      completedCount: 4,
+      completionRateBasisPoints: 8000,
+      correctionCount: 4,
+      correctionsPerCompletionBasisPoints: 10_000,
+      startedCount: 5,
+    });
+    expect(snapshot.metrics?.byMode["typed-conversation"]).toMatchObject({
+      completedCount: 1,
+      completionRateBasisPoints: 5000,
+      correctionCount: 2,
+      correctionsPerCompletionBasisPoints: 20_000,
+      startedCount: 2,
+    });
+    expect(snapshot.metrics?.byMode.mixed.startedCount).toBe(1);
+    expect(snapshot.metrics?.byMode.unobserved.startedCount).toBe(1);
+    expect(snapshot.metrics?.byMode.voice.completionRateBasisPoints).toBeNull();
+  });
+
+  it("suppresses all funnel metrics below the cohort threshold", () => {
+    const snapshot = buildCandidateInterviewFunnelSnapshot({
+      outcomes: funnelOutcomes.slice(0, 4),
+      request,
+      usage: funnelUsage.slice(0, 4),
+    });
+
+    expect(snapshot.dataState).toBe("suppressed-small-cohort");
+    expect(snapshot.metrics).toBeNull();
+  });
+
+  it("emits no session, execution, provider, or interview content", () => {
+    const serialized = JSON.stringify(
+      buildCandidateInterviewFunnelSnapshot({
+        outcomes: funnelOutcomes,
+        request,
+        usage: funnelUsage,
+      }),
+    );
+
+    expect(serialized).not.toMatch(/session-synthetic|execution-synthetic/);
+    expect(serialized).not.toMatch(/provider|model|prompt|answer|transcript/);
+  });
+
+  it("rejects orphaned, duplicate, and out-of-window lineage", () => {
+    expect(() =>
+      buildCandidateInterviewFunnelSnapshot({
+        outcomes: funnelOutcomes,
+        request,
+        usage: [
+          ...funnelUsage,
+          {
+            ...usage(5, 6, "structured"),
+            sessionId: "session-orphaned",
+          },
+        ],
+      }),
+    ).toThrow("no outcome session");
+    expect(() =>
+      buildCandidateInterviewFunnelSnapshot({
+        outcomes: [...funnelOutcomes, funnelOutcomes[0]!],
+        request,
+        usage: funnelUsage,
+      }),
+    ).toThrow("duplicate sessions");
+    expect(() =>
+      buildCandidateInterviewFunnelSnapshot({
+        outcomes: [
+          ...funnelOutcomes.slice(0, 4),
+          {
+            ...funnelOutcomes[4]!,
+            startedAt: "2026-08-24T12:05:00.000Z",
+          },
+        ],
+        request,
+        usage: funnelUsage,
+      }),
+    ).toThrow("outside the funnel window");
+    expect(() =>
+      buildCandidateInterviewFunnelSnapshot({
+        outcomes: funnelOutcomes,
+        request,
+        usage: [
+          ...funnelUsage,
+          {
+            ...usage(5, 7, "structured"),
+            occurredAt: "2026-08-26T00:00:01.000Z",
+          },
+        ],
+      }),
+    ).toThrow("outside its session");
   });
 });

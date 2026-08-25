@@ -1,9 +1,14 @@
 export {
   buildCandidateAnalyticsSnapshot,
+  buildCandidateInterviewFunnelSnapshot,
   candidateAnalyticsSnapshotSchemaVersion,
+  candidateInterviewFunnelSchemaVersion,
   type CandidateAnalyticsMetricSet,
   type CandidateAnalyticsSnapshot,
   type CandidateAnalyticsSnapshotRequest,
+  type CandidateInterviewFunnelMetric,
+  type CandidateInterviewFunnelSnapshot,
+  type CandidateInterviewModeAttribution,
 } from "./candidate-analytics.js";
 export {
   buildCandidateInterviewReview,

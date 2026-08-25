@@ -3,9 +3,22 @@ import {
   type CandidatePurposeProjection,
 } from "./candidate-purpose-projection.js";
 import type { CandidateFieldKnowledgeState } from "./candidate-intelligence.js";
+import {
+  interviewOutcomeSchemaVersion,
+  validateInterviewOutcomeMeasurement,
+  type InterviewOutcomeMeasurement,
+} from "./interview-unit-economics.js";
+import {
+  interviewUsageSchemaVersion,
+  validateInterviewUsageExecution,
+  type InterviewUsageExecution,
+  type InterviewUsageMode,
+} from "./interview-usage.js";
 
 export const candidateAnalyticsSnapshotSchemaVersion =
   "candidate-analytics-snapshot/v1" as const;
+export const candidateInterviewFunnelSchemaVersion =
+  "candidate-interview-funnel/v1" as const;
 
 export interface CandidateAnalyticsSnapshotRequest {
   readonly cohortKey: string;
@@ -41,6 +54,38 @@ export interface CandidateAnalyticsSnapshot {
   readonly windowStart: string;
 }
 
+export type CandidateInterviewModeAttribution =
+  InterviewUsageMode | "mixed" | "unobserved";
+
+export interface CandidateInterviewFunnelMetric {
+  readonly approvedFieldCount: number;
+  readonly completedCount: number;
+  readonly completionRateBasisPoints: number | null;
+  readonly correctionCount: number;
+  readonly correctionsPerCompletionBasisPoints: number | null;
+  readonly startedCount: number;
+}
+
+export interface CandidateInterviewFunnelSnapshot {
+  readonly cohortKey: string;
+  readonly dataState: "available" | "suppressed-small-cohort";
+  readonly lineage: {
+    readonly outcomeSchemaVersion: typeof interviewOutcomeSchemaVersion;
+    readonly sourceContentStored: false;
+    readonly usageSchemaVersion: typeof interviewUsageSchemaVersion;
+  };
+  readonly metrics: {
+    readonly byMode: Readonly<
+      Record<CandidateInterviewModeAttribution, CandidateInterviewFunnelMetric>
+    >;
+    readonly overall: CandidateInterviewFunnelMetric;
+  } | null;
+  readonly minimumCohortSize: number;
+  readonly schemaVersion: typeof candidateInterviewFunnelSchemaVersion;
+  readonly windowEnd: string;
+  readonly windowStart: string;
+}
+
 const cohortKeyPattern = /^cohort-[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 export function buildCandidateAnalyticsSnapshot(
@@ -48,48 +93,29 @@ export function buildCandidateAnalyticsSnapshot(
   request: CandidateAnalyticsSnapshotRequest,
 ): CandidateAnalyticsSnapshot {
   validateProjection(projection);
-  const windowStart = requireIsoTimestamp(
-    request.windowStart,
-    "Analytics window start",
-  );
-  const windowEnd = requireIsoTimestamp(
-    request.windowEnd,
-    "Analytics window end",
-  );
-  if (windowStart >= windowEnd) {
-    throw new Error("Analytics window start must be before window end");
-  }
+  const scope = validateAnalyticsScope(request);
   if (
-    projection.projectedAt < windowStart ||
-    projection.projectedAt > windowEnd
+    projection.projectedAt < scope.windowStart ||
+    projection.projectedAt > scope.windowEnd
   ) {
     throw new Error("Projection time must fall inside the analytics window");
   }
-  if (!cohortKeyPattern.test(request.cohortKey)) {
-    throw new Error("Analytics cohort key must be an opaque cohort identifier");
-  }
-  if (
-    !Number.isSafeInteger(request.minimumCohortSize) ||
-    request.minimumCohortSize < 5
-  ) {
-    throw new Error("Analytics minimum cohort size must be at least five");
-  }
 
   const base: Omit<CandidateAnalyticsSnapshot, "dataState" | "metrics"> = {
-    cohortKey: request.cohortKey,
+    cohortKey: scope.cohortKey,
     lineage: {
       approvedAssertionsOnly: true,
       projectedAt: projection.projectedAt,
       projectionSchemaVersion: projection.schemaVersion,
       rawSourceIncluded: false,
     },
-    minimumCohortSize: request.minimumCohortSize,
+    minimumCohortSize: scope.minimumCohortSize,
     schemaVersion: candidateAnalyticsSnapshotSchemaVersion,
-    windowEnd,
-    windowStart,
+    windowEnd: scope.windowEnd,
+    windowStart: scope.windowStart,
   };
 
-  if (projection.candidateCount < request.minimumCohortSize) {
+  if (projection.candidateCount < scope.minimumCohortSize) {
     return {
       ...base,
       dataState: "suppressed-small-cohort",
@@ -116,6 +142,75 @@ export function buildCandidateAnalyticsSnapshot(
       excludedAssertionCount: projection.excludedAssertionCount,
       fieldStateCounts: { ...projection.fieldStateCounts },
       observedFieldCount,
+    },
+  };
+}
+
+export function buildCandidateInterviewFunnelSnapshot(input: {
+  readonly outcomes: readonly InterviewOutcomeMeasurement[];
+  readonly request: CandidateAnalyticsSnapshotRequest;
+  readonly usage: readonly InterviewUsageExecution[];
+}): CandidateInterviewFunnelSnapshot {
+  const scope = validateAnalyticsScope(input.request);
+  const outcomes = input.outcomes.map(validateInterviewOutcomeMeasurement);
+  const usage = input.usage.map(validateInterviewUsageExecution);
+  validateFunnelLineage(outcomes, usage, scope);
+
+  const base: Omit<CandidateInterviewFunnelSnapshot, "dataState" | "metrics"> =
+    {
+      cohortKey: scope.cohortKey,
+      lineage: {
+        outcomeSchemaVersion: interviewOutcomeSchemaVersion,
+        sourceContentStored: false,
+        usageSchemaVersion: interviewUsageSchemaVersion,
+      },
+      minimumCohortSize: scope.minimumCohortSize,
+      schemaVersion: candidateInterviewFunnelSchemaVersion,
+      windowEnd: scope.windowEnd,
+      windowStart: scope.windowStart,
+    };
+
+  if (outcomes.length < scope.minimumCohortSize) {
+    return {
+      ...base,
+      dataState: "suppressed-small-cohort",
+      metrics: null,
+    };
+  }
+
+  const outcomesByMode = createEmptyModeBuckets();
+  const modesBySession = new Map<string, Set<InterviewUsageMode>>();
+  for (const execution of usage) {
+    const modes = modesBySession.get(execution.sessionId) ?? new Set();
+    modes.add(execution.mode);
+    modesBySession.set(execution.sessionId, modes);
+  }
+  for (const outcome of outcomes) {
+    const modes = modesBySession.get(outcome.sessionId);
+    const attribution =
+      !modes || modes.size === 0
+        ? "unobserved"
+        : modes.size === 1
+          ? [...modes][0]!
+          : "mixed";
+    outcomesByMode[attribution].push(outcome);
+  }
+
+  return {
+    ...base,
+    dataState: "available",
+    metrics: {
+      byMode: {
+        hybrid: summarizeOutcomes(outcomesByMode.hybrid),
+        mixed: summarizeOutcomes(outcomesByMode.mixed),
+        structured: summarizeOutcomes(outcomesByMode.structured),
+        "typed-conversation": summarizeOutcomes(
+          outcomesByMode["typed-conversation"],
+        ),
+        unobserved: summarizeOutcomes(outcomesByMode.unobserved),
+        voice: summarizeOutcomes(outcomesByMode.voice),
+      },
+      overall: summarizeOutcomes(outcomes),
     },
   };
 }
@@ -156,6 +251,137 @@ function validateProjection(projection: CandidatePurposeProjection): void {
       "Candidate analytics projection assertion counts are inconsistent",
     );
   }
+}
+
+function validateFunnelLineage(
+  outcomes: readonly InterviewOutcomeMeasurement[],
+  usage: readonly InterviewUsageExecution[],
+  scope: CandidateAnalyticsSnapshotRequest,
+): void {
+  const outcomesBySession = new Map(
+    outcomes.map((outcome) => [outcome.sessionId, outcome]),
+  );
+  if (outcomesBySession.size !== outcomes.length) {
+    throw new Error("Candidate interview funnel contains duplicate sessions");
+  }
+  const executionIds = new Set(usage.map((execution) => execution.executionId));
+  if (executionIds.size !== usage.length) {
+    throw new Error("Candidate interview funnel contains duplicate executions");
+  }
+
+  for (const outcome of outcomes) {
+    if (
+      outcome.startedAt < scope.windowStart ||
+      outcome.startedAt > scope.windowEnd ||
+      (outcome.completedAt !== null && outcome.completedAt > scope.windowEnd)
+    ) {
+      throw new Error(
+        "Candidate interview outcome falls outside the funnel window",
+      );
+    }
+  }
+  for (const execution of usage) {
+    const outcome = outcomesBySession.get(execution.sessionId);
+    if (!outcome) {
+      throw new Error("Candidate interview usage has no outcome session");
+    }
+    if (
+      execution.occurredAt < outcome.startedAt ||
+      execution.occurredAt > scope.windowEnd ||
+      (outcome.completedAt !== null &&
+        execution.occurredAt > outcome.completedAt)
+    ) {
+      throw new Error("Candidate interview usage falls outside its session");
+    }
+  }
+}
+
+function summarizeOutcomes(
+  outcomes: readonly InterviewOutcomeMeasurement[],
+): CandidateInterviewFunnelMetric {
+  const completedCount = outcomes.filter(
+    (outcome) => outcome.completedAt !== null,
+  ).length;
+  const correctionCount = sumSafeIntegers(
+    outcomes.map((outcome) => outcome.correctionCount),
+    "Candidate interview correction count",
+  );
+  return {
+    approvedFieldCount: sumSafeIntegers(
+      outcomes.map((outcome) => outcome.approvedFieldCount),
+      "Candidate interview approved field count",
+    ),
+    completedCount,
+    completionRateBasisPoints: ratioBasisPoints(
+      completedCount,
+      outcomes.length,
+    ),
+    correctionCount,
+    correctionsPerCompletionBasisPoints: ratioBasisPoints(
+      correctionCount,
+      completedCount,
+    ),
+    startedCount: outcomes.length,
+  };
+}
+
+function createEmptyModeBuckets(): Record<
+  CandidateInterviewModeAttribution,
+  InterviewOutcomeMeasurement[]
+> {
+  return {
+    hybrid: [],
+    mixed: [],
+    structured: [],
+    "typed-conversation": [],
+    unobserved: [],
+    voice: [],
+  };
+}
+
+function validateAnalyticsScope(
+  request: CandidateAnalyticsSnapshotRequest,
+): CandidateAnalyticsSnapshotRequest {
+  const windowStart = requireIsoTimestamp(
+    request.windowStart,
+    "Analytics window start",
+  );
+  const windowEnd = requireIsoTimestamp(
+    request.windowEnd,
+    "Analytics window end",
+  );
+  if (windowStart >= windowEnd) {
+    throw new Error("Analytics window start must be before window end");
+  }
+  if (!cohortKeyPattern.test(request.cohortKey)) {
+    throw new Error("Analytics cohort key must be an opaque cohort identifier");
+  }
+  if (
+    !Number.isSafeInteger(request.minimumCohortSize) ||
+    request.minimumCohortSize < 5
+  ) {
+    throw new Error("Analytics minimum cohort size must be at least five");
+  }
+  return { ...request, windowEnd, windowStart };
+}
+
+function ratioBasisPoints(
+  numerator: number,
+  denominator: number,
+): number | null {
+  return denominator === 0
+    ? null
+    : Math.round((numerator * 10_000) / denominator);
+}
+
+function sumSafeIntegers(values: readonly number[], label: string): number {
+  return values.reduce((total, value) => {
+    const next = total + value;
+    if (!Number.isSafeInteger(next)) {
+      throw new Error(`${label} exceeds the safe integer range`);
+    }
+    return next;
+  }, 0);
 }
 
 function requireIsoTimestamp(value: string, label: string): string {
