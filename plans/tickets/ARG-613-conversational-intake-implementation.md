@@ -48,6 +48,7 @@ each source-grounded field before submission.
 - Branch: `codex/ARG-613-text-interview`
 - Initial interview commit: `96e8c61`
 - Candidate-controlled final-review commit: `c43febf`
+- Explicit navigation and local restoration commit: `c6fcded`
 - Surface: existing `/prototype` Application flow only
 - Flag: `candidate-interviewing`
 - Runtime boundary: local page state only; no database, provider, transcript,
