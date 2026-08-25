@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import "@argent/design-system/nocturne.css";
 import "./styles.css";
 import "./landing-sunrise.css";
+import "./application-sunrise.css";
 
 const siteTitle = "The Montecito Matchmaker";
 const siteDescription = "A division of Argent";

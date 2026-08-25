@@ -1,0 +1,501 @@
+/* The candidate application extends the approved Sunrise landing system. */
+.prototype-shell[data-theme="sunrise"] {
+  --argent-semantic-action-on-primary: var(--landing-on-accent);
+  --argent-semantic-action-primary: var(--landing-accent);
+  --argent-semantic-action-primary-hover: var(--landing-accent-hover);
+  --argent-semantic-border-strong: var(--landing-line-strong);
+  --argent-semantic-border-subtle: var(--landing-line);
+  --argent-semantic-focus-ring: var(--landing-accent);
+  --argent-semantic-status-danger: #9b3e32;
+  --argent-semantic-status-success: #506b57;
+  --argent-semantic-status-warning: #a66a36;
+  --argent-semantic-surface-canvas: var(--landing-canvas);
+  --argent-semantic-surface-overlay: #f0e7dc;
+  --argent-semantic-surface-raised: rgba(255, 252, 247, 0.72);
+  --argent-semantic-text-muted: var(--landing-muted);
+  --argent-semantic-text-primary: var(--landing-ink);
+  --argent-semantic-text-secondary: var(--landing-copy);
+  --argent-type-family-body: var(--landing-body-font);
+  --argent-type-family-display: var(--landing-display-font);
+  --argent-type-family-mono: var(--landing-body-font);
+  background:
+    radial-gradient(
+      circle at 85% 4%,
+      rgba(192, 131, 91, 0.13),
+      transparent 26rem
+    ),
+    var(--landing-canvas);
+  color: var(--landing-ink);
+  color-scheme: light;
+  font-family: var(--landing-body-font);
+  font-synthesis: none;
+  min-height: 100svh;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+.prototype-shell[data-theme="sunrise"] .skip-link {
+  background: var(--landing-ink);
+  color: var(--landing-on-accent);
+  padding: 0.8rem 1rem;
+}
+
+.prototype-shell[data-theme="sunrise"] .prototype-header {
+  border-bottom-color: var(--landing-line);
+  gap: clamp(1rem, 3vw, 3rem);
+  max-width: var(--landing-max);
+  min-height: 104px;
+  padding-inline: var(--landing-gutter);
+}
+
+.prototype-shell[data-theme="sunrise"] .prototype-brand {
+  color: inherit;
+  display: grid;
+  gap: 0.32rem;
+  justify-self: start;
+  text-decoration: none;
+}
+
+.prototype-shell[data-theme="sunrise"] .prototype-wordmark {
+  font-family: "Bodoni 72 Smallcaps", Didot, serif;
+  font-size: clamp(1rem, 1.7vw, 1.3rem);
+  font-weight: 650;
+  letter-spacing: 0.035em;
+  line-height: 1;
+}
+
+.prototype-shell[data-theme="sunrise"] .prototype-endorsement {
+  color: var(--landing-muted);
+  font-size: 0.55rem;
+  font-weight: 650;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.prototype-shell[data-theme="sunrise"] .prototype-notice {
+  color: var(--landing-muted);
+  font-family: var(--landing-body-font);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.prototype-shell[data-theme="sunrise"] .prototype-return {
+  color: var(--landing-ink);
+  font-size: 0.78rem;
+  justify-self: end;
+  text-decoration-color: transparent;
+  text-underline-offset: 5px;
+}
+
+.prototype-shell[data-theme="sunrise"] .prototype-return:hover {
+  text-decoration-color: currentColor;
+}
+
+.prototype-shell[data-theme="sunrise"] .prototype-content {
+  max-width: var(--landing-max);
+  padding: clamp(4rem, 8vw, 7.5rem) var(--landing-gutter)
+    clamp(6rem, 10vw, 10rem);
+}
+
+.prototype-shell[data-theme="sunrise"] .application-view {
+  gap: clamp(3.5rem, 7vw, 6.5rem);
+}
+
+.prototype-shell[data-theme="sunrise"] .application-intro {
+  display: grid;
+  gap: 1.5rem clamp(2rem, 7vw, 7rem);
+  grid-template-columns: minmax(0, 1.25fr) minmax(18rem, 0.75fr);
+  max-width: none;
+}
+
+.prototype-shell[data-theme="sunrise"] .application-intro .eyebrow {
+  grid-column: 1 / -1;
+}
+
+.prototype-shell[data-theme="sunrise"] .eyebrow,
+.prototype-shell[data-theme="sunrise"] .detail-label,
+.prototype-shell[data-theme="sunrise"] .interview-guide-version,
+.prototype-shell[data-theme="sunrise"] .interview-progress,
+.prototype-shell[data-theme="sunrise"] .review-disposition,
+.prototype-shell[data-theme="sunrise"] .sample-response span,
+.prototype-shell[data-theme="sunrise"] .status-sample span {
+  color: var(--landing-muted);
+  font-family: var(--landing-body-font);
+  font-size: 0.64rem;
+  font-weight: 650;
+  letter-spacing: 0.12em;
+}
+
+.prototype-shell[data-theme="sunrise"] h1,
+.prototype-shell[data-theme="sunrise"] h2,
+.prototype-shell[data-theme="sunrise"] h3 {
+  color: var(--landing-ink);
+  font-family: var(--landing-display-font);
+  font-weight: var(--landing-heading-weight);
+}
+
+.prototype-shell[data-theme="sunrise"] h1 {
+  font-size: clamp(3.8rem, 7vw, 6.6rem);
+  letter-spacing: var(--landing-heading-tracking);
+  line-height: 0.91;
+  margin-bottom: 0;
+  max-width: 9ch;
+}
+
+.prototype-shell[data-theme="sunrise"] h2 {
+  font-size: clamp(2.35rem, 4.4vw, 4rem);
+  letter-spacing: var(--landing-heading-tracking);
+  line-height: 0.98;
+}
+
+.prototype-shell[data-theme="sunrise"] h3 {
+  letter-spacing: -0.018em;
+}
+
+.prototype-shell[data-theme="sunrise"] .application-intro > p:last-child,
+.prototype-shell[data-theme="sunrise"] .panel-copy {
+  align-self: end;
+  color: var(--landing-copy);
+  font-size: clamp(1rem, 1.5vw, 1.15rem);
+  line-height: 1.75;
+  margin-bottom: 0.4rem;
+  max-width: 34rem;
+}
+
+.prototype-shell[data-theme="sunrise"] .application-layout {
+  align-items: start;
+  gap: clamp(2.5rem, 6vw, 6.5rem);
+  grid-template-columns: minmax(10rem, 0.42fr) minmax(0, 1.58fr);
+}
+
+.prototype-shell[data-theme="sunrise"] .step-list {
+  position: sticky;
+  top: 2rem;
+}
+
+.prototype-shell[data-theme="sunrise"] .step-list li,
+.prototype-shell[data-theme="sunrise"] .step-list li:last-child {
+  border-color: var(--landing-line);
+}
+
+.prototype-shell[data-theme="sunrise"] .step-list button {
+  color: var(--landing-muted);
+  font-size: 0.84rem;
+  gap: 1rem;
+  padding: 1.15rem 0;
+}
+
+.prototype-shell[data-theme="sunrise"] .step-list .is-current button {
+  color: var(--landing-ink);
+  font-weight: 650;
+}
+
+.prototype-shell[data-theme="sunrise"] .step-list span {
+  color: var(--landing-accent);
+  font-family: var(--landing-body-font);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.prototype-shell[data-theme="sunrise"] .application-panel {
+  background: rgba(255, 252, 247, 0.74);
+  border: 1px solid var(--landing-line);
+  border-radius: 0;
+  box-shadow: 0 2rem 5rem rgba(74, 48, 34, 0.07);
+  padding: clamp(2rem, 5vw, 4.5rem);
+}
+
+.prototype-shell[data-theme="sunrise"] .choice-grid {
+  gap: 0;
+  margin-top: 2.5rem;
+}
+
+.prototype-shell[data-theme="sunrise"] .choice-card {
+  border: 1px solid var(--landing-line);
+  color: var(--landing-copy);
+  min-height: 10.5rem;
+  padding: 1.5rem;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease;
+}
+
+.prototype-shell[data-theme="sunrise"] .choice-card + .choice-card {
+  border-left: 0;
+}
+
+.prototype-shell[data-theme="sunrise"] .choice-card:hover {
+  background: rgba(231, 221, 208, 0.42);
+}
+
+.prototype-shell[data-theme="sunrise"] .choice-card[aria-pressed="true"] {
+  background: var(--landing-panel);
+  border-color: var(--landing-accent);
+  color: var(--landing-ink);
+}
+
+.prototype-shell[data-theme="sunrise"]
+  .choice-card[aria-pressed="true"]
+  + .choice-card {
+  border-left-color: var(--landing-accent);
+}
+
+.prototype-shell[data-theme="sunrise"] .choice-card h3 {
+  font-size: 1.5rem;
+}
+
+.prototype-shell[data-theme="sunrise"] .choice-card p,
+.prototype-shell[data-theme="sunrise"] .mode-boundary,
+.prototype-shell[data-theme="sunrise"] .transcript-note,
+.prototype-shell[data-theme="sunrise"] .question-purpose,
+.prototype-shell[data-theme="sunrise"] .answer-boundary,
+.prototype-shell[data-theme="sunrise"] .proposal-source,
+.prototype-shell[data-theme="sunrise"] .review-count {
+  color: var(--landing-muted);
+}
+
+.prototype-shell[data-theme="sunrise"] .mode-boundary {
+  border-left-color: var(--landing-accent);
+  margin-top: 2rem;
+}
+
+.prototype-shell[data-theme="sunrise"] .action-button,
+.prototype-shell[data-theme="sunrise"] .secondary-button {
+  border-radius: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  min-height: 3.25rem;
+  padding-inline: 1.4rem;
+  text-transform: uppercase;
+}
+
+.prototype-shell[data-theme="sunrise"] .action-button {
+  background: var(--landing-accent);
+  color: var(--landing-on-accent);
+}
+
+.prototype-shell[data-theme="sunrise"] .action-button:hover {
+  background: var(--landing-accent-hover);
+}
+
+.prototype-shell[data-theme="sunrise"] .secondary-button {
+  border-color: var(--landing-line-strong);
+  color: var(--landing-ink);
+}
+
+.prototype-shell[data-theme="sunrise"] .secondary-button:hover {
+  background: rgba(231, 221, 208, 0.55);
+}
+
+.prototype-shell[data-theme="sunrise"] .interview-introduction {
+  border-bottom-color: var(--landing-line);
+}
+
+.prototype-shell[data-theme="sunrise"] .mode-switch {
+  border-color: var(--landing-line);
+  padding: 0;
+}
+
+.prototype-shell[data-theme="sunrise"] .mode-switch button {
+  color: var(--landing-muted);
+  padding-inline: 1rem;
+}
+
+.prototype-shell[data-theme="sunrise"]
+  .mode-switch
+  button[aria-pressed="true"] {
+  background: var(--landing-panel);
+  color: var(--landing-ink);
+}
+
+.prototype-shell[data-theme="sunrise"] .interview-pause,
+.prototype-shell[data-theme="sunrise"] .interview-help-trigger,
+.prototype-shell[data-theme="sunrise"] .text-button {
+  color: var(--landing-muted);
+}
+
+.prototype-shell[data-theme="sunrise"] .interview-assistance,
+.prototype-shell[data-theme="sunrise"] .sample-response,
+.prototype-shell[data-theme="sunrise"] .status-sample {
+  background: var(--landing-panel);
+  border-color: var(--landing-line-strong);
+}
+
+.prototype-shell[data-theme="sunrise"] .interview-assistance h3,
+.prototype-shell[data-theme="sunrise"] .structured-question h3,
+.prototype-shell[data-theme="sunrise"] .proposal-value {
+  color: var(--landing-ink);
+}
+
+.prototype-shell[data-theme="sunrise"] .interview-assistance-copy > p,
+.prototype-shell[data-theme="sunrise"] .question-rationale p,
+.prototype-shell[data-theme="sunrise"] .proposal-status,
+.prototype-shell[data-theme="sunrise"] .final-review-count,
+.prototype-shell[data-theme="sunrise"] .interview-paused > p:not(.detail-label),
+.prototype-shell[data-theme="sunrise"]
+  .interview-complete
+  > p:not(.detail-label) {
+  color: var(--landing-copy);
+}
+
+.prototype-shell[data-theme="sunrise"] .structured-question,
+.prototype-shell[data-theme="sunrise"] .proposal-card,
+.prototype-shell[data-theme="sunrise"] .interview-route-actions {
+  border-color: var(--landing-line-strong);
+}
+
+.prototype-shell[data-theme="sunrise"] .question-rationale,
+.prototype-shell[data-theme="sunrise"] .proposal-status,
+.prototype-shell[data-theme="sunrise"] .final-review-count {
+  border-left-color: var(--landing-accent);
+}
+
+.prototype-shell[data-theme="sunrise"] .interview-question textarea,
+.prototype-shell[data-theme="sunrise"] .structured-question textarea {
+  background: rgba(255, 253, 249, 0.9);
+  border-color: var(--landing-line-strong);
+  color: var(--landing-ink);
+}
+
+.prototype-shell[data-theme="sunrise"]
+  .interview-question
+  textarea::placeholder,
+.prototype-shell[data-theme="sunrise"]
+  .structured-question
+  textarea::placeholder {
+  color: #87766c;
+}
+
+.prototype-shell[data-theme="sunrise"] .interview-progress progress {
+  accent-color: var(--landing-accent);
+}
+
+.prototype-shell[data-theme="sunrise"] .review-disposition.is-approved {
+  border-color: var(--argent-semantic-status-success);
+  color: var(--argent-semantic-status-success);
+}
+
+.prototype-shell[data-theme="sunrise"] .prototype-footer {
+  border-top: 1px solid var(--landing-line);
+  color: var(--landing-muted);
+  display: flex;
+  font-size: 0.7rem;
+  justify-content: space-between;
+  margin-inline: auto;
+  max-width: var(--landing-max);
+  padding: 2.5rem var(--landing-gutter);
+}
+
+.prototype-shell[data-theme="sunrise"] .prototype-footer p {
+  margin: 0;
+}
+
+@media (max-width: 52rem) {
+  .prototype-shell[data-theme="sunrise"] .prototype-header {
+    grid-template-columns: 1fr auto;
+    min-height: 88px;
+  }
+
+  .prototype-shell[data-theme="sunrise"] .prototype-notice {
+    grid-column: 1 / -1;
+    order: 3;
+    padding-bottom: 1rem;
+    text-align: left;
+  }
+
+  .prototype-shell[data-theme="sunrise"] .application-intro {
+    grid-template-columns: 1fr;
+  }
+
+  .prototype-shell[data-theme="sunrise"] .application-intro .eyebrow {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 44rem) {
+  .prototype-shell[data-theme="sunrise"] .prototype-header {
+    padding-block: 1rem;
+  }
+
+  .prototype-shell[data-theme="sunrise"] .prototype-return {
+    font-size: 0;
+  }
+
+  .prototype-shell[data-theme="sunrise"] .prototype-return span {
+    font-size: 1rem;
+  }
+
+  .prototype-shell[data-theme="sunrise"] .prototype-content {
+    padding-block: 3.5rem 6rem;
+  }
+
+  .prototype-shell[data-theme="sunrise"] h1 {
+    font-size: clamp(3.25rem, 15vw, 4.5rem);
+    max-width: 8ch;
+  }
+
+  .prototype-shell[data-theme="sunrise"] .application-view {
+    gap: 3rem;
+  }
+
+  .prototype-shell[data-theme="sunrise"] .application-layout {
+    gap: 2rem;
+    grid-template-columns: 1fr;
+  }
+
+  .prototype-shell[data-theme="sunrise"] .step-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    position: static;
+  }
+
+  .prototype-shell[data-theme="sunrise"] .step-list li:last-child {
+    border-bottom: 0;
+  }
+
+  .prototype-shell[data-theme="sunrise"] .step-list button {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.45rem;
+    padding-right: 0.75rem;
+  }
+
+  .prototype-shell[data-theme="sunrise"] .application-panel {
+    margin-inline: calc(-1 * var(--landing-gutter));
+    padding: 2rem var(--landing-gutter) 3rem;
+  }
+
+  .prototype-shell[data-theme="sunrise"] .choice-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .prototype-shell[data-theme="sunrise"] .interview-assistance-options > * {
+    width: 100%;
+  }
+
+  .prototype-shell[data-theme="sunrise"] .choice-card {
+    min-height: 0;
+  }
+
+  .prototype-shell[data-theme="sunrise"] .choice-card + .choice-card {
+    border-left: 1px solid var(--landing-line);
+    border-top: 0;
+  }
+
+  .prototype-shell[data-theme="sunrise"]
+    .choice-card[aria-pressed="true"]
+    + .choice-card {
+    border-left-color: var(--landing-line);
+    border-top-color: var(--landing-accent);
+  }
+
+  .prototype-shell[data-theme="sunrise"] .prototype-footer {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}

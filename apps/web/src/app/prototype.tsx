@@ -1,12 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 
-import { prototypeCampaign, prototypeGuardrails } from "./prototype-data";
 import { AdaptiveInterview } from "./prototype/interview/adaptive-interview";
 import { StructuredInterview } from "./prototype/interview/structured-interview";
 
-type PrototypeView = "application" | "campaign";
 type IntakeMode = "conversation" | "hybrid" | "structured";
 
 const steps = ["Your approach", "What matters", "Review"] as const;
@@ -15,112 +14,41 @@ export function ConceptPrototype({
   interviewEnabled = false,
 }: Readonly<{ interviewEnabled?: boolean }>) {
   const [applicationStep, setApplicationStep] = useState(0);
-  const [view, setView] = useState<PrototypeView>("campaign");
 
   return (
-    <main className="prototype-shell">
+    <main className="prototype-shell landing-shell" data-theme="sunrise">
       <a className="skip-link" href="#prototype-content">
-        Skip to prototype content
+        Skip to application
       </a>
       <header className="prototype-header">
-        <a className="wordmark" href="#prototype-content">
-          ARGENT
-        </a>
+        <Link
+          aria-label="The Montecito Matchmaker home"
+          className="prototype-brand"
+          href="/"
+        >
+          <span className="prototype-wordmark">The Montecito Matchmaker</span>
+          <span className="prototype-endorsement">A division of Argent</span>
+        </Link>
         <p className="prototype-notice" role="status">
-          Concept prototype · fictional data · nothing is submitted
+          Private application preview · nothing is submitted
         </p>
-        <nav aria-label="Prototype views" className="prototype-nav">
-          <ViewButton
-            active={view === "campaign"}
-            onClick={() => setView("campaign")}
-          >
-            Campaign
-          </ViewButton>
-          <ViewButton
-            active={view === "application"}
-            onClick={() => setView("application")}
-          >
-            Application
-          </ViewButton>
-        </nav>
+        <Link className="prototype-return" href="/">
+          Return to the site <span aria-hidden="true">↗</span>
+        </Link>
       </header>
 
       <section className="prototype-content" id="prototype-content">
-        {view === "campaign" ? (
-          <Campaign onExplore={() => setView("application")} />
-        ) : null}
-        {view === "application" ? (
-          <Application
-            interviewEnabled={interviewEnabled}
-            onStepChange={setApplicationStep}
-            step={applicationStep}
-          />
-        ) : null}
+        <Application
+          interviewEnabled={interviewEnabled}
+          onStepChange={setApplicationStep}
+          step={applicationStep}
+        />
       </section>
+      <footer className="prototype-footer">
+        <p>Private matchmaking, guided with care.</p>
+        <p>Montecito, California</p>
+      </footer>
     </main>
-  );
-}
-
-function ViewButton({
-  active,
-  children,
-  onClick,
-}: Readonly<{ active: boolean; children: string; onClick: () => void }>) {
-  return (
-    <button
-      aria-current={active ? "page" : undefined}
-      className="nav-button"
-      onClick={onClick}
-      type="button"
-    >
-      {children}
-    </button>
-  );
-}
-
-function Campaign({ onExplore }: Readonly<{ onExplore: () => void }>) {
-  return (
-    <div className="campaign-view">
-      <section className="campaign-hero" aria-labelledby="campaign-title">
-        <p className="eyebrow">{prototypeCampaign.status}</p>
-        <h1 id="campaign-title">A more considered way to begin.</h1>
-        <p className="hero-copy">
-          Argent is designing a human-led service for people who value
-          discretion, clarity, and a genuinely personal introduction process.
-        </p>
-        <button className="action-button" onClick={onExplore} type="button">
-          Explore the application preview <span aria-hidden="true">↗</span>
-        </button>
-      </section>
-
-      <section className="campaign-brief" aria-label="Campaign brief">
-        <p className="eyebrow">01 / First campaign</p>
-        <div className="brief-grid">
-          <div>
-            <p className="detail-label">Test ground</p>
-            <p className="detail-value">{prototypeCampaign.location}</p>
-          </div>
-          <div>
-            <p className="detail-label">Approach</p>
-            <p className="detail-value">Human review, then a conversation</p>
-          </div>
-          <div>
-            <p className="detail-label">Status</p>
-            <p className="detail-value">No live applications</p>
-          </div>
-        </div>
-        <p className="boundary-note">{prototypeCampaign.regionBoundary}</p>
-      </section>
-
-      <section className="guardrail-list" aria-label="Prototype guardrails">
-        {prototypeGuardrails.map((guardrail, index) => (
-          <p key={guardrail}>
-            <span>{String(index + 1).padStart(2, "0")}</span>
-            {guardrail}
-          </p>
-        ))}
-      </section>
-    </div>
   );
 }
 
