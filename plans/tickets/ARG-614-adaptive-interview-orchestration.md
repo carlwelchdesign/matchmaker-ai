@@ -89,6 +89,14 @@ See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-intervie
 - Policy tests cover all four required questions, all ten approved optional
   probes, an unapproved wealth/admission prompt, hidden ranking and compatibility
   fields, exact-source proposals, inferred values, and extra admission fields.
+- Human assistance now has a versioned, runtime-validated local request
+  contract. It can carry only the request kind and either the approved current
+  question mapping or a source-free structured-guide marker; draft responses,
+  prior answers, and proposed profile fields are explicitly excluded.
+- Local staging records `contactedHuman: false` and
+  `sentCandidateContent: false`. Tests reject extra content and mismatched topic
+  mappings, and the Sunrise interface displays the local-only contract state
+  after the candidate reviews the request.
 - This does not complete a real human handoff, the provider-backed planner, or
   approval-gated policy work. Those acceptance criteria remain open until their
   dependencies are approved.

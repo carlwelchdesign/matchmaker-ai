@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import type { InterviewQuestion } from "./interview-guide";
 import {
@@ -8,6 +8,11 @@ import {
   type InterviewAssistanceAction,
   type InterviewAssistanceState,
 } from "./interview-assistance-state";
+import {
+  createHumanAssistanceRequestPreview,
+  stageHumanAssistanceRequestLocally,
+  type LocallyStagedHumanAssistanceRequest,
+} from "./interview-human-assistance";
 
 export function InterviewAssistance({
   onChooseApproach,
@@ -18,13 +23,24 @@ export function InterviewAssistance({
   onChooseApproach: () => void;
   onContinueWithoutInterview: () => void;
   onUseStructuredFallback?: () => void;
-  question?: Pick<InterviewQuestion, "fieldLabel" | "purpose">;
+  question?: Pick<InterviewQuestion, "fieldLabel" | "id" | "purpose" | "topic">;
 }>) {
   const [view, setView] = useState<InterviewAssistanceState>("closed");
+  const [stagedRequest, setStagedRequest] =
+    useState<LocallyStagedHumanAssistanceRequest | null>(null);
+  const requestPreview = useMemo(
+    () => createHumanAssistanceRequestPreview(question),
+    [question],
+  );
   const isOpen = view !== "closed";
 
   function transition(action: InterviewAssistanceAction) {
     setView((current) => transitionInterviewAssistance(current, action));
+  }
+
+  function stageRequest() {
+    setStagedRequest(stageHumanAssistanceRequestLocally(requestPreview));
+    transition("stage-human-request");
   }
 
   return (
@@ -173,8 +189,8 @@ export function InterviewAssistance({
             <div className="interview-assistance-copy">
               <p>
                 <strong>Would share:</strong> a request for interview help and
-                {question
-                  ? ` the current topic, ${question.fieldLabel}.`
+                {requestPreview.context.kind === "current-topic"
+                  ? ` the current topic, ${requestPreview.context.fieldLabel}.`
                   : " that you are using the structured guide."}
               </p>
               <p>
@@ -185,7 +201,7 @@ export function InterviewAssistance({
               <div className="interview-assistance-actions">
                 <button
                   className="secondary-button"
-                  onClick={() => transition("stage-human-request")}
+                  onClick={stageRequest}
                   type="button"
                 >
                   Stage request locally
@@ -208,6 +224,15 @@ export function InterviewAssistance({
                 no answer was sent. A live service would still require your
                 permission at the final send step.
               </p>
+              {stagedRequest ? (
+                <p className="detail-label">
+                  {stagedRequest.contractVersion} ·{" "}
+                  {stagedRequest.delivery.mode}
+                  {stagedRequest.context.kind === "current-topic"
+                    ? ` · ${stagedRequest.context.fieldLabel}`
+                    : " · structured guide"}
+                </p>
+              ) : null}
               <div className="interview-assistance-actions">
                 <button
                   className="secondary-button"
