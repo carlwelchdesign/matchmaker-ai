@@ -21,7 +21,7 @@ A versioned guide and constrained planner generate relevant, one-at-a-time follo
 - [x] Every proposed question stores guide, prompt, model, source references, reason code, and disposition.
 - [x] Candidate-approved facts, explicit unknowns, contradictions, and uncovered required topics are the only permitted planning inputs.
 - [x] Compound questions, repetitive acknowledgement, premature termination, unsupported inference, and topic drift have evaluation thresholds.
-- [ ] Human handoff, skip, clarification, and structured-form fallback are deterministic.
+- [x] Human handoff, skip, clarification, and structured-form fallback are deterministic.
 - [x] No protected-trait, emotion, accent, deception, attractiveness, wealth, diagnosis, or compatibility inference is produced.
 - [x] No admission, rejection, ranking, matching, or profile mutation occurs without the existing human/applicant approvals.
 
@@ -33,6 +33,7 @@ See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-intervie
 - Foundation commit: `5f17f5b`
 - Candidate-assistance branch: `codex/ARG-614-interview-assistance`
 - Candidate-assistance commit: `facb39b`
+- Deterministic-controls branch: `codex/ARG-614-deterministic-controls`
 - The local ARG-613 prototype now uses `argent-template-planner-2026-08-25`
   with the versioned `argent-text-guide-2026-08-25` core.
 - The exported guide contract now binds that version to its required question
@@ -100,3 +101,13 @@ See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-intervie
 - This does not complete a real human handoff, the provider-backed planner, or
   approval-gated policy work. Those acceptance criteria remain open until their
   dependencies are approved.
+- A cross-path orchestration contract now proves that clarification returns
+  through the assistance state machine, human help cannot be staged before its
+  minimal-context preview, and local staging contacts nobody and sends no
+  candidate content.
+- The same contract proves that an explicit skip remains a declined answer when
+  the candidate chooses the fixed guide, while a budget-triggered fallback
+  preserves prior question history, source text, and revision lineage. No
+  provider, persistence, submission, or operative human handoff is introduced.
+- Verification: 57 web tests across 13 files, web TypeScript, production build,
+  planning validation, formatting, diff checks, and local prototype HTTP 200.
