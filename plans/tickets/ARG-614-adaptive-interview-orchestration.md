@@ -29,6 +29,8 @@ See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-intervie
 
 ## Foundation evidence
 
+- Branch: `codex/ARG-613-text-interview`
+- Foundation commit: `5f17f5b`
 - The local ARG-613 prototype now uses `argent-template-planner-2026-08-25`
   with the versioned `argent-text-guide-2026-08-25` core.
 - Each local question plan records the guide and planner versions, explicit
