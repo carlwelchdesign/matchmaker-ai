@@ -14,6 +14,7 @@ import {
   type InterviewAnswer,
   type InterviewMode,
 } from "./interview-guide";
+import { InterviewAssistance } from "./interview-assistance";
 
 type FieldDisposition = Exclude<CandidateFieldDisposition, "declined">;
 
@@ -230,6 +231,14 @@ export function AdaptiveInterview({
             </button>
           ) : null}
         </div>
+
+        {!reviewing && !completed && !paused && currentQuestion ? (
+          <InterviewAssistance
+            onChooseApproach={onChooseApproach}
+            onContinueWithoutInterview={onContinueWithoutInterview}
+            question={currentQuestion}
+          />
+        ) : null}
 
         {paused ? (
           <div className="interview-paused" role="status">

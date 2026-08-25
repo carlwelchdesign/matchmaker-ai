@@ -12,6 +12,7 @@ import {
   interviewGuideVersion,
   type InterviewAnswer,
 } from "./interview-guide";
+import { InterviewAssistance } from "./interview-assistance";
 import { buildStructuredAnswers } from "./structured-interview-state";
 
 type FieldDisposition = Exclude<CandidateFieldDisposition, "declined">;
@@ -188,6 +189,10 @@ export function StructuredInterview({
               Avoid names, addresses, financial information, or details about
               another person. Every answer remains editable before local review.
             </p>
+            <InterviewAssistance
+              onChooseApproach={onChooseApproach}
+              onContinueWithoutInterview={onContinueWithoutInterview}
+            />
 
             <div className="structured-question-list">
               {questions.map((question, index) => {

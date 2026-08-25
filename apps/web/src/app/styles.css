@@ -741,6 +741,7 @@ h3 {
 }
 .mode-switch button,
 .interview-pause,
+.interview-help-trigger,
 .text-button {
   background: transparent;
   border: 0;
@@ -755,9 +756,49 @@ h3 {
   color: var(--argent-semantic-text-primary);
 }
 .interview-pause,
+.interview-help-trigger,
 .text-button {
   text-decoration: underline;
   text-underline-offset: 5px;
+}
+.interview-assistance {
+  background: var(--argent-semantic-surface-overlay);
+  border: 1px solid var(--argent-semantic-border-strong);
+  margin: var(--argent-primitive-space-300) 0 var(--argent-primitive-space-400);
+  padding: var(--argent-primitive-space-250);
+}
+.interview-assistance-heading {
+  align-items: start;
+  display: flex;
+  gap: var(--argent-primitive-space-200);
+  justify-content: space-between;
+}
+.interview-assistance-heading .detail-label {
+  margin-top: 0;
+}
+.interview-assistance h3 {
+  font-family: var(--argent-type-family-display);
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin: var(--argent-primitive-space-100) 0 0;
+}
+.interview-assistance-options {
+  display: grid;
+  gap: var(--argent-primitive-space-100);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: var(--argent-primitive-space-250);
+}
+.interview-assistance-copy > p {
+  color: var(--argent-semantic-text-secondary);
+  line-height: var(--argent-type-line-height-body);
+  margin: var(--argent-primitive-space-200) 0;
+}
+.interview-assistance-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--argent-primitive-space-100);
+  margin: var(--argent-primitive-space-250) 0;
 }
 .interview-progress {
   align-items: center;
@@ -1042,6 +1083,20 @@ h3 {
   }
   .interview-route-actions > * {
     width: 100%;
+  }
+  .interview-assistance-options {
+    grid-template-columns: 1fr;
+  }
+  .interview-assistance-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .interview-assistance-actions > * {
+    width: 100%;
+  }
+  .interview-toolbar {
+    align-items: flex-start;
+    gap: var(--argent-primitive-space-150);
   }
   .structured-question-heading {
     align-items: flex-start;
