@@ -7,13 +7,15 @@ import {
 import { useMemo, useState } from "react";
 
 import {
-  createFieldProposal,
-  getInterviewQuestion,
   getInterviewQuestionCount,
   interviewGuideVersion,
   type InterviewAnswer,
   type InterviewMode,
 } from "./interview-guide";
+import {
+  createPolicyCompliantFieldProposal,
+  getPolicyCompliantInterviewQuestion,
+} from "./interview-output-policy";
 import { InterviewAssistance } from "./interview-assistance";
 import {
   proposeInterviewQuestion,
@@ -33,7 +35,7 @@ const dispositionLabels: Record<CandidateFieldDisposition, string> = {
 };
 
 function createInitialQuestionRecords(): InterviewQuestionRecord[] {
-  const question = getInterviewQuestion(0, []);
+  const question = getPolicyCompliantInterviewQuestion(0, []);
   if (!question) throw new Error("The interview guide has no first question");
   return proposeInterviewQuestion([], question);
 }
@@ -79,13 +81,19 @@ export function AdaptiveInterview({
           return [];
         }
 
-        const question = getInterviewQuestion(index, answers.slice(0, index));
+        const question = getPolicyCompliantInterviewQuestion(
+          index,
+          answers.slice(0, index),
+        );
         return question
           ? [
               {
                 answer,
                 answerIndex: index,
-                proposal: createFieldProposal(question, answer.sourceText),
+                proposal: createPolicyCompliantFieldProposal(
+                  question,
+                  answer.sourceText,
+                ),
               },
             ]
           : [];
@@ -101,7 +109,10 @@ export function AdaptiveInterview({
 
     return buildCandidateInterviewReview({
       fields: answers.map((answer, index) => {
-        const question = getInterviewQuestion(index, answers.slice(0, index));
+        const question = getPolicyCompliantInterviewQuestion(
+          index,
+          answers.slice(0, index),
+        );
         if (!question) {
           throw new Error(
             `Missing interview question for ${answer.questionId}`,
@@ -170,7 +181,7 @@ export function AdaptiveInterview({
     }
 
     const nextIndex = currentIndex + 1;
-    const nextQuestion = getInterviewQuestion(
+    const nextQuestion = getPolicyCompliantInterviewQuestion(
       nextIndex,
       nextAnswers.slice(0, nextIndex),
     );
@@ -209,7 +220,7 @@ export function AdaptiveInterview({
     );
     setReviewing(false);
     setCompleted(false);
-    const reopenedQuestion = getInterviewQuestion(
+    const reopenedQuestion = getPolicyCompliantInterviewQuestion(
       index,
       answers.slice(0, index),
     );

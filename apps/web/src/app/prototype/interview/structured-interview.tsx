@@ -6,12 +6,11 @@ import {
 } from "@argent/domain";
 import { useMemo, useState } from "react";
 
+import { interviewGuideVersion, type InterviewAnswer } from "./interview-guide";
 import {
-  createFieldProposal,
-  getStructuredInterviewQuestions,
-  interviewGuideVersion,
-  type InterviewAnswer,
-} from "./interview-guide";
+  createPolicyCompliantFieldProposal,
+  getPolicyCompliantStructuredQuestions,
+} from "./interview-output-policy";
 import { InterviewAssistance } from "./interview-assistance";
 import { buildStructuredAnswers } from "./structured-interview-state";
 
@@ -25,7 +24,7 @@ const dispositionLabels: Record<CandidateFieldDisposition, string> = {
   rejected: "Rejected",
 };
 
-const questions = getStructuredInterviewQuestions();
+const questions = getPolicyCompliantStructuredQuestions();
 
 export function StructuredInterview({
   onChooseApproach,
@@ -59,7 +58,10 @@ export function StructuredInterview({
           ? [
               {
                 answer,
-                proposal: createFieldProposal(question, answer.sourceText),
+                proposal: createPolicyCompliantFieldProposal(
+                  question,
+                  answer.sourceText,
+                ),
               },
             ]
           : [];

@@ -22,8 +22,8 @@ A versioned guide and constrained planner generate relevant, one-at-a-time follo
 - [x] Candidate-approved facts, explicit unknowns, contradictions, and uncovered required topics are the only permitted planning inputs.
 - [x] Compound questions, repetitive acknowledgement, premature termination, unsupported inference, and topic drift have evaluation thresholds.
 - [ ] Human handoff, skip, clarification, and structured-form fallback are deterministic.
-- [ ] No protected-trait, emotion, accent, deception, attractiveness, wealth, diagnosis, or compatibility inference is produced.
-- [ ] No admission, rejection, ranking, matching, or profile mutation occurs without the existing human/applicant approvals.
+- [x] No protected-trait, emotion, accent, deception, attractiveness, wealth, diagnosis, or compatibility inference is produced.
+- [x] No admission, rejection, ranking, matching, or profile mutation occurs without the existing human/applicant approvals.
 
 See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-interviewing.md).
 
@@ -77,6 +77,18 @@ See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-intervie
 - The local human-assistance explanation is deliberately non-operative: it
   states that no person was contacted and no answers were sent, while defining
   the permission and context-preview boundary a future handoff must meet.
+- Candidate-facing structured and adaptive flows now consume policy-compliant
+  planner and field-proposal wrappers. Runtime output is rejected unless its
+  shape, guide/planner versions, exact approved prompt and purpose, reason code,
+  explanation, provenance shape, and source-to-field mapping match the
+  versioned contract.
+- The output policy rejects extra decision fields such as ranking, compatibility
+  scoring, or admission state. Candidate field proposals are accepted only on
+  an approved mapping when the proposed value is exactly the trimmed candidate
+  source text; inferred profile mutation is rejected.
+- Policy tests cover all four required questions, all ten approved optional
+  probes, an unapproved wealth/admission prompt, hidden ranking and compatibility
+  fields, exact-source proposals, inferred values, and extra admission fields.
 - This does not complete a real human handoff, the provider-backed planner, or
   approval-gated policy work. Those acceptance criteria remain open until their
   dependencies are approved.
