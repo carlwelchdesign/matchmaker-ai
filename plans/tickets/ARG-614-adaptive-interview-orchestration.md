@@ -68,6 +68,12 @@ See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-intervie
 - Structured, conversation, and hybrid modes now expose one deterministic help
   control for clarification, privacy boundaries, approach switching, and
   continuing without an interview.
+- A tested assistance state machine now governs help open/close, clarification,
+  privacy guidance, human-request preview/staging, and return-to-interview
+  transitions instead of leaving those outcomes implicit in UI branches.
+- Conversation and hybrid modes offer a direct structured-question fallback.
+  The local human-help preview names the minimal context that would be shared,
+  excludes drafts and prior answers, and requires preview before local staging.
 - The local human-assistance explanation is deliberately non-operative: it
   states that no person was contacted and no answers were sent, while defining
   the permission and context-preview boundary a future handoff must meet.

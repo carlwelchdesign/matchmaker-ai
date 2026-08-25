@@ -137,6 +137,7 @@ function Application({
                 onChooseApproach={() => onStepChange(0)}
                 onContinueToReview={() => onStepChange(2)}
                 onContinueWithoutInterview={() => onStepChange(2)}
+                onUseStructuredFallback={() => setMode("structured")}
               />
             </div>
           ) : null}
@@ -223,12 +224,14 @@ function IntakePreview({
   onChooseApproach,
   onContinueToReview,
   onContinueWithoutInterview,
+  onUseStructuredFallback,
 }: Readonly<{
   interviewEnabled: boolean;
   mode: IntakeMode;
   onChooseApproach: () => void;
   onContinueToReview: () => void;
   onContinueWithoutInterview: () => void;
+  onUseStructuredFallback: () => void;
 }>) {
   const [approvedField, setApprovedField] = useState<
     "approved" | "not-approved" | null
@@ -253,6 +256,7 @@ function IntakePreview({
         onChooseApproach={onChooseApproach}
         onContinueToReview={onContinueToReview}
         onContinueWithoutInterview={onContinueWithoutInterview}
+        onUseStructuredFallback={onUseStructuredFallback}
       />
     );
   }

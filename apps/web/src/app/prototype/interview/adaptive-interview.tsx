@@ -43,11 +43,13 @@ export function AdaptiveInterview({
   onChooseApproach,
   onContinueToReview,
   onContinueWithoutInterview,
+  onUseStructuredFallback,
 }: Readonly<{
   initialMode: InterviewMode;
   onChooseApproach: () => void;
   onContinueToReview: () => void;
   onContinueWithoutInterview: () => void;
+  onUseStructuredFallback: () => void;
 }>) {
   const [answers, setAnswers] = useState<InterviewAnswer[]>([]);
   const [completed, setCompleted] = useState(false);
@@ -280,6 +282,7 @@ export function AdaptiveInterview({
           <InterviewAssistance
             onChooseApproach={onChooseApproach}
             onContinueWithoutInterview={onContinueWithoutInterview}
+            onUseStructuredFallback={onUseStructuredFallback}
             question={currentQuestion}
           />
         ) : null}

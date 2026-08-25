@@ -22,6 +22,9 @@ describe("interview assistance boundary", () => {
     expect(source).toContain("Clarify the question");
     expect(source).toContain("Review what to leave out");
     expect(source).toContain("How human help would work");
+    expect(source).toContain("Preview a help request");
+    expect(source).toContain("Stage request locally");
+    expect(source).toContain("Use structured questions");
     expect(source).toContain("Choose another approach");
     expect(source).toContain("Continue without interview");
     expect(source).toContain("Close interview help");
