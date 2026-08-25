@@ -32,12 +32,12 @@ Risky capabilities can be enabled for explicit cohorts, measured, stopped, and s
 ## Acceptance criteria
 
 - [x] Server-only flag evaluation and typed definitions are implemented with a local deterministic fallback.
-- [ ] `candidate-interviewing=false` always routes to the structured application or human-assistance path without losing resumable work.
+- [x] `candidate-interviewing=false` always routes to the structured application or human-assistance path without losing resumable work.
 - [ ] Authorization, consent, eligibility, retention, and provider kill switches remain enforced independently of flag state.
 - [ ] Production and preview default off until their corresponding approval gates pass.
 - [ ] Cohort targeting, override access, audit, owner, expiry/review date, and rollback runbook are documented.
 - [ ] Flag evaluation volume and provider charges are monitored; no sensitive values enter flag attributes or telemetry.
-- [ ] On/off, mid-session disable, provider outage, and stale-configuration tests pass.
+- [x] On/off, mid-session disable, provider outage, and stale-configuration tests pass.
 - [x] Development enablement uses synthetic data until the research protocol permits real participants.
 
 ## Current development increment
@@ -55,14 +55,19 @@ Risky capabilities can be enabled for explicit cohorts, measured, stopped, and s
   Initial-off and enabled states do not invent a transition; once disabled, the
   fixed Sunrise guide remains active until the candidate explicitly begins
   again or chooses another approach.
-- Verification: 72 web tests across 15 files, web TypeScript, production build,
+- An enabled interview now refreshes a server-only availability endpoint on
+  entry and at most once per minute while its page is visible. The endpoint is
+  private/no-store, returns only the versioned flag decision, and never receives
+  candidate attributes or interview content. Hidden, initial-off, and fallback
+  states do not poll. Malformed responses, stale policy versions, provider
+  errors, HTTP failures, and network failures all fail closed.
+- Verification: 91 web tests across 16 files, web TypeScript, production build,
   planning validation, formatting, diff checks, rebuilt local web container,
   `/prototype` HTTP 200, and a light Sunrise browser smoke check with no
   framework overlay or console errors
-- Still open: live flag refresh/polling or streaming (the preservation path is
-  ready once a signal reaches the component), independent authorization and consent
-  enforcement, production/preview configuration verification, cohort
-  governance, audit/expiry, evaluation-volume monitoring, and rollback drills
+- Still open: independent authorization and consent enforcement,
+  production/preview configuration verification, cohort governance,
+  audit/expiry, evaluation-volume monitoring, and rollback drills
 
 ## Rollout order
 

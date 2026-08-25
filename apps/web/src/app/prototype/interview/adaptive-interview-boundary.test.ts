@@ -55,4 +55,20 @@ describe("adaptive interview prototype boundary", () => {
       "initialTransfer={interviewFallback ?? undefined}",
     );
   });
+
+  it("isolates live flag refresh from candidate interview content", () => {
+    const source = readFileSync(
+      fileURLToPath(
+        new URL("./use-interview-availability.ts", import.meta.url),
+      ),
+      "utf8",
+    );
+
+    expect(source).toContain("fetchInterviewAvailability");
+    expect(source).toContain('document.visibilityState !== "visible"');
+    expect(source).not.toContain("InterviewAnswer");
+    expect(source).not.toContain("drafts");
+    expect(source).not.toContain("localStorage");
+    expect(source).not.toContain("sessionStorage");
+  });
 });

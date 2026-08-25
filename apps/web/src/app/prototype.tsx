@@ -11,6 +11,7 @@ import {
   type InterviewFallbackTransfer,
   type InterviewProgressSnapshot,
 } from "./prototype/interview/structured-interview-state";
+import { useInterviewAvailability } from "./prototype/interview/use-interview-availability";
 
 type IntakeMode = "conversation" | "hybrid" | "structured";
 
@@ -82,18 +83,22 @@ function Application({
       }),
     );
   const previousInterviewEnabled = useRef(interviewEnabled);
+  const liveInterviewEnabled = useInterviewAvailability({
+    active: step === 1 && interviewFallback === null,
+    initiallyEnabled: interviewEnabled,
+  });
   const isReview = step === steps.length - 1;
   const usesInterviewExperience =
-    interviewEnabled || interviewFallback !== null;
+    liveInterviewEnabled || interviewFallback !== null;
   const isInterviewStep = step === 1 && usesInterviewExperience;
 
   useEffect(() => {
     const transition = resolveInterviewAvailabilityTransition({
-      interviewEnabled,
+      interviewEnabled: liveInterviewEnabled,
       progress: interviewProgress,
       previouslyEnabled: previousInterviewEnabled.current,
     });
-    previousInterviewEnabled.current = interviewEnabled;
+    previousInterviewEnabled.current = liveInterviewEnabled;
     if (transition.action !== "structured-fallback") return;
 
     setInterviewFallback(transition.transfer);
@@ -101,7 +106,7 @@ function Application({
       "The conversational preview was paused because interview access changed. Your answers, in-progress drafts, and question choices remain in this page; nothing was submitted or sent to an AI provider.",
     );
     setMode("structured");
-  }, [interviewEnabled, interviewProgress]);
+  }, [interviewProgress, liveInterviewEnabled]);
 
   return (
     <div className="application-view">
@@ -201,7 +206,7 @@ function Application({
           {usesInterviewExperience || step === 1 ? (
             <div hidden={usesInterviewExperience && step !== 1}>
               <IntakePreview
-                interviewEnabled={interviewEnabled}
+                interviewEnabled={liveInterviewEnabled}
                 interviewFallback={interviewFallback}
                 interviewRouteNotice={interviewRouteNotice}
                 key={mode}
