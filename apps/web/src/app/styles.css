@@ -859,6 +859,31 @@ h3 {
   margin: var(--argent-primitive-space-150) 0 0;
   padding-left: var(--argent-primitive-space-150);
 }
+.final-review-heading {
+  align-items: start;
+  display: flex;
+  gap: var(--argent-primitive-space-150);
+  justify-content: space-between;
+}
+.review-disposition {
+  border: 1px solid var(--argent-semantic-border-strong);
+  color: var(--argent-semantic-text-muted);
+  flex: 0 0 auto;
+  font-family: var(--argent-type-family-mono);
+  font-size: var(--argent-type-size-label);
+  padding: 0.3rem 0.5rem;
+  text-transform: uppercase;
+}
+.review-disposition.is-approved {
+  border-color: var(--argent-semantic-status-success);
+  color: var(--argent-semantic-text-primary);
+}
+.final-review-count {
+  border-left: 2px solid var(--argent-semantic-status-success);
+  color: var(--argent-semantic-text-secondary);
+  margin: var(--argent-primitive-space-300) 0 0;
+  padding-left: var(--argent-primitive-space-150);
+}
 @media (max-width: 44rem) {
   .landing-shell {
     max-width: 100vw;

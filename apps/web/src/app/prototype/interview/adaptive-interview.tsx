@@ -1,5 +1,9 @@
 "use client";
 
+import {
+  buildCandidateInterviewReview,
+  type CandidateFieldDisposition,
+} from "@argent/domain";
 import { useMemo, useState } from "react";
 
 import {
@@ -11,7 +15,14 @@ import {
   type InterviewMode,
 } from "./interview-guide";
 
-type FieldDisposition = "approved" | "left-out";
+type FieldDisposition = Exclude<CandidateFieldDisposition, "declined">;
+
+const dispositionLabels: Record<CandidateFieldDisposition, string> = {
+  approved: "Approved for consideration",
+  declined: "Question declined",
+  private: "Kept private",
+  rejected: "Rejected",
+};
 
 export function AdaptiveInterview({
   initialMode,
@@ -52,7 +63,35 @@ export function AdaptiveInterview({
   );
   const reviewedCount = Object.keys(dispositions).length;
   const allReviewed =
-    proposals.length > 0 && reviewedCount === proposals.length;
+    answers.length === questionCount &&
+    proposals.every(({ answer }) => Boolean(dispositions[answer.questionId]));
+  const completedReview = useMemo(() => {
+    if (!completed || answers.length === 0) return null;
+
+    return buildCandidateInterviewReview({
+      fields: answers.map((answer, index) => {
+        const question = getInterviewQuestion(index, answers.slice(0, index));
+        if (!question) {
+          throw new Error(
+            `Missing interview question for ${answer.questionId}`,
+          );
+        }
+
+        return {
+          disposition:
+            answer.sourceText === "Prefer not to answer"
+              ? "declined"
+              : (dispositions[answer.questionId] ?? "private"),
+          fieldLabel: question.fieldLabel,
+          questionId: answer.questionId,
+          responseRevision: answer.revision,
+          sourceText: answer.sourceText,
+          topic: answer.topic,
+        };
+      }),
+      guideVersion: interviewGuideVersion,
+    });
+  }, [answers, completed, dispositions]);
 
   function saveAnswer() {
     if (!currentQuestion) return;
@@ -63,14 +102,16 @@ export function AdaptiveInterview({
       return;
     }
 
-    const nextAnswer = {
-      questionId: currentQuestion.id,
-      sourceText,
-      topic: currentQuestion.topic,
-    };
     const existingIndex = answers.findIndex(
       (answer) => answer.questionId === currentQuestion.id,
     );
+    const nextAnswer = {
+      questionId: currentQuestion.id,
+      revision:
+        existingIndex === -1 ? 1 : (answers[existingIndex]?.revision ?? 0) + 1,
+      sourceText,
+      topic: currentQuestion.topic,
+    };
     const nextAnswers =
       existingIndex === -1
         ? [...answers, nextAnswer]
@@ -92,14 +133,16 @@ export function AdaptiveInterview({
   function preferNotToAnswer() {
     if (!currentQuestion) return;
 
-    const nextAnswer = {
-      questionId: currentQuestion.id,
-      sourceText: "Prefer not to answer",
-      topic: currentQuestion.topic,
-    };
     const existingIndex = answers.findIndex(
       (answer) => answer.questionId === currentQuestion.id,
     );
+    const nextAnswer = {
+      questionId: currentQuestion.id,
+      revision:
+        existingIndex === -1 ? 1 : (answers[existingIndex]?.revision ?? 0) + 1,
+      sourceText: "Prefer not to answer",
+      topic: currentQuestion.topic,
+    };
     const nextAnswers =
       existingIndex === -1
         ? [...answers, nextAnswer]
@@ -225,6 +268,7 @@ export function AdaptiveInterview({
                 error ? "answer-boundary answer-error" : "answer-boundary"
               }
               id="candidate-answer"
+              maxLength={4000}
               onChange={(event) => {
                 setDraft(event.target.value);
                 setError(null);
@@ -274,7 +318,8 @@ export function AdaptiveInterview({
             <h2>Decide what a matchmaker may consider.</h2>
             <p className="question-purpose">
               Each proposed field is the exact source you provided—nothing has
-              been inferred. Approve it or leave it out independently.
+              been inferred. Approve it, keep it private, or reject it
+              independently.
             </p>
             <div className="proposal-list">
               {proposals.map(({ answer, answerIndex, proposal }) => {
@@ -301,17 +346,30 @@ export function AdaptiveInterview({
                         Approve
                       </button>
                       <button
-                        aria-pressed={disposition === "left-out"}
+                        aria-pressed={disposition === "private"}
                         className="secondary-button"
                         onClick={() => {
                           setDispositions((current) => ({
                             ...current,
-                            [answer.questionId]: "left-out",
+                            [answer.questionId]: "private",
                           }));
                         }}
                         type="button"
                       >
-                        Leave out
+                        Keep private
+                      </button>
+                      <button
+                        aria-pressed={disposition === "rejected"}
+                        className="secondary-button"
+                        onClick={() => {
+                          setDispositions((current) => ({
+                            ...current,
+                            [answer.questionId]: "rejected",
+                          }));
+                        }}
+                        type="button"
+                      >
+                        Reject
                       </button>
                       <button
                         className="text-button"
@@ -323,15 +381,19 @@ export function AdaptiveInterview({
                     </div>
                     {disposition ? (
                       <p className="proposal-status" role="status">
-                        {disposition === "approved"
-                          ? "Approved for this local review."
-                          : "Left out of this local review."}
+                        {dispositionLabels[disposition]} for this local review.
                       </p>
                     ) : null}
                   </article>
                 );
               })}
             </div>
+            {proposals.length === 0 ? (
+              <p className="question-purpose">
+                You declined every question, so there are no proposed fields to
+                review. You can continue without approving anything.
+              </p>
+            ) : null}
             <div className="interview-actions">
               <button
                 className="secondary-button"
@@ -358,23 +420,40 @@ export function AdaptiveInterview({
           </div>
         ) : null}
 
-        {!paused && completed ? (
+        {!paused && completed && completedReview ? (
           <div className="interview-complete" role="status">
-            <p className="detail-label">Local review complete</p>
-            <h2>You remain in control.</h2>
-            <p>
-              {
-                Object.values(dispositions).filter(
-                  (value) => value === "approved",
-                ).length
-              }{" "}
-              fields were approved and{" "}
-              {
-                Object.values(dispositions).filter(
-                  (value) => value === "left-out",
-                ).length
-              }{" "}
-              were left out. This preview has not saved or shared either.
+            <p className="detail-label">Your final review</p>
+            <h2>Review exactly what would move forward.</h2>
+            <p className="question-purpose">
+              Only approved fields are eligible for profile use or future
+              analytics. Private, rejected, and declined responses remain
+              excluded. This preview has not saved or shared any of them.
+            </p>
+            <div aria-label="Final interview review" className="proposal-list">
+              {completedReview.fields.map((field) => (
+                <article
+                  className="proposal-card final-review-card"
+                  key={field.provenance.questionId}
+                >
+                  <div className="final-review-heading">
+                    <p className="detail-label">{field.fieldLabel}</p>
+                    <span
+                      className={`review-disposition is-${field.disposition}`}
+                    >
+                      {dispositionLabels[field.disposition]}
+                    </span>
+                  </div>
+                  <p className="proposal-value">“{field.sourceText}”</p>
+                  <p className="proposal-source">
+                    Exact source · Revision {field.provenance.responseRevision}{" "}
+                    · No inference
+                  </p>
+                </article>
+              ))}
+            </div>
+            <p className="final-review-count">
+              {completedReview.approvedFieldCount} of{" "}
+              {completedReview.fields.length} fields approved for consideration
             </p>
             <div className="interview-actions">
               <button
@@ -388,7 +467,7 @@ export function AdaptiveInterview({
                 Revisit review
               </button>
               <button
-                className="action-button"
+                className="text-button"
                 onClick={() => {
                   setAnswers([]);
                   setCompleted(false);

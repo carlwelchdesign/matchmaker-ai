@@ -24,6 +24,10 @@ each source-grounded field before submission.
   Application flow; no parallel site or standalone interview route is created.
 - [x] The first local slice supports one question at a time, pause/resume,
   mode switching, skip, source editing, and field-by-field approval or exclusion.
+- [x] Keep-private and reject remain separate candidate decisions, and the final
+  candidate-visible review shows the exact source revision and disposition.
+- [x] A validated `candidate-interview-review/v1` domain projection marks only
+  approved, source-exact fields eligible for later profile use or analytics.
 - [x] The local slice makes no provider call and stores or submits no response.
 - [x] The guide and grounded follow-up behavior are deterministic and tested.
 - [ ] Approved persistence stores source, proposal, approval, provenance, and
@@ -39,6 +43,8 @@ each source-grounded field before submission.
 - Flag: `candidate-interviewing`
 - Runtime boundary: local page state only; no database, provider, transcript,
   audio, telemetry content, or personal-data handling
+- Review boundary: approved, private, rejected, and declined states remain
+  distinct; every displayed field cites its exact response revision
 - Verification: unit and boundary tests, TypeScript, production build, Docker,
   and browser path check
 - Deployment: none; local review only

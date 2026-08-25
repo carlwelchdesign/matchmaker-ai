@@ -8,6 +8,7 @@ export type InterviewTopic =
 
 export type InterviewAnswer = {
   questionId: string;
+  revision: number;
   sourceText: string;
   topic: InterviewTopic;
 };

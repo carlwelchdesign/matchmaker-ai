@@ -27,3 +27,14 @@ Argent can build a deduplicated, permission-aware candidate database from approv
 - [ ] No universal candidate-value, desirability, personality, wealth, or compatibility score exists.
 
 See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-interviewing.md).
+
+## Foundation evidence
+
+- `candidate-interview-review/v1` is the first synthetic, persistence-free
+  projection implemented under ARG-613.
+- It preserves guide/question/revision provenance, source-exact derivation, and
+  approved/private/rejected/declined dispositions.
+- Only approved fields are eligible for later profile use or analytics.
+- This does not satisfy the database, retention, deletion, permission,
+  deduplication, AI-lineage, or migration acceptance criteria above; ARG-615
+  remains proposed until its dependencies and review gates are ready.

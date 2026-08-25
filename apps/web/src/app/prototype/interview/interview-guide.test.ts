@@ -19,6 +19,7 @@ describe("adaptive interview guide", () => {
     const question = getInterviewQuestion(1, [
       {
         questionId: "intentions",
+        revision: 1,
         sourceText: "I would prefer something intentional and unhurried.",
         topic: "relationship-intention",
       },
