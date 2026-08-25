@@ -33,6 +33,7 @@ const noInitialAnswers: readonly InterviewAnswer[] = [];
 export function StructuredInterview({
   entryNotice,
   initialAnswers = noInitialAnswers,
+  onAnswersChange,
   onBeginAgain,
   onChooseApproach,
   onContinueToReview,
@@ -40,6 +41,7 @@ export function StructuredInterview({
 }: Readonly<{
   entryNotice?: string | null;
   initialAnswers?: readonly InterviewAnswer[];
+  onAnswersChange: (answers: readonly InterviewAnswer[]) => void;
   onBeginAgain: () => void;
   onChooseApproach: () => void;
   onContinueToReview: () => void;
@@ -152,6 +154,7 @@ export function StructuredInterview({
       return next;
     });
     setAnswers(result.answers);
+    onAnswersChange(result.answers);
     setStage("review");
   }
 
@@ -177,6 +180,7 @@ export function StructuredInterview({
     setErrors({});
     setShowEntryNotice(false);
     setStage("worksheet");
+    onAnswersChange([]);
     onBeginAgain();
   }
 

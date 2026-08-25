@@ -47,11 +47,17 @@ Risky capabilities can be enabled for explicit cohorts, measured, stopped, and s
   targeting attributes, persistence, provider logging, or client-side flag SDK
 - Tests: explicit on, explicit off, malformed/stale-shaped values, and provider
   error all resolve deterministically; every non-true state fails closed
-- Verification: 65 web tests across 14 files, web TypeScript, production build,
+- When an on-to-off availability signal reaches the application, it snapshots
+  completed exact-source answers into the existing structured fallback with
+  reason `feature-kill-switch`.
+  Initial-off and enabled states do not invent a transition; once disabled, the
+  fixed Sunrise guide remains active until the candidate explicitly begins
+  again or chooses another approach.
+- Verification: 70 web tests across 15 files, web TypeScript, production build,
   planning validation, formatting, diff checks, rebuilt local web container,
   and `/prototype` HTTP 200
-- Still open: resumable mid-session disable, independent authorization and
-  consent enforcement, production/preview configuration verification, cohort
+- Still open: live flag refresh/polling, independent authorization and consent
+  enforcement, production/preview configuration verification, cohort
   governance, audit/expiry, evaluation-volume monitoring, and rollback drills
 
 ## Rollout order

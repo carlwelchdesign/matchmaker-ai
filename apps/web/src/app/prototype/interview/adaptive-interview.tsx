@@ -57,12 +57,14 @@ function createInitialQuestionRecords(
 
 export function AdaptiveInterview({
   initialMode,
+  onAnswersChange,
   onChooseApproach,
   onContinueToReview,
   onContinueWithoutInterview,
   onUseStructuredFallback,
 }: Readonly<{
   initialMode: InterviewMode;
+  onAnswersChange: (answers: readonly InterviewAnswer[]) => void;
   onChooseApproach: () => void;
   onContinueToReview: () => void;
   onContinueWithoutInterview: () => void;
@@ -184,6 +186,7 @@ export function AdaptiveInterview({
             index === existingIndex ? nextAnswer : answer,
           );
     setAnswers(nextAnswers);
+    onAnswersChange(nextAnswers);
     let nextQuestionRecords = settleInterviewQuestion(
       questionRecords,
       currentQuestionRecord.recordId,
@@ -605,6 +608,7 @@ export function AdaptiveInterview({
                 onClick={() => {
                   const proposedAt = new Date().toISOString();
                   setAnswers([]);
+                  onAnswersChange([]);
                   setCompleted(false);
                   setCurrentIndex(0);
                   setDispositions({});

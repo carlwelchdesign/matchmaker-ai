@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { AdaptiveInterview } from "./prototype/interview/adaptive-interview";
+import { resolveInterviewAvailabilityTransition } from "./prototype/interview/interview-availability";
+import type { InterviewAnswer } from "./prototype/interview/interview-guide";
 import { StructuredInterview } from "./prototype/interview/structured-interview";
 import type { InterviewFallbackTransfer } from "./prototype/interview/structured-interview-state";
 
@@ -68,9 +70,30 @@ function Application({
   >(null);
   const [interviewFallback, setInterviewFallback] =
     useState<InterviewFallbackTransfer | null>(null);
+  const [interviewProgress, setInterviewProgress] = useState<
+    readonly InterviewAnswer[]
+  >([]);
+  const previousInterviewEnabled = useRef(interviewEnabled);
   const isReview = step === steps.length - 1;
-  const usesInterviewExperience = interviewEnabled;
+  const usesInterviewExperience =
+    interviewEnabled || interviewFallback !== null;
   const isInterviewStep = step === 1 && usesInterviewExperience;
+
+  useEffect(() => {
+    const transition = resolveInterviewAvailabilityTransition({
+      answers: interviewProgress,
+      interviewEnabled,
+      previouslyEnabled: previousInterviewEnabled.current,
+    });
+    previousInterviewEnabled.current = interviewEnabled;
+    if (transition.action !== "structured-fallback") return;
+
+    setInterviewFallback(transition.transfer);
+    setInterviewRouteNotice(
+      "The conversational preview was paused because interview access changed. Your completed responses remain in this page; nothing was submitted or sent to an AI provider.",
+    );
+    setMode("structured");
+  }, [interviewEnabled, interviewProgress]);
 
   return (
     <div className="application-view">
@@ -114,6 +137,7 @@ function Application({
                   detail="A concise, guided set of questions."
                   onSelect={() => {
                     setInterviewFallback(null);
+                    setInterviewProgress([]);
                     setInterviewRouteNotice(null);
                     setMode("structured");
                   }}
@@ -124,6 +148,7 @@ function Application({
                   detail="A paced text interview with review before anything is used."
                   onSelect={() => {
                     setInterviewFallback(null);
+                    setInterviewProgress([]);
                     setInterviewRouteNotice(null);
                     setMode("conversation");
                   }}
@@ -134,6 +159,7 @@ function Application({
                   detail="A paced combination of both approaches."
                   onSelect={() => {
                     setInterviewFallback(null);
+                    setInterviewProgress([]);
                     setInterviewRouteNotice(null);
                     setMode("hybrid");
                   }}
@@ -154,15 +180,18 @@ function Application({
                 interviewRouteNotice={interviewRouteNotice}
                 key={mode}
                 mode={mode}
+                onAnswersChange={setInterviewProgress}
                 onChooseApproach={() => onStepChange(0)}
                 onClearInterviewFallback={() => {
                   setInterviewFallback(null);
+                  setInterviewProgress([]);
                   setInterviewRouteNotice(null);
                 }}
                 onContinueToReview={() => onStepChange(2)}
                 onContinueWithoutInterview={() => onStepChange(2)}
                 onUseStructuredFallback={(transfer) => {
                   setInterviewFallback(transfer);
+                  setInterviewProgress(transfer.answers);
                   setInterviewRouteNotice(
                     transfer.reason === "candidate-choice"
                       ? "We moved you to the fixed guide. Your completed responses remain in this page; nothing was submitted or sent to an AI provider."
@@ -255,6 +284,7 @@ function IntakePreview({
   interviewFallback,
   interviewRouteNotice,
   mode,
+  onAnswersChange,
   onChooseApproach,
   onClearInterviewFallback,
   onContinueToReview,
@@ -265,6 +295,7 @@ function IntakePreview({
   interviewFallback: InterviewFallbackTransfer | null;
   interviewRouteNotice: string | null;
   mode: IntakeMode;
+  onAnswersChange: (answers: readonly InterviewAnswer[]) => void;
   onChooseApproach: () => void;
   onClearInterviewFallback: () => void;
   onContinueToReview: () => void;
@@ -277,11 +308,12 @@ function IntakePreview({
   const isConversation = mode === "conversation";
   const isHybrid = mode === "hybrid";
 
-  if (interviewEnabled && mode === "structured") {
+  if ((interviewEnabled || interviewFallback) && mode === "structured") {
     return (
       <StructuredInterview
         entryNotice={interviewRouteNotice}
         initialAnswers={interviewFallback?.answers}
+        onAnswersChange={onAnswersChange}
         onBeginAgain={onClearInterviewFallback}
         onChooseApproach={onChooseApproach}
         onContinueToReview={onContinueToReview}
@@ -294,6 +326,7 @@ function IntakePreview({
     return (
       <AdaptiveInterview
         initialMode={isConversation ? "conversation" : "guided"}
+        onAnswersChange={onAnswersChange}
         onChooseApproach={onChooseApproach}
         onContinueToReview={onContinueToReview}
         onContinueWithoutInterview={onContinueWithoutInterview}
