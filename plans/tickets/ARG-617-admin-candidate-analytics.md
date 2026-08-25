@@ -17,7 +17,7 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
 
 ## Acceptance criteria
 
-- [ ] Define metric contracts for candidate supply, completeness/freshness, consent/availability, funnel by mode, correction burden, search coverage, shortlist throughput, and introduction outcomes. Candidate supply, approved-field coverage, field-state counts, assertion access/freshness, interview funnel by mode, correction burden, and search coverage now have synthetic aggregate contracts; candidate availability and downstream shortlist/introduction metrics remain open.
+- [ ] Define metric contracts for candidate supply, completeness/freshness, consent/availability, funnel by mode, correction burden, search coverage, shortlist throughput, and introduction outcomes. Candidate supply, approved-field coverage, field-state counts, assertion access/freshness, interview funnel by mode, correction burden, search coverage, shortlist throughput, and introduction outcomes now have synthetic aggregate contracts; candidate availability remains open.
 - [ ] Every dashboard value links to authoritative source lineage, cohort, time window, freshness, and missing-data state. The first aggregate contract includes source projection lineage, opaque cohort, bounded time window, and explicit small-cohort suppression; per-metric freshness and missing-data semantics remain open.
 - [ ] Staff can filter and inspect approved facts with provenance and uncertainty; raw interview content is not exposed by default.
 - [ ] Permissions and aggregate thresholds prevent inappropriate small-cohort or partner disclosure.
@@ -72,6 +72,21 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   IDs or mismatched projection lineage, and suppress all metric and data-quality
   counts for cohorts smaller than five. This defines measurement only; ARG-503
   and ARG-605 search/retrieval implementation remain gated.
+- `candidate-workflow-observation/v1` records a content-free, cumulative journey
+  through review, shortlist, recommendation, two independent participant
+  decisions, delivery, first meeting, follow-up interest, and respectful
+  closure. Stage precedence, mutual approval before delivery, selection lineage,
+  and explicit missing-feedback states are enforced at runtime.
+- `candidate-workflow-funnel/v1` keeps review-to-shortlist,
+  shortlist-to-recommendation, recommendation-to-mutual-approval,
+  approval-to-delivery, delivery-to-first-meeting, and meeting-to-reciprocal-
+  interest denominators separate. It never emits a compatibility or generalized
+  success score, and safety telemetry remains outside product analytics.
+- Only complete workflow observations enter conversion rates; other
+  data-quality states stay separate. Small cohorts suppress all outcome and
+  data-quality counts unless both the source candidate cohort and recorded
+  journey cohort meet the minimum, while opaque policy/selection-set and
+  approved discovery projection lineage remain available.
 - This is pure synthetic domain code. It does not add persistence, analytics
   transport, an admin dashboard, real candidate data, or production access.
 

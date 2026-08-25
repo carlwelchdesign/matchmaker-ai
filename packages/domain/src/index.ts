@@ -63,6 +63,21 @@ export {
   type CandidateSearchObservationInput,
 } from "./candidate-search-coverage.js";
 export {
+  buildCandidateWorkflowFunnelSnapshot,
+  candidateWorkflowFunnelSchemaVersion,
+  candidateWorkflowObservationSchemaVersion,
+  recordCandidateWorkflowObservation,
+  validateCandidateWorkflowObservation,
+  type CandidateWorkflowDataQualityState,
+  type CandidateWorkflowFunnelSnapshot,
+  type CandidateWorkflowObservation,
+  type CandidateWorkflowObservationInput,
+  type FirstMeetingState,
+  type ParticipantFollowupInterest,
+  type ParticipantIntroductionDecision,
+  type RespectfulClosureState,
+} from "./candidate-workflow-outcomes.js";
+export {
   buildServiceHealth,
   type ServiceHealth,
   type ServiceState,
