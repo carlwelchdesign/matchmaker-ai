@@ -54,7 +54,8 @@ each source-grounded field before submission.
 
 ## Current development increment
 
-- Branch: `codex/ARG-613-text-interview`
+- Foundation branch: `codex/ARG-613-text-interview`
+- Accessibility hardening branch: `codex/ARG-613-interview-accessibility`
 - Initial interview commit: `96e8c61`
 - Candidate-controlled final-review commit: `c43febf`
 - Explicit navigation and local restoration commit: `c6fcded`
@@ -62,14 +63,25 @@ each source-grounded field before submission.
 - Deterministic interview-assistance commit: `facb39b`
 - Sunrise application alignment commit: `1314102`
 - Sunrise spacing-rhythm correction commit: `59f7382`
+- Interview accessibility hardening commit: `87e3e76`
+- The latest accessibility increment gives the Answer style and field-review
+  controls explicit group semantics, announces question progress, moves focus
+  to newly active question/review/pause/completion headings, moves focus into
+  interview help, and returns focus to the help trigger when it closes.
 - Surface: existing `/prototype` Application flow only
 - Flag: `candidate-interviewing`
 - Runtime boundary: local page state only; no database, provider, transcript,
   audio, telemetry content, or personal-data handling
 - Review boundary: approved, private, rejected, and declined states remain
   distinct; every displayed field cites its exact response revision
-- Verification: 22 domain tests, 21 web tests, domain/web TypeScript, production
-  build, planning validation, formatting, Docker, and full browser review path
+- Verification: the current web suite passes 115 tests across 17 files, web
+  TypeScript and production build pass, 140 planning tickets validate,
+  formatting and diff hygiene pass, and the enabled local browser path verifies
+  help open/close focus, question-transition focus and progress, review-entry
+  focus, semantic control groups, and zero console errors
+- Runtime evidence: the production-style port-3000 container remains
+  fail-closed without an approved flag configuration; the enabled browser check
+  used a temporary provider-free development server that was stopped afterward
 - Deployment: none; local review only
 
 ## Next increment
