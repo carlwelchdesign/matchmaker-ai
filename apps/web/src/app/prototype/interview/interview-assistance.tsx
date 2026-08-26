@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import type { InterviewQuestion } from "./interview-guide";
 import {
@@ -28,11 +28,24 @@ export function InterviewAssistance({
   const [view, setView] = useState<InterviewAssistanceState>("closed");
   const [stagedRequest, setStagedRequest] =
     useState<LocallyStagedHumanAssistanceRequest | null>(null);
+  const helpTitleRef = useRef<HTMLHeadingElement>(null);
+  const helpTriggerRef = useRef<HTMLButtonElement>(null);
+  const wasOpenRef = useRef(false);
   const requestPreview = useMemo(
     () => createHumanAssistanceRequestPreview(question),
     [question],
   );
   const isOpen = view !== "closed";
+
+  useEffect(() => {
+    if (isOpen) {
+      helpTitleRef.current?.focus();
+    } else if (wasOpenRef.current) {
+      helpTriggerRef.current?.focus();
+    }
+
+    wasOpenRef.current = isOpen;
+  }, [isOpen, view]);
 
   function transition(action: InterviewAssistanceAction) {
     setView((current) => transitionInterviewAssistance(current, action));
@@ -51,6 +64,7 @@ export function InterviewAssistance({
         aria-label={isOpen ? "Close interview help" : "Open interview help"}
         className="interview-help-trigger"
         onClick={() => transition("open")}
+        ref={helpTriggerRef}
         type="button"
       >
         {isOpen ? "Close help" : "Need help?"}
@@ -65,7 +79,11 @@ export function InterviewAssistance({
           <div className="interview-assistance-heading">
             <div>
               <p className="detail-label">Interview help</p>
-              <h3 id="interview-assistance-title">
+              <h3
+                id="interview-assistance-title"
+                ref={helpTitleRef}
+                tabIndex={-1}
+              >
                 {view === "menu"
                   ? "What would make this easier?"
                   : helpTitle(view)}
@@ -74,7 +92,11 @@ export function InterviewAssistance({
           </div>
 
           {view === "menu" ? (
-            <div className="interview-assistance-options">
+            <div
+              aria-label="Interview help choices"
+              className="interview-assistance-options"
+              role="group"
+            >
               <button
                 className="secondary-button"
                 onClick={() => transition("show-clarification")}
@@ -141,7 +163,11 @@ export function InterviewAssistance({
                 staff member could see, and ask your permission before sending a
                 request.
               </p>
-              <div className="interview-assistance-actions">
+              <div
+                aria-label="Human help choices"
+                className="interview-assistance-actions"
+                role="group"
+              >
                 <button
                   className="secondary-button"
                   onClick={() => transition("preview-human-request")}
@@ -198,7 +224,11 @@ export function InterviewAssistance({
                 answers, or proposed profile fields. Nothing is sent from this
                 preview.
               </p>
-              <div className="interview-assistance-actions">
+              <div
+                aria-label="Help request preview choices"
+                className="interview-assistance-actions"
+                role="group"
+              >
                 <button
                   className="secondary-button"
                   onClick={stageRequest}
@@ -233,7 +263,11 @@ export function InterviewAssistance({
                     : " · structured guide"}
                 </p>
               ) : null}
-              <div className="interview-assistance-actions">
+              <div
+                aria-label="Locally staged request choices"
+                className="interview-assistance-actions"
+                role="group"
+              >
                 <button
                   className="secondary-button"
                   onClick={() => transition("keep-answering")}

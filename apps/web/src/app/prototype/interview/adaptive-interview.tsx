@@ -4,7 +4,7 @@ import {
   buildCandidateInterviewReview,
   type CandidateFieldDisposition,
 } from "@argent/domain";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import {
   getInterviewQuestionCount,
@@ -89,6 +89,11 @@ export function AdaptiveInterview({
     InterviewQuestionRecord[]
   >(() => createInitialQuestionRecords(initialMode, sessionStartedAt));
   const [reviewing, setReviewing] = useState(false);
+  const completedHeadingRef = useRef<HTMLHeadingElement>(null);
+  const hasMountedRef = useRef(false);
+  const pausedHeadingRef = useRef<HTMLHeadingElement>(null);
+  const questionHeadingRef = useRef<HTMLHeadingElement>(null);
+  const reviewHeadingRef = useRef<HTMLHeadingElement>(null);
 
   const questionCount = getInterviewQuestionCount();
   const currentQuestionRecord = questionRecords.at(-1);
@@ -156,6 +161,18 @@ export function AdaptiveInterview({
       guideVersion: interviewGuideVersion,
     });
   }, [answers, completed, dispositions]);
+
+  useEffect(() => {
+    if (!hasMountedRef.current) {
+      hasMountedRef.current = true;
+      return;
+    }
+
+    if (paused) pausedHeadingRef.current?.focus();
+    else if (completed) completedHeadingRef.current?.focus();
+    else if (reviewing) reviewHeadingRef.current?.focus();
+    else questionHeadingRef.current?.focus();
+  }, [completed, currentIndex, paused, reviewing]);
 
   function snapshotProgress(
     nextAnswers: readonly InterviewAnswer[] = answers,
@@ -340,7 +357,7 @@ export function AdaptiveInterview({
 
       <section aria-labelledby="interview-panel-title">
         <div className="interview-toolbar">
-          <div aria-label="Answer style" className="mode-switch">
+          <div aria-label="Answer style" className="mode-switch" role="group">
             <button
               aria-pressed={mode === "conversation"}
               onClick={() => setMode("conversation")}
@@ -386,7 +403,9 @@ export function AdaptiveInterview({
         {paused ? (
           <div className="interview-paused" role="status">
             <p className="detail-label">Paused</p>
-            <h2>Take all the time you need.</h2>
+            <h2 ref={pausedHeadingRef} tabIndex={-1}>
+              Take all the time you need.
+            </h2>
             <p>
               Your answers remain only in this open page. Closing or refreshing
               it clears the preview.
@@ -404,7 +423,7 @@ export function AdaptiveInterview({
         {!paused && !reviewing && !completed && currentQuestion ? (
           <div className={`interview-question is-${mode}`}>
             <div className="interview-progress">
-              <span>
+              <span aria-atomic="true" aria-live="polite">
                 Question {currentIndex + 1} of {questionCount}
               </span>
               <progress
@@ -418,7 +437,9 @@ export function AdaptiveInterview({
                 ? "Argent asks"
                 : currentQuestion.fieldLabel}
             </p>
-            <h2>{currentQuestion.prompt}</h2>
+            <h2 ref={questionHeadingRef} tabIndex={-1}>
+              {currentQuestion.prompt}
+            </h2>
             <p className="question-purpose">{currentQuestion.purpose}</p>
             <div className="question-rationale">
               <p className="detail-label">Why this question</p>
@@ -482,7 +503,9 @@ export function AdaptiveInterview({
         {!paused && reviewing && !completed ? (
           <div className="interview-review">
             <p className="detail-label">Your review</p>
-            <h2>Decide what a matchmaker may consider.</h2>
+            <h2 ref={reviewHeadingRef} tabIndex={-1}>
+              Decide what a matchmaker may consider.
+            </h2>
             <p className="question-purpose">
               Each proposed field is the exact source you provided—nothing has
               been inferred. Approve it, keep it private, or reject it
@@ -498,7 +521,11 @@ export function AdaptiveInterview({
                     <p className="proposal-source">
                       Source: your response · No inference
                     </p>
-                    <div className="proposal-actions">
+                    <div
+                      aria-label={`Review ${proposal.fieldLabel}`}
+                      className="proposal-actions"
+                      role="group"
+                    >
                       <button
                         aria-pressed={disposition === "approved"}
                         className="secondary-button"
@@ -590,7 +617,9 @@ export function AdaptiveInterview({
         {!paused && completed && completedReview ? (
           <div className="interview-complete" role="status">
             <p className="detail-label">Your final review</p>
-            <h2>Review exactly what would move forward.</h2>
+            <h2 ref={completedHeadingRef} tabIndex={-1}>
+              Review exactly what would move forward.
+            </h2>
             <p className="question-purpose">
               Only approved fields are eligible for profile use or future
               analytics. Private, rejected, and declined responses remain

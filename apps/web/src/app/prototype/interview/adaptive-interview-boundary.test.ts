@@ -56,6 +56,25 @@ describe("adaptive interview prototype boundary", () => {
     );
   });
 
+  it("announces progress and moves focus across explicit stage changes", () => {
+    const adaptiveSource = readFileSync(
+      fileURLToPath(new URL("./adaptive-interview.tsx", import.meta.url)),
+      "utf8",
+    );
+    const structuredSource = readFileSync(
+      fileURLToPath(new URL("./structured-interview.tsx", import.meta.url)),
+      "utf8",
+    );
+
+    expect(adaptiveSource).toContain('aria-live="polite"');
+    expect(adaptiveSource).toContain('aria-label="Answer style"');
+    expect(adaptiveSource).toContain('role="group"');
+    expect(adaptiveSource).toContain("questionHeadingRef.current?.focus()");
+    expect(adaptiveSource).toContain("reviewHeadingRef.current?.focus()");
+    expect(structuredSource).toContain("worksheetHeadingRef.current?.focus()");
+    expect(structuredSource).toContain("completeHeadingRef.current?.focus()");
+  });
+
   it("isolates live flag refresh from candidate interview content", () => {
     const source = readFileSync(
       fileURLToPath(

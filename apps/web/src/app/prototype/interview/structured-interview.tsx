@@ -4,7 +4,7 @@ import {
   buildCandidateInterviewReview,
   type CandidateFieldDisposition,
 } from "@argent/domain";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { interviewGuideVersion, type InterviewAnswer } from "./interview-guide";
 import {
@@ -74,6 +74,10 @@ export function StructuredInterview({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showEntryNotice, setShowEntryNotice] = useState(Boolean(entryNotice));
   const [stage, setStage] = useState<StructuredStage>("worksheet");
+  const completeHeadingRef = useRef<HTMLHeadingElement>(null);
+  const hasMountedRef = useRef(false);
+  const reviewHeadingRef = useRef<HTMLHeadingElement>(null);
+  const worksheetHeadingRef = useRef<HTMLHeadingElement>(null);
 
   const proposals = useMemo(
     () =>
@@ -133,6 +137,17 @@ export function StructuredInterview({
       guideVersion: interviewGuideVersion,
     });
   }, [answers, dispositions, stage]);
+
+  useEffect(() => {
+    if (!hasMountedRef.current) {
+      hasMountedRef.current = true;
+      return;
+    }
+
+    if (stage === "complete") completeHeadingRef.current?.focus();
+    else if (stage === "review") reviewHeadingRef.current?.focus();
+    else worksheetHeadingRef.current?.focus();
+  }, [stage]);
 
   function reportProgress(
     nextAnswers: readonly InterviewAnswer[] = answers,
@@ -211,7 +226,13 @@ export function StructuredInterview({
     <div className="adaptive-interview structured-interview">
       <div className="interview-introduction">
         <p className="detail-label">What matters · Structured</p>
-        <h2 id="structured-interview-title">Write at your own pace.</h2>
+        <h2
+          id="structured-interview-title"
+          ref={worksheetHeadingRef}
+          tabIndex={-1}
+        >
+          Write at your own pace.
+        </h2>
         <p className="panel-copy">
           See the complete guide, answer in any order, and review exactly what a
           matchmaker may consider. For this development preview, use fictional
@@ -353,7 +374,9 @@ export function StructuredInterview({
         {stage === "review" ? (
           <div className="interview-review">
             <p className="detail-label">Your review</p>
-            <h2>Decide what a matchmaker may consider.</h2>
+            <h2 ref={reviewHeadingRef} tabIndex={-1}>
+              Decide what a matchmaker may consider.
+            </h2>
             <p className="question-purpose">
               Each proposed field is the exact source you provided—nothing has
               been inferred. Approve it, keep it private, or reject it
@@ -370,7 +393,11 @@ export function StructuredInterview({
                       Source: your written answer · Revision {answer.revision} ·
                       No inference
                     </p>
-                    <div className="proposal-actions">
+                    <div
+                      aria-label={`Review ${proposal.fieldLabel}`}
+                      className="proposal-actions"
+                      role="group"
+                    >
                       {(["approved", "private", "rejected"] as const).map(
                         (nextDisposition) => (
                           <button
@@ -438,7 +465,9 @@ export function StructuredInterview({
         {stage === "complete" && completedReview ? (
           <div className="interview-complete" role="status">
             <p className="detail-label">Your final review</p>
-            <h2>Review exactly what would move forward.</h2>
+            <h2 ref={completeHeadingRef} tabIndex={-1}>
+              Review exactly what would move forward.
+            </h2>
             <p className="question-purpose">
               Only approved fields are eligible for profile use or future
               analytics. Private, rejected, and declined responses remain

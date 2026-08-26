@@ -29,4 +29,11 @@ describe("interview assistance boundary", () => {
     expect(source).toContain("Continue without interview");
     expect(source).toContain("Close interview help");
   });
+
+  it("moves focus into help and groups related choices", () => {
+    expect(source).toContain("helpTitleRef.current?.focus()");
+    expect(source).toContain("helpTriggerRef.current?.focus()");
+    expect(source).toContain('aria-label="Interview help choices"');
+    expect(source).toContain('role="group"');
+  });
 });
