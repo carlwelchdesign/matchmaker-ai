@@ -1,4 +1,16 @@
 export {
+  buildCandidateAvailabilitySnapshot,
+  candidateAvailabilityObservationSchemaVersion,
+  candidateAvailabilitySnapshotSchemaVersion,
+  recordCandidateAvailabilityObservation,
+  validateCandidateAvailabilityObservation,
+  type CandidateAvailabilityMetricState,
+  type CandidateAvailabilityObservation,
+  type CandidateAvailabilityObservationInput,
+  type CandidateAvailabilitySnapshot,
+  type CandidateAvailabilityState,
+} from "./candidate-availability.js";
+export {
   buildCandidateAnalyticsSnapshot,
   buildCandidateAssertionEligibilitySnapshot,
   buildCandidateInterviewFunnelSnapshot,
