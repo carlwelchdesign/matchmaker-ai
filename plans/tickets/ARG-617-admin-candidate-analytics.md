@@ -17,7 +17,7 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
 
 ## Acceptance criteria
 
-- [ ] Define metric contracts for candidate supply, completeness/freshness, consent/availability, funnel by mode, correction burden, search coverage, shortlist throughput, and introduction outcomes. Candidate supply, approved-field coverage, field-state counts, assertion access/freshness, interview funnel by mode, correction burden, search coverage, shortlist throughput, and introduction outcomes now have synthetic aggregate contracts; candidate availability remains open.
+- [x] Define metric contracts for candidate supply, completeness/freshness, consent/availability, funnel by mode, correction burden, search coverage, shortlist throughput, and introduction outcomes.
 - [ ] Every dashboard value links to authoritative source lineage, cohort, time window, freshness, and missing-data state. The first aggregate contract includes source projection lineage, opaque cohort, bounded time window, and explicit small-cohort suppression; per-metric freshness and missing-data semantics remain open.
 - [ ] Staff can filter and inspect approved facts with provenance and uncertainty; raw interview content is not exposed by default.
 - [ ] Permissions and aggregate thresholds prevent inappropriate small-cohort or partner disclosure.
@@ -55,9 +55,20 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   analytics-only purpose and role. It carries the declared evaluation time and
   candidate-intelligence lineage, suppresses all metrics for small cohorts, and
   emits no candidate/assertion/consent identifiers or approved source values.
-- Candidate availability remains explicitly unimplemented because no approved
-  lifecycle contract exists yet; the fictional admin display is not treated as
-  operational evidence.
+- `candidate-availability-observation/v1` records only an explicit,
+  candidate-confirmed availability decision with effective and freshness
+  timestamps. The strict contract has no interview-content, inferred-state,
+  admission, ranking, or discovery-eligibility field; availability alone cannot
+  broaden consent or make a candidate discoverable.
+- `candidate-availability-snapshot/v1` selects the latest unambiguous
+  confirmation per candidate and reports available, paused, not-available,
+  withdrawn, stale, and unknown counts. Rates use the full declared cohort as
+  their denominator, and all metrics are suppressed below five candidates.
+- Availability snapshots expose no candidate or observation identifiers and
+  explicitly preserve `discoveryEligibilityGranted: false` and
+  `admissionDecisionGranted: false` lineage. This is synthetic measurement only;
+  persistence, identity resolution, production authorization, and an admin view
+  remain gated.
 - `candidate-search-observation/v1` records only opaque search, criteria, policy,
   projection, time, data-quality, and count lineage. It rejects query content,
   candidate identifiers, impossible eligible/retrieved/reviewed counts, and a
@@ -89,5 +100,10 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   approved discovery projection lineage remain available.
 - This is pure synthetic domain code. It does not add persistence, analytics
   transport, an admin dashboard, real candidate data, or production access.
+- Candidate-availability branch: `codex/ARG-617-candidate-availability`
+- Candidate-availability commit: `caa4de0`
+- Candidate-availability verification: 102 domain tests across 13 files; all
+  workspace test and TypeScript tasks; domain and full production builds; the
+  140-ticket planning validator; formatting; and diff hygiene.
 
 See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-interviewing.md).
