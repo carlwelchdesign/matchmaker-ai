@@ -102,6 +102,7 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   transport, an admin dashboard, real candidate data, or production access.
 - Candidate-availability branch: `codex/ARG-617-candidate-availability`
 - Candidate-availability commit: `caa4de0`
+- Candidate-availability PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/61
 - Candidate-availability verification: 102 domain tests across 13 files; all
   workspace test and TypeScript tasks; domain and full production builds; the
   140-ticket planning validator; formatting; and diff hygiene.
