@@ -1,4 +1,4 @@
-# ARG-002/ARG-003 Participant Screener
+# ARG-002/ARG-003/ARG-617 Participant Screener
 
 ## Purpose
 
@@ -20,7 +20,7 @@ screening data.
 | Segment | Minimum | Relevant ticket | Purpose |
 | --- | ---: | --- | --- |
 | Founder/operator | 1 | ARG-002 ARG-003 | Confirm actual operating model and copy intent |
-| Practicing matchmaker or high-touch operator | 2 | ARG-002 | Validate workflow, review, shortlist, and introduction patterns |
+| Practicing matchmaker or high-touch operator | 2 | ARG-002 ARG-617 | Validate workflow, review, shortlist, introduction, and analytics-reconciliation patterns |
 | Applicant/candidate representative | 3 | ARG-003 | Test application, selectivity, status, privacy, and intake language |
 | Potential paying client | 2 | ARG-003 | Test service promise, pricing expectations, and trust language |
 | Accessibility-oriented reviewer | 1 | ARG-003 | Test reading burden, alternate intake needs, and interaction clarity |

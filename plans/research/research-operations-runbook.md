@@ -2,9 +2,10 @@
 
 ## Purpose
 
-Provide a repeatable operating process for executing `ARG-002` and `ARG-003`
-without collecting unnecessary sensitive data or letting research notes become
-unreviewed product decisions.
+Provide a repeatable operating process for executing `ARG-002`, `ARG-003`, and
+the `ARG-617` matchmaker analytics workflow study without collecting
+unnecessary sensitive data or letting research notes become unreviewed product
+decisions.
 
 ## Scope
 
@@ -35,7 +36,10 @@ Run in this order:
 8. Synthesis and downstream gate update.
 
 `ARG-003` can run in parallel with `ARG-002`, but `ARG-005`, `ARG-012`, and
-implementation planning should wait for both syntheses.
+implementation planning should wait for both syntheses. The `ARG-617` study is
+a separate synthetic-prototype workflow test; it may reuse qualified founder
+and matchmaker participants but must use its own consent, tasks, notes, and
+synthesis rows.
 
 ## Session naming
 
@@ -47,6 +51,8 @@ Use non-identifying IDs:
 - `ARG003-APP-001`
 - `ARG003-CLIENT-001`
 - `ARG003-A11Y-001`
+- `ARG617-FND-001`
+- `ARG617-MM-001`
 
 Do not use participant names in filenames, branch names, PR comments, commits,
 or planning tables.
@@ -78,7 +84,8 @@ retention date, deletion process, and access list before use.
 ## Pre-session checklist
 
 - [ ] Confirm participant segment and session ID.
-- [ ] Confirm the session maps to `ARG-002`, `ARG-003`, or both.
+- [ ] Confirm the session maps to `ARG-002`, `ARG-003`, `ARG-617`, or an
+  explicitly declared combination.
 - [ ] Send the plain-language purpose and consent/readout script.
 - [ ] Confirm whether notes only or recording/transcription is allowed.
 - [ ] Prepare only the relevant prompts from the protocol.
