@@ -20,7 +20,7 @@ import {
 } from "./candidate-workflow-outcomes.js";
 
 export const candidateDashboardMetricSetSchemaVersion =
-  "candidate-dashboard-metric-set/v2" as const;
+  "candidate-dashboard-metric-set/v3" as const;
 
 export type CandidateDashboardSource =
   | "availability"
@@ -46,6 +46,47 @@ export type CandidateDashboardMetricKey =
   | "shortlist-rate";
 
 export type CandidateDashboardMetricUnit = "basis-points" | "count";
+export type CandidateDashboardDenominatorKind =
+  | "candidate-cohort"
+  | "delivered-introductions"
+  | "eligible-opportunities"
+  | "first-meetings"
+  | "interview-starts"
+  | "not-applicable"
+  | "observed-fields"
+  | "recommendations"
+  | "retrieved-opportunities"
+  | "reviewed-journeys";
+
+const denominatorKindByMetric = Object.freeze({
+  "approved-field-coverage": "observed-fields",
+  "availability-known": "candidate-cohort",
+  "available-candidates": "not-applicable",
+  "candidate-supply": "not-applicable",
+  "eligible-assertions": "not-applicable",
+  "first-meeting-rate": "delivered-introductions",
+  "interview-completion-rate": "interview-starts",
+  "interview-starts": "not-applicable",
+  "mutual-approval-rate": "recommendations",
+  "reciprocal-interest-rate": "first-meetings",
+  "search-retrieval-coverage": "eligible-opportunities",
+  "search-review-rate": "retrieved-opportunities",
+  "shortlist-rate": "reviewed-journeys",
+} satisfies Record<
+  CandidateDashboardMetricKey,
+  CandidateDashboardDenominatorKind
+>);
+
+export function candidateDashboardDenominatorKindForMetric(
+  key: CandidateDashboardMetricKey,
+): CandidateDashboardDenominatorKind {
+  const denominatorKind = denominatorKindByMetric[key];
+  if (!denominatorKind) {
+    throw new Error(`Dashboard metric key ${String(key)} is invalid`);
+  }
+  return denominatorKind;
+}
+
 export type CandidateDashboardMissingDataState =
   | "available"
   | "missing-denominator"
@@ -54,6 +95,11 @@ export type CandidateDashboardMissingDataState =
 export type CandidateDashboardFreshnessState = "fresh" | "stale" | "unknown";
 
 export interface CandidateDashboardMetric {
+  readonly calculation: {
+    readonly denominator: number | null;
+    readonly denominatorKind: CandidateDashboardDenominatorKind;
+    readonly numerator: number | null;
+  };
   readonly freshness: CandidateDashboardFreshnessState;
   readonly key: CandidateDashboardMetricKey;
   readonly lineage: {
@@ -104,7 +150,10 @@ export interface CandidateDashboardMetricSetInput {
 }
 
 interface MetricDescriptor {
+  readonly denominator: () => number | null;
+  readonly denominatorKind: CandidateDashboardDenominatorKind;
   readonly key: CandidateDashboardMetricKey;
+  readonly numerator: () => number | null;
   readonly unit: CandidateDashboardMetricUnit;
   readonly value: () => number | null;
 }
@@ -183,12 +232,18 @@ function supplyMetrics(
     cohortKey: input.cohortKey,
     descriptors: [
       {
+        denominator: () => null,
+        denominatorKind: "not-applicable",
         key: "candidate-supply",
+        numerator: () => source?.metrics?.candidateSupplyCount ?? null,
         unit: "count",
         value: () => source?.metrics?.candidateSupplyCount ?? null,
       },
       {
+        denominator: () => source?.metrics?.observedFieldCount ?? null,
+        denominatorKind: "observed-fields",
         key: "approved-field-coverage",
+        numerator: () => source?.metrics?.approvedAssertionCount ?? null,
         unit: "basis-points",
         value: () => source?.metrics?.approvedFieldCoverageBasisPoints ?? null,
       },
@@ -215,7 +270,10 @@ function eligibilityMetrics(
     cohortKey: input.cohortKey,
     descriptors: [
       {
+        denominator: () => null,
+        denominatorKind: "not-applicable",
         key: "eligible-assertions",
+        numerator: () => source?.metrics?.eligibleAssertionCount ?? null,
         unit: "count",
         value: () => source?.metrics?.eligibleAssertionCount ?? null,
       },
@@ -242,12 +300,18 @@ function availabilityMetrics(
     cohortKey: input.cohortKey,
     descriptors: [
       {
+        denominator: () => null,
+        denominatorKind: "not-applicable",
         key: "available-candidates",
+        numerator: () => source?.metrics?.availableCandidateCount ?? null,
         unit: "count",
         value: () => source?.metrics?.availableCandidateCount ?? null,
       },
       {
+        denominator: () => source?.metrics?.candidateCount ?? null,
+        denominatorKind: "candidate-cohort",
         key: "availability-known",
+        numerator: () => source?.metrics?.knownAvailabilityCount ?? null,
         unit: "basis-points",
         value: () => source?.metrics?.knownAvailabilityShareBasisPoints ?? null,
       },
@@ -274,12 +338,18 @@ function interviewMetrics(
     cohortKey: input.cohortKey,
     descriptors: [
       {
+        denominator: () => null,
+        denominatorKind: "not-applicable",
         key: "interview-starts",
+        numerator: () => source?.metrics?.overall.startedCount ?? null,
         unit: "count",
         value: () => source?.metrics?.overall.startedCount ?? null,
       },
       {
+        denominator: () => source?.metrics?.overall.startedCount ?? null,
+        denominatorKind: "interview-starts",
         key: "interview-completion-rate",
+        numerator: () => source?.metrics?.overall.completedCount ?? null,
         unit: "basis-points",
         value: () => source?.metrics?.overall.completionRateBasisPoints ?? null,
       },
@@ -306,12 +376,22 @@ function searchMetrics(
     cohortKey: input.cohortKey,
     descriptors: [
       {
+        denominator: () =>
+          source?.metrics?.eligibleCandidateOpportunityCount ?? null,
+        denominatorKind: "eligible-opportunities",
         key: "search-retrieval-coverage",
+        numerator: () =>
+          source?.metrics?.retrievedCandidateOpportunityCount ?? null,
         unit: "basis-points",
         value: () => source?.metrics?.retrievalCoverageBasisPoints ?? null,
       },
       {
+        denominator: () =>
+          source?.metrics?.retrievedCandidateOpportunityCount ?? null,
+        denominatorKind: "retrieved-opportunities",
         key: "search-review-rate",
+        numerator: () =>
+          source?.metrics?.reviewedCandidateOpportunityCount ?? null,
         unit: "basis-points",
         value: () => source?.metrics?.reviewRateBasisPoints ?? null,
       },
@@ -338,22 +418,34 @@ function workflowMetrics(
     cohortKey: input.cohortKey,
     descriptors: [
       {
+        denominator: () => source?.metrics?.reviewedCount ?? null,
+        denominatorKind: "reviewed-journeys",
         key: "shortlist-rate",
+        numerator: () => source?.metrics?.shortlistedCount ?? null,
         unit: "basis-points",
         value: () => source?.metrics?.shortlistRateBasisPoints ?? null,
       },
       {
+        denominator: () => source?.metrics?.recommendedCount ?? null,
+        denominatorKind: "recommendations",
         key: "mutual-approval-rate",
+        numerator: () => source?.metrics?.mutualApprovalCount ?? null,
         unit: "basis-points",
         value: () => source?.metrics?.mutualApprovalRateBasisPoints ?? null,
       },
       {
+        denominator: () => source?.metrics?.deliveredCount ?? null,
+        denominatorKind: "delivered-introductions",
         key: "first-meeting-rate",
+        numerator: () => source?.metrics?.firstMeetingCount ?? null,
         unit: "basis-points",
         value: () => source?.metrics?.firstMeetingRateBasisPoints ?? null,
       },
       {
+        denominator: () => source?.metrics?.firstMeetingCount ?? null,
+        denominatorKind: "first-meetings",
         key: "reciprocal-interest-rate",
+        numerator: () => source?.metrics?.reciprocalInterestCount ?? null,
         unit: "basis-points",
         value: () => source?.metrics?.reciprocalInterestRateBasisPoints ?? null,
       },
@@ -390,7 +482,11 @@ function buildMetrics(input: {
     input.maximumSourceAgeMs,
   );
   return input.descriptors.map((descriptor) => {
-    const value = input.source?.metrics ? descriptor.value() : null;
+    const sourceAvailable =
+      input.source?.metrics !== null && input.source?.metrics !== undefined;
+    const value = sourceAvailable ? descriptor.value() : null;
+    const numerator = sourceAvailable ? descriptor.numerator() : null;
+    const denominator = sourceAvailable ? descriptor.denominator() : null;
     if (
       value !== null &&
       (!Number.isSafeInteger(value) ||
@@ -399,6 +495,7 @@ function buildMetrics(input: {
     ) {
       throw new Error(`Dashboard metric ${descriptor.key} is invalid`);
     }
+    validateCalculation(descriptor, value, numerator, denominator);
     const missingDataState = !input.source
       ? "source-unavailable"
       : input.source.dataState === "suppressed-small-cohort"
@@ -407,6 +504,11 @@ function buildMetrics(input: {
           ? "missing-denominator"
           : "available";
     return {
+      calculation: {
+        denominator,
+        denominatorKind: descriptor.denominatorKind,
+        numerator,
+      },
       freshness,
       key: descriptor.key,
       lineage: {
@@ -422,6 +524,58 @@ function buildMetrics(input: {
       value,
     };
   });
+}
+
+function validateCalculation(
+  descriptor: MetricDescriptor,
+  value: number | null,
+  numerator: number | null,
+  denominator: number | null,
+): void {
+  if (
+    descriptor.denominatorKind !==
+    candidateDashboardDenominatorKindForMetric(descriptor.key)
+  ) {
+    throw new Error(
+      `Dashboard metric ${descriptor.key} denominator kind is invalid`,
+    );
+  }
+  if (
+    (numerator !== null &&
+      (!Number.isSafeInteger(numerator) || numerator < 0)) ||
+    (denominator !== null &&
+      (!Number.isSafeInteger(denominator) || denominator < 0))
+  ) {
+    throw new Error(
+      `Dashboard metric ${descriptor.key} calculation is invalid`,
+    );
+  }
+  if (descriptor.unit === "count") {
+    if (
+      descriptor.denominatorKind !== "not-applicable" ||
+      denominator !== null ||
+      numerator !== value
+    ) {
+      throw new Error(
+        `Dashboard count metric ${descriptor.key} calculation is invalid`,
+      );
+    }
+    return;
+  }
+  if (
+    descriptor.denominatorKind === "not-applicable" ||
+    (numerator === null) !== (denominator === null)
+  ) {
+    throw new Error(
+      `Dashboard ratio metric ${descriptor.key} calculation is invalid`,
+    );
+  }
+  if (numerator === null || denominator === null) return;
+  const expectedValue =
+    denominator === 0 ? null : Math.round((numerator * 10_000) / denominator);
+  if (value !== expectedValue) {
+    throw new Error(`Dashboard ratio metric ${descriptor.key} is inconsistent`);
+  }
 }
 
 function validateSource(
