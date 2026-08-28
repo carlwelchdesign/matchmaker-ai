@@ -103,6 +103,15 @@ describe("candidate dashboard access", () => {
       authorizeCandidateDashboardMetricSet(
         {
           ...dashboard,
+          schemaVersion: "candidate-dashboard-metric-set/v1",
+        } as unknown as CandidateDashboardMetricSet,
+        internalRequest,
+      ),
+    ).toThrow("schema version is not supported");
+    expect(() =>
+      authorizeCandidateDashboardMetricSet(
+        {
+          ...dashboard,
           sourceContentStored: true,
         } as unknown as CandidateDashboardMetricSet,
         internalRequest,

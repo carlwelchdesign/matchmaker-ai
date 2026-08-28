@@ -20,7 +20,7 @@ import {
 } from "./candidate-workflow-outcomes.js";
 
 export const candidateDashboardMetricSetSchemaVersion =
-  "candidate-dashboard-metric-set/v1" as const;
+  "candidate-dashboard-metric-set/v2" as const;
 
 export type CandidateDashboardSource =
   | "availability"
