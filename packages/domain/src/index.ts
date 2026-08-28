@@ -1,4 +1,13 @@
 export {
+  buildCandidateApprovedFactInspection,
+  candidateApprovedFactInspectionSchemaVersion,
+  type CandidateApprovedFact,
+  type CandidateApprovedFactFreshness,
+  type CandidateApprovedFactInspection,
+  type CandidateApprovedFactInspectionFilter,
+  type CandidateApprovedFactInspectionRequest,
+} from "./candidate-approved-fact-inspection.js";
+export {
   buildCandidateAvailabilitySnapshot,
   candidateAvailabilityObservationSchemaVersion,
   candidateAvailabilitySnapshotSchemaVersion,
