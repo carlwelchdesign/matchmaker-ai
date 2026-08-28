@@ -37,6 +37,7 @@ export interface CandidateInspectionView {
   readonly inspectedAt: string;
   readonly matchingFactCount: number;
   readonly sourcePurpose: "matchmaker-discovery";
+  readonly sourceRole: "matchmaker";
 }
 
 export interface CandidateInspectionPageData {

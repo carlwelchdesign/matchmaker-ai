@@ -165,6 +165,12 @@ export function buildSyntheticCandidateInspection(): CandidateApprovedFactInspec
 
 export function buildSyntheticCandidateInspectionPageData(): CandidateInspectionPageData {
   const inspection = buildSyntheticCandidateInspection();
+  if (
+    inspection.sourceProjection.purpose !== "matchmaker-discovery" ||
+    inspection.sourceProjection.role !== "matchmaker"
+  ) {
+    throw new Error("Synthetic candidate inspection access context is invalid");
+  }
 
   return {
     candidates: candidateInspectionCandidates,
@@ -180,7 +186,8 @@ export function buildSyntheticCandidateInspectionPageData(): CandidateInspection
       },
       inspectedAt: inspection.inspectedAt,
       matchingFactCount: inspection.matchingFactCount,
-      sourcePurpose: "matchmaker-discovery",
+      sourcePurpose: inspection.sourceProjection.purpose,
+      sourceRole: inspection.sourceProjection.role,
     },
     topics: candidateInspectionTopics,
   };

@@ -15,6 +15,7 @@ import {
 describe("synthetic candidate fact inspection", () => {
   test("shows only approved facts with visible lineage and uncertainty totals", () => {
     const inspection = buildSyntheticCandidateInspection();
+    const pageData = buildSyntheticCandidateInspectionPageData();
 
     expect(inspection.approvedFactsOnly).toBe(true);
     expect(inspection.rawInterviewContentIncluded).toBe(false);
@@ -25,6 +26,10 @@ describe("synthetic candidate fact inspection", () => {
       disputed: 1,
       private: 1,
       unknown: 3,
+    });
+    expect(pageData.inspection).toMatchObject({
+      sourcePurpose: "matchmaker-discovery",
+      sourceRole: "matchmaker",
     });
     expect(
       inspection.facts.every(

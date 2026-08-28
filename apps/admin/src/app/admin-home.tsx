@@ -261,6 +261,11 @@ const discoveryCandidates = [
 type AdminView =
   "campaigns" | "discovery" | "facts" | "overview" | "operations" | "review";
 
+const inspectionAccessLabels = {
+  purpose: { "matchmaker-discovery": "Matchmaker discovery" },
+  role: { matchmaker: "Matchmaker" },
+} as const;
+
 export default function AdminHome({
   candidateInspectionData,
 }: Readonly<{ candidateInspectionData: CandidateInspectionPageData }>) {
@@ -495,10 +500,22 @@ function ApprovedFacts({
                 : `${inspection.matchingFactCount} approved facts`}
             </h2>
           </div>
-          <p>
-            Projection generated {formatUtc(inspection.inspectedAt)} for the{" "}
-            {inspection.sourcePurpose} purpose.
-          </p>
+          <dl aria-label="Inspection access context" className="access-context">
+            <div>
+              <dt>Access role</dt>
+              <dd>{inspectionAccessLabels.role[inspection.sourceRole]}</dd>
+            </div>
+            <div>
+              <dt>Purpose</dt>
+              <dd>
+                {inspectionAccessLabels.purpose[inspection.sourcePurpose]}
+              </dd>
+            </div>
+            <div>
+              <dt>Evaluated</dt>
+              <dd>{formatUtc(inspection.inspectedAt)}</dd>
+            </div>
+          </dl>
         </div>
         {inspection.facts.length === 0 ? (
           <div className="empty-facts">
