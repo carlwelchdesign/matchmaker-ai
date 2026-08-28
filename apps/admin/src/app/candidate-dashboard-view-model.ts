@@ -17,6 +17,13 @@ export interface CandidateDashboardMetricView {
   readonly sourceLabel: string;
 }
 
+export interface CandidateDashboardInterviewModeView {
+  readonly attributionNote: string | null;
+  readonly label: string;
+  readonly metrics: readonly CandidateDashboardMetricView[];
+  readonly mode: string;
+}
+
 export interface CandidateDashboardPageData {
   readonly accessContext: {
     readonly audience: "Internal staff";
@@ -25,6 +32,8 @@ export interface CandidateDashboardPageData {
     readonly role: "Matchmaker";
     readonly windowLabel: string;
   };
+  readonly interviewModeBreakdown: readonly CandidateDashboardInterviewModeView[];
+  readonly interviewModeMinimumCohortSize: number;
   readonly metrics: readonly CandidateDashboardMetricView[];
   readonly separationNotice: string;
 }

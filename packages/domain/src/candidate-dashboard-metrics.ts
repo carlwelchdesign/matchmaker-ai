@@ -4,7 +4,9 @@ import {
   candidateInterviewFunnelSchemaVersion,
   type CandidateAnalyticsSnapshot,
   type CandidateAssertionEligibilitySnapshot,
+  type CandidateInterviewFunnelMetric,
   type CandidateInterviewFunnelSnapshot,
+  type CandidateInterviewModeAttribution,
 } from "./candidate-analytics.js";
 import {
   candidateAvailabilitySnapshotSchemaVersion,
@@ -20,7 +22,7 @@ import {
 } from "./candidate-workflow-outcomes.js";
 
 export const candidateDashboardMetricSetSchemaVersion =
-  "candidate-dashboard-metric-set/v4" as const;
+  "candidate-dashboard-metric-set/v5" as const;
 
 export type CandidateDashboardSource =
   | "availability"
@@ -50,6 +52,22 @@ export const candidateDashboardMetricKeys = Object.freeze([
 
 export type CandidateDashboardMetricKey =
   (typeof candidateDashboardMetricKeys)[number];
+
+export const candidateDashboardInterviewMetricKeys = Object.freeze([
+  "interview-starts",
+  "interview-completion-rate",
+  "interview-approved-fields",
+  "interview-correction-burden",
+] as const satisfies readonly CandidateDashboardMetricKey[]);
+
+export const candidateDashboardInterviewModes = Object.freeze([
+  "structured",
+  "typed-conversation",
+  "voice",
+  "hybrid",
+  "mixed",
+  "unobserved",
+] as const satisfies readonly CandidateInterviewModeAttribution[]);
 
 export type CandidateDashboardMetricUnit = "basis-points" | "count";
 export type CandidateDashboardDenominatorKind =
@@ -239,11 +257,18 @@ export interface CandidateDashboardMetricSet {
     readonly securityTelemetryStored: false;
   };
   readonly generatedAt: string;
+  readonly interviewModeBreakdown: readonly CandidateDashboardInterviewModeMetrics[];
+  readonly interviewModeMinimumCohortSize: number;
   readonly metrics: readonly CandidateDashboardMetric[];
   readonly schemaVersion: typeof candidateDashboardMetricSetSchemaVersion;
   readonly sourceContentStored: false;
   readonly windowEnd: string;
   readonly windowStart: string;
+}
+
+export interface CandidateDashboardInterviewModeMetrics {
+  readonly metrics: readonly CandidateDashboardMetric[];
+  readonly mode: CandidateInterviewModeAttribution;
 }
 
 export interface CandidateDashboardMetricSetInput {
@@ -314,6 +339,14 @@ export function buildCandidateDashboardMetricSet(
   if (keys.size !== metrics.length) {
     throw new Error("Dashboard contains duplicate metric keys");
   }
+  const interviewModeBreakdown = buildInterviewModeBreakdown(
+    input,
+    generatedAt,
+    windowStart,
+    windowEnd,
+  );
+  const interviewModeMinimumCohortSize =
+    input.sources.interviewFunnel?.minimumCohortSize ?? 5;
 
   return {
     candidateIdentifiersStored: false,
@@ -326,6 +359,8 @@ export function buildCandidateDashboardMetricSet(
       securityTelemetryStored: false,
     },
     generatedAt,
+    interviewModeBreakdown,
+    interviewModeMinimumCohortSize,
     metrics,
     schemaVersion: candidateDashboardMetricSetSchemaVersion,
     sourceContentStored: false,
@@ -449,41 +484,7 @@ function interviewMetrics(
   const source = input.sources.interviewFunnel;
   return buildMetrics({
     cohortKey: input.cohortKey,
-    descriptors: [
-      {
-        denominator: () => null,
-        denominatorKind: "not-applicable",
-        key: "interview-starts",
-        numerator: () => source?.metrics?.overall.startedCount ?? null,
-        unit: "count",
-        value: () => source?.metrics?.overall.startedCount ?? null,
-      },
-      {
-        denominator: () => source?.metrics?.overall.startedCount ?? null,
-        denominatorKind: "interview-starts",
-        key: "interview-completion-rate",
-        numerator: () => source?.metrics?.overall.completedCount ?? null,
-        unit: "basis-points",
-        value: () => source?.metrics?.overall.completionRateBasisPoints ?? null,
-      },
-      {
-        denominator: () => null,
-        denominatorKind: "not-applicable",
-        key: "interview-approved-fields",
-        numerator: () => source?.metrics?.overall.approvedFieldCount ?? null,
-        unit: "count",
-        value: () => source?.metrics?.overall.approvedFieldCount ?? null,
-      },
-      {
-        denominator: () => source?.metrics?.overall.completedCount ?? null,
-        denominatorKind: "interview-completions",
-        key: "interview-correction-burden",
-        numerator: () => source?.metrics?.overall.correctionCount ?? null,
-        unit: "basis-points",
-        value: () =>
-          source?.metrics?.overall.correctionsPerCompletionBasisPoints ?? null,
-      },
-    ],
+    descriptors: interviewMetricDescriptors(source?.metrics?.overall),
     expectedSchemaVersion: candidateInterviewFunnelSchemaVersion,
     generatedAt,
     maximumSourceAgeMs: input.maximumSourceAgeMs,
@@ -493,6 +494,115 @@ function interviewMetrics(
     windowEnd,
     windowStart,
   });
+}
+
+function buildInterviewModeBreakdown(
+  input: CandidateDashboardMetricSetInput,
+  generatedAt: string,
+  windowStart: string,
+  windowEnd: string,
+): CandidateDashboardInterviewModeMetrics[] {
+  const source = input.sources.interviewFunnel;
+  validateInterviewModeSourceTotals(source);
+  return candidateDashboardInterviewModes.map((mode) => {
+    const metric = source?.metrics?.byMode[mode];
+    const sourceForMode =
+      source?.metrics &&
+      metric &&
+      metric.startedCount > 0 &&
+      metric.startedCount < source.minimumCohortSize
+        ? {
+            ...source,
+            dataState: "suppressed-small-cohort" as const,
+            metrics: null,
+          }
+        : source;
+    return {
+      metrics: buildMetrics({
+        cohortKey: input.cohortKey,
+        descriptors: interviewMetricDescriptors(metric),
+        expectedSchemaVersion: candidateInterviewFunnelSchemaVersion,
+        generatedAt,
+        maximumSourceAgeMs: input.maximumSourceAgeMs,
+        source: sourceForMode,
+        sourceAsOf: source?.windowEnd ?? null,
+        sourceName: "interview-funnel",
+        windowEnd,
+        windowStart,
+      }),
+      mode,
+    };
+  });
+}
+
+function validateInterviewModeSourceTotals(
+  source: CandidateInterviewFunnelSnapshot | null | undefined,
+): void {
+  if (!source) return;
+  if (
+    !Number.isSafeInteger(source.minimumCohortSize) ||
+    source.minimumCohortSize < 5
+  ) {
+    throw new Error(
+      "Dashboard interview mode minimum cohort size must be at least five",
+    );
+  }
+  if (!source.metrics) return;
+  const metrics = source.metrics;
+  const countKeys = [
+    "approvedFieldCount",
+    "completedCount",
+    "correctionCount",
+    "startedCount",
+  ] as const;
+  for (const key of countKeys) {
+    const total = candidateDashboardInterviewModes.reduce(
+      (sum, mode) => sum + metrics.byMode[mode][key],
+      0,
+    );
+    if (total !== metrics.overall[key]) {
+      throw new Error("Dashboard interview mode totals do not match overall");
+    }
+  }
+}
+
+function interviewMetricDescriptors(
+  metric: CandidateInterviewFunnelMetric | undefined,
+): readonly MetricDescriptor[] {
+  return [
+    {
+      denominator: () => null,
+      denominatorKind: "not-applicable",
+      key: "interview-starts",
+      numerator: () => metric?.startedCount ?? null,
+      unit: "count",
+      value: () => metric?.startedCount ?? null,
+    },
+    {
+      denominator: () => metric?.startedCount ?? null,
+      denominatorKind: "interview-starts",
+      key: "interview-completion-rate",
+      numerator: () => metric?.completedCount ?? null,
+      unit: "basis-points",
+      value: () => metric?.completionRateBasisPoints ?? null,
+    },
+    {
+      denominator: () => null,
+      denominatorKind: "not-applicable",
+      key: "interview-approved-fields",
+      numerator: () => metric?.approvedFieldCount ?? null,
+      unit: "count",
+      value: () => metric?.approvedFieldCount ?? null,
+    },
+    {
+      denominator: () => metric?.completedCount ?? null,
+      denominatorKind: "interview-completions",
+      key: "interview-correction-burden",
+      numerator: () => metric?.correctionCount ?? null,
+      unit: "basis-points",
+      value: () => metric?.correctionsPerCompletionBasisPoints ?? null,
+    },
+  ];
 }
 
 function searchMetrics(

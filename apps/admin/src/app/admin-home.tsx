@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { Fragment, useState, type ReactNode } from "react";
 import {
   candidateInspectionFilterLabels,
   candidateInspectionFilterStatus,
@@ -417,56 +417,29 @@ function CandidateDashboard({
         </div>
       </dl>
       {candidateDashboardGroups.map((group) => (
-        <section
-          aria-labelledby={`dashboard-${group.toLowerCase().replaceAll(" ", "-")}`}
-          className="metric-section"
-          key={group}
-        >
-          <div className="metric-section-heading">
-            <p className="eyebrow">Governed metrics</p>
-            <h2 id={`dashboard-${group.toLowerCase().replaceAll(" ", "-")}`}>
-              {group}
-            </h2>
-          </div>
-          <div className="metric-grid">
-            {data.metrics
-              .filter((metric) => metric.group === group)
-              .map((metric) => (
-                <article className="metric-card" key={metric.key}>
-                  <div className="metric-card-heading">
-                    <div>
-                      <p className="eyebrow">{metric.label}</p>
-                      <strong>{metric.displayValue}</strong>
-                    </div>
-                    <span
-                      className={`metric-state metric-state-${metric.missingDataLabel.toLowerCase().replaceAll(" ", "-")}`}
-                    >
-                      {metric.missingDataLabel}
-                    </span>
-                  </div>
-                  <p>{metric.description}</p>
-                  <dl className="metric-lineage">
-                    <div>
-                      <dt>Calculation</dt>
-                      <dd>{metric.calculationLabel}</dd>
-                    </div>
-                    <div>
-                      <dt>Source</dt>
-                      <dd>{metric.sourceLabel}</dd>
-                    </div>
-                    <div>
-                      <dt>Source as of</dt>
-                      <dd>{metric.sourceAsOfLabel}</dd>
-                    </div>
-                    <div>
-                      <dt>Freshness</dt>
-                      <dd>{metric.freshnessLabel}</dd>
-                    </div>
-                  </dl>
-                </article>
-              ))}
-          </div>
-        </section>
+        <Fragment key={group}>
+          <section
+            aria-labelledby={`dashboard-${group.toLowerCase().replaceAll(" ", "-")}`}
+            className="metric-section"
+          >
+            <div className="metric-section-heading">
+              <p className="eyebrow">Governed metrics</p>
+              <h2 id={`dashboard-${group.toLowerCase().replaceAll(" ", "-")}`}>
+                {group}
+              </h2>
+            </div>
+            <div className="metric-grid">
+              {data.metrics
+                .filter((metric) => metric.group === group)
+                .map((metric) => (
+                  <MetricCard key={metric.key} metric={metric} />
+                ))}
+            </div>
+          </section>
+          {group === "Intake operations" ? (
+            <InterviewModeBreakdown data={data} />
+          ) : null}
+        </Fragment>
       ))}
       <p className="note">
         Missing sources remain unknown—not zero. This local view does not
@@ -474,6 +447,102 @@ function CandidateDashboard({
         replace human workflow review.
       </p>
     </div>
+  );
+}
+
+function MetricCard({
+  metric,
+}: Readonly<{
+  metric: CandidateDashboardPageData["metrics"][number];
+}>) {
+  return (
+    <article className="metric-card">
+      <div className="metric-card-heading">
+        <div>
+          <p className="eyebrow">{metric.label}</p>
+          <strong>{metric.displayValue}</strong>
+        </div>
+        <span
+          className={`metric-state metric-state-${metric.missingDataLabel.toLowerCase().replaceAll(" ", "-")}`}
+        >
+          {metric.missingDataLabel}
+        </span>
+      </div>
+      <p>{metric.description}</p>
+      <dl className="metric-lineage">
+        <div>
+          <dt>Calculation</dt>
+          <dd>{metric.calculationLabel}</dd>
+        </div>
+        <div>
+          <dt>Source</dt>
+          <dd>{metric.sourceLabel}</dd>
+        </div>
+        <div>
+          <dt>Source as of</dt>
+          <dd>{metric.sourceAsOfLabel}</dd>
+        </div>
+        <div>
+          <dt>Freshness</dt>
+          <dd>{metric.freshnessLabel}</dd>
+        </div>
+      </dl>
+    </article>
+  );
+}
+
+function InterviewModeBreakdown({
+  data,
+}: Readonly<{ data: CandidateDashboardPageData }>) {
+  return (
+    <section
+      aria-labelledby="dashboard-interview-mode-breakdown"
+      className="metric-section interview-mode-section"
+    >
+      <div className="metric-section-heading">
+        <p className="eyebrow">Intake attribution</p>
+        <h2 id="dashboard-interview-mode-breakdown">
+          Interview mode breakdown
+        </h2>
+        <p>
+          Operational counts only. These synthetic rows do not rank modes or
+          establish that one interview experience performs better than another.
+        </p>
+      </div>
+      <div className="interview-mode-grid">
+        {data.interviewModeBreakdown.map((breakdown) => (
+          <article className="interview-mode-card" key={breakdown.mode}>
+            <header>
+              <p className="eyebrow">Attributed mode</p>
+              <h3>{breakdown.label}</h3>
+              {breakdown.attributionNote ? (
+                <p>{breakdown.attributionNote}</p>
+              ) : null}
+            </header>
+            <dl className="interview-mode-metrics">
+              {breakdown.metrics.map((metric) => (
+                <div key={metric.key}>
+                  <dt>{metric.label}</dt>
+                  <dd>
+                    <strong>{metric.displayValue}</strong>
+                    <span>{metric.calculationLabel}</span>
+                    <span className="mode-metric-state">
+                      {metric.missingDataLabel}
+                    </span>
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </article>
+        ))}
+      </div>
+      <p className="note">
+        Mixed means a session switched modes. Unobserved means the source had no
+        reliable mode evidence; neither category is guessed into another mode.
+        Nonzero mode rows below {data.interviewModeMinimumCohortSize} starts are
+        suppressed.
+      </p>
+    </section>
   );
 }
 
