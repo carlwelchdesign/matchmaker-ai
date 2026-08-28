@@ -344,5 +344,18 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   the 140-ticket planning validator; formatting and diff hygiene; and browser
   interaction plus desktop and 390-pixel mobile visual review with no browser
   warnings or errors.
+- Dashboard authorization now requires the complete 13-key metric allowlist and
+  validates each metric's unit, denominator kind, source family, and exact
+  source schema against one immutable contract registry. Missing, unknown,
+  duplicated, source-relabeled, and schema-relabeled metrics fail closed.
+- Dashboard construction validates its descriptors against the same registry,
+  preventing a future implementation change from silently emitting a metric
+  under the wrong source or unit while preserving the serialized v3 contract.
+- Dashboard-contract enforcement branch:
+  `codex/ARG-617-dashboard-contract-enforcement`
+- Dashboard-contract enforcement implementation commit: `49e5a80`
+- Dashboard-contract enforcement verification: 116 domain tests across 16
+  files; all workspace tests, TypeScript tasks, and production builds; the
+  140-ticket planning validator; formatting; and diff hygiene.
 
 See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-interviewing.md).
