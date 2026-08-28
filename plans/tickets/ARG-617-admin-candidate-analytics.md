@@ -441,6 +441,8 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   contract.
 - Search-criteria-context branch: `codex/ARG-617-search-criteria-context`
 - Search-criteria-context implementation commit: `42919b1`
+- Search-criteria-context pull request:
+  [#82](https://github.com/carlwelchdesign/matchmaker-ai/pull/82)
 - Search-criteria-context verification: 117 domain tests across 16 files; six
   admin tests; all workspace tests, TypeScript tasks, and production builds;
   the 140-ticket planning validator; repository formatting, diff hygiene, and
