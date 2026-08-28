@@ -10,6 +10,8 @@ import {
   candidatePurposeProjectionSchemaVersion,
   candidateSearchCoverageSchemaVersion,
   candidateSearchObservationSchemaVersion,
+  candidateWorkflowFunnelSchemaVersion,
+  candidateWorkflowObservationSchemaVersion,
   interviewOutcomeSchemaVersion,
   interviewUsageSchemaVersion,
   type CandidateAnalyticsSnapshot,
@@ -21,6 +23,7 @@ import {
   type CandidateInterviewFunnelMetric,
   type CandidateInterviewFunnelSnapshot,
   type CandidateSearchCoverageSnapshot,
+  type CandidateWorkflowFunnelSnapshot,
 } from "@argent/domain";
 import type {
   CandidateDashboardMetricGroup,
@@ -333,6 +336,53 @@ const searchCoverage: CandidateSearchCoverageSnapshot = {
   windowStart: scope.windowStart,
 };
 
+const workflowOutcomes: CandidateWorkflowFunnelSnapshot = {
+  cohortKey: scope.cohortKey,
+  dataState: "available",
+  lineage: {
+    observationSchemaVersion: candidateWorkflowObservationSchemaVersion,
+    policyVersions: ["workflow-policy-synthetic-v1"],
+    projectedAt: "2026-08-28T19:45:00.000Z",
+    projectionSchemaVersion: candidatePurposeProjectionSchemaVersion,
+    selectionSetVersions: ["selection-set-synthetic-v1"],
+    sourceContentStored: false,
+  },
+  metrics: {
+    completeJourneyCount: 4,
+    dataQualityStateCounts: {
+      backfilled: 0,
+      complete: 4,
+      delayed: 0,
+      "invalid-quarantined": 0,
+      partial: 1,
+      stale: 0,
+    },
+    deliveredCount: 1,
+    deliveryRateBasisPoints: 10_000,
+    firstMeetingCount: 1,
+    firstMeetingRateBasisPoints: 10_000,
+    mutualApprovalCount: 1,
+    mutualApprovalRateBasisPoints: 3333,
+    participantAAcceptedCount: 2,
+    participantAResponseMissingCount: 2,
+    participantBAcceptedCount: 1,
+    participantBResponseMissingCount: 2,
+    reciprocalInterestCount: 1,
+    reciprocalInterestRateBasisPoints: 10_000,
+    recommendedCount: 3,
+    recommendationRateBasisPoints: 7500,
+    recordedJourneyCount: 5,
+    respectfulClosureCount: 1,
+    reviewedCount: 4,
+    shortlistedCount: 4,
+    shortlistRateBasisPoints: 10_000,
+  },
+  minimumCohortSize: 5,
+  schemaVersion: candidateWorkflowFunnelSchemaVersion,
+  windowEnd: scope.windowEnd,
+  windowStart: scope.windowStart,
+};
+
 export function buildSyntheticCandidateDashboardPageData(): CandidateDashboardPageData {
   const dashboard = buildCandidateDashboardMetricSet({
     ...scope,
@@ -341,6 +391,7 @@ export function buildSyntheticCandidateDashboardPageData(): CandidateDashboardPa
       candidateSupply,
       interviewFunnel,
       searchCoverage,
+      workflowOutcomes,
     },
   });
   const decision = authorizeCandidateDashboardMetricSet(dashboard, {
@@ -387,6 +438,15 @@ export function buildSyntheticCandidateDashboardPageData(): CandidateDashboardPa
       policyVersionsLabel:
         decision.dashboard.searchCriteriaContext.policyVersions.join(", ") ||
         "No policy version recorded",
+    },
+    workflowOutcomeContext: {
+      policyVersionsLabel:
+        decision.dashboard.workflowOutcomeContext.policyVersions.join(", ") ||
+        "No workflow policy version recorded",
+      selectionSetVersionsLabel:
+        decision.dashboard.workflowOutcomeContext.selectionSetVersions.join(
+          ", ",
+        ) || "No selection set version recorded",
     },
     separationNotice:
       "Product analytics only. Operational records, legal audit evidence, security telemetry, provider payloads, and candidate identifiers are not stored in this view.",

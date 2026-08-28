@@ -22,7 +22,7 @@ import {
 } from "./candidate-workflow-outcomes.js";
 
 export const candidateDashboardMetricSetSchemaVersion =
-  "candidate-dashboard-metric-set/v6" as const;
+  "candidate-dashboard-metric-set/v7" as const;
 
 export type CandidateDashboardSource =
   | "availability"
@@ -263,6 +263,7 @@ export interface CandidateDashboardMetricSet {
   readonly searchCriteriaContext: CandidateDashboardSearchCriteriaContext;
   readonly schemaVersion: typeof candidateDashboardMetricSetSchemaVersion;
   readonly sourceContentStored: false;
+  readonly workflowOutcomeContext: CandidateDashboardWorkflowOutcomeContext;
   readonly windowEnd: string;
   readonly windowStart: string;
 }
@@ -270,6 +271,12 @@ export interface CandidateDashboardMetricSet {
 export interface CandidateDashboardSearchCriteriaContext {
   readonly criteriaVersions: readonly string[];
   readonly policyVersions: readonly string[];
+  readonly sourceContentStored: false;
+}
+
+export interface CandidateDashboardWorkflowOutcomeContext {
+  readonly policyVersions: readonly string[];
+  readonly selectionSetVersions: readonly string[];
   readonly sourceContentStored: false;
 }
 
@@ -358,6 +365,9 @@ export function buildCandidateDashboardMetricSet(
   const searchCriteriaContext = buildSearchCriteriaContext(
     input.sources.searchCoverage,
   );
+  const workflowOutcomeContext = buildWorkflowOutcomeContext(
+    input.sources.workflowOutcomes,
+  );
 
   return {
     candidateIdentifiersStored: false,
@@ -376,8 +386,32 @@ export function buildCandidateDashboardMetricSet(
     searchCriteriaContext,
     schemaVersion: candidateDashboardMetricSetSchemaVersion,
     sourceContentStored: false,
+    workflowOutcomeContext,
     windowEnd,
     windowStart,
+  };
+}
+
+function buildWorkflowOutcomeContext(
+  source: CandidateWorkflowFunnelSnapshot | null | undefined,
+): CandidateDashboardWorkflowOutcomeContext {
+  const policyVersions: unknown = source?.lineage.policyVersions ?? [];
+  const selectionSetVersions: unknown =
+    source?.lineage.selectionSetVersions ?? [];
+  validateVersionKeys(policyVersions, "Dashboard workflow policy versions");
+  validateVersionKeys(
+    selectionSetVersions,
+    "Dashboard workflow selection-set versions",
+  );
+  if (source && source.lineage.sourceContentStored !== false) {
+    throw new Error(
+      "Dashboard workflow outcome context contains source content",
+    );
+  }
+  return {
+    policyVersions: [...policyVersions],
+    selectionSetVersions: [...selectionSetVersions],
+    sourceContentStored: false,
   };
 }
 

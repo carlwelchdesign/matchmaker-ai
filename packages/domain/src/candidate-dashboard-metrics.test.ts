@@ -26,6 +26,11 @@ import {
 } from "./candidate-search-coverage.js";
 import { interviewOutcomeSchemaVersion } from "./interview-unit-economics.js";
 import { interviewUsageSchemaVersion } from "./interview-usage.js";
+import {
+  candidateWorkflowFunnelSchemaVersion,
+  candidateWorkflowObservationSchemaVersion,
+  type CandidateWorkflowFunnelSnapshot,
+} from "./candidate-workflow-outcomes.js";
 
 const scope = {
   cohortKey: "cohort-synthetic-pilot",
@@ -136,6 +141,53 @@ const searchCoverage: CandidateSearchCoverageSnapshot = {
   windowStart: scope.windowStart,
 };
 
+const workflowOutcomes: CandidateWorkflowFunnelSnapshot = {
+  cohortKey: scope.cohortKey,
+  dataState: "available",
+  lineage: {
+    observationSchemaVersion: candidateWorkflowObservationSchemaVersion,
+    policyVersions: ["workflow-policy-v1"],
+    projectedAt: "2026-08-25T18:30:00.000Z",
+    projectionSchemaVersion: candidatePurposeProjectionSchemaVersion,
+    selectionSetVersions: ["selection-set-v1"],
+    sourceContentStored: false,
+  },
+  metrics: {
+    completeJourneyCount: 4,
+    dataQualityStateCounts: {
+      backfilled: 0,
+      complete: 4,
+      delayed: 0,
+      "invalid-quarantined": 0,
+      partial: 1,
+      stale: 0,
+    },
+    deliveredCount: 1,
+    deliveryRateBasisPoints: 10_000,
+    firstMeetingCount: 1,
+    firstMeetingRateBasisPoints: 10_000,
+    mutualApprovalCount: 1,
+    mutualApprovalRateBasisPoints: 3333,
+    participantAAcceptedCount: 2,
+    participantAResponseMissingCount: 2,
+    participantBAcceptedCount: 1,
+    participantBResponseMissingCount: 2,
+    reciprocalInterestCount: 1,
+    reciprocalInterestRateBasisPoints: 10_000,
+    recommendedCount: 3,
+    recommendationRateBasisPoints: 7500,
+    recordedJourneyCount: 5,
+    respectfulClosureCount: 1,
+    reviewedCount: 4,
+    shortlistedCount: 4,
+    shortlistRateBasisPoints: 10_000,
+  },
+  minimumCohortSize: 5,
+  schemaVersion: candidateWorkflowFunnelSchemaVersion,
+  windowEnd: scope.windowEnd,
+  windowStart: scope.windowStart,
+};
+
 function funnelMetric(
   values: Partial<CandidateInterviewFunnelMetric> = {},
 ): CandidateInterviewFunnelMetric {
@@ -202,6 +254,7 @@ describe("candidate dashboard metric set", () => {
         candidateSupply: supply,
         interviewFunnel,
         searchCoverage,
+        workflowOutcomes,
       },
     });
 
@@ -220,6 +273,11 @@ describe("candidate dashboard metric set", () => {
       searchCriteriaContext: {
         criteriaVersions: ["criteria-synthetic-v1"],
         policyVersions: ["search-policy-synthetic-v1"],
+        sourceContentStored: false,
+      },
+      workflowOutcomeContext: {
+        policyVersions: ["workflow-policy-v1"],
+        selectionSetVersions: ["selection-set-v1"],
         sourceContentStored: false,
       },
       schemaVersion: candidateDashboardMetricSetSchemaVersion,
@@ -345,6 +403,32 @@ describe("candidate dashboard metric set", () => {
       missingDataState: "available",
       value: 6000,
     });
+    expect(
+      metricSet.metrics.filter(
+        (metric) => metric.lineage.source === "workflow-outcomes",
+      ),
+    ).toEqual([
+      expect.objectContaining({
+        calculation: expect.objectContaining({ denominator: 4, numerator: 4 }),
+        key: "shortlist-rate",
+        value: 10_000,
+      }),
+      expect.objectContaining({
+        calculation: expect.objectContaining({ denominator: 3, numerator: 1 }),
+        key: "mutual-approval-rate",
+        value: 3333,
+      }),
+      expect.objectContaining({
+        calculation: expect.objectContaining({ denominator: 1, numerator: 1 }),
+        key: "first-meeting-rate",
+        value: 10_000,
+      }),
+      expect.objectContaining({
+        calculation: expect.objectContaining({ denominator: 1, numerator: 1 }),
+        key: "reciprocal-interest-rate",
+        value: 10_000,
+      }),
+    ]);
   });
 
   it("distinguishes a missing denominator from a missing source", () => {
@@ -567,6 +651,22 @@ describe("candidate dashboard metric set", () => {
         },
       }),
     ).toThrow("search criteria versions must be sorted, unique identifiers");
+    expect(() =>
+      buildCandidateDashboardMetricSet({
+        ...scope,
+        sources: {
+          workflowOutcomes: {
+            ...workflowOutcomes,
+            lineage: {
+              ...workflowOutcomes.lineage,
+              selectionSetVersions: ["selection-set-v2", "selection-set-v1"],
+            },
+          },
+        },
+      }),
+    ).toThrow(
+      "workflow selection-set versions must be sorted, unique identifiers",
+    );
     expect(() =>
       buildCandidateDashboardMetricSet({
         ...scope,

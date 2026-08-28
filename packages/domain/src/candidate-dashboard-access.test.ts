@@ -149,6 +149,30 @@ describe("candidate dashboard access", () => {
     ).toThrow("search criteria context contains source content");
     expect(() =>
       authorizeCandidateDashboardMetricSet(
+        {
+          ...dashboard,
+          workflowOutcomeContext: {
+            ...dashboard.workflowOutcomeContext,
+            policyVersions: ["workflow-policy-v2", "workflow-policy-v1"],
+          },
+        },
+        internalRequest,
+      ),
+    ).toThrow("workflow policy versions must be sorted, unique identifiers");
+    expect(() =>
+      authorizeCandidateDashboardMetricSet(
+        {
+          ...dashboard,
+          workflowOutcomeContext: {
+            ...dashboard.workflowOutcomeContext,
+            sourceContentStored: true as false,
+          },
+        },
+        internalRequest,
+      ),
+    ).toThrow("workflow outcome context contains source content");
+    expect(() =>
+      authorizeCandidateDashboardMetricSet(
         { ...dashboard, metrics: dashboard.metrics.slice(1) },
         internalRequest,
       ),
