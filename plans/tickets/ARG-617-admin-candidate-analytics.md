@@ -221,6 +221,18 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   TypeScript tasks, and production builds; the 140-ticket planning validator;
   repository formatting and diff hygiene; and browser verification of default
   and candidate-filtered scope labels, live-region attributes, and browser logs.
+- The projection-wide knowledge-gap total now exposes its individual unknown,
+  disputed, and private counts instead of collapsing those materially different
+  evidence states into one number. Candidate filtering leaves that full-
+  projection breakdown intact.
+- Admin-uncertainty-breakdown branch:
+  `codex/ARG-617-admin-uncertainty-breakdown`
+- Admin-uncertainty-breakdown commit: `14adfa6`
+- Admin-uncertainty-breakdown verification: four admin tests; all workspace
+  tests, TypeScript tasks, and production builds; the 140-ticket planning
+  validator; repository formatting and diff hygiene; and browser verification
+  of the 3 unknown, 1 disputed, and 1 private counts before and after candidate
+  filtering, with no browser warnings or errors.
 - Candidate-availability branch: `codex/ARG-617-candidate-availability`
 - Candidate-availability commit: `caa4de0`
 - Candidate-availability PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/61
