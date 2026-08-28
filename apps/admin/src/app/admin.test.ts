@@ -40,6 +40,11 @@ describe("separate synthetic admin application", () => {
     expect(clientSource).toContain("Candidate analytics / synthetic dashboard");
     expect(clientSource).toContain("See the denominator");
     expect(clientSource).toContain("Missing sources remain unknown—not zero");
+    expect(clientSource).toContain("Interview mode breakdown");
+    expect(clientSource).toContain("do not rank modes");
+    expect(clientSource).toContain("Mixed means a session switched modes");
+    expect(clientSource).toContain("Unobserved means the source had no");
+    expect(clientSource).toContain("interviewModeMinimumCohortSize");
     expect(clientSource).toContain("metric.calculationLabel");
     expect(clientSource).toContain("metric.sourceAsOfLabel");
     expect(clientSource).toContain("Raw interviews, compatibility scores");

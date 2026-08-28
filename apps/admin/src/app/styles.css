@@ -765,6 +765,63 @@ dd {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   margin: 0;
 }
+.interview-mode-section {
+  border-color: var(--argent-semantic-status-warning);
+}
+.metric-section-heading > p:not(.eyebrow),
+.interview-mode-card header p {
+  color: var(--argent-semantic-text-secondary);
+  line-height: var(--argent-type-line-height-body);
+  margin: var(--argent-primitive-space-100) 0 0;
+  max-width: 48rem;
+}
+.interview-mode-grid {
+  display: grid;
+  gap: var(--argent-primitive-space-200);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.interview-mode-card {
+  border-top: 1px solid var(--argent-semantic-border-strong);
+  display: grid;
+  gap: var(--argent-primitive-space-200);
+  padding-top: var(--argent-primitive-space-200);
+}
+.interview-mode-card h3 {
+  font-family: var(--argent-type-family-display);
+  font-size: clamp(1.6rem, 3vw, 2.25rem);
+  line-height: 1.1;
+  margin: var(--argent-primitive-space-050) 0 0;
+}
+.interview-mode-metrics {
+  display: grid;
+  gap: var(--argent-primitive-space-150);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0;
+}
+.interview-mode-metrics > div {
+  border-top: 1px solid var(--argent-semantic-border-subtle);
+  min-width: 0;
+  padding-top: var(--argent-primitive-space-100);
+}
+.interview-mode-metrics dd {
+  display: grid;
+  gap: var(--argent-primitive-space-050);
+  overflow-wrap: anywhere;
+}
+.interview-mode-metrics strong {
+  font-family: var(--argent-type-family-display);
+  font-size: clamp(1.8rem, 4vw, 2.75rem);
+  line-height: 1;
+}
+.interview-mode-metrics span {
+  color: var(--argent-semantic-text-secondary);
+}
+.interview-mode-metrics .mode-metric-state {
+  font-family: var(--argent-type-family-mono);
+  font-size: var(--argent-type-size-label);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
 @media (max-width: 44rem) {
   .header {
     grid-template-columns: 1fr auto;
@@ -785,6 +842,8 @@ dd {
   .inspection-summary,
   .fact-lineage,
   .dashboard-context,
+  .interview-mode-grid,
+  .interview-mode-metrics,
   .metric-grid,
   .metric-lineage {
     grid-template-columns: 1fr;

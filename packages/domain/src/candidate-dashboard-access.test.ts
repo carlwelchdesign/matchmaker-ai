@@ -25,6 +25,30 @@ const internalRequest = {
   role: "matchmaker",
 } as const;
 
+function withFirstModeStarts(value: number): CandidateDashboardMetricSet {
+  return {
+    ...dashboard,
+    interviewModeBreakdown: dashboard.interviewModeBreakdown.map(
+      (breakdown, index) =>
+        index === 0
+          ? {
+              ...breakdown,
+              metrics: breakdown.metrics.map((metric) =>
+                metric.key === "interview-starts"
+                  ? {
+                      ...metric,
+                      calculation: { ...metric.calculation, numerator: value },
+                      missingDataState: "available" as const,
+                      value,
+                    }
+                  : metric,
+              ),
+            }
+          : breakdown,
+    ),
+  };
+}
+
 describe("candidate dashboard access", () => {
   it("returns the governed dashboard only to authorized internal staff", () => {
     expect(
@@ -158,7 +182,7 @@ describe("candidate dashboard access", () => {
       authorizeCandidateDashboardMetricSet(
         {
           ...dashboard,
-          schemaVersion: "candidate-dashboard-metric-set/v3",
+          schemaVersion: "candidate-dashboard-metric-set/v4",
         } as unknown as CandidateDashboardMetricSet,
         internalRequest,
       ),
@@ -252,6 +276,53 @@ describe("candidate dashboard access", () => {
         internalRequest,
       ),
     ).toThrow("denominator kind is invalid");
+    expect(() =>
+      authorizeCandidateDashboardMetricSet(
+        {
+          ...dashboard,
+          interviewModeBreakdown: dashboard.interviewModeBreakdown.slice(1),
+        },
+        internalRequest,
+      ),
+    ).toThrow("interview mode breakdown is incomplete");
+    expect(() =>
+      authorizeCandidateDashboardMetricSet(
+        {
+          ...dashboard,
+          interviewModeBreakdown: dashboard.interviewModeBreakdown.map(
+            (breakdown, index) =>
+              index === 0
+                ? {
+                    ...breakdown,
+                    mode: "unobserved" as const,
+                  }
+                : breakdown,
+          ),
+        },
+        internalRequest,
+      ),
+    ).toThrow("interview modes must be valid and unique");
+    expect(() =>
+      authorizeCandidateDashboardMetricSet(
+        withFirstModeStarts(5),
+        internalRequest,
+      ),
+    ).toThrow("interview mode totals do not match overall");
+    expect(() =>
+      authorizeCandidateDashboardMetricSet(
+        withFirstModeStarts(1),
+        internalRequest,
+      ),
+    ).toThrow("interview mode exposes a small cohort");
+    expect(() =>
+      authorizeCandidateDashboardMetricSet(
+        {
+          ...dashboard,
+          interviewModeMinimumCohortSize: 4,
+        },
+        internalRequest,
+      ),
+    ).toThrow("minimum cohort size must be at least five");
     expect(() =>
       authorizeCandidateDashboardMetricSet(
         {

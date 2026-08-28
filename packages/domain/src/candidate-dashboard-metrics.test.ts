@@ -14,6 +14,7 @@ import {
 } from "./candidate-availability.js";
 import {
   buildCandidateDashboardMetricSet,
+  candidateDashboardInterviewModes,
   candidateDashboardMetricKeys,
   candidateDashboardMetricSetSchemaVersion,
 } from "./candidate-dashboard-metrics.js";
@@ -120,9 +121,20 @@ const interviewFunnel: CandidateInterviewFunnelSnapshot = {
     byMode: {
       hybrid: funnelMetric(),
       mixed: funnelMetric(),
-      structured: funnelMetric(),
+      structured: funnelMetric({
+        approvedFieldCount: 11,
+        completedCount: 4,
+        completionRateBasisPoints: 8000,
+        correctionCount: 2,
+        correctionsPerCompletionBasisPoints: 5000,
+        startedCount: 5,
+      }),
       "typed-conversation": funnelMetric(),
-      unobserved: funnelMetric(),
+      unobserved: funnelMetric({
+        approvedFieldCount: 1,
+        completionRateBasisPoints: 0,
+        startedCount: 1,
+      }),
       voice: funnelMetric(),
     },
     overall: funnelMetric({
@@ -162,6 +174,7 @@ describe("candidate dashboard metric set", () => {
         securityTelemetryStored: false,
       },
       generatedAt: scope.generatedAt,
+      interviewModeMinimumCohortSize: 5,
       schemaVersion: candidateDashboardMetricSetSchemaVersion,
       sourceContentStored: false,
       windowEnd: scope.windowEnd,
@@ -170,6 +183,43 @@ describe("candidate dashboard metric set", () => {
     expect(metricSet.metrics).toHaveLength(15);
     expect(metricSet.metrics.map((metric) => metric.key)).toEqual(
       candidateDashboardMetricKeys,
+    );
+    expect(
+      metricSet.interviewModeBreakdown.map((breakdown) => breakdown.mode),
+    ).toEqual(candidateDashboardInterviewModes);
+    expect(
+      metricSet.interviewModeBreakdown.find(
+        (breakdown) => breakdown.mode === "structured",
+      ),
+    ).toMatchObject({
+      metrics: [
+        { key: "interview-starts", value: 5 },
+        {
+          calculation: { denominator: 5, numerator: 4 },
+          key: "interview-completion-rate",
+          value: 8000,
+        },
+        { key: "interview-approved-fields", value: 11 },
+        {
+          calculation: { denominator: 4, numerator: 2 },
+          key: "interview-correction-burden",
+          value: 5000,
+        },
+      ],
+      mode: "structured",
+    });
+    expect(
+      metricSet.interviewModeBreakdown.find(
+        (breakdown) => breakdown.mode === "unobserved",
+      )?.metrics,
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          key: "interview-starts",
+          missingDataState: "suppressed-small-cohort",
+          value: null,
+        }),
+      ]),
     );
     expect(
       metricSet.metrics.find((metric) => metric.key === "candidate-supply"),
@@ -257,6 +307,14 @@ describe("candidate dashboard metric set", () => {
           ...interviewFunnel,
           metrics: {
             ...interviewFunnel.metrics!,
+            byMode: {
+              hybrid: funnelMetric(),
+              mixed: funnelMetric(),
+              structured: funnelMetric(),
+              "typed-conversation": funnelMetric(),
+              unobserved: funnelMetric(),
+              voice: funnelMetric(),
+            },
             overall: funnelMetric(),
           },
         },
@@ -301,6 +359,17 @@ describe("candidate dashboard metric set", () => {
           ...interviewFunnel,
           metrics: {
             ...interviewFunnel.metrics!,
+            byMode: {
+              ...interviewFunnel.metrics!.byMode,
+              structured: funnelMetric({
+                approvedFieldCount: 11,
+                completedCount: 4,
+                completionRateBasisPoints: 8000,
+                correctionCount: 8,
+                correctionsPerCompletionBasisPoints: 20_000,
+                startedCount: 5,
+              }),
+            },
             overall: funnelMetric({
               approvedFieldCount: 12,
               completedCount: 4,
@@ -436,6 +505,34 @@ describe("candidate dashboard metric set", () => {
         },
       }),
     ).toThrow("approved-field-coverage is invalid");
+    expect(() =>
+      buildCandidateDashboardMetricSet({
+        ...scope,
+        sources: {
+          interviewFunnel: {
+            ...interviewFunnel,
+            metrics: {
+              ...interviewFunnel.metrics!,
+              byMode: {
+                ...interviewFunnel.metrics!.byMode,
+                voice: funnelMetric({ startedCount: 1 }),
+              },
+            },
+          },
+        },
+      }),
+    ).toThrow("interview mode totals do not match overall");
+    expect(() =>
+      buildCandidateDashboardMetricSet({
+        ...scope,
+        sources: {
+          interviewFunnel: {
+            ...interviewFunnel,
+            minimumCohortSize: 4,
+          },
+        },
+      }),
+    ).toThrow("minimum cohort size must be at least five");
   });
 
   it("emits no identity, interview content, or generalized score", () => {

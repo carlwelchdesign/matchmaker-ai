@@ -49,6 +49,57 @@ describe("synthetic candidate analytics dashboard", () => {
       missingDataLabel: "Source unavailable",
       sourceAsOfLabel: "No source timestamp",
     });
+    expect(data.interviewModeBreakdown.map((mode) => mode.label)).toEqual([
+      "Structured",
+      "Typed conversation",
+      "Voice",
+      "Hybrid",
+      "Mixed mode",
+      "Unobserved mode",
+    ]);
+    expect(data.interviewModeMinimumCohortSize).toBe(5);
+    expect(
+      data.interviewModeBreakdown.find((mode) => mode.mode === "structured")
+        ?.metrics,
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          calculationLabel: "4 of 5 interview starts",
+          displayValue: "80%",
+          key: "interview-completion-rate",
+        }),
+        expect.objectContaining({
+          calculationLabel: "2 of 4 completed interviews",
+          displayValue: "50%",
+          key: "interview-correction-burden",
+        }),
+      ]),
+    );
+    expect(
+      data.interviewModeBreakdown.find((mode) => mode.mode === "mixed"),
+    ).toMatchObject({
+      attributionNote: "The interview switched modes during one session.",
+      metrics: expect.arrayContaining([
+        expect.objectContaining({
+          calculationLabel: "0 of 0 completed interviews",
+          displayValue: "—",
+          key: "interview-correction-burden",
+          missingDataLabel: "Missing denominator",
+        }),
+      ]),
+    });
+    expect(
+      data.interviewModeBreakdown.find((mode) => mode.mode === "unobserved")
+        ?.metrics,
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          displayValue: "—",
+          key: "interview-starts",
+          missingDataLabel: "Suppressed small cohort",
+        }),
+      ]),
+    );
   });
 
   test("keeps the client view model aggregate and content-free", () => {

@@ -13,13 +13,16 @@ import {
   type CandidateAnalyticsSnapshot,
   type CandidateAvailabilitySnapshot,
   type CandidateDashboardMetric,
+  type CandidateDashboardInterviewModeMetrics,
   type CandidateDashboardMetricKey,
+  type CandidateInterviewModeAttribution,
   type CandidateInterviewFunnelMetric,
   type CandidateInterviewFunnelSnapshot,
 } from "@argent/domain";
 import type {
   CandidateDashboardMetricGroup,
   CandidateDashboardMetricView,
+  CandidateDashboardInterviewModeView,
   CandidateDashboardPageData,
 } from "./candidate-dashboard-view-model";
 
@@ -139,6 +142,36 @@ const sourceLabels = {
   "workflow-outcomes": "Introduction workflow outcomes",
 } as const;
 
+const interviewModeContent = {
+  hybrid: {
+    attributionNote: null,
+    label: "Hybrid",
+  },
+  mixed: {
+    attributionNote: "The interview switched modes during one session.",
+    label: "Mixed mode",
+  },
+  structured: {
+    attributionNote: null,
+    label: "Structured",
+  },
+  "typed-conversation": {
+    attributionNote: null,
+    label: "Typed conversation",
+  },
+  unobserved: {
+    attributionNote: "No reliable mode evidence was available.",
+    label: "Unobserved mode",
+  },
+  voice: {
+    attributionNote: null,
+    label: "Voice",
+  },
+} as const satisfies Record<
+  CandidateInterviewModeAttribution,
+  { readonly attributionNote: string | null; readonly label: string }
+>;
+
 const candidateSupply: CandidateAnalyticsSnapshot = {
   cohortKey: scope.cohortKey,
   dataState: "available",
@@ -230,9 +263,20 @@ const interviewFunnel: CandidateInterviewFunnelSnapshot = {
     byMode: {
       hybrid: funnelMetric(),
       mixed: funnelMetric(),
-      structured: funnelMetric(),
+      structured: funnelMetric({
+        approvedFieldCount: 11,
+        completedCount: 4,
+        completionRateBasisPoints: 8000,
+        correctionCount: 2,
+        correctionsPerCompletionBasisPoints: 5000,
+        startedCount: 5,
+      }),
       "typed-conversation": funnelMetric(),
-      unobserved: funnelMetric(),
+      unobserved: funnelMetric({
+        approvedFieldCount: 1,
+        completionRateBasisPoints: 0,
+        startedCount: 1,
+      }),
       voice: funnelMetric(),
     },
     overall: funnelMetric({
@@ -273,9 +317,25 @@ export function buildSyntheticCandidateDashboardPageData(): CandidateDashboardPa
       role: "Matchmaker",
       windowLabel: `${formatUtc(dashboard.windowStart)} to ${formatUtc(dashboard.windowEnd)}`,
     },
+    interviewModeBreakdown:
+      decision.dashboard.interviewModeBreakdown.map(toInterviewModeView),
+    interviewModeMinimumCohortSize:
+      decision.dashboard.interviewModeMinimumCohortSize,
     metrics: decision.dashboard.metrics.map(toMetricView),
     separationNotice:
       "Product analytics only. Operational records, legal audit evidence, security telemetry, provider payloads, and candidate identifiers are not stored in this view.",
+  };
+}
+
+function toInterviewModeView(
+  breakdown: CandidateDashboardInterviewModeMetrics,
+): CandidateDashboardInterviewModeView {
+  const content = interviewModeContent[breakdown.mode];
+  return {
+    attributionNote: content.attributionNote,
+    label: content.label,
+    metrics: breakdown.metrics.map(toMetricView),
+    mode: breakdown.mode,
   };
 }
 
