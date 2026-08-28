@@ -1,4 +1,46 @@
 export {
+  buildCandidateApprovedFactInspection,
+  candidateApprovedFactInspectionSchemaVersion,
+  type CandidateApprovedFact,
+  type CandidateApprovedFactFreshness,
+  type CandidateApprovedFactInspection,
+  type CandidateApprovedFactInspectionFilter,
+  type CandidateApprovedFactInspectionRequest,
+} from "./candidate-approved-fact-inspection.js";
+export {
+  buildCandidateAvailabilitySnapshot,
+  candidateAvailabilityObservationSchemaVersion,
+  candidateAvailabilitySnapshotSchemaVersion,
+  recordCandidateAvailabilityObservation,
+  validateCandidateAvailabilityObservation,
+  type CandidateAvailabilityMetricState,
+  type CandidateAvailabilityObservation,
+  type CandidateAvailabilityObservationInput,
+  type CandidateAvailabilitySnapshot,
+  type CandidateAvailabilityState,
+} from "./candidate-availability.js";
+export {
+  authorizeCandidateDashboardMetricSet,
+  candidateDashboardAccessDecisionSchemaVersion,
+  type CandidateDashboardAccessDecision,
+  type CandidateDashboardAccessReason,
+  type CandidateDashboardAccessRequest,
+  type CandidateDashboardAudience,
+  type CandidateDashboardViewerRole,
+} from "./candidate-dashboard-access.js";
+export {
+  buildCandidateDashboardMetricSet,
+  candidateDashboardMetricSetSchemaVersion,
+  type CandidateDashboardFreshnessState,
+  type CandidateDashboardMetric,
+  type CandidateDashboardMetricKey,
+  type CandidateDashboardMetricSet,
+  type CandidateDashboardMetricSetInput,
+  type CandidateDashboardMetricUnit,
+  type CandidateDashboardMissingDataState,
+  type CandidateDashboardSource,
+} from "./candidate-dashboard-metrics.js";
+export {
   buildCandidateAnalyticsSnapshot,
   buildCandidateAssertionEligibilitySnapshot,
   buildCandidateInterviewFunnelSnapshot,
