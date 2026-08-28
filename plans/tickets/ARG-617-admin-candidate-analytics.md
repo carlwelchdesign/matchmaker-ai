@@ -19,7 +19,7 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
 
 - [x] Define metric contracts for candidate supply, completeness/freshness, consent/availability, funnel by mode, correction burden, search coverage, shortlist throughput, and introduction outcomes.
 - [x] Every dashboard value links to authoritative source lineage, cohort, time window, freshness, and missing-data state. The display-ready metric-set contract preserves per-source schema and observation time, distinguishes fresh, stale, and unknown values, and separates missing denominators, unavailable sources, and small-cohort suppression.
-- [ ] Staff can filter and inspect approved facts with provenance and uncertainty; raw interview content is not exposed by default.
+- [ ] Staff can filter and inspect approved facts with provenance and uncertainty; raw interview content is not exposed by default. The governed domain inspection contract is implemented, but an authenticated staff-facing integration and user-visible workflow evidence remain open.
 - [x] Permissions and aggregate thresholds prevent inappropriate small-cohort or partner disclosure. The access-decision boundary returns dashboard values only to authorized internal staff for explicitly allowed cohorts, returns no dashboard for partner audiences or roles, and preserves null-valued small-cohort suppression.
 - [x] No overall candidate-value, attractiveness, personality, wealth, compatibility, or relationship-success score is shown. Dashboard keys are an explicit operational allowlist, and the serialization regression test excludes generalized or sensitive-trait scores.
 - [ ] Product analytics, operational records, legal audit evidence, and security telemetry remain separate.
@@ -133,6 +133,17 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   typecheck and build; all workspace tests, TypeScript tasks, and production
   builds; the 140-ticket planning validator; repository formatting; and diff
   hygiene.
+- `candidate-approved-fact-inspection/v1` turns a purpose- and role-matched
+  candidate projection into filterable approved facts for candidate, topic,
+  and freshness state. Each result carries exact review provenance, consent and
+  retention bounds, and a current or expires-soon label derived from an
+  explicit warning window.
+- Inspection must use a projection generated at the exact access time, rejects
+  expired or malformed assertions, preserves global unknown/disputed/private
+  state counts, and distinguishes approved, excluded, source-evaluated, and
+  filter-matching counts. Output selects approved values only and contains no
+  raw transcript, prompt, audio, model, or generalized score fields.
+- Fact-inspection branch: `codex/ARG-617-fact-inspection`
 - Candidate-availability branch: `codex/ARG-617-candidate-availability`
 - Candidate-availability commit: `caa4de0`
 - Candidate-availability PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/61
