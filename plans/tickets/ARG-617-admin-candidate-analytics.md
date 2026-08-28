@@ -19,7 +19,7 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
 
 - [x] Define metric contracts for candidate supply, completeness/freshness, consent/availability, funnel by mode, correction burden, search coverage, shortlist throughput, and introduction outcomes.
 - [x] Every dashboard value links to authoritative source lineage, cohort, time window, freshness, and missing-data state. The display-ready metric-set contract preserves per-source schema and observation time, distinguishes fresh, stale, and unknown values, and separates missing denominators, unavailable sources, and small-cohort suppression.
-- [ ] Staff can filter and inspect approved facts with provenance and uncertainty; raw interview content is not exposed by default. The governed domain inspection contract is implemented, but an authenticated staff-facing integration and user-visible workflow evidence remain open.
+- [ ] Staff can filter and inspect approved facts with provenance and uncertainty; raw interview content is not exposed by default. The governed domain contract and a synthetic local inspection workflow are implemented and browser-verified, but authenticated staff access, real integration, and representative staff testing remain open.
 - [x] Permissions and aggregate thresholds prevent inappropriate small-cohort or partner disclosure. The access-decision boundary returns dashboard values only to authorized internal staff for explicitly allowed cohorts, returns no dashboard for partner audiences or roles, and preserves null-valued small-cohort suppression.
 - [x] No overall candidate-value, attractiveness, personality, wealth, compatibility, or relationship-success score is shown. Dashboard keys are an explicit operational allowlist, and the serialization regression test excludes generalized or sensitive-trait scores.
 - [ ] Product analytics, operational records, legal audit evidence, and security telemetry remain separate.
@@ -150,6 +150,24 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   typecheck and build; all workspace tests, TypeScript tasks, and production
   builds; the 140-ticket planning validator; repository formatting; and diff
   hygiene.
+- The local admin concept now consumes the governed inspection contract through
+  a clearly synthetic access-time projection. Matchmakers can combine
+  candidate, topic, and freshness filters; inspect exact source, guide, review,
+  consent, freshness, and retention lineage; and see explicit empty results
+  without an inferred answer.
+- The interface keeps unknown, disputed, and private field counts visible,
+  distinguishes facts excluded at access time, labels facts that expire soon,
+  and contains no raw interview, compatibility score, prediction, or automatic
+  recommendation. It does not authenticate staff, connect to real candidate
+  data, persist state, or grant production access.
+- Admin-fact-inspection branch: `codex/ARG-617-admin-fact-inspection`
+- Admin-fact-inspection commit: `4887cf7`
+- Admin-fact-inspection PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/65
+- Admin-fact-inspection verification: four admin tests; all workspace tests,
+  TypeScript tasks, and production builds; the 140-ticket planning validator;
+  repository formatting and diff hygiene; browser interaction for default,
+  combined-filter, and empty-result states; and desktop plus 390-pixel mobile
+  visual review with no browser warnings or errors.
 - Candidate-availability branch: `codex/ARG-617-candidate-availability`
 - Candidate-availability commit: `caa4de0`
 - Candidate-availability PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/61
