@@ -469,7 +469,31 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
 - Workflow-outcome-context verification: 117 domain tests across 16 files; six
   admin tests; all workspace tests, TypeScript tasks, and production builds;
   the 140-ticket planning validator; repository formatting and diff hygiene.
-  Interactive browser QA remains outstanding because browser control was not
-  available in this task runtime.
+  The combined workflow context received desktop and mobile browser review with
+  the following observation-quality increment.
+- `candidate-dashboard-metric-set/v8` adds a governed observation-quality
+  summary to the search and workflow contexts. Available summaries require the
+  exact six-state quality allowlist, nonnegative integer counts, a complete
+  count that matches the complete state, and state totals that reconcile to all
+  recorded observations. Missing sources and suppressed small cohorts carry no
+  counts.
+- Dashboard authorization independently revalidates the exact quality shape,
+  disclosure state, allowlisted keys, counts, and totals. Malformed, partial,
+  or count-bearing unavailable/suppressed summaries fail closed.
+- The synthetic admin dashboard now states that 2 of 3 recorded searches and 4
+  of 5 recorded journeys are complete, with one partial observation excluded
+  from each displayed rate family. This explains denominator exclusions without
+  exposing queries, identities, journey records, or narrative content.
+- Observation-quality-context branch:
+  `codex/ARG-617-observation-quality-context`
+- Observation-quality-context implementation commit: `2dc6435`
+- Observation-quality-context pull request:
+  [#84](https://github.com/carlwelchdesign/matchmaker-ai/pull/84)
+- Observation-quality-context verification: 117 domain tests across 16 files;
+  six admin tests; all workspace tests, TypeScript tasks, and production builds;
+  the 140-ticket planning validator; repository formatting and diff hygiene;
+  plus 1280-pixel and 390-pixel browser review with exact content, responsive
+  single-column contexts, no horizontal overflow, and no browser warnings or
+  errors.
 
 See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-interviewing.md).

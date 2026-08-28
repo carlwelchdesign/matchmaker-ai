@@ -441,6 +441,10 @@ function CandidateDashboard({
                   <dt>Search policy version</dt>
                   <dd>{data.searchCriteriaContext.policyVersionsLabel}</dd>
                 </div>
+                <div className="context-observation-quality">
+                  <dt>Observation quality</dt>
+                  <dd>{data.searchCriteriaContext.observationQualityLabel}</dd>
+                </div>
                 <div className="search-context-boundary">
                   <dt>Boundary</dt>
                   <dd>
@@ -464,6 +468,10 @@ function CandidateDashboard({
                 <div>
                   <dt>Workflow policy version</dt>
                   <dd>{data.workflowOutcomeContext.policyVersionsLabel}</dd>
+                </div>
+                <div className="context-observation-quality">
+                  <dt>Observation quality</dt>
+                  <dd>{data.workflowOutcomeContext.observationQualityLabel}</dd>
                 </div>
                 <div className="workflow-context-boundary">
                   <dt>Boundary</dt>

@@ -819,6 +819,10 @@ dd {
 .workflow-outcome-context .workflow-context-boundary {
   grid-column: 1 / -1;
 }
+.search-coverage-context .context-observation-quality,
+.workflow-outcome-context .context-observation-quality {
+  grid-column: 1 / -1;
+}
 .interview-mode-card {
   border-top: 1px solid var(--argent-semantic-border-strong);
   display: grid;

@@ -5,6 +5,7 @@ import {
   candidateDashboardMetricContractForMetric,
   candidateDashboardMetricKeys,
   candidateDashboardMetricSetSchemaVersion,
+  candidateDashboardObservationDataQualityStates,
   type CandidateDashboardMetricSet,
 } from "./candidate-dashboard-metrics.js";
 
@@ -214,6 +215,10 @@ function validateWorkflowOutcomeContext(
     dashboard.workflowOutcomeContext.selectionSetVersions,
     "Dashboard workflow selection-set versions",
   );
+  validateObservationQuality(
+    dashboard.workflowOutcomeContext.observationQuality,
+    "Dashboard workflow observation quality",
+  );
 }
 
 function validateSearchCriteriaContext(
@@ -232,6 +237,68 @@ function validateSearchCriteriaContext(
     dashboard.searchCriteriaContext.policyVersions,
     "Dashboard search policy versions",
   );
+  validateObservationQuality(
+    dashboard.searchCriteriaContext.observationQuality,
+    "Dashboard search observation quality",
+  );
+}
+
+function validateObservationQuality(quality: unknown, label: string): void {
+  if (!quality || typeof quality !== "object") {
+    throw new Error(`${label} is invalid`);
+  }
+  const record = quality as Record<string, unknown>;
+  if (
+    Object.keys(record).sort().join(",") !==
+    [
+      "completeObservationCount",
+      "dataQualityStateCounts",
+      "recordedObservationCount",
+      "state",
+    ].join(",")
+  ) {
+    throw new Error(`${label} is invalid`);
+  }
+  if (
+    record.state === "source-unavailable" ||
+    record.state === "suppressed-small-cohort"
+  ) {
+    if (
+      record.completeObservationCount !== null ||
+      record.dataQualityStateCounts !== null ||
+      record.recordedObservationCount !== null
+    ) {
+      throw new Error(`${label} is invalid`);
+    }
+    return;
+  }
+  if (
+    record.state !== "available" ||
+    !Number.isSafeInteger(record.completeObservationCount) ||
+    (record.completeObservationCount as number) < 0 ||
+    !Number.isSafeInteger(record.recordedObservationCount) ||
+    (record.recordedObservationCount as number) < 0 ||
+    !record.dataQualityStateCounts ||
+    typeof record.dataQualityStateCounts !== "object"
+  ) {
+    throw new Error(`${label} is invalid`);
+  }
+  const counts = record.dataQualityStateCounts as Record<string, unknown>;
+  if (
+    Object.keys(counts).sort().join(",") !==
+      [...candidateDashboardObservationDataQualityStates].sort().join(",") ||
+    candidateDashboardObservationDataQualityStates.some(
+      (state) =>
+        !Number.isSafeInteger(counts[state]) || (counts[state] as number) < 0,
+    ) ||
+    counts.complete !== record.completeObservationCount ||
+    candidateDashboardObservationDataQualityStates.reduce(
+      (total, state) => total + (counts[state] as number),
+      0,
+    ) !== record.recordedObservationCount
+  ) {
+    throw new Error(`${label} is invalid`);
+  }
 }
 
 function validateVersionKeys(values: unknown, label: string): void {

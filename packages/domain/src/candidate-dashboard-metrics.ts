@@ -22,7 +22,7 @@ import {
 } from "./candidate-workflow-outcomes.js";
 
 export const candidateDashboardMetricSetSchemaVersion =
-  "candidate-dashboard-metric-set/v7" as const;
+  "candidate-dashboard-metric-set/v8" as const;
 
 export type CandidateDashboardSource =
   | "availability"
@@ -270,15 +270,45 @@ export interface CandidateDashboardMetricSet {
 
 export interface CandidateDashboardSearchCriteriaContext {
   readonly criteriaVersions: readonly string[];
+  readonly observationQuality: CandidateDashboardObservationQuality;
   readonly policyVersions: readonly string[];
   readonly sourceContentStored: false;
 }
 
 export interface CandidateDashboardWorkflowOutcomeContext {
+  readonly observationQuality: CandidateDashboardObservationQuality;
   readonly policyVersions: readonly string[];
   readonly selectionSetVersions: readonly string[];
   readonly sourceContentStored: false;
 }
+
+export const candidateDashboardObservationDataQualityStates = Object.freeze([
+  "backfilled",
+  "complete",
+  "delayed",
+  "invalid-quarantined",
+  "partial",
+  "stale",
+] as const);
+
+export type CandidateDashboardObservationDataQualityState =
+  (typeof candidateDashboardObservationDataQualityStates)[number];
+
+export type CandidateDashboardObservationQuality =
+  | {
+      readonly completeObservationCount: number;
+      readonly dataQualityStateCounts: Readonly<
+        Record<CandidateDashboardObservationDataQualityState, number>
+      >;
+      readonly recordedObservationCount: number;
+      readonly state: "available";
+    }
+  | {
+      readonly completeObservationCount: null;
+      readonly dataQualityStateCounts: null;
+      readonly recordedObservationCount: null;
+      readonly state: "source-unavailable" | "suppressed-small-cohort";
+    };
 
 export interface CandidateDashboardInterviewModeMetrics {
   readonly metrics: readonly CandidateDashboardMetric[];
@@ -409,6 +439,13 @@ function buildWorkflowOutcomeContext(
     );
   }
   return {
+    observationQuality: buildObservationQuality({
+      completeObservationCount: source?.metrics?.completeJourneyCount,
+      dataQualityStateCounts: source?.metrics?.dataQualityStateCounts,
+      label: "Dashboard workflow observation quality",
+      recordedObservationCount: source?.metrics?.recordedJourneyCount,
+      sourceState: source?.dataState,
+    }),
     policyVersions: [...policyVersions],
     selectionSetVersions: [...selectionSetVersions],
     sourceContentStored: false,
@@ -429,9 +466,81 @@ function buildSearchCriteriaContext(
   }
   return {
     criteriaVersions: [...criteriaVersions],
+    observationQuality: buildObservationQuality({
+      completeObservationCount: source?.metrics?.completeSearchCount,
+      dataQualityStateCounts: source?.metrics?.dataQualityStateCounts,
+      label: "Dashboard search observation quality",
+      recordedObservationCount: source?.metrics?.recordedSearchCount,
+      sourceState: source?.dataState,
+    }),
     policyVersions: [...policyVersions],
     sourceContentStored: false,
   };
+}
+
+function buildObservationQuality(input: {
+  readonly completeObservationCount: number | null | undefined;
+  readonly dataQualityStateCounts:
+    | Readonly<Record<CandidateDashboardObservationDataQualityState, number>>
+    | null
+    | undefined;
+  readonly label: string;
+  readonly recordedObservationCount: number | null | undefined;
+  readonly sourceState: DashboardSourceContract["dataState"] | undefined;
+}): CandidateDashboardObservationQuality {
+  if (input.sourceState === undefined) {
+    return {
+      completeObservationCount: null,
+      dataQualityStateCounts: null,
+      recordedObservationCount: null,
+      state: "source-unavailable",
+    };
+  }
+  if (input.sourceState === "suppressed-small-cohort") {
+    return {
+      completeObservationCount: null,
+      dataQualityStateCounts: null,
+      recordedObservationCount: null,
+      state: "suppressed-small-cohort",
+    };
+  }
+  const counts = input.dataQualityStateCounts;
+  if (
+    !counts ||
+    !hasExactDataQualityStateKeys(counts) ||
+    candidateDashboardObservationDataQualityStates.some(
+      (state) => !Number.isSafeInteger(counts[state]) || counts[state] < 0,
+    ) ||
+    !Number.isSafeInteger(input.completeObservationCount) ||
+    input.completeObservationCount! < 0 ||
+    !Number.isSafeInteger(input.recordedObservationCount) ||
+    input.recordedObservationCount! < 0 ||
+    counts.complete !== input.completeObservationCount ||
+    candidateDashboardObservationDataQualityStates.reduce(
+      (total, state) => total + counts[state],
+      0,
+    ) !== input.recordedObservationCount
+  ) {
+    throw new Error(`${input.label} is invalid`);
+  }
+  return {
+    completeObservationCount: input.completeObservationCount as number,
+    dataQualityStateCounts: { ...counts },
+    recordedObservationCount: input.recordedObservationCount as number,
+    state: "available",
+  };
+}
+
+function hasExactDataQualityStateKeys(value: object): boolean {
+  const keys = Object.keys(value).sort();
+  return (
+    keys.length === candidateDashboardObservationDataQualityStates.length &&
+    keys.every(
+      (key, index) =>
+        key ===
+        [...candidateDashboardObservationDataQualityStates].sort()[index],
+    )
+  );
 }
 
 function validateVersionKeys(
