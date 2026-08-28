@@ -57,6 +57,8 @@ describe("synthetic candidate analytics dashboard", () => {
     });
     expect(data.searchCriteriaContext).toEqual({
       criteriaVersionsLabel: "criteria-synthetic-v1",
+      observationQualityLabel:
+        "2 of 3 recorded searches complete. 1 partial excluded from displayed rates.",
       policyVersionsLabel: "search-policy-synthetic-v1",
     });
     expect(
@@ -89,6 +91,8 @@ describe("synthetic candidate analytics dashboard", () => {
       sourceAsOfLabel: "Aug 28, 2026, 7:45 PM UTC",
     });
     expect(data.workflowOutcomeContext).toEqual({
+      observationQualityLabel:
+        "4 of 5 recorded journeys complete. 1 partial excluded from displayed rates.",
       policyVersionsLabel: "workflow-policy-synthetic-v1",
       selectionSetVersionsLabel: "selection-set-synthetic-v1",
     });

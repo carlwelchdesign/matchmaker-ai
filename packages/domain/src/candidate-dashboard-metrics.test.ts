@@ -272,10 +272,36 @@ describe("candidate dashboard metric set", () => {
       interviewModeMinimumCohortSize: 5,
       searchCriteriaContext: {
         criteriaVersions: ["criteria-synthetic-v1"],
+        observationQuality: {
+          completeObservationCount: 2,
+          dataQualityStateCounts: {
+            backfilled: 0,
+            complete: 2,
+            delayed: 0,
+            "invalid-quarantined": 0,
+            partial: 1,
+            stale: 0,
+          },
+          recordedObservationCount: 3,
+          state: "available",
+        },
         policyVersions: ["search-policy-synthetic-v1"],
         sourceContentStored: false,
       },
       workflowOutcomeContext: {
+        observationQuality: {
+          completeObservationCount: 4,
+          dataQualityStateCounts: {
+            backfilled: 0,
+            complete: 4,
+            delayed: 0,
+            "invalid-quarantined": 0,
+            partial: 1,
+            stale: 0,
+          },
+          recordedObservationCount: 5,
+          state: "available",
+        },
         policyVersions: ["workflow-policy-v1"],
         selectionSetVersions: ["selection-set-v1"],
         sourceContentStored: false,
@@ -481,6 +507,12 @@ describe("candidate dashboard metric set", () => {
       metricSet.metrics.find((metric) => metric.key === "candidate-supply")
         ?.missingDataState,
     ).toBe("source-unavailable");
+    expect(metricSet.searchCriteriaContext.observationQuality).toEqual({
+      completeObservationCount: null,
+      dataQualityStateCounts: null,
+      recordedObservationCount: null,
+      state: "source-unavailable",
+    });
   });
 
   it("allows correction burden above one correction per completion", () => {
@@ -552,6 +584,11 @@ describe("candidate dashboard metric set", () => {
           dataState: "suppressed-small-cohort",
           metrics: null,
         },
+        searchCoverage: {
+          ...searchCoverage,
+          dataState: "suppressed-small-cohort",
+          metrics: null,
+        },
       },
     });
 
@@ -579,6 +616,12 @@ describe("candidate dashboard metric set", () => {
         value: null,
       }),
     ]);
+    expect(metricSet.searchCriteriaContext.observationQuality).toEqual({
+      completeObservationCount: null,
+      dataQualityStateCounts: null,
+      recordedObservationCount: null,
+      state: "suppressed-small-cohort",
+    });
   });
 
   it("fails closed on mismatched scope, schema, state, or future lineage", () => {
@@ -667,6 +710,20 @@ describe("candidate dashboard metric set", () => {
     ).toThrow(
       "workflow selection-set versions must be sorted, unique identifiers",
     );
+    expect(() =>
+      buildCandidateDashboardMetricSet({
+        ...scope,
+        sources: {
+          searchCoverage: {
+            ...searchCoverage,
+            metrics: {
+              ...searchCoverage.metrics!,
+              recordedSearchCount: 4,
+            },
+          },
+        },
+      }),
+    ).toThrow("search observation quality is invalid");
     expect(() =>
       buildCandidateDashboardMetricSet({
         ...scope,

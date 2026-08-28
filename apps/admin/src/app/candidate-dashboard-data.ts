@@ -19,6 +19,7 @@ import {
   type CandidateDashboardMetric,
   type CandidateDashboardInterviewModeMetrics,
   type CandidateDashboardMetricKey,
+  type CandidateDashboardObservationQuality,
   type CandidateInterviewModeAttribution,
   type CandidateInterviewFunnelMetric,
   type CandidateInterviewFunnelSnapshot,
@@ -435,11 +436,21 @@ export function buildSyntheticCandidateDashboardPageData(): CandidateDashboardPa
       criteriaVersionsLabel:
         decision.dashboard.searchCriteriaContext.criteriaVersions.join(", ") ||
         "No criteria version recorded",
+      observationQualityLabel: observationQualityLabel(
+        decision.dashboard.searchCriteriaContext.observationQuality,
+        "search",
+        "searches",
+      ),
       policyVersionsLabel:
         decision.dashboard.searchCriteriaContext.policyVersions.join(", ") ||
         "No policy version recorded",
     },
     workflowOutcomeContext: {
+      observationQualityLabel: observationQualityLabel(
+        decision.dashboard.workflowOutcomeContext.observationQuality,
+        "journey",
+        "journeys",
+      ),
       policyVersionsLabel:
         decision.dashboard.workflowOutcomeContext.policyVersions.join(", ") ||
         "No workflow policy version recorded",
@@ -451,6 +462,32 @@ export function buildSyntheticCandidateDashboardPageData(): CandidateDashboardPa
     separationNotice:
       "Product analytics only. Operational records, legal audit evidence, security telemetry, provider payloads, and candidate identifiers are not stored in this view.",
   };
+}
+
+function observationQualityLabel(
+  quality: CandidateDashboardObservationQuality,
+  singularNoun: string,
+  pluralNoun: string,
+): string {
+  if (quality.state !== "available") {
+    return quality.state === "source-unavailable"
+      ? `No recorded ${pluralNoun} available.`
+      : `Recorded ${pluralNoun} are suppressed for a small cohort.`;
+  }
+  const completeCount = quality.completeObservationCount;
+  const recordedCount = quality.recordedObservationCount;
+  const excludedStates = Object.entries(quality.dataQualityStateCounts)
+    .filter(([state, count]) => state !== "complete" && count > 0)
+    .map(
+      ([state, count]) =>
+        `${count.toLocaleString("en-US")} ${state.replaceAll("-", " ")}`,
+    );
+  const noun = recordedCount === 1 ? singularNoun : pluralNoun;
+  const exclusion =
+    excludedStates.length === 0
+      ? "No incomplete observations are excluded from displayed rates."
+      : `${excludedStates.join(", ")} excluded from displayed rates.`;
+  return `${completeCount.toLocaleString("en-US")} of ${recordedCount.toLocaleString("en-US")} recorded ${noun} complete. ${exclusion}`;
 }
 
 function toInterviewModeView(

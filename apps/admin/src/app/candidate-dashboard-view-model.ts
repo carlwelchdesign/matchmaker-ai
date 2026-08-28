@@ -42,10 +42,12 @@ export interface CandidateDashboardPageData {
   readonly metrics: readonly CandidateDashboardMetricView[];
   readonly searchCriteriaContext: {
     readonly criteriaVersionsLabel: string;
+    readonly observationQualityLabel: string;
     readonly policyVersionsLabel: string;
   };
   readonly separationNotice: string;
   readonly workflowOutcomeContext: {
+    readonly observationQualityLabel: string;
     readonly policyVersionsLabel: string;
     readonly selectionSetVersionsLabel: string;
   };

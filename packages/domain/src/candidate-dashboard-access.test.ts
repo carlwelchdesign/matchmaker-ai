@@ -173,6 +173,47 @@ describe("candidate dashboard access", () => {
     ).toThrow("workflow outcome context contains source content");
     expect(() =>
       authorizeCandidateDashboardMetricSet(
+        {
+          ...dashboard,
+          searchCriteriaContext: {
+            ...dashboard.searchCriteriaContext,
+            observationQuality: {
+              completeObservationCount: 1,
+              dataQualityStateCounts: null,
+              recordedObservationCount: 1,
+              state: "source-unavailable",
+            },
+          },
+        },
+        internalRequest,
+      ),
+    ).toThrow("search observation quality is invalid");
+    expect(() =>
+      authorizeCandidateDashboardMetricSet(
+        {
+          ...dashboard,
+          workflowOutcomeContext: {
+            ...dashboard.workflowOutcomeContext,
+            observationQuality: {
+              completeObservationCount: 1,
+              dataQualityStateCounts: {
+                backfilled: 0,
+                complete: 1,
+                delayed: 0,
+                "invalid-quarantined": 0,
+                partial: 1,
+                stale: 0,
+              },
+              recordedObservationCount: 1,
+              state: "available",
+            },
+          },
+        },
+        internalRequest,
+      ),
+    ).toThrow("workflow observation quality is invalid");
+    expect(() =>
+      authorizeCandidateDashboardMetricSet(
         { ...dashboard, metrics: dashboard.metrics.slice(1) },
         internalRequest,
       ),

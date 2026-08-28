@@ -36,6 +36,7 @@ export {
   candidateDashboardMetricContractForMetric,
   candidateDashboardMetricKeys,
   candidateDashboardMetricSetSchemaVersion,
+  candidateDashboardObservationDataQualityStates,
   type CandidateDashboardDenominatorKind,
   type CandidateDashboardFreshnessState,
   type CandidateDashboardInterviewModeMetrics,
@@ -46,6 +47,8 @@ export {
   type CandidateDashboardMetricSetInput,
   type CandidateDashboardMetricUnit,
   type CandidateDashboardMissingDataState,
+  type CandidateDashboardObservationDataQualityState,
+  type CandidateDashboardObservationQuality,
   type CandidateDashboardSource,
 } from "./candidate-dashboard-metrics.js";
 export {
