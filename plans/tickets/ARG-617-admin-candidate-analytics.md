@@ -145,6 +145,7 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   raw transcript, prompt, audio, model, or generalized score fields.
 - Fact-inspection branch: `codex/ARG-617-fact-inspection`
 - Fact-inspection commit: `ee76d68`
+- Fact-inspection PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/64
 - Fact-inspection verification: 116 domain tests across 16 files; domain
   typecheck and build; all workspace tests, TypeScript tasks, and production
   builds; the 140-ticket planning validator; repository formatting; and diff
