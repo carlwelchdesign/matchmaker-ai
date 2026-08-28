@@ -3,7 +3,7 @@
 - **Epic:** Product prototype
 - **Capability/requirement IDs:** CAP-003; CAP-009
 - **Priority:** P1
-- **Status:** In review
+- **Status:** Done
 - **Named owner:** Codex
 - **Named approver/reviewer:** Project owner
 - **Target milestone:** Prototype review
@@ -113,10 +113,11 @@ can determine the correct introduction.
 - Branch: `codex/ARG-121-candidate-discovery-map`
 - Commit: `b0d7b85` (`ARG-121 add synthetic candidate discovery map`)
 - PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/43
-- Merge:
+- Merge: `f64ea1b40043f2392e18305045f0c72385d37ddf`
 - Deployment: Local Docker concept prototype only
-- Evidence URLs/paths:
-- Completion date:
+- Evidence URLs/paths: `apps/admin/src/app/page.tsx`,
+  `apps/admin/src/app/styles.css`, `apps/admin/src/app/admin.test.ts`
+- Completion date: 2026-07-25
 
 ## Completion notes
 
