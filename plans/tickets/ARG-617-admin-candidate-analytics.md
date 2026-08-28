@@ -513,6 +513,8 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   synthesis are complete.
 - Matchmaker-workflow-study branch: `codex/ARG-617-matchmaker-workflow-study`
 - Matchmaker-workflow-study implementation commit: `d531547`
+- Matchmaker-workflow-study pull request:
+  [#85](https://github.com/carlwelchdesign/matchmaker-ai/pull/85)
 - Matchmaker-workflow-study verification: planning package validated with 140
   backlog tickets, 25 ticket files, and all local links resolved; repository
   formatting and diff hygiene passed.
