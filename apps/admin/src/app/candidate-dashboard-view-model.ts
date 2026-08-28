@@ -45,6 +45,10 @@ export interface CandidateDashboardPageData {
     readonly policyVersionsLabel: string;
   };
   readonly separationNotice: string;
+  readonly workflowOutcomeContext: {
+    readonly policyVersionsLabel: string;
+    readonly selectionSetVersionsLabel: string;
+  };
 }
 
 export const candidateDashboardGroups = [

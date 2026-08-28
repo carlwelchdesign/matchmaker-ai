@@ -795,7 +795,8 @@ dd {
   color: var(--argent-semantic-text-secondary);
   overflow-wrap: anywhere;
 }
-.search-coverage-context {
+.search-coverage-context,
+.workflow-outcome-context {
   border-block: 1px solid var(--argent-semantic-border-subtle);
   display: grid;
   gap: var(--argent-primitive-space-200);
@@ -803,14 +804,19 @@ dd {
   margin: 0;
   padding-block: var(--argent-primitive-space-150);
 }
-.search-coverage-context > div {
+.search-coverage-context > div,
+.workflow-outcome-context > div {
   min-width: 0;
 }
-.search-coverage-context dd {
+.search-coverage-context dd,
+.workflow-outcome-context dd {
   color: var(--argent-semantic-text-secondary);
   overflow-wrap: anywhere;
 }
 .search-coverage-context .search-context-boundary {
+  grid-column: 1 / -1;
+}
+.workflow-outcome-context .workflow-context-boundary {
   grid-column: 1 / -1;
 }
 .interview-mode-card {
@@ -882,7 +888,8 @@ dd {
   .metric-lineage {
     grid-template-columns: 1fr;
   }
-  .search-coverage-context {
+  .search-coverage-context,
+  .workflow-outcome-context {
     grid-template-columns: 1fr;
   }
   .queue button {

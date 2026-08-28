@@ -134,6 +134,7 @@ function validateDashboard(dashboard: CandidateDashboardMetricSet): void {
     throw new Error("Dashboard cohort key must be opaque");
   }
   validateSearchCriteriaContext(dashboard);
+  validateWorkflowOutcomeContext(dashboard);
   const generatedAt = timestamp(
     dashboard.generatedAt,
     "Dashboard generation time",
@@ -195,6 +196,24 @@ function validateDashboard(dashboard: CandidateDashboardMetricSet): void {
   }
   validateInterviewModeLineage(dashboard);
   validateInterviewModeTotals(dashboard);
+}
+
+function validateWorkflowOutcomeContext(
+  dashboard: CandidateDashboardMetricSet,
+): void {
+  if (dashboard.workflowOutcomeContext?.sourceContentStored !== false) {
+    throw new Error(
+      "Dashboard workflow outcome context contains source content",
+    );
+  }
+  validateVersionKeys(
+    dashboard.workflowOutcomeContext.policyVersions,
+    "Dashboard workflow policy versions",
+  );
+  validateVersionKeys(
+    dashboard.workflowOutcomeContext.selectionSetVersions,
+    "Dashboard workflow selection-set versions",
+  );
 }
 
 function validateSearchCriteriaContext(

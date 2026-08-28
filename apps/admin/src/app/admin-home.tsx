@@ -450,6 +450,31 @@ function CandidateDashboard({
                 </div>
               </dl>
             ) : null}
+            {group === "Introduction outcomes" ? (
+              <dl
+                aria-label="Introduction workflow context"
+                className="workflow-outcome-context"
+              >
+                <div>
+                  <dt>Selection set version</dt>
+                  <dd>
+                    {data.workflowOutcomeContext.selectionSetVersionsLabel}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Workflow policy version</dt>
+                  <dd>{data.workflowOutcomeContext.policyVersionsLabel}</dd>
+                </div>
+                <div className="workflow-context-boundary">
+                  <dt>Boundary</dt>
+                  <dd>
+                    Aggregate journey stages only. These measures do not score
+                    candidates, predict relationship success, or replace
+                    participant decisions.
+                  </dd>
+                </div>
+              </dl>
+            ) : null}
             <div className="metric-grid">
               {data.metrics
                 .filter((metric) => metric.group === group)

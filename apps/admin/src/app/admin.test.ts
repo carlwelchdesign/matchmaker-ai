@@ -44,6 +44,14 @@ describe("separate synthetic admin application", () => {
     expect(clientSource).toContain("Interview mode source context");
     expect(clientSource).toContain("Discovery criteria context");
     expect(clientSource).toContain("Version identifiers only");
+    expect(clientSource).toContain("Introduction workflow context");
+    expect(clientSource).toContain("Aggregate journey stages only");
+    expect(clientSource).toContain(
+      "workflowOutcomeContext.selectionSetVersionsLabel",
+    );
+    expect(clientSource).toContain(
+      "workflowOutcomeContext.policyVersionsLabel",
+    );
     expect(clientSource).toContain(
       "searchCriteriaContext.criteriaVersionsLabel",
     );

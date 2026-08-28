@@ -59,6 +59,39 @@ describe("synthetic candidate analytics dashboard", () => {
       criteriaVersionsLabel: "criteria-synthetic-v1",
       policyVersionsLabel: "search-policy-synthetic-v1",
     });
+    expect(
+      data.metrics.find((metric) => metric.key === "shortlist-rate"),
+    ).toMatchObject({
+      calculationLabel: "4 of 4 reviewed journeys",
+      displayValue: "100%",
+      missingDataLabel: "Available",
+    });
+    expect(
+      data.metrics.find((metric) => metric.key === "mutual-approval-rate"),
+    ).toMatchObject({
+      calculationLabel: "1 of 3 recommendations",
+      displayValue: "33.3%",
+      missingDataLabel: "Available",
+    });
+    expect(
+      data.metrics.find((metric) => metric.key === "first-meeting-rate"),
+    ).toMatchObject({
+      calculationLabel: "1 of 1 delivered introductions",
+      displayValue: "100%",
+      missingDataLabel: "Available",
+    });
+    expect(
+      data.metrics.find((metric) => metric.key === "reciprocal-interest-rate"),
+    ).toMatchObject({
+      calculationLabel: "1 of 1 first meetings",
+      displayValue: "100%",
+      missingDataLabel: "Available",
+      sourceAsOfLabel: "Aug 28, 2026, 7:45 PM UTC",
+    });
+    expect(data.workflowOutcomeContext).toEqual({
+      policyVersionsLabel: "workflow-policy-synthetic-v1",
+      selectionSetVersionsLabel: "selection-set-synthetic-v1",
+    });
     expect(data.interviewModeBreakdown.map((mode) => mode.label)).toEqual([
       "Structured",
       "Typed conversation",
@@ -127,6 +160,8 @@ describe("synthetic candidate analytics dashboard", () => {
       /transcript|prompt|audio|compatibility score/i,
     );
     expect(serialized).not.toMatch(/query content|candidate search id/i);
+    expect(serialized).not.toMatch(/journey-(?:ember|noor|tarin)/i);
+    expect(serialized).not.toMatch(/predicted relationship success/i);
     expect(serialized).toContain("Product analytics only");
     expect(serialized).toContain("candidate identifiers are not stored");
   });

@@ -448,5 +448,28 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   the 140-ticket planning validator; repository formatting, diff hygiene, and
   client-boundary inspection; plus desktop and 390-pixel mobile browser review
   with no horizontal overflow or browser warnings or errors.
+- `candidate-dashboard-metric-set/v7` carries the workflow policy and selection-
+  set version identifiers used by its Introduction outcome source. Construction
+  and authorization require sorted, unique lowercase identifiers and explicitly
+  reject content-bearing or malformed context.
+- The synthetic admin dashboard now renders the existing governed workflow
+  funnel: 4 of 4 reviewed journeys shortlisted, 1 of 3 recommendations mutually
+  approved, 1 of 1 delivered introductions reaching a first meeting, and 1 of
+  1 first meetings recording reciprocal interest. One partial synthetic journey
+  remains outside every displayed denominator.
+- The Introduction outcomes section exposes only aggregate stages and version
+  provenance. Its visible boundary says these measures do not score candidates,
+  predict relationship success, or replace participant decisions; candidate
+  identities, journey identifiers, narratives, and safety telemetry remain out
+  of the dashboard contract.
+- Workflow-outcome-context branch: `codex/ARG-617-workflow-outcome-context`
+- Workflow-outcome-context implementation commit: `d760515`
+- Workflow-outcome-context pull request:
+  [#83](https://github.com/carlwelchdesign/matchmaker-ai/pull/83)
+- Workflow-outcome-context verification: 117 domain tests across 16 files; six
+  admin tests; all workspace tests, TypeScript tasks, and production builds;
+  the 140-ticket planning validator; repository formatting and diff hygiene.
+  Interactive browser QA remains outstanding because browser control was not
+  available in this task runtime.
 
 See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-interviewing.md).
