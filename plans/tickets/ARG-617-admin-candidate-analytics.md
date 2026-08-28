@@ -354,6 +354,8 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
 - Dashboard-contract enforcement branch:
   `codex/ARG-617-dashboard-contract-enforcement`
 - Dashboard-contract enforcement implementation commit: `49e5a80`
+- Dashboard-contract enforcement pull request:
+  [#78](https://github.com/carlwelchdesign/matchmaker-ai/pull/78)
 - Dashboard-contract enforcement verification: 116 domain tests across 16
   files; all workspace tests, TypeScript tasks, and production builds; the
   140-ticket planning validator; formatting; and diff hygiene.
