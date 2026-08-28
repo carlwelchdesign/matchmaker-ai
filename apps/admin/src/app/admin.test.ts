@@ -36,6 +36,8 @@ describe("separate synthetic admin application", () => {
     expect(clientSource).toContain("inspection.fieldStateCounts.disputed");
     expect(clientSource).toContain("inspection.fieldStateCounts.private");
     expect(clientSource).toContain("Inspection access context");
+    expect(clientSource).toContain("Active evidence filters");
+    expect(clientSource).toContain("candidateInspectionFilterLabels");
     expect(clientSource).toContain(
       "inspectionAccessLabels.role[inspection.sourceRole]",
     );
