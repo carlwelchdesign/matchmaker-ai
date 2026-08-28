@@ -417,6 +417,8 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   server-to-client view model derives it only after dashboard authorization.
 - Mode-lineage-context branch: `codex/ARG-617-mode-lineage-context`
 - Mode-lineage-context implementation commit: `7cad986`
+- Mode-lineage-context pull request:
+  [#81](https://github.com/carlwelchdesign/matchmaker-ai/pull/81)
 - Mode-lineage-context verification: 117 domain tests across 16 files; six
   admin tests; all workspace tests, TypeScript tasks, and production builds;
   the 140-ticket planning validator; formatting, diff hygiene, and client-
