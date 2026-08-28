@@ -400,6 +400,8 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   that the rows neither rank modes nor establish comparative performance.
 - Interview-mode branch: `codex/ARG-617-interview-mode-breakdown`
 - Interview-mode implementation commit: `5398e67`
+- Interview-mode pull request:
+  [#80](https://github.com/carlwelchdesign/matchmaker-ai/pull/80)
 - Interview-mode verification: 117 domain tests across 16 files; six admin
   tests; all workspace tests, TypeScript tasks, and production builds; the
   140-ticket planning validator; formatting, diff hygiene, and client-boundary
