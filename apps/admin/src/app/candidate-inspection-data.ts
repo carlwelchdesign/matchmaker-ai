@@ -1,10 +1,13 @@
 import {
   buildCandidateApprovedFactInspection,
   candidatePurposeProjectionSchemaVersion,
-  type CandidateApprovedFactFreshness,
   type CandidateApprovedFactInspection,
   type CandidatePurposeProjection,
 } from "@argent/domain";
+import type {
+  CandidateApprovedFactFreshness,
+  CandidateInspectionPageData,
+} from "./candidate-inspection-view-model";
 
 export const candidateInspectionTimestamp = "2026-08-28T16:00:00.000Z";
 
@@ -27,12 +30,6 @@ export const candidateInspectionFreshness = [
   id: CandidateApprovedFactFreshness;
   label: string;
 }[];
-
-export interface CandidateInspectionSelection {
-  readonly candidateId?: string;
-  readonly freshness?: CandidateApprovedFactFreshness;
-  readonly topic?: string;
-}
 
 const fieldStateCounts: CandidatePurposeProjection["fieldStateCounts"] = {
   active: 5,
@@ -156,24 +153,33 @@ const syntheticProjection: CandidatePurposeProjection = {
   schemaVersion: candidatePurposeProjectionSchemaVersion,
 };
 
-export function buildSyntheticCandidateInspection(
-  selection: CandidateInspectionSelection = {},
-): CandidateApprovedFactInspection {
+export function buildSyntheticCandidateInspection(): CandidateApprovedFactInspection {
   return buildCandidateApprovedFactInspection({
-    filter: {
-      candidateIds: selection.candidateId ? [selection.candidateId] : [],
-      freshness: selection.freshness ? [selection.freshness] : [],
-      topics: selection.topic ? [selection.topic] : [],
-    },
     freshnessWarningWindowMs: 7 * 24 * 60 * 60 * 1_000,
     inspectedAt: candidateInspectionTimestamp,
     projection: syntheticProjection,
   });
 }
 
-export function candidateLabel(candidateId: string): string {
-  return (
-    candidateInspectionCandidates.find(({ id }) => id === candidateId)?.label ??
-    "Unknown candidate"
-  );
+export function buildSyntheticCandidateInspectionPageData(): CandidateInspectionPageData {
+  const inspection = buildSyntheticCandidateInspection();
+
+  return {
+    candidates: candidateInspectionCandidates,
+    freshnessOptions: candidateInspectionFreshness,
+    inspection: {
+      approvedFactCount: inspection.approvedFactCount,
+      excludedFactCount: inspection.excludedFactCount,
+      facts: inspection.facts,
+      fieldStateCounts: {
+        disputed: inspection.fieldStateCounts.disputed,
+        private: inspection.fieldStateCounts.private,
+        unknown: inspection.fieldStateCounts.unknown,
+      },
+      inspectedAt: inspection.inspectedAt,
+      matchingFactCount: inspection.matchingFactCount,
+      sourcePurpose: "matchmaker-discovery",
+    },
+    topics: candidateInspectionTopics,
+  };
 }
