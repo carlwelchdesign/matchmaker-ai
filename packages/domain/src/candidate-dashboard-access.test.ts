@@ -112,6 +112,30 @@ describe("candidate dashboard access", () => {
       authorizeCandidateDashboardMetricSet(
         {
           ...dashboard,
+          dataBoundary: {
+            ...dashboard.dataBoundary,
+            operationalRecordsStored: true,
+          },
+        } as unknown as CandidateDashboardMetricSet,
+        internalRequest,
+      ),
+    ).toThrow("violates the product analytics data boundary");
+    expect(() =>
+      authorizeCandidateDashboardMetricSet(
+        {
+          ...dashboard,
+          dataBoundary: {
+            ...dashboard.dataBoundary,
+            productAnalyticsOnly: false,
+          },
+        } as unknown as CandidateDashboardMetricSet,
+        internalRequest,
+      ),
+    ).toThrow("violates the product analytics data boundary");
+    expect(() =>
+      authorizeCandidateDashboardMetricSet(
+        {
+          ...dashboard,
           metrics: dashboard.metrics.map((metric, index) =>
             index === 0
               ? {

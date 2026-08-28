@@ -116,6 +116,15 @@ function validateDashboard(dashboard: CandidateDashboardMetricSet): void {
   ) {
     throw new Error("Dashboard contains prohibited candidate content");
   }
+  if (
+    dashboard.dataBoundary?.productAnalyticsOnly !== true ||
+    dashboard.dataBoundary.legalAuditEvidenceStored !== false ||
+    dashboard.dataBoundary.operationalRecordsStored !== false ||
+    dashboard.dataBoundary.providerPayloadsStored !== false ||
+    dashboard.dataBoundary.securityTelemetryStored !== false
+  ) {
+    throw new Error("Dashboard violates the product analytics data boundary");
+  }
   if (!cohortKeyPattern.test(dashboard.cohortKey)) {
     throw new Error("Dashboard cohort key must be opaque");
   }
