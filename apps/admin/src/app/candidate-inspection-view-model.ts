@@ -71,6 +71,29 @@ export function filterCandidateInspection(
   };
 }
 
+export function candidateInspectionFilterLabels(
+  data: CandidateInspectionPageData,
+  selection: CandidateInspectionSelection,
+): readonly string[] {
+  const labels = [
+    selection.candidateId
+      ? `Candidate: ${optionLabel(data.candidates, selection.candidateId, "Unknown candidate")}`
+      : undefined,
+    selection.topic
+      ? `Topic: ${optionLabel(data.topics, selection.topic, "Unknown topic")}`
+      : undefined,
+    selection.freshness
+      ? `Freshness: ${optionLabel(
+          data.freshnessOptions,
+          selection.freshness,
+          "Unknown freshness",
+        )}`
+      : undefined,
+  ].filter((label): label is string => Boolean(label));
+
+  return labels.length > 0 ? labels : ["All approved facts"];
+}
+
 export function candidateLabel(
   candidates: readonly CandidateInspectionOption[],
   candidateId: string,
@@ -79,4 +102,12 @@ export function candidateLabel(
     candidates.find(({ id }) => id === candidateId)?.label ??
     "Unknown candidate"
   );
+}
+
+function optionLabel(
+  options: readonly CandidateInspectionOption[],
+  id: string,
+  fallback: string,
+): string {
+  return options.find((option) => option.id === id)?.label ?? fallback;
 }

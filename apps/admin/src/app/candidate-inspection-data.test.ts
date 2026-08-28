@@ -8,6 +8,7 @@ import {
   candidateInspectionTimestamp,
 } from "./candidate-inspection-data";
 import {
+  candidateInspectionFilterLabels,
   candidateLabel,
   filterCandidateInspection,
 } from "./candidate-inspection-view-model";
@@ -59,6 +60,20 @@ describe("synthetic candidate fact inspection", () => {
       freshness: "expires-soon",
       topic: "geography",
     });
+    expect(
+      candidateInspectionFilterLabels(data, {
+        candidateId: "candidate-ember",
+        freshness: "expires-soon",
+        topic: "geography",
+      }),
+    ).toEqual([
+      "Candidate: Ember Lane",
+      "Topic: Geography",
+      "Freshness: Expires soon",
+    ]);
+    expect(candidateInspectionFilterLabels(data, {})).toEqual([
+      "All approved facts",
+    ]);
   });
 
   test("returns an explicit empty result without manufacturing evidence", () => {

@@ -2,6 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import {
+  candidateInspectionFilterLabels,
   filterCandidateInspection,
   candidateLabel,
   type CandidateApprovedFactFreshness,
@@ -367,6 +368,11 @@ function ApprovedFacts({
     inspection.fieldStateCounts.disputed +
     inspection.fieldStateCounts.private +
     inspection.fieldStateCounts.unknown;
+  const activeFilterLabels = candidateInspectionFilterLabels(data, {
+    candidateId: candidateId || undefined,
+    freshness: freshness || undefined,
+    topic: topic || undefined,
+  });
 
   return (
     <div className="view">
@@ -516,6 +522,14 @@ function ApprovedFacts({
               <dd>{formatUtc(inspection.inspectedAt)}</dd>
             </div>
           </dl>
+        </div>
+        <div className="active-filter-context">
+          <p className="eyebrow">Current evidence filters</p>
+          <ul aria-label="Active evidence filters">
+            {activeFilterLabels.map((label) => (
+              <li key={label}>{label}</li>
+            ))}
+          </ul>
         </div>
         {inspection.facts.length === 0 ? (
           <div className="empty-facts">
