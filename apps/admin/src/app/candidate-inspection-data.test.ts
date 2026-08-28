@@ -9,6 +9,7 @@ import {
 } from "./candidate-inspection-data";
 import {
   candidateInspectionFilterLabels,
+  candidateInspectionFilterStatus,
   candidateLabel,
   filterCandidateInspection,
 } from "./candidate-inspection-view-model";
@@ -74,6 +75,15 @@ describe("synthetic candidate fact inspection", () => {
     expect(candidateInspectionFilterLabels(data, {})).toEqual([
       "All approved facts",
     ]);
+    expect(
+      candidateInspectionFilterStatus(1, [
+        "Candidate: Ember Lane",
+        "Topic: Geography",
+        "Freshness: Expires soon",
+      ]),
+    ).toBe(
+      "1 approved fact. Candidate: Ember Lane. Topic: Geography. Freshness: Expires soon.",
+    );
   });
 
   test("returns an explicit empty result without manufacturing evidence", () => {
@@ -85,6 +95,12 @@ describe("synthetic candidate fact inspection", () => {
 
     expect(inspection.matchingFactCount).toBe(0);
     expect(inspection.facts).toEqual([]);
+    expect(
+      candidateInspectionFilterStatus(0, [
+        "Candidate: Tarin Vale",
+        "Topic: Social rhythm",
+      ]),
+    ).toBe("0 approved facts. Candidate: Tarin Vale. Topic: Social rhythm.");
     expect(candidateLabel(data.candidates, "candidate-tarin")).toBe(
       "Tarin Vale",
     );

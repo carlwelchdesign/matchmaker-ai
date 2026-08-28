@@ -38,6 +38,9 @@ describe("separate synthetic admin application", () => {
     expect(clientSource).toContain("Inspection access context");
     expect(clientSource).toContain("Active evidence filters");
     expect(clientSource).toContain("candidateInspectionFilterLabels");
+    expect(clientSource).toContain("candidateInspectionFilterStatus");
+    expect(clientSource).toContain('className="visually-hidden" role="status"');
+    expect(clientSource).not.toContain('aria-live="polite"');
     expect(clientSource).toContain(
       "inspectionAccessLabels.role[inspection.sourceRole]",
     );
