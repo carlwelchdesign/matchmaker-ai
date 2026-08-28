@@ -270,6 +270,8 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
 - Admin-filter-announcement branch:
   `codex/ARG-617-admin-filter-announcement`
 - Admin-filter-announcement commit: `e9824f8`
+- Admin-filter-announcement PR:
+  https://github.com/carlwelchdesign/matchmaker-ai/pull/73
 - Admin-filter-announcement verification: four admin tests; all workspace tests,
   TypeScript tasks, and production builds; the 140-ticket planning validator;
   repository formatting and diff hygiene; and browser verification of the
