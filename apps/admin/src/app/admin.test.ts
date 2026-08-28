@@ -12,6 +12,9 @@ describe("separate synthetic admin application", () => {
     expect(source).toContain("Owner workspace · local concept only");
     expect(source).toContain("Pricing is not connected");
     expect(source).toContain("Candidate discovery / synthetic map");
+    expect(source).toContain("Approved facts / synthetic inspection");
+    expect(source).toContain("Raw interviews, compatibility scores");
+    expect(source).toContain("will not infer or manufacture an answer");
     expect(source).toContain("Nearness does not mean a better fit");
     expect(source).toContain(
       "A matchmaker decides whether to clarify information",

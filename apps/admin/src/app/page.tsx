@@ -1,6 +1,14 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import type { CandidateApprovedFactFreshness } from "@argent/domain";
+import {
+  buildSyntheticCandidateInspection,
+  candidateInspectionCandidates,
+  candidateInspectionFreshness,
+  candidateInspectionTopics,
+  candidateLabel,
+} from "./candidate-inspection-data";
 
 const applicants = [
   {
@@ -253,7 +261,7 @@ const discoveryCandidates = [
 }[];
 
 type AdminView =
-  "campaigns" | "discovery" | "overview" | "operations" | "review";
+  "campaigns" | "discovery" | "facts" | "overview" | "operations" | "review";
 
 export default function AdminHome() {
   const [view, setView] = useState<AdminView>("overview");
@@ -295,6 +303,9 @@ export default function AdminHome() {
         >
           Discovery map
         </NavButton>
+        <NavButton active={view === "facts"} onClick={() => setView("facts")}>
+          Approved facts
+        </NavButton>
         <NavButton
           active={view === "campaigns"}
           onClick={() => setView("campaigns")}
@@ -324,11 +335,219 @@ export default function AdminHome() {
             selectedId={selectedCandidateId}
           />
         ) : null}
+        {view === "facts" ? <ApprovedFacts /> : null}
         {view === "campaigns" ? <Campaigns /> : null}
         {view === "operations" ? <Operations /> : null}
       </section>
     </main>
   );
+}
+
+function ApprovedFacts() {
+  const [candidateId, setCandidateId] = useState("");
+  const [freshness, setFreshness] = useState<
+    CandidateApprovedFactFreshness | ""
+  >("");
+  const [topic, setTopic] = useState("");
+  const inspection = buildSyntheticCandidateInspection({
+    candidateId: candidateId || undefined,
+    freshness: freshness || undefined,
+    topic: topic || undefined,
+  });
+  const hiddenKnowledgeCount =
+    inspection.fieldStateCounts.disputed +
+    inspection.fieldStateCounts.private +
+    inspection.fieldStateCounts.unknown;
+
+  return (
+    <div className="view">
+      <Intro
+        eyebrow="Approved facts / synthetic inspection"
+        title="Evidence first. Judgment stays human."
+      >
+        Filter a fictional, access-time projection of candidate-approved facts.
+        This local concept has no authentication, real candidate access, or
+        operational connection.
+      </Intro>
+      <aside className="inspection-boundary" role="note">
+        <span aria-hidden="true">●</span>
+        <div>
+          <strong>Synthetic local inspection</strong>
+          <p>
+            Exact approved facts only. Raw interviews, compatibility scores,
+            predictions, and automatic recommendations are unavailable.
+          </p>
+        </div>
+      </aside>
+      <section aria-labelledby="fact-filter-title" className="filter-panel">
+        <div className="filter-heading">
+          <div>
+            <p className="eyebrow">Inspect the projection</p>
+            <h2 id="fact-filter-title">Narrow the evidence</h2>
+          </div>
+          <button
+            className="clear-filters"
+            disabled={!candidateId && !freshness && !topic}
+            onClick={() => {
+              setCandidateId("");
+              setFreshness("");
+              setTopic("");
+            }}
+            type="button"
+          >
+            Clear filters
+          </button>
+        </div>
+        <div className="fact-filters">
+          <label>
+            Candidate
+            <select
+              onChange={(event) => setCandidateId(event.target.value)}
+              value={candidateId}
+            >
+              <option value="">All fictional candidates</option>
+              {candidateInspectionCandidates.map((candidate) => (
+                <option key={candidate.id} value={candidate.id}>
+                  {candidate.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Topic
+            <select
+              onChange={(event) => setTopic(event.target.value)}
+              value={topic}
+            >
+              <option value="">All topics</option>
+              {candidateInspectionTopics.map((option) => (
+                <option key={option.id} value={option.id}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Freshness
+            <select
+              onChange={(event) =>
+                setFreshness(
+                  event.target.value as CandidateApprovedFactFreshness | "",
+                )
+              }
+              value={freshness}
+            >
+              <option value="">Any freshness</option>
+              {candidateInspectionFreshness.map((option) => (
+                <option key={option.id} value={option.id}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+      </section>
+      <section aria-label="Inspection summary" className="inspection-summary">
+        <article>
+          <span>{inspection.matchingFactCount}</span>
+          <p>Matching approved facts</p>
+        </article>
+        <article>
+          <span>{inspection.excludedFactCount}</span>
+          <p>Assertions excluded at access time</p>
+        </article>
+        <article>
+          <span>{hiddenKnowledgeCount}</span>
+          <p>Unknown, disputed, or private fields remain visible as gaps</p>
+        </article>
+      </section>
+      <section className="fact-results">
+        <div className="results-heading">
+          <div>
+            <p className="eyebrow">Reviewable evidence</p>
+            <h2 aria-live="polite">
+              {inspection.matchingFactCount === 1
+                ? "1 approved fact"
+                : `${inspection.matchingFactCount} approved facts`}
+            </h2>
+          </div>
+          <p>
+            Projection generated {formatUtc(inspection.inspectedAt)} for the
+            matchmaker-discovery purpose.
+          </p>
+        </div>
+        {inspection.facts.length === 0 ? (
+          <div className="empty-facts">
+            <p className="eyebrow">No approved evidence</p>
+            <h2>No facts match these filters.</h2>
+            <p>
+              Broaden the filters or ask the candidate directly. The workspace
+              will not infer or manufacture an answer.
+            </p>
+          </div>
+        ) : (
+          <div className="fact-list">
+            {inspection.facts.map((fact) => (
+              <article className="fact-card" key={fact.factId}>
+                <div className="fact-card-heading">
+                  <div>
+                    <p className="eyebrow">
+                      {candidateLabel(fact.candidateId)}
+                    </p>
+                    <h2>{fact.fieldLabel}</h2>
+                  </div>
+                  <span className={`freshness freshness-${fact.freshness}`}>
+                    {fact.freshness === "expires-soon"
+                      ? "Expires soon"
+                      : "Current"}
+                  </span>
+                </div>
+                <p className="fact-value">{fact.value}</p>
+                <dl className="fact-lineage">
+                  <div>
+                    <dt>Source</dt>
+                    <dd>
+                      Source exact · {fact.provenance.questionId} · revision{" "}
+                      {fact.provenance.responseRevision}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>Guide</dt>
+                    <dd>{fact.provenance.guideVersion}</dd>
+                  </div>
+                  <div>
+                    <dt>Human review</dt>
+                    <dd>{formatUtc(fact.provenance.reviewedAt)}</dd>
+                  </div>
+                  <div>
+                    <dt>Consent</dt>
+                    <dd>{fact.permission.consentGrantId}</dd>
+                  </div>
+                  <div>
+                    <dt>Fresh until</dt>
+                    <dd>{formatUtc(fact.permission.freshUntil)}</dd>
+                  </div>
+                  <div>
+                    <dt>Retain until</dt>
+                    <dd>{formatUtc(fact.permission.retainUntil)}</dd>
+                  </div>
+                </dl>
+              </article>
+            ))}
+          </div>
+        )}
+      </section>
+    </div>
+  );
+}
+
+function formatUtc(value: string): string {
+  return new Intl.DateTimeFormat("en-US", {
+    day: "numeric",
+    month: "short",
+    timeZone: "UTC",
+    year: "numeric",
+  }).format(new Date(value));
 }
 
 function DiscoveryMap({
