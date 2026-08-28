@@ -103,7 +103,7 @@ describe("candidate dashboard access", () => {
       authorizeCandidateDashboardMetricSet(
         {
           ...dashboard,
-          schemaVersion: "candidate-dashboard-metric-set/v1",
+          schemaVersion: "candidate-dashboard-metric-set/v2",
         } as unknown as CandidateDashboardMetricSet,
         internalRequest,
       ),
@@ -158,6 +158,45 @@ describe("candidate dashboard access", () => {
         internalRequest,
       ),
     ).toThrow("missing-data state disagree");
+    expect(() =>
+      authorizeCandidateDashboardMetricSet(
+        {
+          ...dashboard,
+          metrics: dashboard.metrics.map((metric, index) =>
+            index === 0
+              ? {
+                  ...metric,
+                  calculation: {
+                    denominator: 2,
+                    denominatorKind: "not-applicable" as const,
+                    numerator: 1,
+                  },
+                }
+              : metric,
+          ),
+        },
+        internalRequest,
+      ),
+    ).toThrow("count metric calculation is invalid");
+    expect(() =>
+      authorizeCandidateDashboardMetricSet(
+        {
+          ...dashboard,
+          metrics: dashboard.metrics.map((metric) =>
+            metric.key === "interview-completion-rate"
+              ? {
+                  ...metric,
+                  calculation: {
+                    ...metric.calculation,
+                    denominatorKind: "candidate-cohort" as const,
+                  },
+                }
+              : metric,
+          ),
+        },
+        internalRequest,
+      ),
+    ).toThrow("denominator kind is invalid");
     expect(() =>
       authorizeCandidateDashboardMetricSet(
         {

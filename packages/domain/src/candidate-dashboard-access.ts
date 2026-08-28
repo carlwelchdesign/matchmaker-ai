@@ -1,4 +1,5 @@
 import {
+  candidateDashboardDenominatorKindForMetric,
   candidateDashboardMetricSetSchemaVersion,
   type CandidateDashboardMetricSet,
 } from "./candidate-dashboard-metrics.js";
@@ -189,6 +190,68 @@ function validateDashboard(dashboard: CandidateDashboardMetricSet): void {
     ) {
       throw new Error("Dashboard metric value is invalid");
     }
+    validateMetricCalculation(metric);
+  }
+}
+
+function validateMetricCalculation(
+  metric: CandidateDashboardMetricSet["metrics"][number],
+): void {
+  if (metric.unit !== "count" && metric.unit !== "basis-points") {
+    throw new Error("Dashboard metric unit is invalid");
+  }
+  const calculation = metric.calculation;
+  if (
+    !calculation ||
+    (calculation.numerator !== null &&
+      (!Number.isSafeInteger(calculation.numerator) ||
+        calculation.numerator < 0)) ||
+    (calculation.denominator !== null &&
+      (!Number.isSafeInteger(calculation.denominator) ||
+        calculation.denominator < 0))
+  ) {
+    throw new Error("Dashboard metric calculation is invalid");
+  }
+  if (
+    calculation.denominatorKind !==
+    candidateDashboardDenominatorKindForMetric(metric.key)
+  ) {
+    throw new Error("Dashboard metric denominator kind is invalid");
+  }
+  if (metric.unit === "count") {
+    if (
+      calculation.denominatorKind !== "not-applicable" ||
+      calculation.denominator !== null ||
+      calculation.numerator !== metric.value ||
+      metric.missingDataState === "missing-denominator"
+    ) {
+      throw new Error("Dashboard count metric calculation is invalid");
+    }
+    return;
+  }
+  if (calculation.denominatorKind === "not-applicable") {
+    throw new Error("Dashboard ratio metric denominator is invalid");
+  }
+  if (metric.missingDataState === "available") {
+    if (
+      calculation.numerator === null ||
+      calculation.denominator === null ||
+      calculation.denominator === 0 ||
+      metric.value !==
+        Math.round((calculation.numerator * 10_000) / calculation.denominator)
+    ) {
+      throw new Error("Dashboard ratio metric calculation is inconsistent");
+    }
+    return;
+  }
+  if (metric.missingDataState === "missing-denominator") {
+    if (calculation.numerator === null || calculation.denominator !== 0) {
+      throw new Error("Dashboard missing denominator is inconsistent");
+    }
+    return;
+  }
+  if (calculation.numerator !== null || calculation.denominator !== null) {
+    throw new Error("Dashboard unavailable calculation is inconsistent");
   }
 }
 

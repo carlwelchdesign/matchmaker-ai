@@ -170,6 +170,11 @@ describe("candidate dashboard metric set", () => {
     expect(
       metricSet.metrics.find((metric) => metric.key === "candidate-supply"),
     ).toEqual({
+      calculation: {
+        denominator: null,
+        denominatorKind: "not-applicable",
+        numerator: 6,
+      },
       freshness: "fresh",
       key: "candidate-supply",
       lineage: {
@@ -192,6 +197,11 @@ describe("candidate dashboard metric set", () => {
         (metric) => metric.key === "interview-completion-rate",
       ),
     ).toMatchObject({
+      calculation: {
+        denominator: 6,
+        denominatorKind: "interview-starts",
+        numerator: 4,
+      },
       freshness: "fresh",
       missingDataState: "available",
       unit: "basis-points",
@@ -216,7 +226,7 @@ describe("candidate dashboard metric set", () => {
           ...interviewFunnel,
           metrics: {
             ...interviewFunnel.metrics!,
-            overall: funnelMetric({ startedCount: 6 }),
+            overall: funnelMetric(),
           },
         },
       },
@@ -225,8 +235,15 @@ describe("candidate dashboard metric set", () => {
     expect(
       metricSet.metrics.find(
         (metric) => metric.key === "interview-completion-rate",
-      )?.missingDataState,
-    ).toBe("missing-denominator");
+      ),
+    ).toMatchObject({
+      calculation: {
+        denominator: 0,
+        denominatorKind: "interview-starts",
+        numerator: 0,
+      },
+      missingDataState: "missing-denominator",
+    });
     expect(
       metricSet.metrics.find((metric) => metric.key === "candidate-supply")
         ?.missingDataState,
@@ -269,10 +286,20 @@ describe("candidate dashboard metric set", () => {
       ),
     ).toEqual([
       expect.objectContaining({
+        calculation: {
+          denominator: null,
+          denominatorKind: "not-applicable",
+          numerator: null,
+        },
         missingDataState: "suppressed-small-cohort",
         value: null,
       }),
       expect.objectContaining({
+        calculation: {
+          denominator: null,
+          denominatorKind: "candidate-cohort",
+          numerator: null,
+        },
         missingDataState: "suppressed-small-cohort",
         value: null,
       }),

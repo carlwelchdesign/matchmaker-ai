@@ -30,7 +30,9 @@ export {
 } from "./candidate-dashboard-access.js";
 export {
   buildCandidateDashboardMetricSet,
+  candidateDashboardDenominatorKindForMetric,
   candidateDashboardMetricSetSchemaVersion,
+  type CandidateDashboardDenominatorKind,
   type CandidateDashboardFreshnessState,
   type CandidateDashboardMetric,
   type CandidateDashboardMetricKey,

@@ -311,5 +311,18 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
 - Dashboard-schema verification: 116 domain tests across 16 files; all
   workspace tests and TypeScript tasks; domain and full production builds; the
   140-ticket planning validator; formatting; and diff hygiene.
+- `candidate-dashboard-metric-set/v3` makes every displayed calculation
+  inspectable. Count metrics carry their numerator and an explicit
+  not-applicable denominator; ratio metrics carry numerator, denominator, and a
+  stable denominator kind such as observed fields, interview starts, eligible
+  opportunities, reviewed journeys, recommendations, delivered introductions,
+  or first meetings.
+- Dashboard construction recomputes every ratio from those components and fails
+  closed on inconsistent source values. Authorization independently revalidates
+  count, ratio, unavailable-source, missing-denominator, and suppressed-cohort
+  calculation states before returning a dashboard.
+- Metric-calculation branch: `codex/ARG-617-metric-calculations`
+- Metric-calculation implementation commit: `ee310fd`
+- Metric-calculation pull request: [#76](https://github.com/carlwelchdesign/matchmaker-ai/pull/76)
 
 See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-interviewing.md).
