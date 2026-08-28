@@ -20,8 +20,8 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
 - [x] Define metric contracts for candidate supply, completeness/freshness, consent/availability, funnel by mode, correction burden, search coverage, shortlist throughput, and introduction outcomes.
 - [x] Every dashboard value links to authoritative source lineage, cohort, time window, freshness, and missing-data state. The display-ready metric-set contract preserves per-source schema and observation time, distinguishes fresh, stale, and unknown values, and separates missing denominators, unavailable sources, and small-cohort suppression.
 - [ ] Staff can filter and inspect approved facts with provenance and uncertainty; raw interview content is not exposed by default.
-- [ ] Permissions and aggregate thresholds prevent inappropriate small-cohort or partner disclosure.
-- [ ] No overall candidate-value, attractiveness, personality, wealth, compatibility, or relationship-success score is shown.
+- [x] Permissions and aggregate thresholds prevent inappropriate small-cohort or partner disclosure. The access-decision boundary returns dashboard values only to authorized internal staff for explicitly allowed cohorts, returns no dashboard for partner audiences or roles, and preserves null-valued small-cohort suppression.
+- [x] No overall candidate-value, attractiveness, personality, wealth, compatibility, or relationship-success score is shown. Dashboard keys are an explicit operational allowlist, and the serialization regression test excludes generalized or sensitive-trait scores.
 - [ ] Product analytics, operational records, legal audit evidence, and security telemetry remain separate.
 - [ ] Representative matchmaker workflow testing shows the views reduce manual reconciliation without encouraging workarounds.
 
@@ -113,6 +113,23 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
 - Dashboard-lineage commit: `699f5a5`
 - Dashboard-lineage PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/62
 - Dashboard-lineage verification: 108 domain tests across 14 files; domain
+  typecheck and build; all workspace tests, TypeScript tasks, and production
+  builds; the 140-ticket planning validator; repository formatting; and diff
+  hygiene.
+- `candidate-dashboard-access-decision/v1` is a fail-closed application policy
+  boundary for synthetic dashboard data. It authorizes only internal
+  `data-analyst` and `matchmaker` roles for explicitly allowed opaque cohorts;
+  partner audiences, partner roles, and unlisted cohorts receive a decision
+  containing no dashboard.
+- The access boundary revalidates schema, content-exclusion flags, time and
+  cohort scope, lineage timestamps, missing-data state, freshness presence,
+  numeric bounds, and unique metric keys. Small-cohort values remain null, and
+  the decision explicitly records that neither partner nor small-cohort values
+  were exposed.
+- Dashboard-access branch: `codex/ARG-617-dashboard-access`
+- Dashboard-access commit: `4b7c8e1`
+- Dashboard-access PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/63
+- Dashboard-access verification: 112 domain tests across 15 files; domain
   typecheck and build; all workspace tests, TypeScript tasks, and production
   builds; the 140-ticket planning validator; repository formatting; and diff
   hygiene.
