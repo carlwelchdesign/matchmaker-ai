@@ -338,6 +338,7 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   real candidate data, persist records, or replace human workflow review.
 - Admin-dashboard branch: `codex/ARG-617-admin-dashboard`
 - Admin-dashboard implementation commit: `2620b68`
+- Admin-dashboard pull request: [#77](https://github.com/carlwelchdesign/matchmaker-ai/pull/77)
 - Admin-dashboard verification: six admin tests; all workspace tests,
   TypeScript tasks, and production builds; client-chunk boundary inspection;
   the 140-ticket planning validator; formatting and diff hygiene; and browser
