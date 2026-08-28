@@ -110,6 +110,11 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   0-to-10,000 basis-point range. It exposes no candidate identifier, interview
   content, generalized score, or raw source value.
 - Dashboard-lineage branch: `codex/ARG-617-metric-lineage`
+- Dashboard-lineage commit: `699f5a5`
+- Dashboard-lineage verification: 108 domain tests across 14 files; domain
+  typecheck and build; all workspace tests, TypeScript tasks, and production
+  builds; the 140-ticket planning validator; repository formatting; and diff
+  hygiene.
 - Candidate-availability branch: `codex/ARG-617-candidate-availability`
 - Candidate-availability commit: `caa4de0`
 - Candidate-availability PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/61
