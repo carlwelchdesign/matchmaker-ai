@@ -3,6 +3,7 @@
 import { useState, type ReactNode } from "react";
 import {
   candidateInspectionFilterLabels,
+  candidateInspectionFilterStatus,
   filterCandidateInspection,
   candidateLabel,
   type CandidateApprovedFactFreshness,
@@ -373,6 +374,10 @@ function ApprovedFacts({
     freshness: freshness || undefined,
     topic: topic || undefined,
   });
+  const filterStatus = candidateInspectionFilterStatus(
+    inspection.matchingFactCount,
+    activeFilterLabels,
+  );
 
   return (
     <div className="view">
@@ -463,7 +468,7 @@ function ApprovedFacts({
         </div>
       </section>
       <section aria-label="Inspection summary" className="inspection-summary">
-        <article aria-atomic="true" aria-live="polite">
+        <article>
           <span>{inspection.matchingFactCount}</span>
           <p>Matching approved facts</p>
           <small>Current filters</small>
@@ -496,6 +501,9 @@ function ApprovedFacts({
           <small>Full access-time projection</small>
         </article>
       </section>
+      <p aria-atomic="true" className="visually-hidden" role="status">
+        {filterStatus}
+      </p>
       <section className="fact-results">
         <div className="results-heading">
           <div>

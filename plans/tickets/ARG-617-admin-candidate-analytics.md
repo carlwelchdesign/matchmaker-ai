@@ -263,6 +263,20 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   repository formatting and diff hygiene; and browser verification of
   unfiltered, combined-filter, empty-result, reset, full-page layout, and log
   states.
+- Filter changes now produce one visually hidden, atomic status containing both
+  the matching approved-fact count and every active filter label. This replaces
+  the count-only live region so screen-reader users receive the same scoped
+  result context as sighted reviewers without duplicate announcements.
+- Admin-filter-announcement branch:
+  `codex/ARG-617-admin-filter-announcement`
+- Admin-filter-announcement commit: `e9824f8`
+- Admin-filter-announcement PR:
+  https://github.com/carlwelchdesign/matchmaker-ai/pull/73
+- Admin-filter-announcement verification: four admin tests; all workspace tests,
+  TypeScript tasks, and production builds; the 140-ticket planning validator;
+  repository formatting and diff hygiene; and browser verification of the
+  atomic combined-filter, empty-result, and reset status text, unchanged
+  full-page layout, and browser logs.
 - Candidate-availability branch: `codex/ARG-617-candidate-availability`
 - Candidate-availability commit: `caa4de0`
 - Candidate-availability PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/61

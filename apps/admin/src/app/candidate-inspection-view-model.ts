@@ -94,6 +94,17 @@ export function candidateInspectionFilterLabels(
   return labels.length > 0 ? labels : ["All approved facts"];
 }
 
+export function candidateInspectionFilterStatus(
+  matchingFactCount: number,
+  filterLabels: readonly string[],
+): string {
+  const countLabel =
+    matchingFactCount === 1
+      ? "1 approved fact"
+      : `${matchingFactCount} approved facts`;
+  return `${countLabel}. ${filterLabels.join(". ")}.`;
+}
+
 export function candidateLabel(
   candidates: readonly CandidateInspectionOption[],
   candidateId: string,
