@@ -228,6 +228,8 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
 - Admin-uncertainty-breakdown branch:
   `codex/ARG-617-admin-uncertainty-breakdown`
 - Admin-uncertainty-breakdown commit: `14adfa6`
+- Admin-uncertainty-breakdown PR:
+  https://github.com/carlwelchdesign/matchmaker-ai/pull/70
 - Admin-uncertainty-breakdown verification: four admin tests; all workspace
   tests, TypeScript tasks, and production builds; the 140-ticket planning
   validator; repository formatting and diff hygiene; and browser verification
