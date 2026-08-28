@@ -452,24 +452,27 @@ function ApprovedFacts({
         </div>
       </section>
       <section aria-label="Inspection summary" className="inspection-summary">
-        <article>
+        <article aria-atomic="true" aria-live="polite">
           <span>{inspection.matchingFactCount}</span>
           <p>Matching approved facts</p>
+          <small>Current filters</small>
         </article>
         <article>
           <span>{inspection.excludedFactCount}</span>
           <p>Assertions excluded at access time</p>
+          <small>Full access-time projection</small>
         </article>
         <article>
           <span>{hiddenKnowledgeCount}</span>
           <p>Unknown, disputed, or private fields remain visible as gaps</p>
+          <small>Full access-time projection</small>
         </article>
       </section>
       <section className="fact-results">
         <div className="results-heading">
           <div>
             <p className="eyebrow">Reviewable evidence</p>
-            <h2 aria-live="polite">
+            <h2>
               {inspection.matchingFactCount === 1
                 ? "1 approved fact"
                 : `${inspection.matchingFactCount} approved facts`}
