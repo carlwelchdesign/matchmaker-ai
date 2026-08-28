@@ -310,6 +310,34 @@ describe("candidate dashboard access", () => {
     ).toThrow("interview mode totals do not match overall");
     expect(() =>
       authorizeCandidateDashboardMetricSet(
+        {
+          ...dashboard,
+          interviewModeBreakdown: dashboard.interviewModeBreakdown.map(
+            (breakdown, index) =>
+              index === 0
+                ? {
+                    ...breakdown,
+                    metrics: breakdown.metrics.map((metric) =>
+                      metric.key === "interview-starts"
+                        ? {
+                            ...metric,
+                            freshness: "fresh" as const,
+                            lineage: {
+                              ...metric.lineage,
+                              sourceAsOf: "2026-08-25T23:00:00.000Z",
+                            },
+                          }
+                        : metric,
+                    ),
+                  }
+                : breakdown,
+          ),
+        },
+        internalRequest,
+      ),
+    ).toThrow("interview mode lineage does not match overall");
+    expect(() =>
+      authorizeCandidateDashboardMetricSet(
         withFirstModeStarts(1),
         internalRequest,
       ),

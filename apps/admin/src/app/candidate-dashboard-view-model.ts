@@ -34,6 +34,11 @@ export interface CandidateDashboardPageData {
   };
   readonly interviewModeBreakdown: readonly CandidateDashboardInterviewModeView[];
   readonly interviewModeMinimumCohortSize: number;
+  readonly interviewModeSourceContext: {
+    readonly freshnessLabel: string;
+    readonly sourceAsOfLabel: string;
+    readonly sourceLabel: string;
+  };
   readonly metrics: readonly CandidateDashboardMetricView[];
   readonly separationNotice: string;
 }

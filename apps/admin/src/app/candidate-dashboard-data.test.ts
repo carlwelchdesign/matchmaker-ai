@@ -58,6 +58,11 @@ describe("synthetic candidate analytics dashboard", () => {
       "Unobserved mode",
     ]);
     expect(data.interviewModeMinimumCohortSize).toBe(5);
+    expect(data.interviewModeSourceContext).toEqual({
+      freshnessLabel: "Fresh",
+      sourceAsOfLabel: "Aug 28, 2026, 8:00 PM UTC",
+      sourceLabel: "Content-free interview outcomes",
+    });
     expect(
       data.interviewModeBreakdown.find((mode) => mode.mode === "structured")
         ?.metrics,

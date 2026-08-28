@@ -308,6 +308,15 @@ export function buildSyntheticCandidateDashboardPageData(): CandidateDashboardPa
   if (!decision.authorized) {
     throw new Error("Synthetic candidate dashboard access was denied");
   }
+  const interviewStarts = decision.dashboard.metrics.find(
+    (metric) => metric.key === "interview-starts",
+  );
+  if (!interviewStarts) {
+    throw new Error(
+      "Synthetic candidate dashboard interview lineage is missing",
+    );
+  }
+  const interviewModeSourceMetric = toMetricView(interviewStarts);
 
   return {
     accessContext: {
@@ -321,6 +330,11 @@ export function buildSyntheticCandidateDashboardPageData(): CandidateDashboardPa
       decision.dashboard.interviewModeBreakdown.map(toInterviewModeView),
     interviewModeMinimumCohortSize:
       decision.dashboard.interviewModeMinimumCohortSize,
+    interviewModeSourceContext: {
+      freshnessLabel: interviewModeSourceMetric.freshnessLabel,
+      sourceAsOfLabel: interviewModeSourceMetric.sourceAsOfLabel,
+      sourceLabel: interviewModeSourceMetric.sourceLabel,
+    },
     metrics: decision.dashboard.metrics.map(toMetricView),
     separationNotice:
       "Product analytics only. Operational records, legal audit evidence, security telemetry, provider payloads, and candidate identifiers are not stored in this view.",
