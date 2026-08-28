@@ -324,5 +324,25 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
 - Metric-calculation branch: `codex/ARG-617-metric-calculations`
 - Metric-calculation implementation commit: `ee310fd`
 - Metric-calculation pull request: [#76](https://github.com/carlwelchdesign/matchmaker-ai/pull/76)
+- The local admin concept now presents all 13 governed dashboard metrics in a
+  dedicated analytics view. Available values show their exact numerator and
+  denominator, source, source timestamp, freshness, cohort, and reporting
+  window; unavailable sources remain visibly unknown instead of becoming zero.
+- The Server Component builds and authorizes a synthetic v3 metric set, then
+  passes a narrow aggregate-only view model to the client. The client imports no
+  domain policy, and its production chunk contains no dashboard-contract or
+  synthetic source-construction markers.
+- The interface visibly preserves the product-analytics-only separation from
+  operational records, legal audit evidence, security telemetry, provider
+  payloads, and candidate identifiers. It does not authenticate staff, read
+  real candidate data, persist records, or replace human workflow review.
+- Admin-dashboard branch: `codex/ARG-617-admin-dashboard`
+- Admin-dashboard implementation commit: `2620b68`
+- Admin-dashboard pull request: [#77](https://github.com/carlwelchdesign/matchmaker-ai/pull/77)
+- Admin-dashboard verification: six admin tests; all workspace tests,
+  TypeScript tasks, and production builds; client-chunk boundary inspection;
+  the 140-ticket planning validator; formatting and diff hygiene; and browser
+  interaction plus desktop and 390-pixel mobile visual review with no browser
+  warnings or errors.
 
 See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-interviewing.md).

@@ -12,6 +12,16 @@ describe("separate synthetic admin application", () => {
       fileURLToPath(new URL("./candidate-inspection-data.ts", import.meta.url)),
       "utf8",
     );
+    const dashboardDataSource = readFileSync(
+      fileURLToPath(new URL("./candidate-dashboard-data.ts", import.meta.url)),
+      "utf8",
+    );
+    const dashboardViewModelSource = readFileSync(
+      fileURLToPath(
+        new URL("./candidate-dashboard-view-model.ts", import.meta.url),
+      ),
+      "utf8",
+    );
     const pageSource = readFileSync(
       fileURLToPath(new URL("./page.tsx", import.meta.url)),
       "utf8",
@@ -27,6 +37,11 @@ describe("separate synthetic admin application", () => {
     expect(clientSource).toContain("Pricing is not connected");
     expect(clientSource).toContain("Candidate discovery / synthetic map");
     expect(clientSource).toContain("Approved facts / synthetic inspection");
+    expect(clientSource).toContain("Candidate analytics / synthetic dashboard");
+    expect(clientSource).toContain("See the denominator");
+    expect(clientSource).toContain("Missing sources remain unknown—not zero");
+    expect(clientSource).toContain("metric.calculationLabel");
+    expect(clientSource).toContain("metric.sourceAsOfLabel");
     expect(clientSource).toContain("Raw interviews, compatibility scores");
     expect(clientSource).toContain("will not infer or manufacture an answer");
     expect(clientSource).toContain("Current filters");
@@ -57,10 +72,19 @@ describe("separate synthetic admin application", () => {
 
     expect(pageSource).not.toContain('"use client"');
     expect(pageSource).toContain("buildSyntheticCandidateInspectionPageData");
+    expect(pageSource).toContain("buildSyntheticCandidateDashboardPageData");
     expect(dataSource).toContain('import "server-only"');
+    expect(dashboardDataSource).toContain('import "server-only"');
+    expect(dashboardDataSource).toContain(
+      "authorizeCandidateDashboardMetricSet",
+    );
+    expect(dashboardDataSource).toContain("buildCandidateDashboardMetricSet");
     expect(dataSource).toContain("@argent/domain");
+    expect(dashboardDataSource).toContain("@argent/domain");
     expect(clientSource).not.toContain("@argent/domain");
+    expect(clientSource).not.toContain("candidate-dashboard-data");
     expect(clientSource).not.toContain("candidate-inspection-data");
+    expect(dashboardViewModelSource).not.toContain("@argent/domain");
     expect(viewModelSource).not.toContain("@argent/domain");
   });
 });
