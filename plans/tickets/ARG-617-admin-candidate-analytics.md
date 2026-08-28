@@ -197,6 +197,18 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   repository formatting and diff hygiene; emitted client-chunk inspection with
   no domain-policy markers; and browser verification of navigation, combined
   filters, and the empty state with no warnings or errors.
+- The governed synthetic inspection data module now carries Next's compiler-
+  enforced `server-only` marker. A future Client Component import fails at the
+  framework boundary instead of relying only on review convention, while the
+  test environment explicitly mocks the marker and continues exercising the
+  real server projection.
+- Admin-server-sentinel branch: `codex/ARG-617-admin-server-sentinel`
+- Admin-server-sentinel commit: `15ad7ff`
+- Admin-server-sentinel PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/68
+- Admin-server-sentinel verification: four admin tests; all workspace tests,
+  TypeScript tasks, and production builds; the 140-ticket planning validator;
+  repository formatting and diff hygiene; and emitted client-chunk inspection
+  with no domain-policy markers.
 - Candidate-availability branch: `codex/ARG-617-candidate-availability`
 - Candidate-availability commit: `caa4de0`
 - Candidate-availability PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/61
