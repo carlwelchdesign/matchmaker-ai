@@ -9,6 +9,10 @@ import {
   type CandidateApprovedFactFreshness,
   type CandidateInspectionPageData,
 } from "./candidate-inspection-view-model";
+import {
+  candidateDashboardGroups,
+  type CandidateDashboardPageData,
+} from "./candidate-dashboard-view-model";
 
 const applicants = [
   {
@@ -261,7 +265,13 @@ const discoveryCandidates = [
 }[];
 
 type AdminView =
-  "campaigns" | "discovery" | "facts" | "overview" | "operations" | "review";
+  | "campaigns"
+  | "dashboard"
+  | "discovery"
+  | "facts"
+  | "overview"
+  | "operations"
+  | "review";
 
 const inspectionAccessLabels = {
   purpose: { "matchmaker-discovery": "Matchmaker discovery" },
@@ -269,8 +279,12 @@ const inspectionAccessLabels = {
 } as const;
 
 export default function AdminHome({
+  candidateDashboardData,
   candidateInspectionData,
-}: Readonly<{ candidateInspectionData: CandidateInspectionPageData }>) {
+}: Readonly<{
+  candidateDashboardData: CandidateDashboardPageData;
+  candidateInspectionData: CandidateInspectionPageData;
+}>) {
   const [view, setView] = useState<AdminView>("overview");
   const [selectedId, setSelectedId] = useState<string>(applicants[0].id);
   const [selectedCandidateId, setSelectedCandidateId] = useState<string>(
@@ -314,6 +328,12 @@ export default function AdminHome({
           Approved facts
         </NavButton>
         <NavButton
+          active={view === "dashboard"}
+          onClick={() => setView("dashboard")}
+        >
+          Analytics
+        </NavButton>
+        <NavButton
           active={view === "campaigns"}
           onClick={() => setView("campaigns")}
         >
@@ -345,10 +365,115 @@ export default function AdminHome({
         {view === "facts" ? (
           <ApprovedFacts data={candidateInspectionData} />
         ) : null}
+        {view === "dashboard" ? (
+          <CandidateDashboard data={candidateDashboardData} />
+        ) : null}
         {view === "campaigns" ? <Campaigns /> : null}
         {view === "operations" ? <Operations /> : null}
       </section>
     </main>
+  );
+}
+
+function CandidateDashboard({
+  data,
+}: Readonly<{ data: CandidateDashboardPageData }>) {
+  return (
+    <div className="view">
+      <Intro
+        eyebrow="Candidate analytics / synthetic dashboard"
+        title="See the denominator. Keep the limits visible."
+      >
+        Review fictional operational measures with exact calculation lineage,
+        explicit missing data, and no generalized candidate score.
+      </Intro>
+      <aside className="analytics-boundary" role="note">
+        <span aria-hidden="true">●</span>
+        <div>
+          <strong>Synthetic product analytics</strong>
+          <p>{data.separationNotice}</p>
+        </div>
+      </aside>
+      <dl aria-label="Dashboard access context" className="dashboard-context">
+        <div>
+          <dt>Access role</dt>
+          <dd>{data.accessContext.role}</dd>
+        </div>
+        <div>
+          <dt>Audience</dt>
+          <dd>{data.accessContext.audience}</dd>
+        </div>
+        <div>
+          <dt>Cohort</dt>
+          <dd>{data.accessContext.cohortLabel}</dd>
+        </div>
+        <div>
+          <dt>Window</dt>
+          <dd>{data.accessContext.windowLabel}</dd>
+        </div>
+        <div>
+          <dt>Generated</dt>
+          <dd>{data.accessContext.generatedAtLabel}</dd>
+        </div>
+      </dl>
+      {candidateDashboardGroups.map((group) => (
+        <section
+          aria-labelledby={`dashboard-${group.toLowerCase().replaceAll(" ", "-")}`}
+          className="metric-section"
+          key={group}
+        >
+          <div className="metric-section-heading">
+            <p className="eyebrow">Governed metrics</p>
+            <h2 id={`dashboard-${group.toLowerCase().replaceAll(" ", "-")}`}>
+              {group}
+            </h2>
+          </div>
+          <div className="metric-grid">
+            {data.metrics
+              .filter((metric) => metric.group === group)
+              .map((metric) => (
+                <article className="metric-card" key={metric.key}>
+                  <div className="metric-card-heading">
+                    <div>
+                      <p className="eyebrow">{metric.label}</p>
+                      <strong>{metric.displayValue}</strong>
+                    </div>
+                    <span
+                      className={`metric-state metric-state-${metric.missingDataLabel.toLowerCase().replaceAll(" ", "-")}`}
+                    >
+                      {metric.missingDataLabel}
+                    </span>
+                  </div>
+                  <p>{metric.description}</p>
+                  <dl className="metric-lineage">
+                    <div>
+                      <dt>Calculation</dt>
+                      <dd>{metric.calculationLabel}</dd>
+                    </div>
+                    <div>
+                      <dt>Source</dt>
+                      <dd>{metric.sourceLabel}</dd>
+                    </div>
+                    <div>
+                      <dt>Source as of</dt>
+                      <dd>{metric.sourceAsOfLabel}</dd>
+                    </div>
+                    <div>
+                      <dt>Freshness</dt>
+                      <dd>{metric.freshnessLabel}</dd>
+                    </div>
+                  </dl>
+                </article>
+              ))}
+          </div>
+        </section>
+      ))}
+      <p className="note">
+        Missing sources remain unknown—not zero. This local view does not
+        authenticate staff, read real candidate data, persist records, or
+        replace human workflow review.
+      </p>
+    </div>
   );
 }
 
