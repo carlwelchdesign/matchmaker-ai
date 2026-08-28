@@ -144,6 +144,11 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   filter-matching counts. Output selects approved values only and contains no
   raw transcript, prompt, audio, model, or generalized score fields.
 - Fact-inspection branch: `codex/ARG-617-fact-inspection`
+- Fact-inspection commit: `ee76d68`
+- Fact-inspection verification: 116 domain tests across 16 files; domain
+  typecheck and build; all workspace tests, TypeScript tasks, and production
+  builds; the 140-ticket planning validator; repository formatting; and diff
+  hygiene.
 - Candidate-availability branch: `codex/ARG-617-candidate-availability`
 - Candidate-availability commit: `caa4de0`
 - Candidate-availability PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/61
