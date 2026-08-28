@@ -127,6 +127,11 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   the decision explicitly records that neither partner nor small-cohort values
   were exposed.
 - Dashboard-access branch: `codex/ARG-617-dashboard-access`
+- Dashboard-access commit: `4b7c8e1`
+- Dashboard-access verification: 112 domain tests across 15 files; domain
+  typecheck and build; all workspace tests, TypeScript tasks, and production
+  builds; the 140-ticket planning validator; repository formatting; and diff
+  hygiene.
 - Candidate-availability branch: `codex/ARG-617-candidate-availability`
 - Candidate-availability commit: `caa4de0`
 - Candidate-availability PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/61
