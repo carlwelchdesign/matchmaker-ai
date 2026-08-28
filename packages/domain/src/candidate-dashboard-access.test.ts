@@ -101,6 +101,61 @@ describe("candidate dashboard access", () => {
   it("fails closed on malformed or privacy-unsafe dashboard payloads", () => {
     expect(() =>
       authorizeCandidateDashboardMetricSet(
+        { ...dashboard, metrics: dashboard.metrics.slice(1) },
+        internalRequest,
+      ),
+    ).toThrow("metric set is incomplete");
+    expect(() =>
+      authorizeCandidateDashboardMetricSet(
+        {
+          ...dashboard,
+          metrics: dashboard.metrics.map((metric, index) =>
+            index === 0 ? { ...metric, key: "constructor" } : metric,
+          ),
+        } as unknown as CandidateDashboardMetricSet,
+        internalRequest,
+      ),
+    ).toThrow("metric key constructor is invalid");
+    expect(() =>
+      authorizeCandidateDashboardMetricSet(
+        {
+          ...dashboard,
+          metrics: dashboard.metrics.map((metric) =>
+            metric.key === "candidate-supply"
+              ? {
+                  ...metric,
+                  lineage: {
+                    ...metric.lineage,
+                    source: "availability" as const,
+                  },
+                }
+              : metric,
+          ),
+        },
+        internalRequest,
+      ),
+    ).toThrow("contract does not match its key");
+    expect(() =>
+      authorizeCandidateDashboardMetricSet(
+        {
+          ...dashboard,
+          metrics: dashboard.metrics.map((metric) =>
+            metric.key === "candidate-supply"
+              ? {
+                  ...metric,
+                  lineage: {
+                    ...metric.lineage,
+                    sourceSchemaVersion: "candidate-analytics-snapshot/v0",
+                  },
+                }
+              : metric,
+          ),
+        },
+        internalRequest,
+      ),
+    ).toThrow("contract does not match its key");
+    expect(() =>
+      authorizeCandidateDashboardMetricSet(
         {
           ...dashboard,
           schemaVersion: "candidate-dashboard-metric-set/v2",

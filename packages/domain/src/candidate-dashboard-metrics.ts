@@ -30,20 +30,24 @@ export type CandidateDashboardSource =
   | "search-coverage"
   | "workflow-outcomes";
 
+export const candidateDashboardMetricKeys = Object.freeze([
+  "candidate-supply",
+  "approved-field-coverage",
+  "eligible-assertions",
+  "available-candidates",
+  "availability-known",
+  "interview-starts",
+  "interview-completion-rate",
+  "search-retrieval-coverage",
+  "search-review-rate",
+  "shortlist-rate",
+  "mutual-approval-rate",
+  "first-meeting-rate",
+  "reciprocal-interest-rate",
+] as const);
+
 export type CandidateDashboardMetricKey =
-  | "approved-field-coverage"
-  | "availability-known"
-  | "available-candidates"
-  | "candidate-supply"
-  | "eligible-assertions"
-  | "first-meeting-rate"
-  | "interview-completion-rate"
-  | "interview-starts"
-  | "mutual-approval-rate"
-  | "reciprocal-interest-rate"
-  | "search-retrieval-coverage"
-  | "search-review-rate"
-  | "shortlist-rate";
+  (typeof candidateDashboardMetricKeys)[number];
 
 export type CandidateDashboardMetricUnit = "basis-points" | "count";
 export type CandidateDashboardDenominatorKind =
@@ -58,33 +62,111 @@ export type CandidateDashboardDenominatorKind =
   | "retrieved-opportunities"
   | "reviewed-journeys";
 
-const denominatorKindByMetric = Object.freeze({
-  "approved-field-coverage": "observed-fields",
-  "availability-known": "candidate-cohort",
-  "available-candidates": "not-applicable",
-  "candidate-supply": "not-applicable",
-  "eligible-assertions": "not-applicable",
-  "first-meeting-rate": "delivered-introductions",
-  "interview-completion-rate": "interview-starts",
-  "interview-starts": "not-applicable",
-  "mutual-approval-rate": "recommendations",
-  "reciprocal-interest-rate": "first-meetings",
-  "search-retrieval-coverage": "eligible-opportunities",
-  "search-review-rate": "retrieved-opportunities",
-  "shortlist-rate": "reviewed-journeys",
+export interface CandidateDashboardMetricContract {
+  readonly denominatorKind: CandidateDashboardDenominatorKind;
+  readonly source: CandidateDashboardSource;
+  readonly sourceSchemaVersion: string;
+  readonly unit: CandidateDashboardMetricUnit;
+}
+
+const metricContractByKey = Object.freeze({
+  "approved-field-coverage": {
+    denominatorKind: "observed-fields",
+    source: "candidate-supply",
+    sourceSchemaVersion: candidateAnalyticsSnapshotSchemaVersion,
+    unit: "basis-points",
+  },
+  "availability-known": {
+    denominatorKind: "candidate-cohort",
+    source: "availability",
+    sourceSchemaVersion: candidateAvailabilitySnapshotSchemaVersion,
+    unit: "basis-points",
+  },
+  "available-candidates": {
+    denominatorKind: "not-applicable",
+    source: "availability",
+    sourceSchemaVersion: candidateAvailabilitySnapshotSchemaVersion,
+    unit: "count",
+  },
+  "candidate-supply": {
+    denominatorKind: "not-applicable",
+    source: "candidate-supply",
+    sourceSchemaVersion: candidateAnalyticsSnapshotSchemaVersion,
+    unit: "count",
+  },
+  "eligible-assertions": {
+    denominatorKind: "not-applicable",
+    source: "consent-eligibility",
+    sourceSchemaVersion: candidateAssertionEligibilitySchemaVersion,
+    unit: "count",
+  },
+  "first-meeting-rate": {
+    denominatorKind: "delivered-introductions",
+    source: "workflow-outcomes",
+    sourceSchemaVersion: candidateWorkflowFunnelSchemaVersion,
+    unit: "basis-points",
+  },
+  "interview-completion-rate": {
+    denominatorKind: "interview-starts",
+    source: "interview-funnel",
+    sourceSchemaVersion: candidateInterviewFunnelSchemaVersion,
+    unit: "basis-points",
+  },
+  "interview-starts": {
+    denominatorKind: "not-applicable",
+    source: "interview-funnel",
+    sourceSchemaVersion: candidateInterviewFunnelSchemaVersion,
+    unit: "count",
+  },
+  "mutual-approval-rate": {
+    denominatorKind: "recommendations",
+    source: "workflow-outcomes",
+    sourceSchemaVersion: candidateWorkflowFunnelSchemaVersion,
+    unit: "basis-points",
+  },
+  "reciprocal-interest-rate": {
+    denominatorKind: "first-meetings",
+    source: "workflow-outcomes",
+    sourceSchemaVersion: candidateWorkflowFunnelSchemaVersion,
+    unit: "basis-points",
+  },
+  "search-retrieval-coverage": {
+    denominatorKind: "eligible-opportunities",
+    source: "search-coverage",
+    sourceSchemaVersion: candidateSearchCoverageSchemaVersion,
+    unit: "basis-points",
+  },
+  "search-review-rate": {
+    denominatorKind: "retrieved-opportunities",
+    source: "search-coverage",
+    sourceSchemaVersion: candidateSearchCoverageSchemaVersion,
+    unit: "basis-points",
+  },
+  "shortlist-rate": {
+    denominatorKind: "reviewed-journeys",
+    source: "workflow-outcomes",
+    sourceSchemaVersion: candidateWorkflowFunnelSchemaVersion,
+    unit: "basis-points",
+  },
 } satisfies Record<
   CandidateDashboardMetricKey,
-  CandidateDashboardDenominatorKind
+  CandidateDashboardMetricContract
 >);
+
+export function candidateDashboardMetricContractForMetric(
+  key: CandidateDashboardMetricKey,
+): CandidateDashboardMetricContract {
+  if (!Object.hasOwn(metricContractByKey, key)) {
+    throw new Error(`Dashboard metric key ${String(key)} is invalid`);
+  }
+  const contract = metricContractByKey[key];
+  return { ...contract };
+}
 
 export function candidateDashboardDenominatorKindForMetric(
   key: CandidateDashboardMetricKey,
 ): CandidateDashboardDenominatorKind {
-  const denominatorKind = denominatorKindByMetric[key];
-  if (!denominatorKind) {
-    throw new Error(`Dashboard metric key ${String(key)} is invalid`);
-  }
-  return denominatorKind;
+  return candidateDashboardMetricContractForMetric(key).denominatorKind;
 }
 
 export type CandidateDashboardMissingDataState =
@@ -482,6 +564,11 @@ function buildMetrics(input: {
     input.maximumSourceAgeMs,
   );
   return input.descriptors.map((descriptor) => {
+    validateDescriptorContract(
+      descriptor,
+      input.sourceName,
+      input.expectedSchemaVersion,
+    );
     const sourceAvailable =
       input.source?.metrics !== null && input.source?.metrics !== undefined;
     const value = sourceAvailable ? descriptor.value() : null;
@@ -524,6 +611,22 @@ function buildMetrics(input: {
       value,
     };
   });
+}
+
+function validateDescriptorContract(
+  descriptor: MetricDescriptor,
+  source: CandidateDashboardSource,
+  sourceSchemaVersion: string,
+): void {
+  const contract = candidateDashboardMetricContractForMetric(descriptor.key);
+  if (
+    descriptor.denominatorKind !== contract.denominatorKind ||
+    descriptor.unit !== contract.unit ||
+    source !== contract.source ||
+    sourceSchemaVersion !== contract.sourceSchemaVersion
+  ) {
+    throw new Error(`Dashboard metric ${descriptor.key} contract is invalid`);
+  }
 }
 
 function validateCalculation(

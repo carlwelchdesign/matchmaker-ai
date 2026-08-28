@@ -1,5 +1,7 @@
 import {
   candidateDashboardDenominatorKindForMetric,
+  candidateDashboardMetricContractForMetric,
+  candidateDashboardMetricKeys,
   candidateDashboardMetricSetSchemaVersion,
   type CandidateDashboardMetricSet,
 } from "./candidate-dashboard-metrics.js";
@@ -147,11 +149,22 @@ function validateDashboard(dashboard: CandidateDashboardMetricSet): void {
   }
 
   const metricKeys = new Set<string>();
+  if (dashboard.metrics.length !== candidateDashboardMetricKeys.length) {
+    throw new Error("Dashboard metric set is incomplete");
+  }
   for (const metric of dashboard.metrics) {
     if (metricKeys.has(metric.key)) {
       throw new Error("Dashboard metric keys must be unique");
     }
     metricKeys.add(metric.key);
+    const contract = candidateDashboardMetricContractForMetric(metric.key);
+    if (
+      metric.unit !== contract.unit ||
+      metric.lineage.source !== contract.source ||
+      metric.lineage.sourceSchemaVersion !== contract.sourceSchemaVersion
+    ) {
+      throw new Error("Dashboard metric contract does not match its key");
+    }
     if (
       metric.lineage.cohortKey !== dashboard.cohortKey ||
       metric.lineage.windowStart !== dashboard.windowStart ||
@@ -191,6 +204,11 @@ function validateDashboard(dashboard: CandidateDashboardMetricSet): void {
       throw new Error("Dashboard metric value is invalid");
     }
     validateMetricCalculation(metric);
+  }
+  if (
+    candidateDashboardMetricKeys.some((metricKey) => !metricKeys.has(metricKey))
+  ) {
+    throw new Error("Dashboard metric set is incomplete");
   }
 }
 

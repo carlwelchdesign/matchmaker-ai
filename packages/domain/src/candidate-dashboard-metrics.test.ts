@@ -14,6 +14,7 @@ import {
 } from "./candidate-availability.js";
 import {
   buildCandidateDashboardMetricSet,
+  candidateDashboardMetricKeys,
   candidateDashboardMetricSetSchemaVersion,
 } from "./candidate-dashboard-metrics.js";
 import { candidatePurposeProjectionSchemaVersion } from "./candidate-purpose-projection.js";
@@ -167,6 +168,9 @@ describe("candidate dashboard metric set", () => {
       windowStart: scope.windowStart,
     });
     expect(metricSet.metrics).toHaveLength(13);
+    expect(metricSet.metrics.map((metric) => metric.key)).toEqual(
+      candidateDashboardMetricKeys,
+    );
     expect(
       metricSet.metrics.find((metric) => metric.key === "candidate-supply"),
     ).toEqual({

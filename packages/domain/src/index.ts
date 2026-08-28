@@ -31,10 +31,13 @@ export {
 export {
   buildCandidateDashboardMetricSet,
   candidateDashboardDenominatorKindForMetric,
+  candidateDashboardMetricContractForMetric,
+  candidateDashboardMetricKeys,
   candidateDashboardMetricSetSchemaVersion,
   type CandidateDashboardDenominatorKind,
   type CandidateDashboardFreshnessState,
   type CandidateDashboardMetric,
+  type CandidateDashboardMetricContract,
   type CandidateDashboardMetricKey,
   type CandidateDashboardMetricSet,
   type CandidateDashboardMetricSetInput,
