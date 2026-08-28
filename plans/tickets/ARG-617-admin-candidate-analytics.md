@@ -359,5 +359,27 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
 - Dashboard-contract enforcement verification: 116 domain tests across 16
   files; all workspace tests, TypeScript tasks, and production builds; the
   140-ticket planning validator; formatting; and diff hygiene.
+- `candidate-dashboard-metric-set/v4` adds the intake-quality measures already
+  present in the content-free interview funnel to the governed dashboard:
+  candidate-approved interview fields and correction burden per completed
+  interview. Both preserve the exact aggregate source, timestamp, cohort,
+  reporting window, numerator, denominator, freshness, and missing-data state.
+- Correction burden has an explicit unbounded maximum in the central metric
+  registry because multiple candidate corrections per completed interview are
+  valid. Percentage-like funnel rates remain capped at 10,000 basis points, and
+  dashboard construction plus authorization continue to fail closed on values
+  outside each metric's declared contract.
+- The synthetic admin view presents 15 governed metrics. The two new intake
+  measures remain operational quality signals, not candidate scores, and the
+  interface continues to expose no raw interview content or candidate identity.
+- Intake-quality branch: `codex/ARG-617-intake-quality-metrics`
+- Intake-quality implementation commit: `66ce6ce`
+- Intake-quality pull request:
+  [#79](https://github.com/carlwelchdesign/matchmaker-ai/pull/79)
+- Intake-quality verification: 117 domain tests across 16 files; six admin
+  tests; all workspace tests, TypeScript tasks, and production builds; the
+  140-ticket planning validator; formatting and diff hygiene; and browser
+  verification of exact calculations, desktop and 390-pixel mobile layout, no
+  horizontal overflow, and no browser warnings or errors.
 
 See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-interviewing.md).

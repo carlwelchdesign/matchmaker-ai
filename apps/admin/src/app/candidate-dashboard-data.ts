@@ -67,6 +67,16 @@ const metricContent = {
     group: "Intake operations",
     label: "Interview completion",
   },
+  "interview-approved-fields": {
+    description: "Candidate-approved fields collected through interviews.",
+    group: "Intake operations",
+    label: "Approved interview fields",
+  },
+  "interview-correction-burden": {
+    description: "Candidate corrections per completed interview.",
+    group: "Intake operations",
+    label: "Correction burden",
+  },
   "interview-starts": {
     description: "Candidate interviews started in the reporting window.",
     group: "Intake operations",
@@ -111,6 +121,7 @@ const denominatorLabels = {
   "delivered-introductions": "delivered introductions",
   "eligible-opportunities": "eligible opportunities",
   "first-meetings": "first meetings",
+  "interview-completions": "completed interviews",
   "interview-starts": "interview starts",
   "not-applicable": "not applicable",
   "observed-fields": "observed fields",

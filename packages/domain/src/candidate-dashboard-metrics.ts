@@ -20,7 +20,7 @@ import {
 } from "./candidate-workflow-outcomes.js";
 
 export const candidateDashboardMetricSetSchemaVersion =
-  "candidate-dashboard-metric-set/v3" as const;
+  "candidate-dashboard-metric-set/v4" as const;
 
 export type CandidateDashboardSource =
   | "availability"
@@ -38,6 +38,8 @@ export const candidateDashboardMetricKeys = Object.freeze([
   "availability-known",
   "interview-starts",
   "interview-completion-rate",
+  "interview-approved-fields",
+  "interview-correction-burden",
   "search-retrieval-coverage",
   "search-review-rate",
   "shortlist-rate",
@@ -55,6 +57,7 @@ export type CandidateDashboardDenominatorKind =
   | "delivered-introductions"
   | "eligible-opportunities"
   | "first-meetings"
+  | "interview-completions"
   | "interview-starts"
   | "not-applicable"
   | "observed-fields"
@@ -64,6 +67,7 @@ export type CandidateDashboardDenominatorKind =
 
 export interface CandidateDashboardMetricContract {
   readonly denominatorKind: CandidateDashboardDenominatorKind;
+  readonly maximumValue: number | null;
   readonly source: CandidateDashboardSource;
   readonly sourceSchemaVersion: string;
   readonly unit: CandidateDashboardMetricUnit;
@@ -72,78 +76,105 @@ export interface CandidateDashboardMetricContract {
 const metricContractByKey = Object.freeze({
   "approved-field-coverage": {
     denominatorKind: "observed-fields",
+    maximumValue: 10_000,
     source: "candidate-supply",
     sourceSchemaVersion: candidateAnalyticsSnapshotSchemaVersion,
     unit: "basis-points",
   },
   "availability-known": {
     denominatorKind: "candidate-cohort",
+    maximumValue: 10_000,
     source: "availability",
     sourceSchemaVersion: candidateAvailabilitySnapshotSchemaVersion,
     unit: "basis-points",
   },
   "available-candidates": {
     denominatorKind: "not-applicable",
+    maximumValue: null,
     source: "availability",
     sourceSchemaVersion: candidateAvailabilitySnapshotSchemaVersion,
     unit: "count",
   },
   "candidate-supply": {
     denominatorKind: "not-applicable",
+    maximumValue: null,
     source: "candidate-supply",
     sourceSchemaVersion: candidateAnalyticsSnapshotSchemaVersion,
     unit: "count",
   },
   "eligible-assertions": {
     denominatorKind: "not-applicable",
+    maximumValue: null,
     source: "consent-eligibility",
     sourceSchemaVersion: candidateAssertionEligibilitySchemaVersion,
     unit: "count",
   },
   "first-meeting-rate": {
     denominatorKind: "delivered-introductions",
+    maximumValue: 10_000,
     source: "workflow-outcomes",
     sourceSchemaVersion: candidateWorkflowFunnelSchemaVersion,
     unit: "basis-points",
   },
+  "interview-approved-fields": {
+    denominatorKind: "not-applicable",
+    maximumValue: null,
+    source: "interview-funnel",
+    sourceSchemaVersion: candidateInterviewFunnelSchemaVersion,
+    unit: "count",
+  },
   "interview-completion-rate": {
     denominatorKind: "interview-starts",
+    maximumValue: 10_000,
+    source: "interview-funnel",
+    sourceSchemaVersion: candidateInterviewFunnelSchemaVersion,
+    unit: "basis-points",
+  },
+  "interview-correction-burden": {
+    denominatorKind: "interview-completions",
+    maximumValue: null,
     source: "interview-funnel",
     sourceSchemaVersion: candidateInterviewFunnelSchemaVersion,
     unit: "basis-points",
   },
   "interview-starts": {
     denominatorKind: "not-applicable",
+    maximumValue: null,
     source: "interview-funnel",
     sourceSchemaVersion: candidateInterviewFunnelSchemaVersion,
     unit: "count",
   },
   "mutual-approval-rate": {
     denominatorKind: "recommendations",
+    maximumValue: 10_000,
     source: "workflow-outcomes",
     sourceSchemaVersion: candidateWorkflowFunnelSchemaVersion,
     unit: "basis-points",
   },
   "reciprocal-interest-rate": {
     denominatorKind: "first-meetings",
+    maximumValue: 10_000,
     source: "workflow-outcomes",
     sourceSchemaVersion: candidateWorkflowFunnelSchemaVersion,
     unit: "basis-points",
   },
   "search-retrieval-coverage": {
     denominatorKind: "eligible-opportunities",
+    maximumValue: 10_000,
     source: "search-coverage",
     sourceSchemaVersion: candidateSearchCoverageSchemaVersion,
     unit: "basis-points",
   },
   "search-review-rate": {
     denominatorKind: "retrieved-opportunities",
+    maximumValue: 10_000,
     source: "search-coverage",
     sourceSchemaVersion: candidateSearchCoverageSchemaVersion,
     unit: "basis-points",
   },
   "shortlist-rate": {
     denominatorKind: "reviewed-journeys",
+    maximumValue: 10_000,
     source: "workflow-outcomes",
     sourceSchemaVersion: candidateWorkflowFunnelSchemaVersion,
     unit: "basis-points",
@@ -435,6 +466,23 @@ function interviewMetrics(
         unit: "basis-points",
         value: () => source?.metrics?.overall.completionRateBasisPoints ?? null,
       },
+      {
+        denominator: () => null,
+        denominatorKind: "not-applicable",
+        key: "interview-approved-fields",
+        numerator: () => source?.metrics?.overall.approvedFieldCount ?? null,
+        unit: "count",
+        value: () => source?.metrics?.overall.approvedFieldCount ?? null,
+      },
+      {
+        denominator: () => source?.metrics?.overall.completedCount ?? null,
+        denominatorKind: "interview-completions",
+        key: "interview-correction-burden",
+        numerator: () => source?.metrics?.overall.correctionCount ?? null,
+        unit: "basis-points",
+        value: () =>
+          source?.metrics?.overall.correctionsPerCompletionBasisPoints ?? null,
+      },
     ],
     expectedSchemaVersion: candidateInterviewFunnelSchemaVersion,
     generatedAt,
@@ -574,11 +622,14 @@ function buildMetrics(input: {
     const value = sourceAvailable ? descriptor.value() : null;
     const numerator = sourceAvailable ? descriptor.numerator() : null;
     const denominator = sourceAvailable ? descriptor.denominator() : null;
+    const maximumValue = candidateDashboardMetricContractForMetric(
+      descriptor.key,
+    ).maximumValue;
     if (
       value !== null &&
       (!Number.isSafeInteger(value) ||
         value < 0 ||
-        (descriptor.unit === "basis-points" && value > 10_000))
+        (maximumValue !== null && value > maximumValue))
     ) {
       throw new Error(`Dashboard metric ${descriptor.key} is invalid`);
     }

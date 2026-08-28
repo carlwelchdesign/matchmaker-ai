@@ -199,7 +199,8 @@ function validateDashboard(dashboard: CandidateDashboardMetricSet): void {
       hasValue &&
       (!Number.isSafeInteger(metric.value) ||
         metric.value < 0 ||
-        (metric.unit === "basis-points" && metric.value > 10_000))
+        (contract.maximumValue !== null &&
+          metric.value > contract.maximumValue))
     ) {
       throw new Error("Dashboard metric value is invalid");
     }
