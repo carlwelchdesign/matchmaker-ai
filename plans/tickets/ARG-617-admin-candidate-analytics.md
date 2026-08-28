@@ -250,6 +250,17 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   repository formatting and diff hygiene; and browser verification of the
   access-context semantics, candidate-filter stability, full-page layout, and
   browser logs.
+- The results area now names every active candidate, topic, and freshness filter
+  in an accessible summary, including the exact filters that produced an empty
+  result. The unfiltered state is explicitly labeled, and clearing filters
+  restores that baseline context instead of leaving the result scope implicit.
+- Admin-filter-context branch: `codex/ARG-617-admin-filter-context`
+- Admin-filter-context commit: `f08a70a`
+- Admin-filter-context verification: four admin tests; all workspace tests,
+  TypeScript tasks, and production builds; the 140-ticket planning validator;
+  repository formatting and diff hygiene; and browser verification of
+  unfiltered, combined-filter, empty-result, reset, full-page layout, and log
+  states.
 - Candidate-availability branch: `codex/ARG-617-candidate-availability`
 - Candidate-availability commit: `caa4de0`
 - Candidate-availability PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/61
