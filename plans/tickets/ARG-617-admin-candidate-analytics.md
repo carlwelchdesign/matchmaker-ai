@@ -191,6 +191,7 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   domain policy.
 - Admin-server-boundary branch: `codex/ARG-617-admin-server-boundary`
 - Admin-server-boundary commit: `800223e`
+- Admin-server-boundary PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/67
 - Admin-server-boundary verification: four admin tests; all workspace tests,
   TypeScript tasks, and production builds; the 140-ticket planning validator;
   repository formatting and diff hygiene; emitted client-chunk inspection with
