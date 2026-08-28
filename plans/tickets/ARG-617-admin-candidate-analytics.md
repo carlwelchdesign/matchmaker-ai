@@ -323,5 +323,6 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   calculation states before returning a dashboard.
 - Metric-calculation branch: `codex/ARG-617-metric-calculations`
 - Metric-calculation implementation commit: `ee310fd`
+- Metric-calculation pull request: [#76](https://github.com/carlwelchdesign/matchmaker-ai/pull/76)
 
 See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-interviewing.md).
