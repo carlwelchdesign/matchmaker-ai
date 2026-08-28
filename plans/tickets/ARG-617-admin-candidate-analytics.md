@@ -18,7 +18,7 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
 ## Acceptance criteria
 
 - [x] Define metric contracts for candidate supply, completeness/freshness, consent/availability, funnel by mode, correction burden, search coverage, shortlist throughput, and introduction outcomes.
-- [ ] Every dashboard value links to authoritative source lineage, cohort, time window, freshness, and missing-data state. The first aggregate contract includes source projection lineage, opaque cohort, bounded time window, and explicit small-cohort suppression; per-metric freshness and missing-data semantics remain open.
+- [x] Every dashboard value links to authoritative source lineage, cohort, time window, freshness, and missing-data state. The display-ready metric-set contract preserves per-source schema and observation time, distinguishes fresh, stale, and unknown values, and separates missing denominators, unavailable sources, and small-cohort suppression.
 - [ ] Staff can filter and inspect approved facts with provenance and uncertainty; raw interview content is not exposed by default.
 - [ ] Permissions and aggregate thresholds prevent inappropriate small-cohort or partner disclosure.
 - [ ] No overall candidate-value, attractiveness, personality, wealth, compatibility, or relationship-success score is shown.
@@ -100,6 +100,22 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   approved discovery projection lineage remain available.
 - This is pure synthetic domain code. It does not add persistence, analytics
   transport, an admin dashboard, real candidate data, or production access.
+- `candidate-dashboard-metric-set/v1` composes the six aggregate analytics
+  sources into display-ready metrics while preserving source schema, opaque
+  cohort, reporting window, source-as-of time, freshness, and missing-data
+  state for every value. Missing sources remain unknown instead of becoming
+  zero, and suppressed cohorts remain suppressed through the display boundary.
+- Dashboard composition rejects mismatched source scope or schema, inconsistent
+  source state, future lineage, invalid counts, and ratio values outside the
+  0-to-10,000 basis-point range. It exposes no candidate identifier, interview
+  content, generalized score, or raw source value.
+- Dashboard-lineage branch: `codex/ARG-617-metric-lineage`
+- Dashboard-lineage commit: `699f5a5`
+- Dashboard-lineage PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/62
+- Dashboard-lineage verification: 108 domain tests across 14 files; domain
+  typecheck and build; all workspace tests, TypeScript tasks, and production
+  builds; the 140-ticket planning validator; repository formatting; and diff
+  hygiene.
 - Candidate-availability branch: `codex/ARG-617-candidate-availability`
 - Candidate-availability commit: `caa4de0`
 - Candidate-availability PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/61
