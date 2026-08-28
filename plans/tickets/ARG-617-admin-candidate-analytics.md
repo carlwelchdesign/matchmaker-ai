@@ -243,6 +243,8 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   operational role.
 - Admin-access-context branch: `codex/ARG-617-admin-access-context`
 - Admin-access-context commit: `0792210`
+- Admin-access-context PR:
+  https://github.com/carlwelchdesign/matchmaker-ai/pull/71
 - Admin-access-context verification: four admin tests; all workspace tests,
   TypeScript tasks, and production builds; the 140-ticket planning validator;
   repository formatting and diff hygiene; and browser verification of the
