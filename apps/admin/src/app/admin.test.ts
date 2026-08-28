@@ -8,6 +8,10 @@ describe("separate synthetic admin application", () => {
       fileURLToPath(new URL("./admin-home.tsx", import.meta.url)),
       "utf8",
     );
+    const dataSource = readFileSync(
+      fileURLToPath(new URL("./candidate-inspection-data.ts", import.meta.url)),
+      "utf8",
+    );
     const pageSource = readFileSync(
       fileURLToPath(new URL("./page.tsx", import.meta.url)),
       "utf8",
@@ -35,6 +39,8 @@ describe("separate synthetic admin application", () => {
 
     expect(pageSource).not.toContain('"use client"');
     expect(pageSource).toContain("buildSyntheticCandidateInspectionPageData");
+    expect(dataSource).toContain('import "server-only"');
+    expect(dataSource).toContain("@argent/domain");
     expect(clientSource).not.toContain("@argent/domain");
     expect(clientSource).not.toContain("candidate-inspection-data");
     expect(viewModelSource).not.toContain("@argent/domain");
