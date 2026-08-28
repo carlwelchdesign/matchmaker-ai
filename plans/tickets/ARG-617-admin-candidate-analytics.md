@@ -295,6 +295,8 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   and `ARG-114`.
 - Analytics-boundary branch: `codex/ARG-617-analytics-boundary`
 - Analytics-boundary commit: `93c54c5`
+- Analytics-boundary PR:
+  https://github.com/carlwelchdesign/matchmaker-ai/pull/74
 - Analytics-boundary verification: 116 domain tests across 16 files; all
   workspace tests and TypeScript tasks; domain and full production builds; the
   140-ticket planning validator; formatting; and diff hygiene.
