@@ -192,7 +192,30 @@ function validateDashboard(dashboard: CandidateDashboardMetricSet): void {
       dashboard.interviewModeMinimumCohortSize,
     );
   }
+  validateInterviewModeLineage(dashboard);
   validateInterviewModeTotals(dashboard);
+}
+
+function validateInterviewModeLineage(
+  dashboard: CandidateDashboardMetricSet,
+): void {
+  for (const key of candidateDashboardInterviewMetricKeys) {
+    const overall = dashboard.metrics.find((metric) => metric.key === key);
+    if (!overall) throw new Error("Dashboard interview metric is missing");
+    for (const breakdown of dashboard.interviewModeBreakdown) {
+      const metric = breakdown.metrics.find((item) => item.key === key);
+      if (!metric)
+        throw new Error("Dashboard interview mode metric is missing");
+      if (
+        metric.freshness !== overall.freshness ||
+        metric.lineage.sourceAsOf !== overall.lineage.sourceAsOf
+      ) {
+        throw new Error(
+          "Dashboard interview mode lineage does not match overall",
+        );
+      }
+    }
+  }
 }
 
 function validateInterviewModeDisclosure(

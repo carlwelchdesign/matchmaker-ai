@@ -509,6 +509,23 @@ function InterviewModeBreakdown({
           establish that one interview experience performs better than another.
         </p>
       </div>
+      <dl
+        aria-label="Interview mode source context"
+        className="interview-mode-source-context"
+      >
+        <div>
+          <dt>Source</dt>
+          <dd>{data.interviewModeSourceContext.sourceLabel}</dd>
+        </div>
+        <div>
+          <dt>Source as of</dt>
+          <dd>{data.interviewModeSourceContext.sourceAsOfLabel}</dd>
+        </div>
+        <div>
+          <dt>Freshness</dt>
+          <dd>{data.interviewModeSourceContext.freshnessLabel}</dd>
+        </div>
+      </dl>
       <div className="interview-mode-grid">
         {data.interviewModeBreakdown.map((breakdown) => (
           <article className="interview-mode-card" key={breakdown.mode}>

@@ -780,6 +780,21 @@ dd {
   gap: var(--argent-primitive-space-200);
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
+.interview-mode-source-context {
+  border-block: 1px solid var(--argent-semantic-border-subtle);
+  display: grid;
+  gap: var(--argent-primitive-space-200);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+  padding-block: var(--argent-primitive-space-150);
+}
+.interview-mode-source-context > div {
+  min-width: 0;
+}
+.interview-mode-source-context dd {
+  color: var(--argent-semantic-text-secondary);
+  overflow-wrap: anywhere;
+}
 .interview-mode-card {
   border-top: 1px solid var(--argent-semantic-border-strong);
   display: grid;
@@ -844,6 +859,7 @@ dd {
   .dashboard-context,
   .interview-mode-grid,
   .interview-mode-metrics,
+  .interview-mode-source-context,
   .metric-grid,
   .metric-lineage {
     grid-template-columns: 1fr;
