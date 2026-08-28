@@ -487,6 +487,8 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
 - Observation-quality-context branch:
   `codex/ARG-617-observation-quality-context`
 - Observation-quality-context implementation commit: `2dc6435`
+- Observation-quality-context pull request:
+  [#84](https://github.com/carlwelchdesign/matchmaker-ai/pull/84)
 - Observation-quality-context verification: 117 domain tests across 16 files;
   six admin tests; all workspace tests, TypeScript tasks, and production builds;
   the 140-ticket planning validator; repository formatting and diff hygiene;
