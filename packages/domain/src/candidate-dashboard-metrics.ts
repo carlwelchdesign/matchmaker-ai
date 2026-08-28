@@ -72,6 +72,13 @@ export interface CandidateDashboardMetric {
 export interface CandidateDashboardMetricSet {
   readonly candidateIdentifiersStored: false;
   readonly cohortKey: string;
+  readonly dataBoundary: {
+    readonly legalAuditEvidenceStored: false;
+    readonly operationalRecordsStored: false;
+    readonly productAnalyticsOnly: true;
+    readonly providerPayloadsStored: false;
+    readonly securityTelemetryStored: false;
+  };
   readonly generatedAt: string;
   readonly metrics: readonly CandidateDashboardMetric[];
   readonly schemaVersion: typeof candidateDashboardMetricSetSchemaVersion;
@@ -149,6 +156,13 @@ export function buildCandidateDashboardMetricSet(
   return {
     candidateIdentifiersStored: false,
     cohortKey: input.cohortKey,
+    dataBoundary: {
+      legalAuditEvidenceStored: false,
+      operationalRecordsStored: false,
+      productAnalyticsOnly: true,
+      providerPayloadsStored: false,
+      securityTelemetryStored: false,
+    },
     generatedAt,
     metrics,
     schemaVersion: candidateDashboardMetricSetSchemaVersion,

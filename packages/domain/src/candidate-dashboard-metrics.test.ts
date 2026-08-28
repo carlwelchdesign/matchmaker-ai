@@ -153,6 +153,13 @@ describe("candidate dashboard metric set", () => {
     expect(metricSet).toMatchObject({
       candidateIdentifiersStored: false,
       cohortKey: scope.cohortKey,
+      dataBoundary: {
+        legalAuditEvidenceStored: false,
+        operationalRecordsStored: false,
+        productAnalyticsOnly: true,
+        providerPayloadsStored: false,
+        securityTelemetryStored: false,
+      },
       generatedAt: scope.generatedAt,
       schemaVersion: candidateDashboardMetricSetSchemaVersion,
       sourceContentStored: false,
