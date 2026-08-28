@@ -256,6 +256,8 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   restores that baseline context instead of leaving the result scope implicit.
 - Admin-filter-context branch: `codex/ARG-617-admin-filter-context`
 - Admin-filter-context commit: `f08a70a`
+- Admin-filter-context PR:
+  https://github.com/carlwelchdesign/matchmaker-ai/pull/72
 - Admin-filter-context verification: four admin tests; all workspace tests,
   TypeScript tasks, and production builds; the 140-ticket planning validator;
   repository formatting and diff hygiene; and browser verification of
