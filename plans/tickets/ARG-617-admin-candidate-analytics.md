@@ -162,6 +162,7 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   data, persist state, or grant production access.
 - Admin-fact-inspection branch: `codex/ARG-617-admin-fact-inspection`
 - Admin-fact-inspection commit: `4887cf7`
+- Admin-fact-inspection PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/65
 - Admin-fact-inspection verification: four admin tests; all workspace tests,
   TypeScript tasks, and production builds; the 140-ticket planning validator;
   repository formatting and diff hygiene; browser interaction for default,
