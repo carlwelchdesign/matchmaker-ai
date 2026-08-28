@@ -128,6 +128,7 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   were exposed.
 - Dashboard-access branch: `codex/ARG-617-dashboard-access`
 - Dashboard-access commit: `4b7c8e1`
+- Dashboard-access PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/63
 - Dashboard-access verification: 112 domain tests across 15 files; domain
   typecheck and build; all workspace tests, TypeScript tasks, and production
   builds; the 140-ticket planning validator; repository formatting; and diff
