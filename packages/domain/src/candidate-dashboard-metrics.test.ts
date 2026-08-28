@@ -19,6 +19,11 @@ import {
   candidateDashboardMetricSetSchemaVersion,
 } from "./candidate-dashboard-metrics.js";
 import { candidatePurposeProjectionSchemaVersion } from "./candidate-purpose-projection.js";
+import {
+  candidateSearchCoverageSchemaVersion,
+  candidateSearchObservationSchemaVersion,
+  type CandidateSearchCoverageSnapshot,
+} from "./candidate-search-coverage.js";
 import { interviewOutcomeSchemaVersion } from "./interview-unit-economics.js";
 import { interviewUsageSchemaVersion } from "./interview-usage.js";
 
@@ -95,6 +100,42 @@ const availability: CandidateAvailabilitySnapshot = {
   windowStart: scope.windowStart,
 };
 
+const searchCoverage: CandidateSearchCoverageSnapshot = {
+  cohortKey: scope.cohortKey,
+  dataState: "available",
+  lineage: {
+    criteriaVersions: ["criteria-synthetic-v1"],
+    observationSchemaVersion: candidateSearchObservationSchemaVersion,
+    policyVersions: ["search-policy-synthetic-v1"],
+    projectedAt: "2026-08-25T18:00:00.000Z",
+    projectionSchemaVersion: candidatePurposeProjectionSchemaVersion,
+    sourceContentStored: false,
+  },
+  metrics: {
+    completeSearchCount: 2,
+    dataQualityStateCounts: {
+      backfilled: 0,
+      complete: 2,
+      delayed: 0,
+      "invalid-quarantined": 0,
+      partial: 1,
+      stale: 0,
+    },
+    eligibleCandidateOpportunityCount: 10,
+    recordedSearchCount: 3,
+    retrievalCoverageBasisPoints: 6000,
+    retrievedCandidateOpportunityCount: 6,
+    reviewRateBasisPoints: 6667,
+    reviewedCandidateOpportunityCount: 4,
+    zeroResultRateBasisPoints: 0,
+    zeroResultSearchCount: 0,
+  },
+  minimumCohortSize: 5,
+  schemaVersion: candidateSearchCoverageSchemaVersion,
+  windowEnd: scope.windowEnd,
+  windowStart: scope.windowStart,
+};
+
 function funnelMetric(
   values: Partial<CandidateInterviewFunnelMetric> = {},
 ): CandidateInterviewFunnelMetric {
@@ -160,6 +201,7 @@ describe("candidate dashboard metric set", () => {
         availability,
         candidateSupply: supply,
         interviewFunnel,
+        searchCoverage,
       },
     });
 
@@ -175,6 +217,11 @@ describe("candidate dashboard metric set", () => {
       },
       generatedAt: scope.generatedAt,
       interviewModeMinimumCohortSize: 5,
+      searchCriteriaContext: {
+        criteriaVersions: ["criteria-synthetic-v1"],
+        policyVersions: ["search-policy-synthetic-v1"],
+        sourceContentStored: false,
+      },
       schemaVersion: candidateDashboardMetricSetSchemaVersion,
       sourceContentStored: false,
       windowEnd: scope.windowEnd,
@@ -293,9 +340,10 @@ describe("candidate dashboard metric set", () => {
         (metric) => metric.key === "search-retrieval-coverage",
       ),
     ).toMatchObject({
-      freshness: "unknown",
-      missingDataState: "source-unavailable",
-      value: null,
+      calculation: { denominator: 10, numerator: 6 },
+      freshness: "fresh",
+      missingDataState: "available",
+      value: 6000,
     });
   });
 
@@ -505,6 +553,20 @@ describe("candidate dashboard metric set", () => {
         },
       }),
     ).toThrow("approved-field-coverage is invalid");
+    expect(() =>
+      buildCandidateDashboardMetricSet({
+        ...scope,
+        sources: {
+          searchCoverage: {
+            ...searchCoverage,
+            lineage: {
+              ...searchCoverage.lineage,
+              criteriaVersions: ["criteria-v2", "criteria-v1"],
+            },
+          },
+        },
+      }),
+    ).toThrow("search criteria versions must be sorted, unique identifiers");
     expect(() =>
       buildCandidateDashboardMetricSet({
         ...scope,

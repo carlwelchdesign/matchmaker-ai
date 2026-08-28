@@ -8,6 +8,8 @@ import {
   candidateAvailabilitySnapshotSchemaVersion,
   candidateInterviewFunnelSchemaVersion,
   candidatePurposeProjectionSchemaVersion,
+  candidateSearchCoverageSchemaVersion,
+  candidateSearchObservationSchemaVersion,
   interviewOutcomeSchemaVersion,
   interviewUsageSchemaVersion,
   type CandidateAnalyticsSnapshot,
@@ -18,6 +20,7 @@ import {
   type CandidateInterviewModeAttribution,
   type CandidateInterviewFunnelMetric,
   type CandidateInterviewFunnelSnapshot,
+  type CandidateSearchCoverageSnapshot,
 } from "@argent/domain";
 import type {
   CandidateDashboardMetricGroup,
@@ -294,10 +297,51 @@ const interviewFunnel: CandidateInterviewFunnelSnapshot = {
   windowStart: scope.windowStart,
 };
 
+const searchCoverage: CandidateSearchCoverageSnapshot = {
+  cohortKey: scope.cohortKey,
+  dataState: "available",
+  lineage: {
+    criteriaVersions: ["criteria-synthetic-v1"],
+    observationSchemaVersion: candidateSearchObservationSchemaVersion,
+    policyVersions: ["search-policy-synthetic-v1"],
+    projectedAt: "2026-08-28T19:30:00.000Z",
+    projectionSchemaVersion: candidatePurposeProjectionSchemaVersion,
+    sourceContentStored: false,
+  },
+  metrics: {
+    completeSearchCount: 2,
+    dataQualityStateCounts: {
+      backfilled: 0,
+      complete: 2,
+      delayed: 0,
+      "invalid-quarantined": 0,
+      partial: 1,
+      stale: 0,
+    },
+    eligibleCandidateOpportunityCount: 10,
+    recordedSearchCount: 3,
+    retrievalCoverageBasisPoints: 6000,
+    retrievedCandidateOpportunityCount: 6,
+    reviewRateBasisPoints: 6667,
+    reviewedCandidateOpportunityCount: 4,
+    zeroResultRateBasisPoints: 0,
+    zeroResultSearchCount: 0,
+  },
+  minimumCohortSize: 5,
+  schemaVersion: candidateSearchCoverageSchemaVersion,
+  windowEnd: scope.windowEnd,
+  windowStart: scope.windowStart,
+};
+
 export function buildSyntheticCandidateDashboardPageData(): CandidateDashboardPageData {
   const dashboard = buildCandidateDashboardMetricSet({
     ...scope,
-    sources: { availability, candidateSupply, interviewFunnel },
+    sources: {
+      availability,
+      candidateSupply,
+      interviewFunnel,
+      searchCoverage,
+    },
   });
   const decision = authorizeCandidateDashboardMetricSet(dashboard, {
     accessedAt: "2026-08-28T21:00:00.000Z",
@@ -336,6 +380,14 @@ export function buildSyntheticCandidateDashboardPageData(): CandidateDashboardPa
       sourceLabel: interviewModeSourceMetric.sourceLabel,
     },
     metrics: decision.dashboard.metrics.map(toMetricView),
+    searchCriteriaContext: {
+      criteriaVersionsLabel:
+        decision.dashboard.searchCriteriaContext.criteriaVersions.join(", ") ||
+        "No criteria version recorded",
+      policyVersionsLabel:
+        decision.dashboard.searchCriteriaContext.policyVersions.join(", ") ||
+        "No policy version recorded",
+    },
     separationNotice:
       "Product analytics only. Operational records, legal audit evidence, security telemetry, provider payloads, and candidate identifiers are not stored in this view.",
   };

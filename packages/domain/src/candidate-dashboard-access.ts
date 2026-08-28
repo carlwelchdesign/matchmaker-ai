@@ -133,6 +133,7 @@ function validateDashboard(dashboard: CandidateDashboardMetricSet): void {
   if (!cohortKeyPattern.test(dashboard.cohortKey)) {
     throw new Error("Dashboard cohort key must be opaque");
   }
+  validateSearchCriteriaContext(dashboard);
   const generatedAt = timestamp(
     dashboard.generatedAt,
     "Dashboard generation time",
@@ -194,6 +195,37 @@ function validateDashboard(dashboard: CandidateDashboardMetricSet): void {
   }
   validateInterviewModeLineage(dashboard);
   validateInterviewModeTotals(dashboard);
+}
+
+function validateSearchCriteriaContext(
+  dashboard: CandidateDashboardMetricSet,
+): void {
+  if (dashboard.searchCriteriaContext?.sourceContentStored !== false) {
+    throw new Error(
+      "Dashboard search criteria context contains source content",
+    );
+  }
+  validateVersionKeys(
+    dashboard.searchCriteriaContext.criteriaVersions,
+    "Dashboard search criteria versions",
+  );
+  validateVersionKeys(
+    dashboard.searchCriteriaContext.policyVersions,
+    "Dashboard search policy versions",
+  );
+}
+
+function validateVersionKeys(values: unknown, label: string): void {
+  if (
+    !Array.isArray(values) ||
+    values.some(
+      (value) =>
+        typeof value !== "string" || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value),
+    ) ||
+    values.some((value, index) => index > 0 && value <= values[index - 1]!)
+  ) {
+    throw new Error(`${label} must be sorted, unique identifiers`);
+  }
 }
 
 function validateInterviewModeLineage(

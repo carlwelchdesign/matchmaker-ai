@@ -22,7 +22,7 @@ import {
 } from "./candidate-workflow-outcomes.js";
 
 export const candidateDashboardMetricSetSchemaVersion =
-  "candidate-dashboard-metric-set/v5" as const;
+  "candidate-dashboard-metric-set/v6" as const;
 
 export type CandidateDashboardSource =
   | "availability"
@@ -260,10 +260,17 @@ export interface CandidateDashboardMetricSet {
   readonly interviewModeBreakdown: readonly CandidateDashboardInterviewModeMetrics[];
   readonly interviewModeMinimumCohortSize: number;
   readonly metrics: readonly CandidateDashboardMetric[];
+  readonly searchCriteriaContext: CandidateDashboardSearchCriteriaContext;
   readonly schemaVersion: typeof candidateDashboardMetricSetSchemaVersion;
   readonly sourceContentStored: false;
   readonly windowEnd: string;
   readonly windowStart: string;
+}
+
+export interface CandidateDashboardSearchCriteriaContext {
+  readonly criteriaVersions: readonly string[];
+  readonly policyVersions: readonly string[];
+  readonly sourceContentStored: false;
 }
 
 export interface CandidateDashboardInterviewModeMetrics {
@@ -306,6 +313,7 @@ interface DashboardSourceContract {
 }
 
 const cohortKeyPattern = /^cohort-[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const versionKeyPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 export function buildCandidateDashboardMetricSet(
   input: CandidateDashboardMetricSetInput,
@@ -347,6 +355,9 @@ export function buildCandidateDashboardMetricSet(
   );
   const interviewModeMinimumCohortSize =
     input.sources.interviewFunnel?.minimumCohortSize ?? 5;
+  const searchCriteriaContext = buildSearchCriteriaContext(
+    input.sources.searchCoverage,
+  );
 
   return {
     candidateIdentifiersStored: false,
@@ -362,11 +373,46 @@ export function buildCandidateDashboardMetricSet(
     interviewModeBreakdown,
     interviewModeMinimumCohortSize,
     metrics,
+    searchCriteriaContext,
     schemaVersion: candidateDashboardMetricSetSchemaVersion,
     sourceContentStored: false,
     windowEnd,
     windowStart,
   };
+}
+
+function buildSearchCriteriaContext(
+  source: CandidateSearchCoverageSnapshot | null | undefined,
+): CandidateDashboardSearchCriteriaContext {
+  const criteriaVersions: unknown = source?.lineage.criteriaVersions ?? [];
+  const policyVersions: unknown = source?.lineage.policyVersions ?? [];
+  validateVersionKeys(criteriaVersions, "Dashboard search criteria versions");
+  validateVersionKeys(policyVersions, "Dashboard search policy versions");
+  if (source && source.lineage.sourceContentStored !== false) {
+    throw new Error(
+      "Dashboard search criteria context contains source content",
+    );
+  }
+  return {
+    criteriaVersions: [...criteriaVersions],
+    policyVersions: [...policyVersions],
+    sourceContentStored: false,
+  };
+}
+
+function validateVersionKeys(
+  values: unknown,
+  label: string,
+): asserts values is readonly string[] {
+  if (
+    !Array.isArray(values) ||
+    values.some(
+      (value) => typeof value !== "string" || !versionKeyPattern.test(value),
+    ) ||
+    values.some((value, index) => index > 0 && value <= values[index - 1]!)
+  ) {
+    throw new Error(`${label} must be sorted, unique identifiers`);
+  }
 }
 
 function supplyMetrics(
