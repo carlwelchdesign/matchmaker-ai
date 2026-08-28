@@ -306,6 +306,8 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   newly required boundary as a backward-compatible v1 addition.
 - Dashboard-schema branch: `codex/ARG-617-dashboard-schema-v2`
 - Dashboard-schema commit: `7ba8a75`
+- Dashboard-schema PR:
+  https://github.com/carlwelchdesign/matchmaker-ai/pull/75
 - Dashboard-schema verification: 116 domain tests across 16 files; all
   workspace tests and TypeScript tasks; domain and full production builds; the
   140-ticket planning validator; formatting; and diff hygiene.
