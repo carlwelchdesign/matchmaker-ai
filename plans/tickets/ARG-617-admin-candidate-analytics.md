@@ -495,5 +495,28 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   plus 1280-pixel and 390-pixel browser review with exact content, responsive
   single-column contexts, no horizontal overflow, and no browser warnings or
   errors.
+- The representative-workflow gate now has a proposed 45-minute
+  [founder and practicing-matchmaker moderator guide](../research/session-materials/ARG-617-moderator-guide.md)
+  covering reporting boundaries, supply and intake reconciliation, discovery
+  and introduction denominators, approved-fact provenance, scoring
+  misinterpretation, and side-channel workaround signals. It uses synthetic
+  records only and requires owner approval of the proposed sample and acceptance
+  threshold before recruitment.
+- [`ARG617-SYN-001`](../research/synthetic-dry-runs/ARG-617-dashboard-reconciliation-walkthrough.md)
+  dry-runs all six tasks against the current synthetic admin fixtures. It
+  confirms that the protocol is executable and records likely research risks,
+  but is explicitly not founder, matchmaker, usability, or acceptance evidence.
+- Research operations, participant screening, session naming, and the synthesis
+  tracker now include `ARG-617` while preserving consent, redaction, storage,
+  evidence-type, and decision-authority boundaries. The workflow-testing
+  acceptance criterion remains open until approved representative sessions and
+  synthesis are complete.
+- Matchmaker-workflow-study branch: `codex/ARG-617-matchmaker-workflow-study`
+- Matchmaker-workflow-study implementation commit: `d531547`
+- Matchmaker-workflow-study pull request:
+  [#85](https://github.com/carlwelchdesign/matchmaker-ai/pull/85)
+- Matchmaker-workflow-study verification: planning package validated with 140
+  backlog tickets, 25 ticket files, and all local links resolved; repository
+  formatting and diff hygiene passed.
 
 See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-interviewing.md).

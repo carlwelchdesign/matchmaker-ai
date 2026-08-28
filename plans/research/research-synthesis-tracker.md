@@ -15,6 +15,8 @@ review.
 | ARG-003 | Potential paying-client concept review | 2 | 0 | Pending | Required before ARG-003 Done |
 | ARG-003 | Founder/operator copy review | 1 | 0 | Pending | Required before ARG-003 Done |
 | ARG-003 | Accessibility-oriented concept review | 1 | 0 | Pending | Required before ARG-003 Done |
+| ARG-617 | Founder/operator analytics workflow | 1 | 0 | Proposed | Sample and threshold require owner approval |
+| ARG-617 | Practicing matchmaker analytics workflow | 2 | 0 | Proposed | Sample and threshold require owner approval |
 
 ## Synthetic dry-run coverage
 
@@ -22,6 +24,7 @@ review.
 | --- | --- | ---: | --- | --- |
 | ARG-002 | [Synthetic case walkthroughs](synthetic-dry-runs/ARG-002-synthetic-case-walkthroughs.md) | 5 | Complete | Not founder or matchmaker evidence |
 | ARG-003 | [Synthetic concept review](synthetic-dry-runs/ARG-003-synthetic-concept-review.md) | 1 | Complete | Not applicant, client, founder, or accessibility evidence |
+| ARG-617 | [Synthetic dashboard reconciliation walkthrough](synthetic-dry-runs/ARG-617-dashboard-reconciliation-walkthrough.md) | 1 | Complete | Protocol dry run only; not representative workflow evidence |
 
 ## Finding tracker
 
@@ -32,6 +35,7 @@ review.
 | ARG003-SYN-001 | ARG-003 | ARG003-SYN-001 | Synthetic dry run | `100 men / 100 women` may create quota, binary-gender, or casting-call interpretation. | Needs revision | Medium | High | ARG-014 ARG-016 ARG-301 |
 | ARG003-SYN-002 | ARG-003 | ARG003-SYN-001 | Synthetic dry run | `accepted`, `verified`, `private network`, and `confidential` require exact lifecycle, check, visibility, and privacy definitions. | Policy escalation | High | High | ARG-005 ARG-006 ARG-013 ARG-016 |
 | ARG003-SYN-003 | ARG-003 | ARG003-SYN-001 | Synthetic dry run | Intake choice copy should emphasize equal review treatment and user approval of saved fields. | Approved direction | Medium | Medium | ARG-018 ARG-027 ARG-613 |
+| ARG617-SYN-001 | ARG-617 | ARG617-SYN-001 | Synthetic dry run | The prototype and moderator tasks can expose denominator, missing-data, provenance, scoring-inference, and workaround errors without real records. | Research protocol ready for owner review | Medium | Medium | ARG-617 |
 
 ## Decision tracker
 
@@ -43,6 +47,7 @@ review.
 | Approve conversational-intake continuation | ARG-003 ARG-006 ARG-018 ARG-026 complete | Project owner/privacy owner | Pending | ARG-027 |
 | Decide whether `100 men / 100 women` can be public copy or must remain internal capacity language | ARG-003 participant testing | Project owner/content/legal | Pending | ARG-014 ARG-016 |
 | Define exact meaning of accepted verified private network and confidential | ARG-003 synthesis and privacy/legal review | Project owner/privacy/legal | Pending | ARG-005 ARG-006 ARG-016 |
+| Approve ARG-617 workflow-study sample and gate threshold | ARG-617 protocol review | Project owner/research owner | Pending | ARG-617 |
 
 ## Go/no-go criteria for closing ARG-002
 
@@ -59,3 +64,15 @@ review.
 - [ ] Misleading or high-risk terms have mitigations.
 - [ ] Accessibility findings are recorded.
 - [ ] Open legal/privacy escalations are listed.
+
+## Go/no-go criteria for ARG-617 workflow-test acceptance
+
+- [ ] The project/research owner approves the sample and gate threshold.
+- [ ] Required representative session coverage is complete or a fallback is
+  explicitly approved.
+- [ ] Denominator, missing-data, provenance, and scoring interpretations are
+  synthesized with counterevidence.
+- [ ] Reconciliation and workaround signals are compared with each
+  participant's current-process baseline.
+- [ ] High-severity misunderstandings and trust/privacy workaround signals are
+  resolved or explicitly accepted by the owner.
