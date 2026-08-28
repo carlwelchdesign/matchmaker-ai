@@ -235,6 +235,21 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   validator; repository formatting and diff hygiene; and browser verification
   of the 3 unknown, 1 disputed, and 1 private counts before and after candidate
   filtering, with no browser warnings or errors.
+- The admin inspection now carries its validated source role and purpose through
+  the narrow server-to-client view model and presents both in plain language
+  beside the evaluation date. The server boundary fails closed if the synthetic
+  projection is not the expected matchmaker-discovery context; this makes the
+  permission scope reviewable without simulating authentication or granting an
+  operational role.
+- Admin-access-context branch: `codex/ARG-617-admin-access-context`
+- Admin-access-context commit: `0792210`
+- Admin-access-context PR:
+  https://github.com/carlwelchdesign/matchmaker-ai/pull/71
+- Admin-access-context verification: four admin tests; all workspace tests,
+  TypeScript tasks, and production builds; the 140-ticket planning validator;
+  repository formatting and diff hygiene; and browser verification of the
+  access-context semantics, candidate-filter stability, full-page layout, and
+  browser logs.
 - Candidate-availability branch: `codex/ARG-617-candidate-availability`
 - Candidate-availability commit: `caa4de0`
 - Candidate-availability PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/61
