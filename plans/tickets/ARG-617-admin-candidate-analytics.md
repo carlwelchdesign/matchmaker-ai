@@ -111,6 +111,7 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   content, generalized score, or raw source value.
 - Dashboard-lineage branch: `codex/ARG-617-metric-lineage`
 - Dashboard-lineage commit: `699f5a5`
+- Dashboard-lineage PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/62
 - Dashboard-lineage verification: 108 domain tests across 14 files; domain
   typecheck and build; all workspace tests, TypeScript tasks, and production
   builds; the 140-ticket planning validator; repository formatting; and diff
