@@ -283,7 +283,7 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
 - Candidate-availability verification: 102 domain tests across 13 files; all
   workspace test and TypeScript tasks; domain and full production builds; the
   140-ticket planning validator; formatting; and diff hygiene.
-- `candidate-dashboard-metric-set/v1` now carries an explicit product-analytics
+- `candidate-dashboard-metric-set/v2` now carries an explicit product-analytics
   data boundary. It declares that operational records, legal-audit evidence,
   security telemetry, and raw provider payloads are not stored in the dashboard
   contract.
@@ -298,6 +298,15 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
 - Analytics-boundary PR:
   https://github.com/carlwelchdesign/matchmaker-ai/pull/74
 - Analytics-boundary verification: 116 domain tests across 16 files; all
+  workspace tests and TypeScript tasks; domain and full production builds; the
+  140-ticket planning validator; formatting; and diff hygiene.
+- The required product-analytics classification and separation markers advance
+  the serialized dashboard contract to `candidate-dashboard-metric-set/v2`.
+  Authorization rejects legacy v1 payloads instead of silently treating the
+  newly required boundary as a backward-compatible v1 addition.
+- Dashboard-schema branch: `codex/ARG-617-dashboard-schema-v2`
+- Dashboard-schema commit: `7ba8a75`
+- Dashboard-schema verification: 116 domain tests across 16 files; all
   workspace tests and TypeScript tasks; domain and full production builds; the
   140-ticket planning validator; formatting; and diff hygiene.
 
