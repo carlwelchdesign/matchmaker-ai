@@ -283,5 +283,20 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
 - Candidate-availability verification: 102 domain tests across 13 files; all
   workspace test and TypeScript tasks; domain and full production builds; the
   140-ticket planning validator; formatting; and diff hygiene.
+- `candidate-dashboard-metric-set/v1` now carries an explicit product-analytics
+  data boundary. It declares that operational records, legal-audit evidence,
+  security telemetry, and raw provider payloads are not stored in the dashboard
+  contract.
+- Dashboard authorization revalidates every separation marker and fails closed
+  if a payload is missing its product-analytics classification or contains any
+  of those separately governed record classes. This strengthens the synthetic
+  contract only; transport schemas, retention, persistence, production access,
+  and the final telemetry-separation acceptance gate remain owned by `ARG-021`
+  and `ARG-114`.
+- Analytics-boundary branch: `codex/ARG-617-analytics-boundary`
+- Analytics-boundary commit: `93c54c5`
+- Analytics-boundary verification: 116 domain tests across 16 files; all
+  workspace tests and TypeScript tasks; domain and full production builds; the
+  140-ticket planning validator; formatting; and diff hygiene.
 
 See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-interviewing.md).
