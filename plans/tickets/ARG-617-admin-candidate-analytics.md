@@ -204,6 +204,7 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   real server projection.
 - Admin-server-sentinel branch: `codex/ARG-617-admin-server-sentinel`
 - Admin-server-sentinel commit: `15ad7ff`
+- Admin-server-sentinel PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/68
 - Admin-server-sentinel verification: four admin tests; all workspace tests,
   TypeScript tasks, and production builds; the 140-ticket planning validator;
   repository formatting and diff hygiene; and emitted client-chunk inspection
