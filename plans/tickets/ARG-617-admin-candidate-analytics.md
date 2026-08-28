@@ -216,6 +216,7 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   atomic live region.
 - Admin-summary-scope branch: `codex/ARG-617-admin-summary-scope`
 - Admin-summary-scope commit: `d98b879`
+- Admin-summary-scope PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/69
 - Admin-summary-scope verification: four admin tests; all workspace tests,
   TypeScript tasks, and production builds; the 140-ticket planning validator;
   repository formatting and diff hygiene; and browser verification of default
