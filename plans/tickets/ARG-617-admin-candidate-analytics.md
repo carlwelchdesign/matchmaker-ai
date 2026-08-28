@@ -407,5 +407,20 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   140-ticket planning validator; formatting, diff hygiene, and client-boundary
   inspection; and desktop plus 390-pixel mobile browser review with no
   horizontal overflow or browser warnings or errors.
+- Dashboard authorization now requires every interview-mode metric to share
+  the corresponding overall metric's source observation time and freshness.
+  A mode row whose individually valid lineage drifts from the authorized
+  overall funnel fails closed before it can be returned to the admin view.
+- The synthetic interview-mode section presents that shared source, source-as-
+  of time, and freshness once above the mode grid. This keeps provenance
+  visible without repeating identical metadata in every row, and the narrow
+  server-to-client view model derives it only after dashboard authorization.
+- Mode-lineage-context branch: `codex/ARG-617-mode-lineage-context`
+- Mode-lineage-context implementation commit: `7cad986`
+- Mode-lineage-context verification: 117 domain tests across 16 files; six
+  admin tests; all workspace tests, TypeScript tasks, and production builds;
+  the 140-ticket planning validator; formatting, diff hygiene, and client-
+  boundary inspection; plus desktop and 390-pixel mobile browser review with
+  no horizontal overflow or browser warnings or errors.
 
 See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-interviewing.md).
