@@ -374,6 +374,8 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   interface continues to expose no raw interview content or candidate identity.
 - Intake-quality branch: `codex/ARG-617-intake-quality-metrics`
 - Intake-quality implementation commit: `66ce6ce`
+- Intake-quality pull request:
+  [#79](https://github.com/carlwelchdesign/matchmaker-ai/pull/79)
 - Intake-quality verification: 117 domain tests across 16 files; six admin
   tests; all workspace tests, TypeScript tasks, and production builds; the
   140-ticket planning validator; formatting and diff hygiene; and browser
