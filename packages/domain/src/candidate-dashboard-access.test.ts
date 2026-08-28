@@ -158,7 +158,7 @@ describe("candidate dashboard access", () => {
       authorizeCandidateDashboardMetricSet(
         {
           ...dashboard,
-          schemaVersion: "candidate-dashboard-metric-set/v2",
+          schemaVersion: "candidate-dashboard-metric-set/v3",
         } as unknown as CandidateDashboardMetricSet,
         internalRequest,
       ),

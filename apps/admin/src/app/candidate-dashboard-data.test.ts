@@ -8,13 +8,29 @@ describe("synthetic candidate analytics dashboard", () => {
   test("presents exact calculations and honest unavailable-source states", () => {
     const data = buildSyntheticCandidateDashboardPageData();
 
-    expect(data.metrics).toHaveLength(13);
+    expect(data.metrics).toHaveLength(15);
     expect(
       data.metrics.find((metric) => metric.key === "candidate-supply"),
     ).toMatchObject({
       calculationLabel: "6 counted",
       displayValue: "6",
       freshnessLabel: "Fresh",
+      missingDataLabel: "Available",
+    });
+    expect(
+      data.metrics.find((metric) => metric.key === "interview-approved-fields"),
+    ).toMatchObject({
+      calculationLabel: "12 counted",
+      displayValue: "12",
+      missingDataLabel: "Available",
+    });
+    expect(
+      data.metrics.find(
+        (metric) => metric.key === "interview-correction-burden",
+      ),
+    ).toMatchObject({
+      calculationLabel: "2 of 4 completed interviews",
+      displayValue: "50%",
       missingDataLabel: "Available",
     });
     expect(

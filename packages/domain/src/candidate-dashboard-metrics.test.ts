@@ -167,7 +167,7 @@ describe("candidate dashboard metric set", () => {
       windowEnd: scope.windowEnd,
       windowStart: scope.windowStart,
     });
-    expect(metricSet.metrics).toHaveLength(13);
+    expect(metricSet.metrics).toHaveLength(15);
     expect(metricSet.metrics.map((metric) => metric.key)).toEqual(
       candidateDashboardMetricKeys,
     );
@@ -213,6 +213,33 @@ describe("candidate dashboard metric set", () => {
     });
     expect(
       metricSet.metrics.find(
+        (metric) => metric.key === "interview-approved-fields",
+      ),
+    ).toMatchObject({
+      calculation: {
+        denominator: null,
+        denominatorKind: "not-applicable",
+        numerator: 12,
+      },
+      unit: "count",
+      value: 12,
+    });
+    expect(
+      metricSet.metrics.find(
+        (metric) => metric.key === "interview-correction-burden",
+      ),
+    ).toMatchObject({
+      calculation: {
+        denominator: 4,
+        denominatorKind: "interview-completions",
+        numerator: 2,
+      },
+      missingDataState: "available",
+      unit: "basis-points",
+      value: 5000,
+    });
+    expect(
+      metricSet.metrics.find(
         (metric) => metric.key === "search-retrieval-coverage",
       ),
     ).toMatchObject({
@@ -249,9 +276,52 @@ describe("candidate dashboard metric set", () => {
       missingDataState: "missing-denominator",
     });
     expect(
+      metricSet.metrics.find(
+        (metric) => metric.key === "interview-correction-burden",
+      ),
+    ).toMatchObject({
+      calculation: {
+        denominator: 0,
+        denominatorKind: "interview-completions",
+        numerator: 0,
+      },
+      missingDataState: "missing-denominator",
+    });
+    expect(
       metricSet.metrics.find((metric) => metric.key === "candidate-supply")
         ?.missingDataState,
     ).toBe("source-unavailable");
+  });
+
+  it("allows correction burden above one correction per completion", () => {
+    const metricSet = buildCandidateDashboardMetricSet({
+      ...scope,
+      sources: {
+        interviewFunnel: {
+          ...interviewFunnel,
+          metrics: {
+            ...interviewFunnel.metrics!,
+            overall: funnelMetric({
+              approvedFieldCount: 12,
+              completedCount: 4,
+              completionRateBasisPoints: 6667,
+              correctionCount: 8,
+              correctionsPerCompletionBasisPoints: 20_000,
+              startedCount: 6,
+            }),
+          },
+        },
+      },
+    });
+
+    expect(
+      metricSet.metrics.find(
+        (metric) => metric.key === "interview-correction-burden",
+      ),
+    ).toMatchObject({
+      calculation: { denominator: 4, numerator: 8 },
+      value: 20_000,
+    });
   });
 
   it("labels old source values as stale without hiding their lineage", () => {
