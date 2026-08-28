@@ -424,5 +424,27 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   the 140-ticket planning validator; formatting, diff hygiene, and client-
   boundary inspection; plus desktop and 390-pixel mobile browser review with
   no horizontal overflow or browser warnings or errors.
+- `candidate-dashboard-metric-set/v6` carries the approved search criteria and
+  search policy version identifiers used by its search-coverage source. The
+  builder and authorization boundary require sorted, unique lowercase
+  identifiers and an explicit no-source-content marker; malformed, duplicated,
+  relabeled, or content-bearing context fails closed.
+- The synthetic admin dashboard now supplies the existing governed search-
+  coverage contract instead of rendering discovery metrics as unavailable. It
+  shows 6 of 10 eligible opportunities retrieved and 4 of 6 retrieved
+  opportunities human-reviewed, with the exact source timestamp, freshness,
+  approved criteria version, and policy version.
+- The Discovery coverage view labels those strings as version identifiers only
+  and explicitly excludes criteria contents, queries, candidate identities,
+  real search execution, and ranking claims. One partial synthetic observation
+  remains outside the displayed denominators through the existing source
+  contract.
+- Search-criteria-context branch: `codex/ARG-617-search-criteria-context`
+- Search-criteria-context implementation commit: `42919b1`
+- Search-criteria-context verification: 117 domain tests across 16 files; six
+  admin tests; all workspace tests, TypeScript tasks, and production builds;
+  the 140-ticket planning validator; repository formatting, diff hygiene, and
+  client-boundary inspection; plus desktop and 390-pixel mobile browser review
+  with no horizontal overflow or browser warnings or errors.
 
 See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-interviewing.md).
