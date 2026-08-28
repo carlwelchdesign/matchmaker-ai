@@ -536,6 +536,27 @@ dd {
   margin-top: var(--argent-primitive-space-100);
   text-transform: uppercase;
 }
+.knowledge-state-breakdown {
+  display: grid;
+  gap: var(--argent-primitive-space-100);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: var(--argent-primitive-space-150) 0 0;
+}
+.knowledge-state-breakdown div {
+  border-top: 1px solid var(--argent-semantic-border-subtle);
+  min-width: 0;
+  padding-top: var(--argent-primitive-space-100);
+}
+.knowledge-state-breakdown dt {
+  overflow-wrap: anywhere;
+}
+.knowledge-state-breakdown dd {
+  color: var(--argent-semantic-text-primary);
+  font-family: var(--argent-type-family-display);
+  font-size: 1.35rem;
+  line-height: 1;
+  margin-top: var(--argent-primitive-space-050);
+}
 .fact-results {
   display: grid;
   gap: var(--argent-primitive-space-300);

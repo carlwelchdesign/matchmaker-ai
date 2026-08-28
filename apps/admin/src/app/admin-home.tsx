@@ -464,7 +464,24 @@ function ApprovedFacts({
         </article>
         <article>
           <span>{hiddenKnowledgeCount}</span>
-          <p>Unknown, disputed, or private fields remain visible as gaps</p>
+          <p>Knowledge gaps in projection</p>
+          <dl
+            aria-label="Knowledge-state breakdown"
+            className="knowledge-state-breakdown"
+          >
+            <div>
+              <dt>Unknown</dt>
+              <dd>{inspection.fieldStateCounts.unknown}</dd>
+            </div>
+            <div>
+              <dt>Disputed</dt>
+              <dd>{inspection.fieldStateCounts.disputed}</dd>
+            </div>
+            <div>
+              <dt>Private</dt>
+              <dd>{inspection.fieldStateCounts.private}</dd>
+            </div>
+          </dl>
           <small>Full access-time projection</small>
         </article>
       </section>
