@@ -43,11 +43,21 @@ describe("synthetic candidate analytics dashboard", () => {
     expect(
       data.metrics.find((metric) => metric.key === "search-retrieval-coverage"),
     ).toMatchObject({
-      calculationLabel: "Calculation unavailable",
-      displayValue: "—",
-      freshnessLabel: "Unknown freshness",
-      missingDataLabel: "Source unavailable",
-      sourceAsOfLabel: "No source timestamp",
+      calculationLabel: "6 of 10 eligible opportunities",
+      displayValue: "60%",
+      freshnessLabel: "Fresh",
+      missingDataLabel: "Available",
+      sourceAsOfLabel: "Aug 28, 2026, 7:30 PM UTC",
+    });
+    expect(
+      data.metrics.find((metric) => metric.key === "search-review-rate"),
+    ).toMatchObject({
+      calculationLabel: "4 of 6 retrieved opportunities",
+      displayValue: "66.7%",
+    });
+    expect(data.searchCriteriaContext).toEqual({
+      criteriaVersionsLabel: "criteria-synthetic-v1",
+      policyVersionsLabel: "search-policy-synthetic-v1",
     });
     expect(data.interviewModeBreakdown.map((mode) => mode.label)).toEqual([
       "Structured",
@@ -116,6 +126,7 @@ describe("synthetic candidate analytics dashboard", () => {
     expect(serialized).not.toMatch(
       /transcript|prompt|audio|compatibility score/i,
     );
+    expect(serialized).not.toMatch(/query content|candidate search id/i);
     expect(serialized).toContain("Product analytics only");
     expect(serialized).toContain("candidate identifiers are not stored");
   });

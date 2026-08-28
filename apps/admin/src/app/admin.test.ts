@@ -42,6 +42,11 @@ describe("separate synthetic admin application", () => {
     expect(clientSource).toContain("Missing sources remain unknown—not zero");
     expect(clientSource).toContain("Interview mode breakdown");
     expect(clientSource).toContain("Interview mode source context");
+    expect(clientSource).toContain("Discovery criteria context");
+    expect(clientSource).toContain("Version identifiers only");
+    expect(clientSource).toContain(
+      "searchCriteriaContext.criteriaVersionsLabel",
+    );
     expect(clientSource).toContain("do not rank modes");
     expect(clientSource).toContain("Mixed means a session switched modes");
     expect(clientSource).toContain("Unobserved means the source had no");

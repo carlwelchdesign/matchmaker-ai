@@ -795,6 +795,24 @@ dd {
   color: var(--argent-semantic-text-secondary);
   overflow-wrap: anywhere;
 }
+.search-coverage-context {
+  border-block: 1px solid var(--argent-semantic-border-subtle);
+  display: grid;
+  gap: var(--argent-primitive-space-200);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0;
+  padding-block: var(--argent-primitive-space-150);
+}
+.search-coverage-context > div {
+  min-width: 0;
+}
+.search-coverage-context dd {
+  color: var(--argent-semantic-text-secondary);
+  overflow-wrap: anywhere;
+}
+.search-coverage-context .search-context-boundary {
+  grid-column: 1 / -1;
+}
 .interview-mode-card {
   border-top: 1px solid var(--argent-semantic-border-strong);
   display: grid;
@@ -862,6 +880,9 @@ dd {
   .interview-mode-source-context,
   .metric-grid,
   .metric-lineage {
+    grid-template-columns: 1fr;
+  }
+  .search-coverage-context {
     grid-template-columns: 1fr;
   }
   .queue button {

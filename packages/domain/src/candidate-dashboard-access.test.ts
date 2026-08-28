@@ -125,6 +125,30 @@ describe("candidate dashboard access", () => {
   it("fails closed on malformed or privacy-unsafe dashboard payloads", () => {
     expect(() =>
       authorizeCandidateDashboardMetricSet(
+        {
+          ...dashboard,
+          searchCriteriaContext: {
+            ...dashboard.searchCriteriaContext,
+            criteriaVersions: ["criteria-v2", "criteria-v1"],
+          },
+        },
+        internalRequest,
+      ),
+    ).toThrow("search criteria versions must be sorted, unique identifiers");
+    expect(() =>
+      authorizeCandidateDashboardMetricSet(
+        {
+          ...dashboard,
+          searchCriteriaContext: {
+            ...dashboard.searchCriteriaContext,
+            sourceContentStored: true as false,
+          },
+        },
+        internalRequest,
+      ),
+    ).toThrow("search criteria context contains source content");
+    expect(() =>
+      authorizeCandidateDashboardMetricSet(
         { ...dashboard, metrics: dashboard.metrics.slice(1) },
         internalRequest,
       ),

@@ -428,6 +428,28 @@ function CandidateDashboard({
                 {group}
               </h2>
             </div>
+            {group === "Discovery coverage" ? (
+              <dl
+                aria-label="Discovery criteria context"
+                className="search-coverage-context"
+              >
+                <div>
+                  <dt>Approved criteria version</dt>
+                  <dd>{data.searchCriteriaContext.criteriaVersionsLabel}</dd>
+                </div>
+                <div>
+                  <dt>Search policy version</dt>
+                  <dd>{data.searchCriteriaContext.policyVersionsLabel}</dd>
+                </div>
+                <div className="search-context-boundary">
+                  <dt>Boundary</dt>
+                  <dd>
+                    Version identifiers only. Criteria contents, queries, and
+                    candidate identities are not stored in this view.
+                  </dd>
+                </div>
+              </dl>
+            ) : null}
             <div className="metric-grid">
               {data.metrics
                 .filter((metric) => metric.group === group)

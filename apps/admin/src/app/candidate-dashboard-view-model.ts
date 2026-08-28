@@ -40,6 +40,10 @@ export interface CandidateDashboardPageData {
     readonly sourceLabel: string;
   };
   readonly metrics: readonly CandidateDashboardMetricView[];
+  readonly searchCriteriaContext: {
+    readonly criteriaVersionsLabel: string;
+    readonly policyVersionsLabel: string;
+  };
   readonly separationNotice: string;
 }
 
