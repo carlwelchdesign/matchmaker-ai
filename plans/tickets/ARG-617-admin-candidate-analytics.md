@@ -28,7 +28,8 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
 ## Remaining completion gates
 
 - Authenticated staff access and sessions require the `ARG-201` identity
-  boundary; the local inspection concept does not grant a role or access real
+  boundary plus the deny-by-default RBAC and staff-role work in `ARG-202` and
+  `ARG-203`; the local inspection concept does not grant a role or access real
   candidate data.
 - Persistence and real candidate integration remain gated by `ARG-615` and its
   declared dependencies.
@@ -183,6 +184,19 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   repository formatting and diff hygiene; browser interaction for default,
   combined-filter, and empty-result states; and desktop plus 390-pixel mobile
   visual review with no browser warnings or errors.
+- The admin inspection now preserves the architecture's server-only domain
+  boundary. A Server Component evaluates the governed synthetic projection and
+  passes a narrow serializable view model to the interactive client; the client
+  filters only those already-approved synthetic facts and imports no server
+  domain policy.
+- Admin-server-boundary branch: `codex/ARG-617-admin-server-boundary`
+- Admin-server-boundary commit: `800223e`
+- Admin-server-boundary PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/67
+- Admin-server-boundary verification: four admin tests; all workspace tests,
+  TypeScript tasks, and production builds; the 140-ticket planning validator;
+  repository formatting and diff hygiene; emitted client-chunk inspection with
+  no domain-policy markers; and browser verification of navigation, combined
+  filters, and the empty state with no warnings or errors.
 - Candidate-availability branch: `codex/ARG-617-candidate-availability`
 - Candidate-availability commit: `caa4de0`
 - Candidate-availability PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/61

@@ -1,9 +1,13 @@
 import { describe, expect, test } from "vitest";
 import {
   buildSyntheticCandidateInspection,
+  buildSyntheticCandidateInspectionPageData,
   candidateInspectionTimestamp,
-  candidateLabel,
 } from "./candidate-inspection-data";
+import {
+  candidateLabel,
+  filterCandidateInspection,
+} from "./candidate-inspection-view-model";
 
 describe("synthetic candidate fact inspection", () => {
   test("shows only approved facts with visible lineage and uncertainty totals", () => {
@@ -27,7 +31,8 @@ describe("synthetic candidate fact inspection", () => {
   });
 
   test("combines candidate, topic, and freshness filters", () => {
-    const inspection = buildSyntheticCandidateInspection({
+    const data = buildSyntheticCandidateInspectionPageData();
+    const inspection = filterCandidateInspection(data.inspection, {
       candidateId: "candidate-ember",
       freshness: "expires-soon",
       topic: "geography",
@@ -42,13 +47,16 @@ describe("synthetic candidate fact inspection", () => {
   });
 
   test("returns an explicit empty result without manufacturing evidence", () => {
-    const inspection = buildSyntheticCandidateInspection({
+    const data = buildSyntheticCandidateInspectionPageData();
+    const inspection = filterCandidateInspection(data.inspection, {
       candidateId: "candidate-tarin",
       topic: "social-rhythm",
     });
 
     expect(inspection.matchingFactCount).toBe(0);
     expect(inspection.facts).toEqual([]);
-    expect(candidateLabel("candidate-tarin")).toBe("Tarin Vale");
+    expect(candidateLabel(data.candidates, "candidate-tarin")).toBe(
+      "Tarin Vale",
+    );
   });
 });
