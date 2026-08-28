@@ -4,8 +4,11 @@
 
 - **Ticket:** `ARG-617`
 - **Evidence needed:** Representative matchmaker workflow testing.
-- **Artifact status:** Proposed protocol; owner approval and participant sessions
-  are not yet complete.
+- **Artifact status:** Owner-approved protocol; participant recruitment, consent,
+  sessions, and synthesis are not yet complete.
+- **Approval:** Carl Welch approved the participant sample and gate-review
+  threshold on 2026-08-28. This approval covers the study design only; it does
+  not authorize participant recruitment or contact.
 - **Prototype boundary:** Use only the local synthetic admin dashboard and
   approved-facts inspection. Do not use real applicant, candidate, client, or
   partner records.
@@ -27,16 +30,16 @@ approved-facts views to reconcile candidate-supply work without mistaking
 missing data for zero, treating operational rates as candidate scores, or
 moving sensitive work into side channels?
 
-## Proposed sample for owner approval
+## Approved participant sample
 
-| Segment | Proposed minimum | Session ID pattern | Why it is needed |
+| Segment | Approved minimum | Session ID pattern | Why it is needed |
 | --- | ---: | --- | --- |
 | Founder/operator | 1 | `ARG617-FND-001` | Tests fit with Argent's intended operating model |
 | Practicing matchmaker/operator | 2 | `ARG617-MM-001` | Tests whether the workflow transfers beyond its designer |
 
-The sample and gate thresholds below are proposals until Jenny or the named
-product/research owner approves them. Synthetic or internal-review sessions do
-not count toward the proposed minimum.
+Carl Welch approved this sample and the gate-review threshold on 2026-08-28.
+Synthetic or internal-review sessions do not count toward the approved minimum.
+Recruitment and participant contact require separate authorization.
 
 ## Study hypotheses
 
@@ -174,12 +177,12 @@ Record one row per task:
 Do not collect candidate names, profile contents, private romantic history, or
 real operational screenshots in the planning repository.
 
-## Proposed gate-review threshold
+## Approved gate-review threshold
 
-The named owner must approve this threshold before sessions. If approved,
-`ARG-617` can enter acceptance review only when:
+Carl Welch approved this threshold on 2026-08-28. `ARG-617` can enter acceptance
+review only when:
 
-- the proposed participant minimum is met;
+- the approved participant minimum is met;
 - every participant completes Tasks 1 through 4 independently or with one
   neutral clarification;
 - no participant persists in a candidate-value or relationship-success

@@ -61,6 +61,7 @@
 The moderator guide is executable against the synthetic prototype and can
 collect denominator interpretation, provenance use, missing-data errors,
 scoring inference, and workaround signals. No representative participant
-evidence exists yet. Owner approval of the sample and threshold, recruitment,
-consent, sessions, and synthesis remain required before the ARG-617 workflow-
-testing criterion can change.
+evidence exists yet. The owner approved the sample and threshold on 2026-08-28;
+participant recruitment, consent, sessions, and synthesis remain required before
+the ARG-617 workflow-testing criterion can change. The approval does not itself
+authorize participant recruitment or contact.
