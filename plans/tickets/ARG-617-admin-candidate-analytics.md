@@ -6,6 +6,7 @@
 - **Status:** In progress
 - **Named owner:** Unassigned
 - **Named approver/reviewer:** Unassigned matchmaking, product, data, privacy, and design reviewers
+- **Workflow-study gate approver:** Carl Welch; participant sample and threshold approved 2026-08-28
 - **Target milestone:** Private beta
 - **Estimate band:** L
 - **Dependencies:** ARG-115, ARG-121, ARG-503, ARG-615
@@ -495,13 +496,14 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   plus 1280-pixel and 390-pixel browser review with exact content, responsive
   single-column contexts, no horizontal overflow, and no browser warnings or
   errors.
-- The representative-workflow gate now has a proposed 45-minute
+- The representative-workflow gate now has an owner-approved 45-minute
   [founder and practicing-matchmaker moderator guide](../research/session-materials/ARG-617-moderator-guide.md)
   covering reporting boundaries, supply and intake reconciliation, discovery
   and introduction denominators, approved-fact provenance, scoring
   misinterpretation, and side-channel workaround signals. It uses synthetic
-  records only and requires owner approval of the proposed sample and acceptance
-  threshold before recruitment.
+  records only. Carl Welch approved the participant sample and acceptance
+  threshold on 2026-08-28; recruitment and participant contact remain separately
+  gated and have not been authorized.
 - [`ARG617-SYN-001`](../research/synthetic-dry-runs/ARG-617-dashboard-reconciliation-walkthrough.md)
   dry-runs all six tasks against the current synthetic admin fixtures. It
   confirms that the protocol is executable and records likely research risks,
@@ -511,6 +513,7 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   evidence-type, and decision-authority boundaries. The workflow-testing
   acceptance criterion remains open until approved representative sessions and
   synthesis are complete.
+- Study-gate approval branch: `codex/ARG-617-study-gate-approval`
 - Matchmaker-workflow-study branch: `codex/ARG-617-matchmaker-workflow-study`
 - Matchmaker-workflow-study implementation commit: `d531547`
 - Matchmaker-workflow-study pull request:

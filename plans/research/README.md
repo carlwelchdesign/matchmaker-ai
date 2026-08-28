@@ -20,7 +20,8 @@ synthesis criteria for Phase 0 decision gates.
 - [session-materials/ARG-003-concept-stimuli.md](session-materials/ARG-003-concept-stimuli.md) —
   low-fidelity copy stimuli for testing.
 - [session-materials/ARG-617-moderator-guide.md](session-materials/ARG-617-moderator-guide.md) —
-  proposed matchmaker analytics reconciliation and workaround study.
+  owner-approved matchmaker analytics reconciliation and workaround study;
+  recruitment and participant contact remain separately gated.
 - [synthetic-dry-runs/ARG-002-synthetic-case-walkthroughs.md](synthetic-dry-runs/ARG-002-synthetic-case-walkthroughs.md) —
   synthetic workflow dry run, not participant evidence.
 - [synthetic-dry-runs/ARG-003-synthetic-concept-review.md](synthetic-dry-runs/ARG-003-synthetic-concept-review.md) —

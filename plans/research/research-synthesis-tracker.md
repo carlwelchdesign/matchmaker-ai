@@ -15,8 +15,8 @@ review.
 | ARG-003 | Potential paying-client concept review | 2 | 0 | Pending | Required before ARG-003 Done |
 | ARG-003 | Founder/operator copy review | 1 | 0 | Pending | Required before ARG-003 Done |
 | ARG-003 | Accessibility-oriented concept review | 1 | 0 | Pending | Required before ARG-003 Done |
-| ARG-617 | Founder/operator analytics workflow | 1 | 0 | Proposed | Sample and threshold require owner approval |
-| ARG-617 | Practicing matchmaker analytics workflow | 2 | 0 | Proposed | Sample and threshold require owner approval |
+| ARG-617 | Founder/operator analytics workflow | 1 | 0 | Approved; not recruiting | Sample and threshold approved 2026-08-28; participant contact remains separately gated |
+| ARG-617 | Practicing matchmaker analytics workflow | 2 | 0 | Approved; not recruiting | Sample and threshold approved 2026-08-28; participant contact remains separately gated |
 
 ## Synthetic dry-run coverage
 
@@ -47,7 +47,7 @@ review.
 | Approve conversational-intake continuation | ARG-003 ARG-006 ARG-018 ARG-026 complete | Project owner/privacy owner | Pending | ARG-027 |
 | Decide whether `100 men / 100 women` can be public copy or must remain internal capacity language | ARG-003 participant testing | Project owner/content/legal | Pending | ARG-014 ARG-016 |
 | Define exact meaning of accepted verified private network and confidential | ARG-003 synthesis and privacy/legal review | Project owner/privacy/legal | Pending | ARG-005 ARG-006 ARG-016 |
-| Approve ARG-617 workflow-study sample and gate threshold | ARG-617 protocol review | Project owner/research owner | Pending | ARG-617 |
+| Approve ARG-617 workflow-study sample and gate threshold | ARG-617 protocol review | Carl Welch | Approved 2026-08-28 | ARG-617 |
 
 ## Go/no-go criteria for closing ARG-002
 
@@ -67,7 +67,7 @@ review.
 
 ## Go/no-go criteria for ARG-617 workflow-test acceptance
 
-- [ ] The project/research owner approves the sample and gate threshold.
+- [x] The project/research owner approves the sample and gate threshold.
 - [ ] Required representative session coverage is complete or a fallback is
   explicitly approved.
 - [ ] Denominator, missing-data, provenance, and scoring interpretations are
