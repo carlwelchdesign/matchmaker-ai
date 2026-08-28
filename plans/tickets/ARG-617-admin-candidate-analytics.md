@@ -25,6 +25,21 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
 - [ ] Product analytics, operational records, legal audit evidence, and security telemetry remain separate.
 - [ ] Representative matchmaker workflow testing shows the views reduce manual reconciliation without encouraging workarounds.
 
+## Remaining completion gates
+
+- Authenticated staff access and sessions require the `ARG-201` identity
+  boundary; the local inspection concept does not grant a role or access real
+  candidate data.
+- Persistence and real candidate integration remain gated by `ARG-615` and its
+  declared dependencies.
+- Analytics transport and telemetry separation remain gated by the approved
+  architecture and privacy-safe pipeline in `ARG-021` and `ARG-114`; this
+  ticket does not invent those event or retention boundaries.
+- Representative matchmaker workflow testing requires human participation and
+  evidence that the views reduce reconciliation without encouraging
+  workarounds.
+- Keep `ARG-617` in progress until these gates are satisfied and reviewed.
+
 ## Current development increment
 
 - Branch: `codex/ARG-617-candidate-metrics`
