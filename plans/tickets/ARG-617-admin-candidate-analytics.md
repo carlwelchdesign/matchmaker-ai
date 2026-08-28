@@ -381,5 +381,29 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   140-ticket planning validator; formatting and diff hygiene; and browser
   verification of exact calculations, desktop and 390-pixel mobile layout, no
   horizontal overflow, and no browser warnings or errors.
+- `candidate-dashboard-metric-set/v5` adds a governed interview-mode dimension
+  for structured, typed-conversation, voice, hybrid, mixed, and unobserved
+  attribution. Each row reuses the four intake metric contracts and preserves
+  exact calculations, source lineage, freshness, and missing-data state.
+- Dashboard construction rejects mode partitions whose starts, completions,
+  approved-field counts, or correction counts do not reconcile to the overall
+  funnel. Authorization independently requires the exact mode and metric
+  allowlists, rejects malformed or duplicated rows, and revalidates totals when
+  no cells are suppressed.
+- Nonzero mode rows below the declared minimum of five starts are fully
+  suppressed; zero rows remain explicit. The serialized contract carries that
+  minimum so authorization rejects a lowered threshold, partial suppression, or
+  an exposed small mode cohort.
+- The synthetic admin view places the mode breakdown immediately after the
+  overall intake metrics. It explains mixed and unobserved attribution, shows
+  calculation and disclosure state for every measure, and explicitly states
+  that the rows neither rank modes nor establish comparative performance.
+- Interview-mode branch: `codex/ARG-617-interview-mode-breakdown`
+- Interview-mode implementation commit: `5398e67`
+- Interview-mode verification: 117 domain tests across 16 files; six admin
+  tests; all workspace tests, TypeScript tasks, and production builds; the
+  140-ticket planning validator; formatting, diff hygiene, and client-boundary
+  inspection; and desktop plus 390-pixel mobile browser review with no
+  horizontal overflow or browser warnings or errors.
 
 See [adaptive-candidate-interviewing.md](../research/adaptive-candidate-interviewing.md).
