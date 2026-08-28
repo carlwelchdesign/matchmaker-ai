@@ -11,6 +11,15 @@ export {
   type CandidateAvailabilityState,
 } from "./candidate-availability.js";
 export {
+  authorizeCandidateDashboardMetricSet,
+  candidateDashboardAccessDecisionSchemaVersion,
+  type CandidateDashboardAccessDecision,
+  type CandidateDashboardAccessReason,
+  type CandidateDashboardAccessRequest,
+  type CandidateDashboardAudience,
+  type CandidateDashboardViewerRole,
+} from "./candidate-dashboard-access.js";
+export {
   buildCandidateDashboardMetricSet,
   candidateDashboardMetricSetSchemaVersion,
   type CandidateDashboardFreshnessState,
