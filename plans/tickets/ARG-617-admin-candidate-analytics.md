@@ -209,6 +209,18 @@ Jenny and authorized staff can understand candidate supply, data quality, intake
   TypeScript tasks, and production builds; the 140-ticket planning validator;
   repository formatting and diff hygiene; and emitted client-chunk inspection
   with no domain-policy markers.
+- The inspection summary now distinguishes counts produced by the current
+  filters from projection-wide exclusion and knowledge-gap totals. Filtering a
+  candidate can no longer make global uncertainty counts appear candidate-
+  specific, and the changing match count is announced through one polite,
+  atomic live region.
+- Admin-summary-scope branch: `codex/ARG-617-admin-summary-scope`
+- Admin-summary-scope commit: `d98b879`
+- Admin-summary-scope PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/69
+- Admin-summary-scope verification: four admin tests; all workspace tests,
+  TypeScript tasks, and production builds; the 140-ticket planning validator;
+  repository formatting and diff hygiene; and browser verification of default
+  and candidate-filtered scope labels, live-region attributes, and browser logs.
 - Candidate-availability branch: `codex/ARG-617-candidate-availability`
 - Candidate-availability commit: `caa4de0`
 - Candidate-availability PR: https://github.com/carlwelchdesign/matchmaker-ai/pull/61

@@ -29,6 +29,8 @@ describe("separate synthetic admin application", () => {
     expect(clientSource).toContain("Approved facts / synthetic inspection");
     expect(clientSource).toContain("Raw interviews, compatibility scores");
     expect(clientSource).toContain("will not infer or manufacture an answer");
+    expect(clientSource).toContain("Current filters");
+    expect(clientSource.match(/Full access-time projection/g)).toHaveLength(2);
     expect(clientSource).toContain("Nearness does not mean a better fit");
     expect(clientSource).toContain(
       "A matchmaker decides whether to clarify information",

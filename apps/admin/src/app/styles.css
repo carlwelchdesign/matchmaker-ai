@@ -527,6 +527,15 @@ dd {
   line-height: var(--argent-type-line-height-compact);
   margin: var(--argent-primitive-space-100) 0 0;
 }
+.inspection-summary small {
+  color: var(--argent-semantic-text-subtle);
+  display: block;
+  font-family: var(--argent-type-family-mono);
+  font-size: var(--argent-type-size-label);
+  letter-spacing: 0.04em;
+  margin-top: var(--argent-primitive-space-100);
+  text-transform: uppercase;
+}
 .fact-results {
   display: grid;
   gap: var(--argent-primitive-space-300);

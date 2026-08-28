@@ -42,6 +42,13 @@ describe("synthetic candidate fact inspection", () => {
     });
 
     expect(inspection.matchingFactCount).toBe(1);
+    expect(inspection.approvedFactCount).toBe(5);
+    expect(inspection.excludedFactCount).toBe(2);
+    expect(inspection.fieldStateCounts).toEqual({
+      disputed: 1,
+      private: 1,
+      unknown: 3,
+    });
     expect(inspection.facts[0]).toMatchObject({
       candidateId: "candidate-ember",
       freshness: "expires-soon",
