@@ -1,0 +1,217 @@
+{
+  "version": "2.0",
+  "controlsApproval": {
+    "status": "Not approved",
+    "projectOwner": null,
+    "privacyTrustReviewer": null
+  },
+  "operationalState": {
+    "status": "Closed",
+    "changedAt": "2026-08-28T19:00:00-07:00",
+    "changedBy": "Carl Welch",
+    "reason": "Operations remain closed until human and privacy/trust approvals are recorded"
+  },
+  "owner": "Carl Welch",
+  "governedTickets": ["ARG-002", "ARG-003", "ARG-031", "ARG-809"],
+  "participantSystemOfRecord": {
+    "status": "Not selected",
+    "reference": null,
+    "approval": null
+  },
+  "recruitmentChannels": [],
+  "controlProcedure": {
+    "path": "plans/research/research-control-procedures.md",
+    "version": "1.0",
+    "sha256": "312c32f74f3938983eb4aa2d8d1a32bca265d8ffb5da192b10bb055492f9f0f4"
+  },
+  "supportingArtifacts": [
+    {
+      "path": "plans/research/research-operations-runbook.md",
+      "version": "1.0",
+      "sha256": "327bea6b2e94c4e56bd8341c70f4bde6d60469e4cc03cc71f272fbea7eba1f53"
+    },
+    {
+      "path": "plans/research/participant-screener.md",
+      "version": "1.0",
+      "sha256": "bbdaebe3b8d9d387809620b2b2aed76589f4ba3ee91f0c97aa49bf2e0cdcbffb"
+    },
+    {
+      "path": "plans/templates/research-consent-receipt.md",
+      "version": "1.0",
+      "sha256": "311fd7619c9b33437ba8f99bebdbc951c2f8dd5a25c0bdc8bdff27291500b80d"
+    }
+  ],
+  "operationalControls": {
+    "withdrawal": {
+      "channelReference": null,
+      "acknowledgementTarget": null,
+      "completionTarget": null
+    },
+    "safety": {
+      "owner": null,
+      "deputy": null,
+      "contactReference": null
+    },
+    "accessibility": {
+      "accommodationChannelReference": null,
+      "accessibleCommunicationProcedure": null
+    },
+    "dataClasses": [
+      {
+        "id": "recruitmentContacts",
+        "purpose": "Recruitment and scheduling",
+        "systemReference": null,
+        "minimumFields": [],
+        "collectionSource": null,
+        "allowedRoles": [],
+        "accessReviewOwner": null,
+        "correctionExportRule": null,
+        "retentionRule": null,
+        "deletionRule": null,
+        "backupRule": null,
+        "incidentReference": null,
+        "offboardingRule": null
+      },
+      {
+        "id": "consentReceipts",
+        "purpose": "Permission and withdrawal evidence",
+        "systemReference": null,
+        "minimumFields": [],
+        "collectionSource": null,
+        "allowedRoles": [],
+        "accessReviewOwner": null,
+        "correctionExportRule": null,
+        "retentionRule": null,
+        "deletionRule": null,
+        "backupRule": null,
+        "incidentReference": null,
+        "offboardingRule": null
+      },
+      {
+        "id": "redactedNotes",
+        "purpose": "Research synthesis and traceability",
+        "systemReference": null,
+        "minimumFields": [],
+        "collectionSource": null,
+        "allowedRoles": [],
+        "accessReviewOwner": null,
+        "correctionExportRule": null,
+        "retentionRule": null,
+        "deletionRule": null,
+        "backupRule": null,
+        "incidentReference": null,
+        "offboardingRule": null
+      },
+      {
+        "id": "recordingsAndTranscripts",
+        "purpose": "Separately approved source evidence",
+        "systemReference": null,
+        "minimumFields": [],
+        "collectionSource": null,
+        "allowedRoles": [],
+        "accessReviewOwner": null,
+        "correctionExportRule": null,
+        "retentionRule": null,
+        "deletionRule": null,
+        "backupRule": null,
+        "incidentReference": null,
+        "offboardingRule": null
+      },
+      {
+        "id": "incentiveRecords",
+        "purpose": "Approved participant compensation evidence",
+        "systemReference": null,
+        "minimumFields": [],
+        "collectionSource": null,
+        "allowedRoles": [],
+        "accessReviewOwner": null,
+        "correctionExportRule": null,
+        "retentionRule": null,
+        "deletionRule": null,
+        "backupRule": null,
+        "incidentReference": null,
+        "offboardingRule": null
+      }
+    ]
+  },
+  "protocols": [
+    {
+      "ticketId": "ARG-002",
+      "purpose": "Service operations and matchmaker workflow",
+      "owner": "Project owner",
+      "status": "Not approved",
+      "artifact": {
+        "path": "plans/research/ARG-002-founder-matchmaker-workflow.md",
+        "version": "1.0",
+        "sha256": "a530054c724c1ea0bbd411a05a2f3168260df92815e3096a09292135f19b0c77"
+      },
+      "consentScript": {
+        "path": "plans/research/consent-and-session-script.md",
+        "version": "1.0",
+        "sha256": "eb1837bbf7a770d177a5f740ded3f17aae13b6674e6dca431588e2d4711cd0ca"
+      },
+      "approvals": {
+        "projectOwner": null,
+        "privacyTrustReviewer": null
+      },
+      "cohorts": [],
+      "recruitmentChannelIds": [],
+      "incentiveDecision": {
+        "status": "Not approved",
+        "terms": null,
+        "approval": null
+      },
+      "permissions": {
+        "outreach": false,
+        "notes": false,
+        "shortQuotes": false,
+        "audioRecording": false,
+        "videoRecording": false,
+        "humanTranscription": false,
+        "automatedTranscription": false,
+        "followUp": false,
+        "researchReuse": false
+      },
+      "automatedTranscriptionProcessor": null
+    },
+    {
+      "ticketId": "ARG-003",
+      "purpose": "Candidate and client concept and language research",
+      "owner": "Project owner",
+      "status": "Not approved",
+      "artifact": {
+        "path": "plans/research/ARG-003-concept-language-testing.md",
+        "version": "1.0",
+        "sha256": "9b53cfbb9cc8d0473668ddc5e8464f6aabf646b718af13edc815565dd145011b"
+      },
+      "consentScript": {
+        "path": "plans/research/consent-and-session-script.md",
+        "version": "1.0",
+        "sha256": "eb1837bbf7a770d177a5f740ded3f17aae13b6674e6dca431588e2d4711cd0ca"
+      },
+      "approvals": {
+        "projectOwner": null,
+        "privacyTrustReviewer": null
+      },
+      "cohorts": [],
+      "recruitmentChannelIds": [],
+      "incentiveDecision": {
+        "status": "Not approved",
+        "terms": null,
+        "approval": null
+      },
+      "permissions": {
+        "outreach": false,
+        "notes": false,
+        "shortQuotes": false,
+        "audioRecording": false,
+        "videoRecording": false,
+        "humanTranscription": false,
+        "automatedTranscription": false,
+        "followUp": false,
+        "researchReuse": false
+      },
+      "automatedTranscriptionProcessor": null
+    }
+  ]
+}

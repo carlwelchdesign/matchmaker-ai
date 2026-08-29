@@ -42,6 +42,8 @@ That check currently covers:
 - single top-level WIP, active-ticket readiness, structured dependency waivers,
   structured blocked-ticket metadata, estimate-band values, and agreement
   between the backlog and `delivery-state.json`.
+- fail-closed human-research authorization, protocol registration, participant
+  system-of-record selection, and outreach/recording prerequisites.
 
 Later `ARG-024` traceability work should extend this to cover:
 

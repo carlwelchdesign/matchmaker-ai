@@ -1,5 +1,14 @@
 # ARG-003 Concept and Language Testing Protocol
 
+- **Owner:** Project owner
+- **Approvers:** Project owner and privacy/trust reviewer
+- **Status:** Blocked — ARG-030 authorization required
+- **Version:** 1.0
+- **Effective date:** Not approved
+- **Last reviewed:** 2026-08-28
+- **Next review:** 2026-09-04
+- **Controlling ticket:** ARG-003
+
 ## Purpose
 
 Test whether applicants, candidates, clients, and internal operators correctly

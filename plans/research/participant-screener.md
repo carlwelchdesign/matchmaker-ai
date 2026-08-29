@@ -1,9 +1,25 @@
 # ARG-002/ARG-003 Participant Screener
 
+- **Owner:** Carl Welch
+- **Approvers:** Project owner and privacy/trust reviewer
+- **Status:** Draft — no outreach authorized
+- **Version:** 1.0
+- **Effective date:** Not approved
+- **Last reviewed:** 2026-08-28
+- **Next review:** Before any participant contact
+- **Controlling ticket:** ARG-030
+
 ## Purpose
 
 Recruit appropriate research participants while avoiding unnecessary sensitive
 screening data.
+
+This screener is a planning artifact, not outreach authorization. Do not contact,
+screen, schedule, or store contact details for a potential participant until the
+shared and applicable protocol gates in
+[research-authorization.json](research-authorization.json) are approved. Store
+any authorized contact or screening record only in the approved participant
+system of record, never in this repository.
 
 ## Do not collect
 
@@ -54,8 +70,9 @@ Use these as discussion prompts, not scored qualification rules.
    to you?
 3. Are you willing to avoid sharing intimate personal details during the
    session?
-4. Do you use assistive technology or alternate input modes that you want the
-   team to consider? Answering is optional.
+4. Would any format, communication, scheduling, or interaction adjustment help
+   you participate? Answering is optional. Record only the adjustment needed,
+   not a diagnosis or underlying condition.
 
 ### Potential paying client
 

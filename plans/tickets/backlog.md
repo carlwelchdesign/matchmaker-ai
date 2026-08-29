@@ -36,7 +36,9 @@ When a ticket moves to `Ready`, copy [the ticket template](../templates/ticket.m
 - [ ] `ARG-026` Complete match-science evidence review, construct register, and prospective validation plan.
 - [ ] `ARG-027` Prototype and test optional structured, conversational, and hybrid intake.
 - [ ] `ARG-028` Evaluate on-device and server speech recognition for privacy, accuracy, cost, and accessibility.
-- [ ] `ARG-029` Enforce workflow authority, readiness, and the single-WIP delivery rule.
+- [x] `ARG-029` Enforce workflow authority, readiness, and the single-WIP delivery rule.
+- [ ] `ARG-030` Approve shared human-research authorization controls.
+- [ ] `ARG-031` Validate target-buyer problem intensity, authority, and commitment.
 
 ## Phase 1 — Repository, platform, and trust foundation
 
@@ -62,6 +64,7 @@ When a ticket moves to `Ready`, copy [the ticket template](../templates/ticket.m
 - [x] `ARG-119` Report safe next development work from the backlog.
 - [x] `ARG-120` Build a synthetic, interactive public, applicant, and matchmaker concept prototype.
 - [ ] `ARG-121` Build a synthetic, private Candidate Discovery Map for matchmaker review.
+- [ ] `ARG-122` Build the accessible component and interaction-state foundation.
 - [ ] `ARG-201` Integrate authentication, MFA, recovery, and session management.
 - [ ] `ARG-202` Implement deny-by-default RBAC and object-scoped authorization.
 - [ ] `ARG-203` Implement staff administration and privileged-access review.

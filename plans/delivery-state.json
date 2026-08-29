@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "capturedAt": "2026-08-28T18:55:00-07:00",
+  "capturedAt": "2026-08-28T19:00:00-07:00",
   "workflowAuthority": {
     "system": "Asana",
     "projectId": "1217038055360286",
@@ -10,10 +10,10 @@
   "evidenceAuthority": "repository",
   "activeTickets": [
     {
-      "id": "ARG-029",
-      "workflowTaskRef": "1217966588260345",
+      "id": "ARG-030",
+      "workflowTaskRef": "1217966825442195",
       "deliveryStatus": "In progress",
-      "artifactMaturity": "Planning control implementation"
+      "artifactMaturity": "Draft research authorization controls"
     }
   ],
   "reconciledTickets": [
@@ -31,6 +31,11 @@
       "id": "ARG-027",
       "deliveryStatus": "Blocked",
       "artifactMaturity": "Provider-free synthetic prototype"
+    },
+    {
+      "id": "ARG-029",
+      "deliveryStatus": "Done",
+      "artifactMaturity": "Merged planning control"
     }
   ]
 }
