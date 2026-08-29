@@ -473,6 +473,31 @@ export function validateResearchAuthorization(
       protocol.consentScript,
       `${protocol.ticketId} consent script`,
     );
+    for (const [index, artifact] of (
+      protocol.evidenceArtifacts ?? []
+    ).entries()) {
+      assertArtifactDescriptor(
+        artifact,
+        `${protocol.ticketId} evidence artifact ${index + 1}`,
+      );
+    }
+    const commitmentStimulus = protocol.commitmentStimulus;
+    if (commitmentStimulus?.offerArtifact) {
+      assertArtifactDescriptor(
+        commitmentStimulus.offerArtifact,
+        `${protocol.ticketId} commitment offer artifact`,
+      );
+    }
+    if (commitmentStimulus?.reviewScript) {
+      assertArtifactDescriptor(
+        commitmentStimulus.reviewScript,
+        `${protocol.ticketId} commitment review script`,
+      );
+    }
+
+    if (row.status === "Done") {
+      assertResearchCompletionEvidence(protocol, asOf);
+    }
 
     const permissions = protocol.permissions ?? {};
     for (const activity of researchActivities) {
@@ -499,6 +524,22 @@ export function validateResearchAuthorization(
         `${protocol.ticketId} cannot retain privacy approval while ${protocol.status}`,
       );
       continue;
+    }
+
+    if (protocol.completionRequirements?.requiresCommitmentStimulus === true) {
+      assert.equal(
+        protocol.permissions.followUp,
+        true,
+        `${protocol.ticketId} commitment measurement requires follow-up authorization`,
+      );
+      assertArtifactDescriptor(
+        commitmentStimulus?.offerArtifact,
+        `${protocol.ticketId} commitment offer artifact`,
+      );
+      assertArtifactDescriptor(
+        commitmentStimulus?.reviewScript,
+        `${protocol.ticketId} commitment review script`,
+      );
     }
 
     assert.equal(
@@ -708,17 +749,19 @@ export function validateResearchAuthorization(
 
   for (const row of rows) {
     if (
-      (row.status === "Ready" || row.status === "In progress") &&
+      ["Ready", "In progress", "Done"].includes(row.status) &&
       governedTicketIds.has(row.id)
     ) {
       assert(
         protocolIds.has(row.id),
         `${row.id} cannot be ${row.status} without a registered research protocol`,
       );
-      assert(
-        isResearchActivityAuthorized(authorization, row.id, "outreach", asOf),
-        `${row.id} cannot be ${row.status} while participant outreach is unauthorized`,
-      );
+      if (row.status !== "Done") {
+        assert(
+          isResearchActivityAuthorized(authorization, row.id, "outreach", asOf),
+          `${row.id} cannot be ${row.status} while participant outreach is unauthorized`,
+        );
+      }
     }
   }
 }
@@ -864,6 +907,63 @@ export async function validateResearchAuthorizationArtifacts(
       requireApprovedMetadata: protocol.status === "Approved",
       expectedOwner: authorization.owner,
     });
+    for (const [index, descriptor] of (
+      protocol.evidenceArtifacts ?? []
+    ).entries()) {
+      descriptors.push({
+        label: `${protocol.ticketId} evidence artifact ${index + 1}`,
+        descriptor,
+        rejectPlaceholders: false,
+        requireApprovedMetadata: protocol.status === "Approved",
+        expectedOwner: protocol.owner,
+      });
+    }
+    for (const [label, descriptor] of [
+      ["commitment offer artifact", protocol.commitmentStimulus?.offerArtifact],
+      ["commitment review script", protocol.commitmentStimulus?.reviewScript],
+    ]) {
+      if (!descriptor) {
+        continue;
+      }
+      descriptors.push({
+        label: `${protocol.ticketId} ${label}`,
+        descriptor,
+        rejectPlaceholders: protocol.status === "Approved",
+        requireApprovedMetadata: protocol.status === "Approved",
+        expectedOwner: protocol.owner,
+      });
+    }
+    if (protocol.completionEvidence?.synthesisArtifact) {
+      descriptors.push({
+        label: `${protocol.ticketId} completion authorization snapshot`,
+        descriptor: protocol.completionEvidence.authorizationSnapshot.artifact,
+        rejectPlaceholders: true,
+        requireApprovedMetadata: true,
+        expectedOwner: protocol.owner,
+      });
+      descriptors.push({
+        label: `${protocol.ticketId} completion evidence ledger`,
+        descriptor: protocol.completionEvidence.evidenceLedgerArtifact,
+        rejectPlaceholders: true,
+        requireApprovedMetadata: true,
+        expectedOwner: protocol.owner,
+      });
+      descriptors.push({
+        label: `${protocol.ticketId} completion disposition`,
+        descriptor:
+          protocol.completionEvidence.withdrawalAndExclusionDispositionArtifact,
+        rejectPlaceholders: true,
+        requireApprovedMetadata: true,
+        expectedOwner: protocol.owner,
+      });
+      descriptors.push({
+        label: `${protocol.ticketId} completion synthesis`,
+        descriptor: protocol.completionEvidence.synthesisArtifact,
+        rejectPlaceholders: true,
+        requireApprovedMetadata: true,
+        expectedOwner: protocol.owner,
+      });
+    }
   }
 
   const artifactContents = new Map();
@@ -913,7 +1013,40 @@ export async function validateResearchAuthorizationArtifacts(
     followUp: "Follow-up contact for this protocol:",
     researchReuse: "Research reuse for ",
   };
+  const ledgerEvidenceReferences = [];
   for (const protocol of authorization.protocols ?? []) {
+    if (protocol.completionEvidence) {
+      const completion = protocol.completionEvidence;
+      const synthesis =
+        artifactContents.get(completion.synthesisArtifact.path) ?? "";
+      assert(
+        synthesis.includes(
+          `- **Protocol version:** ${protocol.artifact.version}`,
+        ),
+        `${protocol.ticketId} completion synthesis protocol version drift`,
+      );
+      assert(
+        synthesis.includes(
+          `- **Primary sessions completed:** ${completion.includedSessionCount}`,
+        ),
+        `${protocol.ticketId} completion synthesis session count drift`,
+      );
+      assert(
+        synthesis.includes(
+          `- **Decision status:** ${completion.ownerDecision.decision}`,
+        ),
+        `${protocol.ticketId} completion synthesis decision drift`,
+      );
+      assert(
+        !synthesis.includes("| Pending |"),
+        `${protocol.ticketId} completion synthesis retains pending thresholds`,
+      );
+      const ledger =
+        artifactContents.get(completion.evidenceLedgerArtifact.path) ?? "";
+      ledgerEvidenceReferences.push(
+        ...validateCompletionLedger(protocol, completion, ledger, synthesis),
+      );
+    }
     if (protocol.status !== "Approved") {
       continue;
     }
@@ -963,6 +1096,33 @@ export async function validateResearchAuthorizationArtifacts(
     );
     await stat(absolutePath);
   }
+
+  const completionReferences = (authorization.protocols ?? []).flatMap(
+    (protocol) => {
+      const completion = protocol.completionEvidence;
+      if (!completion) {
+        return [];
+      }
+      return [
+        ...(completion.authorizationEvidenceRefs ?? []),
+        ...(completion.authorizationSnapshot?.approvalEvidenceRefs ?? []),
+        completion.ownerDecision?.evidenceRef,
+      ].filter(Boolean);
+    },
+  );
+  completionReferences.push(...ledgerEvidenceReferences);
+  for (const evidenceRef of completionReferences) {
+    if (!evidenceRef.startsWith("plans/")) {
+      continue;
+    }
+    const evidencePath = evidenceRef.split("#")[0];
+    const absolutePath = resolve(repositoryRoot, evidencePath);
+    assert(
+      absolutePath.startsWith(`${resolve(repositoryRoot)}/`),
+      "research completion evidence escapes the repository",
+    );
+    await stat(absolutePath);
+  }
 }
 
 function assertArtifactDescriptor(descriptor, label) {
@@ -980,6 +1140,609 @@ function assertArtifactDescriptor(descriptor, label) {
     sha256Pattern.test(descriptor?.sha256 ?? ""),
     `${label} requires a sha256 revision`,
   );
+}
+
+function assertResearchCompletionEvidence(protocol, asOf) {
+  const completion = protocol.completionEvidence;
+  assert(
+    completion !== null && typeof completion === "object",
+    `${protocol.ticketId} Done research requires immutable completion evidence`,
+  );
+  const completedAt = assertValidTimestamp(
+    completion.completedAt,
+    `${protocol.ticketId} completion completedAt`,
+  );
+  assert(
+    completedAt <= asOf,
+    `${protocol.ticketId} completion cannot be future-dated`,
+  );
+  assertMeaningfulString(
+    completion.completedBy,
+    `${protocol.ticketId} completion completedBy`,
+  );
+  assert.equal(
+    completion.protocolArtifactSha256,
+    protocol.artifact.sha256,
+    `${protocol.ticketId} completion protocol revision drift`,
+  );
+  assert.equal(
+    completion.consentScriptSha256,
+    protocol.consentScript.sha256,
+    `${protocol.ticketId} completion consent revision drift`,
+  );
+  assertNonEmptyMeaningfulStrings(
+    completion.authorizationEvidenceRefs,
+    `${protocol.ticketId} completion authorization evidence`,
+  );
+  for (const evidenceRef of completion.authorizationEvidenceRefs) {
+    assert(
+      evidenceReferencePattern.test(evidenceRef),
+      `${protocol.ticketId} completion has an invalid authorization evidence reference`,
+    );
+  }
+  assert(
+    Number.isInteger(completion.includedSessionCount) &&
+      completion.includedSessionCount > 0,
+    `${protocol.ticketId} completion requires a positive included session count`,
+  );
+  const minimumIncludedSessions =
+    protocol.completionRequirements?.minimumIncludedSessions;
+  assert(
+    Number.isInteger(minimumIncludedSessions) && minimumIncludedSessions > 0,
+    `${protocol.ticketId} completion requires a predeclared minimum session count`,
+  );
+  assert(
+    completion.includedSessionCount >= minimumIncludedSessions,
+    `${protocol.ticketId} completion has fewer included sessions than its predeclared minimum`,
+  );
+  const decisionSampleSizes =
+    protocol.completionRequirements?.decisionSampleSizes;
+  if (decisionSampleSizes !== undefined) {
+    assert(
+      Array.isArray(decisionSampleSizes) &&
+        decisionSampleSizes.every(
+          (sampleSize) => Number.isInteger(sampleSize) && sampleSize > 0,
+        ),
+      `${protocol.ticketId} completion decision sample sizes are invalid`,
+    );
+    assert(
+      decisionSampleSizes.includes(completion.includedSessionCount),
+      `${protocol.ticketId} completion session count is not a predeclared decision point`,
+    );
+  }
+  if (protocol.completionRequirements?.requiresCommitmentStimulus === true) {
+    assert(
+      authorizationSnapshotIncludesFollowUp(completion),
+      `${protocol.ticketId} completion snapshot must include followUp`,
+    );
+    assert.equal(
+      completion.commitmentOfferSha256,
+      protocol.commitmentStimulus?.offerArtifact?.sha256,
+      `${protocol.ticketId} completion commitment offer revision drift`,
+    );
+    assert.equal(
+      completion.commitmentReviewScriptSha256,
+      protocol.commitmentStimulus?.reviewScript?.sha256,
+      `${protocol.ticketId} completion commitment review script revision drift`,
+    );
+  }
+  const firstSessionAt = assertValidTimestamp(
+    completion.firstIncludedSessionAt,
+    `${protocol.ticketId} first included session`,
+  );
+  const lastSessionAt = assertValidTimestamp(
+    completion.lastIncludedSessionAt,
+    `${protocol.ticketId} last included session`,
+  );
+  assert(
+    firstSessionAt <= lastSessionAt && lastSessionAt <= completedAt,
+    `${protocol.ticketId} completion session chronology is invalid`,
+  );
+
+  const authorizationSnapshot = completion.authorizationSnapshot ?? {};
+  assertArtifactDescriptor(
+    authorizationSnapshot.artifact,
+    `${protocol.ticketId} completion authorization snapshot`,
+  );
+  assert.equal(
+    authorizationSnapshot.operationalState,
+    "Open",
+    `${protocol.ticketId} completion snapshot must record Open operations`,
+  );
+  assert.equal(
+    authorizationSnapshot.protocolStatus,
+    "Approved",
+    `${protocol.ticketId} completion snapshot must record an Approved protocol`,
+  );
+  assertNonEmptyMeaningfulStrings(
+    authorizationSnapshot.allowedActivities,
+    `${protocol.ticketId} completion snapshot allowed activities`,
+  );
+  for (const activity of authorizationSnapshot.allowedActivities) {
+    assert(
+      researchActivities.includes(activity),
+      `${protocol.ticketId} completion snapshot has unknown activity: ${activity}`,
+    );
+  }
+  assert(
+    authorizationSnapshot.allowedActivities.includes("outreach"),
+    `${protocol.ticketId} completion snapshot must include outreach`,
+  );
+  const effectiveFrom = assertValidTimestamp(
+    authorizationSnapshot.effectiveFrom,
+    `${protocol.ticketId} completion authorization effectiveFrom`,
+  );
+  const effectiveUntil = assertValidTimestamp(
+    authorizationSnapshot.effectiveUntil,
+    `${protocol.ticketId} completion authorization effectiveUntil`,
+  );
+  assert(
+    effectiveFrom <= firstSessionAt && lastSessionAt <= effectiveUntil,
+    `${protocol.ticketId} included sessions fall outside the captured authorization window`,
+  );
+  assertNonEmptyMeaningfulStrings(
+    authorizationSnapshot.approvalEvidenceRefs,
+    `${protocol.ticketId} completion snapshot approval evidence`,
+  );
+  for (const evidenceRef of authorizationSnapshot.approvalEvidenceRefs) {
+    assert(
+      evidenceReferencePattern.test(evidenceRef),
+      `${protocol.ticketId} completion snapshot has an invalid approval evidence reference`,
+    );
+  }
+
+  assertArtifactDescriptor(
+    completion.evidenceLedgerArtifact,
+    `${protocol.ticketId} completion evidence ledger`,
+  );
+  assertArtifactDescriptor(
+    completion.withdrawalAndExclusionDispositionArtifact,
+    `${protocol.ticketId} completion disposition`,
+  );
+  assertArtifactDescriptor(
+    completion.synthesisArtifact,
+    `${protocol.ticketId} completion synthesis`,
+  );
+
+  const ownerDecision = completion.ownerDecision ?? {};
+  assert(
+    ["Pass", "Revise", "Stop"].includes(ownerDecision.decision),
+    `${protocol.ticketId} completion requires a Pass, Revise, or Stop owner decision`,
+  );
+  assertMeaningfulString(
+    ownerDecision.decidedBy,
+    `${protocol.ticketId} completion decision owner`,
+  );
+  const decidedAt = assertValidTimestamp(
+    ownerDecision.decidedAt,
+    `${protocol.ticketId} completion decision timestamp`,
+  );
+  assert(
+    decidedAt <= asOf,
+    `${protocol.ticketId} completion decision cannot be future-dated`,
+  );
+  assert(
+    evidenceReferencePattern.test(ownerDecision.evidenceRef ?? ""),
+    `${protocol.ticketId} completion decision requires a resolvable evidence reference`,
+  );
+}
+
+function authorizationSnapshotIncludesFollowUp(completion) {
+  return completion.authorizationSnapshot?.allowedActivities?.includes(
+    "followUp",
+  );
+}
+
+function validateCompletionLedger(protocol, completion, ledger, synthesis) {
+  const evidenceSection = ledger.split("## Per-primary-session coding")[0];
+  const evidenceRows = evidenceSection
+    .split("\n")
+    .filter((line) => line.startsWith("|"))
+    .map((line) =>
+      line
+        .split("|")
+        .slice(1, -1)
+        .map((cell) => cell.trim()),
+    )
+    .filter(
+      (cells) =>
+        cells.length > 0 &&
+        cells[0] !== "Evidence ID" &&
+        !cells.every((cell) => /^:?-+:?$/u.test(cell)),
+    );
+  assert(
+    evidenceRows.length > 0,
+    `${protocol.ticketId} completion ledger lacks claim-level evidence`,
+  );
+
+  const section = ledger
+    .split("## Per-primary-session coding")[1]
+    ?.split(/\n## /u)[0];
+  assert(
+    section,
+    `${protocol.ticketId} completion ledger lacks session coding`,
+  );
+  const rows = section
+    .split("\n")
+    .filter((line) => line.startsWith("|"))
+    .map((line) =>
+      line
+        .split("|")
+        .slice(1, -1)
+        .map((cell) => cell.trim()),
+    )
+    .filter(
+      (cells) =>
+        cells.length > 0 &&
+        cells[0] !== "Opaque participant ref" &&
+        !cells.every((cell) => /^:?-+:?$/u.test(cell)),
+    );
+  assert.equal(
+    rows.length,
+    completion.includedSessionCount,
+    `${protocol.ticketId} completion ledger session count drift`,
+  );
+
+  const opaqueReferences = new Set();
+  const consentReferences = new Set();
+  const expectedRevision = `${protocol.artifact.version}/${protocol.artifact.sha256}`;
+  const metrics = {
+    recentProblemAndAction: 0,
+    unresolvedCostAndSwitchingTrigger: 0,
+    purchaseAuthority: 0,
+    commitmentLevel2: 0,
+    resolvingAlternative: 0,
+  };
+  for (const [index, cells] of rows.entries()) {
+    assert.equal(
+      cells.length,
+      17,
+      `${protocol.ticketId} completion ledger row ${index + 1} has invalid columns`,
+    );
+    const [
+      opaqueReference,
+      sessionTime,
+      protocolRevision,
+      authorizationEvidenceRef,
+      consentReceiptRef,
+      authorizationVerified,
+      eligiblePrimary,
+      marketEvidence,
+      recentProblem,
+      currentAlternative,
+      alternativeOutcome,
+      unresolvedCost,
+      purchaseAuthority,
+      switchingTrigger,
+      trustConstraint,
+      commitmentLevel,
+      disconfirmingEvidence,
+    ] = cells;
+    assert(
+      /^[A-Z0-9][A-Z0-9_-]{5,}$/u.test(opaqueReference) &&
+        !opaqueReference.startsWith("SYN-"),
+      `${protocol.ticketId} completion ledger row ${index + 1} lacks an opaque real-participant reference`,
+    );
+    assert(
+      !opaqueReferences.has(opaqueReference),
+      `${protocol.ticketId} completion ledger duplicates ${opaqueReference}`,
+    );
+    opaqueReferences.add(opaqueReference);
+    const sessionAt = assertValidTimestamp(
+      sessionTime,
+      `${protocol.ticketId} completion ledger row ${index + 1} session time`,
+    );
+    assert(
+      sessionAt >= new Date(completion.firstIncludedSessionAt) &&
+        sessionAt <= new Date(completion.lastIncludedSessionAt),
+      `${protocol.ticketId} completion ledger row ${index + 1} falls outside the included-session window`,
+    );
+    assert.equal(
+      protocolRevision,
+      expectedRevision,
+      `${protocol.ticketId} completion ledger row ${index + 1} protocol revision drift`,
+    );
+    assert(
+      evidenceReferencePattern.test(authorizationEvidenceRef),
+      `${protocol.ticketId} completion ledger row ${index + 1} has invalid authorization evidence`,
+    );
+    assert(
+      /^CONSENT-[A-Z0-9][A-Z0-9_-]{3,}$/u.test(consentReceiptRef),
+      `${protocol.ticketId} completion ledger row ${index + 1} has invalid consent receipt evidence`,
+    );
+    assert(
+      !consentReferences.has(consentReceiptRef),
+      `${protocol.ticketId} completion ledger duplicates ${consentReceiptRef}`,
+    );
+    consentReferences.add(consentReceiptRef);
+    assert.equal(
+      authorizationVerified,
+      "Yes",
+      `${protocol.ticketId} completion ledger row ${index + 1} was not authorization-verified`,
+    );
+    assert.equal(
+      eligiblePrimary,
+      "Yes",
+      `${protocol.ticketId} completion ledger row ${index + 1} is not eligible primary evidence`,
+    );
+    assert.equal(
+      marketEvidence,
+      "Direct matchmaking",
+      `${protocol.ticketId} completion ledger row ${index + 1} is proxy evidence`,
+    );
+    assert(
+      ["Concrete", "Vague", "Absent"].includes(recentProblem),
+      `${protocol.ticketId} completion ledger row ${index + 1} has invalid recent-problem coding`,
+    );
+    assert(
+      ["Action", "Considered", "Absent"].includes(currentAlternative),
+      `${protocol.ticketId} completion ledger row ${index + 1} has invalid alternative coding`,
+    );
+    assert(
+      ["Resolves", "Partial", "Unresolved", "Not tried"].includes(
+        alternativeOutcome,
+      ),
+      `${protocol.ticketId} completion ledger row ${index + 1} has invalid alternative outcome`,
+    );
+    assert(
+      currentAlternative === "Action"
+        ? alternativeOutcome !== "Not tried"
+        : alternativeOutcome === "Not tried",
+      `${protocol.ticketId} completion ledger row ${index + 1} has contradictory alternative coding`,
+    );
+    assert(
+      ["Concrete", "Vague", "Absent"].includes(unresolvedCost),
+      `${protocol.ticketId} completion ledger row ${index + 1} has invalid unresolved-cost coding`,
+    );
+    assert(
+      ["Sole", "Joint", "Adviser", "None", "Unknown"].includes(
+        purchaseAuthority,
+      ),
+      `${protocol.ticketId} completion ledger row ${index + 1} has invalid purchase-authority coding`,
+    );
+    assert(
+      ["Observable", "Preference", "Absent"].includes(switchingTrigger),
+      `${protocol.ticketId} completion ledger row ${index + 1} has invalid switching-trigger coding`,
+    );
+    assert(
+      ["Concrete", "Vague", "Absent"].includes(trustConstraint),
+      `${protocol.ticketId} completion ledger row ${index + 1} has invalid trust-constraint coding`,
+    );
+    assert(
+      /^[0-2]$/u.test(commitmentLevel),
+      `${protocol.ticketId} completion ledger row ${index + 1} has invalid commitment coding`,
+    );
+    assertMeaningfulString(
+      disconfirmingEvidence,
+      `${protocol.ticketId} completion ledger row ${index + 1} disconfirming evidence`,
+    );
+
+    metrics.recentProblemAndAction += Number(
+      recentProblem === "Concrete" && currentAlternative === "Action",
+    );
+    metrics.unresolvedCostAndSwitchingTrigger += Number(
+      unresolvedCost === "Concrete" && switchingTrigger === "Observable",
+    );
+    metrics.purchaseAuthority += Number(
+      purchaseAuthority === "Sole" || purchaseAuthority === "Joint",
+    );
+    metrics.commitmentLevel2 += Number(commitmentLevel === "2");
+    metrics.resolvingAlternative += Number(alternativeOutcome === "Resolves");
+  }
+
+  const evidenceRecords = new Map();
+  const evidenceSourceReferences = [];
+  for (const [index, cells] of evidenceRows.entries()) {
+    assert.equal(
+      cells.length,
+      10,
+      `${protocol.ticketId} completion evidence row ${index + 1} has invalid columns`,
+    );
+    const [
+      evidenceId,
+      participantReference,
+      cohort,
+      marketEvidence,
+      claimTested,
+      observation,
+      evidenceSource,
+      counterevidence,
+      confidence,
+      decisionEffect,
+    ] = cells;
+    assert(
+      /^EVD-[A-Z0-9][A-Z0-9_-]{3,}$/u.test(evidenceId),
+      `${protocol.ticketId} completion evidence row ${index + 1} has invalid Evidence ID`,
+    );
+    assert(
+      !evidenceRecords.has(evidenceId),
+      `${protocol.ticketId} completion evidence duplicates ${evidenceId}`,
+    );
+    assert(
+      opaqueReferences.has(participantReference),
+      `${protocol.ticketId} completion evidence ${evidenceId} has unknown participant reference`,
+    );
+    assert.equal(
+      cohort,
+      "Primary",
+      `${protocol.ticketId} completion evidence ${evidenceId} is not primary evidence`,
+    );
+    assert.equal(
+      marketEvidence,
+      "Direct matchmaking",
+      `${protocol.ticketId} completion evidence ${evidenceId} is proxy evidence`,
+    );
+    assertMeaningfulString(
+      claimTested,
+      `${protocol.ticketId} completion evidence ${evidenceId} claim`,
+    );
+    assertMeaningfulString(
+      observation,
+      `${protocol.ticketId} completion evidence ${evidenceId} observation`,
+    );
+    assert(
+      evidenceReferencePattern.test(evidenceSource),
+      `${protocol.ticketId} completion evidence ${evidenceId} has invalid source reference`,
+    );
+    evidenceSourceReferences.push(evidenceSource);
+    assertMeaningfulString(
+      counterevidence,
+      `${protocol.ticketId} completion evidence ${evidenceId} counterevidence`,
+    );
+    assert(
+      ["Low", "Medium", "High"].includes(confidence),
+      `${protocol.ticketId} completion evidence ${evidenceId} has invalid confidence`,
+    );
+    assert(
+      ["Supports", "Contradicts", "Neutral"].includes(decisionEffect),
+      `${protocol.ticketId} completion evidence ${evidenceId} has invalid decision effect`,
+    );
+    evidenceRecords.set(evidenceId, { cohort, marketEvidence });
+  }
+
+  const sampleSize = completion.includedSessionCount;
+  const required =
+    sampleSize === 8
+      ? { recent: 6, unresolved: 5, authority: 5, commitment: 4 }
+      : { recent: 9, unresolved: 8, authority: 8, commitment: 6 };
+  const stop =
+    sampleSize === 8
+      ? { recentBelow: 3, commitmentBelow: 2, alternativesAtLeast: 6 }
+      : { recentBelow: 4, commitmentBelow: 3, alternativesAtLeast: 9 };
+  const scorecardRows = [
+    [
+      "Concrete recent problem and action",
+      metrics.recentProblemAndAction,
+      metrics.recentProblemAndAction >= required.recent ? "Pass" : "Miss",
+    ],
+    [
+      "Material unresolved cost and switching trigger",
+      metrics.unresolvedCostAndSwitchingTrigger,
+      metrics.unresolvedCostAndSwitchingTrigger >= required.unresolved
+        ? "Pass"
+        : "Miss",
+    ],
+    [
+      "Sole or joint purchase authority",
+      metrics.purchaseAuthority,
+      metrics.purchaseAuthority >= required.authority ? "Pass" : "Miss",
+    ],
+    [
+      "Commitment level 2",
+      metrics.commitmentLevel2,
+      metrics.commitmentLevel2 >= required.commitment ? "Pass" : "Miss",
+    ],
+    [
+      "Existing alternative resolves problem",
+      metrics.resolvingAlternative,
+      metrics.resolvingAlternative >= stop.alternativesAtLeast
+        ? "Stop"
+        : "Pass",
+    ],
+  ];
+  for (const [criterion, count, expectedResult] of scorecardRows) {
+    const row = synthesis
+      .split("\n")
+      .find((line) => line.startsWith(`| ${criterion} |`));
+    assert(
+      row?.includes(`| ${count} / ${sampleSize} |`),
+      `${protocol.ticketId} completion synthesis ${criterion} count drift`,
+    );
+    const cells = row
+      .split("|")
+      .slice(1, -1)
+      .map((cell) => cell.trim());
+    const actualResult = cells.length >= 5 ? cells[4] : cells[2];
+    assert.equal(
+      actualResult,
+      expectedResult,
+      `${protocol.ticketId} completion synthesis ${criterion} result drift`,
+    );
+  }
+
+  const qualitativeGates = [
+    {
+      criterion:
+        "Credible demand depends on prohibited guarantees, surveillance, discriminatory selection, undisclosed sharing, or pay-to-rank",
+      effect: "Stop",
+    },
+    {
+      criterion:
+        "Required privacy, safety, or service burden is incompatible with the bounded pilot",
+      effect: "Stop",
+    },
+    {
+      criterion: "Evidence splits materially by cohort",
+      effect: "Revise",
+    },
+    { criterion: "Buying process is unclear", effect: "Revise" },
+    {
+      criterion: "Participants require a materially different service promise",
+      effect: "Revise",
+    },
+  ];
+  let qualitativeStop = false;
+  let qualitativeRevise = false;
+  for (const gate of qualitativeGates) {
+    const row = synthesis
+      .split("\n")
+      .find((line) => line.startsWith(`| ${gate.criterion} |`));
+    assert(
+      row,
+      `${protocol.ticketId} completion synthesis lacks ${gate.criterion}`,
+    );
+    const [, finding, evidenceIds] = row
+      .split("|")
+      .slice(1, -1)
+      .map((cell) => cell.trim());
+    assert(
+      finding === "Yes" || finding === "No",
+      `${protocol.ticketId} completion synthesis ${gate.criterion} must be Yes or No`,
+    );
+    if (finding === "Yes") {
+      const references = evidenceIds.split(",").map((value) => value.trim());
+      assert(
+        references.length > 0 &&
+          references.every((reference) => evidenceRecords.has(reference)),
+        `${protocol.ticketId} completion synthesis ${gate.criterion} lacks valid ledger evidence IDs`,
+      );
+      if (gate.effect === "Stop") qualitativeStop = true;
+      if (gate.effect === "Revise") qualitativeRevise = true;
+    } else {
+      assert.equal(
+        evidenceIds,
+        "None",
+        `${protocol.ticketId} completion synthesis ${gate.criterion} No finding must use None`,
+      );
+    }
+  }
+
+  const numericPasses =
+    metrics.recentProblemAndAction >= required.recent &&
+    metrics.unresolvedCostAndSwitchingTrigger >= required.unresolved &&
+    metrics.purchaseAuthority >= required.authority &&
+    metrics.commitmentLevel2 >= required.commitment;
+  const stops =
+    metrics.recentProblemAndAction < stop.recentBelow ||
+    metrics.commitmentLevel2 < stop.commitmentBelow ||
+    metrics.resolvingAlternative >= stop.alternativesAtLeast ||
+    qualitativeStop;
+  const passes = numericPasses && !stops && !qualitativeRevise;
+  const revises = !stops && (!numericPasses || qualitativeRevise);
+  if (completion.ownerDecision.decision === "Pass") {
+    assert(
+      passes && !stops,
+      `${protocol.ticketId} Pass contradicts ledger thresholds`,
+    );
+  } else if (completion.ownerDecision.decision === "Stop") {
+    assert(stops, `${protocol.ticketId} Stop contradicts ledger thresholds`);
+  } else {
+    assert(
+      revises,
+      `${protocol.ticketId} Revise contradicts ledger thresholds`,
+    );
+  }
+  return evidenceSourceReferences;
 }
 
 function assertApprovedArtifactMetadata(

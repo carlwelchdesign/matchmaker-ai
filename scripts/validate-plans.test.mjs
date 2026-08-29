@@ -330,6 +330,25 @@ test("validateResearchAuthorization blocks an unregistered governed ticket from 
   );
 });
 
+test("validateResearchAuthorization blocks an unregistered governed ticket from Done", () => {
+  assert.throws(
+    () =>
+      validateResearchAuthorization(
+        [
+          researchRow(),
+          completeRow({
+            id: "ARG-809",
+            epic: "Usability beta",
+            status: "Done",
+          }),
+        ],
+        researchAuthorization({ governedTickets: ["ARG-002", "ARG-809"] }),
+        validationTime(),
+      ),
+    /cannot be Done without a registered research protocol/u,
+  );
+});
+
 test("validateResearchAuthorization blocks Ready research without outreach approval", () => {
   assert.throws(
     () =>
@@ -339,6 +358,141 @@ test("validateResearchAuthorization blocks Ready research without outreach appro
         validationTime(),
       ),
     /participant outreach is unauthorized/u,
+  );
+});
+
+test("registered ARG-031 remains blocked from In progress without outreach approval", () => {
+  const buyerRow = completeRow({
+    id: "ARG-031",
+    epic: "Buyer discovery",
+    status: "In progress",
+    owner: "Carl Welch",
+    reviewer: "Project owner",
+    acceptance_artifact: "plans/research/ARG-031-buyer-discovery-protocol.md",
+    risk_decision_links: "R-021;R-023",
+  });
+  const buyerProtocol = protocol({
+    ticketId: "ARG-031",
+    purpose: "Buyer problem intensity, authority, and commitment",
+    owner: "Carl Welch",
+    artifact: artifact("plans/research/ARG-031-buyer-discovery-protocol.md"),
+  });
+
+  assert.throws(
+    () =>
+      validateResearchAuthorization(
+        [researchRow(), buyerRow],
+        researchAuthorization({
+          governedTickets: ["ARG-002", "ARG-031"],
+          protocols: [protocol(), buyerProtocol],
+        }),
+        validationTime(),
+      ),
+    /ARG-031 cannot be In progress while participant outreach is unauthorized/u,
+  );
+});
+
+test("governed research cannot be Done without immutable completion evidence", () => {
+  const authorization = researchAuthorization();
+
+  assert.throws(
+    () =>
+      validateResearchAuthorization(
+        [researchRow({ status: "Done" })],
+        authorization,
+        validationTime(),
+      ),
+    /Done research requires immutable completion evidence/u,
+  );
+
+  authorization.protocols[0].completionEvidence = completionEvidence(
+    authorization.protocols[0],
+  );
+  assert.doesNotThrow(() =>
+    validateResearchAuthorization(
+      [researchRow({ status: "Done" })],
+      authorization,
+      validationTime(),
+    ),
+  );
+
+  authorization.protocols[0].completionRequirements.minimumIncludedSessions = 9;
+  assert.throws(
+    () =>
+      validateResearchAuthorization(
+        [researchRow({ status: "Done" })],
+        authorization,
+        validationTime(),
+      ),
+    /fewer included sessions than its predeclared minimum/u,
+  );
+});
+
+test("commitment completion requires follow-up and pinned stimulus revisions", () => {
+  const authorization = approvedResearchAuthorization();
+  const researchProtocol = authorization.protocols[0];
+  researchProtocol.completionRequirements.requiresCommitmentStimulus = true;
+
+  assert.throws(
+    () =>
+      validateResearchAuthorization(
+        [researchRow()],
+        authorization,
+        validationTime(),
+      ),
+    /commitment measurement requires follow-up authorization/u,
+  );
+
+  researchProtocol.permissions.followUp = true;
+  assert.throws(
+    () =>
+      validateResearchAuthorization(
+        [researchRow()],
+        authorization,
+        validationTime(),
+      ),
+    /commitment offer artifact requires a repository research artifact path/u,
+  );
+
+  researchProtocol.commitmentStimulus = {
+    offerArtifact: artifact("plans/research/commitment-offer.md"),
+    reviewScript: artifact("plans/research/commitment-review.md"),
+  };
+  researchProtocol.completionEvidence = completionEvidence(researchProtocol);
+  assert.throws(
+    () =>
+      validateResearchAuthorization(
+        [researchRow({ status: "Done" })],
+        authorization,
+        validationTime(),
+      ),
+    /completion snapshot must include followUp/u,
+  );
+
+  researchProtocol.completionEvidence.authorizationSnapshot.allowedActivities.push(
+    "followUp",
+  );
+  researchProtocol.completionEvidence.commitmentOfferSha256 =
+    researchProtocol.commitmentStimulus.offerArtifact.sha256;
+  researchProtocol.completionEvidence.commitmentReviewScriptSha256 =
+    researchProtocol.commitmentStimulus.reviewScript.sha256;
+  assert.doesNotThrow(() =>
+    validateResearchAuthorization(
+      [researchRow({ status: "Done" })],
+      authorization,
+      validationTime(),
+    ),
+  );
+
+  researchProtocol.completionEvidence.commitmentOfferSha256 = "b".repeat(64);
+  assert.throws(
+    () =>
+      validateResearchAuthorization(
+        [researchRow({ status: "Done" })],
+        authorization,
+        validationTime(),
+      ),
+    /completion commitment offer revision drift/u,
   );
 });
 
@@ -431,6 +585,270 @@ test("validateResearchAuthorizationArtifacts rejects placeholders and draft meta
       () =>
         validateResearchAuthorizationArtifacts(repositoryRoot, authorization),
       /must declare Approved status/u,
+    );
+  } finally {
+    await rm(repositoryRoot, { recursive: true, force: true });
+  }
+});
+
+test("validateResearchAuthorizationArtifacts enforces completion synthesis parity", async () => {
+  const repositoryRoot = await mkdtemp(join(tmpdir(), "argent-completion-"));
+  try {
+    const researchRoot = join(repositoryRoot, "plans/research");
+    await mkdir(researchRoot, { recursive: true });
+    const draft =
+      "- **Owner:** Carl Welch\n- **Status:** Draft\n- **Version:** 1.0\n- **Effective date:** Not approved\nDraft artifact\n";
+    const approved = (body) =>
+      "- **Owner:** Carl Welch\n" +
+      "- **Status:** Approved\n" +
+      "- **Version:** 1.0\n" +
+      "- **Effective date:** 2026-08-20T00:00:00Z\n" +
+      body;
+    const snapshot = approved("Authorization snapshot\n");
+    const protocolDigest = createHash("sha256").update(draft).digest("hex");
+    const evidenceRows = Array.from({ length: 8 }, (_, index) => {
+      const participant = String(index + 1).padStart(4, "0");
+      return `| EVD-${participant} | PRT-${participant} | Primary | Direct matchmaking | Buyer decision boundary | Structured observation ${participant} | asana:1217966825442195/1217967000000000 | Counterevidence reviewed ${participant} | High | Supports |`;
+    }).join("\n");
+    const ledgerRows = Array.from({ length: 8 }, (_, index) => {
+      const day = String(20 + index).padStart(2, "0");
+      const participant = String(index + 1).padStart(4, "0");
+      return `| PRT-${participant} | 2026-08-${day}T10:00:00Z | 1.0/${protocolDigest} | asana:1217966825442195/1217967000000000 | CONSENT-${participant} | Yes | Yes | Direct matchmaking | Concrete | Action | Unresolved | Concrete | Sole | Observable | Concrete | 2 | None observed |`;
+    }).join("\n");
+    const ledger = approved(
+      "| Evidence ID | Opaque participant ref | Cohort | Direct or analogous | Claim tested | Observation/paraphrase | Evidence source | Counterevidence | Confidence | Decision effect |\n" +
+        "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |\n" +
+        `${evidenceRows}\n\n` +
+        "## Per-primary-session coding\n\n" +
+        "| Opaque participant ref | Session time | Protocol version/hash | Authorization evidence ref | Consent receipt ref | Authorization verified | Eligible primary | Market evidence | Recent problem | Current alternative | Alternative outcome | Unresolved cost | Purchase authority | Switching trigger | Trust constraint | Commitment level | Disconfirming evidence |\n" +
+        "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | ---: | --- |\n" +
+        `${ledgerRows}\n`,
+    );
+    const disposition = approved("Withdrawal and exclusion disposition\n");
+    const synthesis = approved(
+      "- **Protocol version:** 1.0\n" +
+        "- **Primary sessions completed:** 8\n" +
+        "- **Decision status:** Pass\n" +
+        "| Criterion | Observed | Result |\n" +
+        "| --- | ---: | --- |\n" +
+        "| Concrete recent problem and action | 8 / 8 | Pass |\n" +
+        "| Material unresolved cost and switching trigger | 8 / 8 | Pass |\n" +
+        "| Sole or joint purchase authority | 8 / 8 | Pass |\n" +
+        "| Commitment level 2 | 8 / 8 | Pass |\n" +
+        "| Existing alternative resolves problem | 0 / 8 | Pass |\n" +
+        "| Credible demand depends on prohibited guarantees, surveillance, discriminatory selection, undisclosed sharing, or pay-to-rank | No | None |\n" +
+        "| Required privacy, safety, or service burden is incompatible with the bounded pilot | No | None |\n" +
+        "| Evidence splits materially by cohort | No | None |\n" +
+        "| Buying process is unclear | No | None |\n" +
+        "| Participants require a materially different service promise | No | None |\n",
+    );
+    const artifacts = {
+      "control.md": draft,
+      "runbook.md": draft,
+      "protocol.md": draft,
+      "consent.md": draft,
+      "snapshot.md": snapshot,
+      "ledger.md": ledger,
+      "disposition.md": disposition,
+      "synthesis.md": synthesis,
+    };
+    for (const [fileName, contents] of Object.entries(artifacts)) {
+      await writeFile(join(researchRoot, fileName), contents);
+    }
+
+    const authorization = researchAuthorization({
+      controlProcedure: hashedArtifact("plans/research/control.md", draft),
+      supportingArtifacts: [hashedArtifact("plans/research/runbook.md", draft)],
+      protocols: [
+        protocol({
+          owner: "Carl Welch",
+          artifact: hashedArtifact("plans/research/protocol.md", draft),
+          consentScript: hashedArtifact("plans/research/consent.md", draft),
+        }),
+      ],
+    });
+    authorization.protocols[0].completionEvidence = completionEvidence(
+      authorization.protocols[0],
+    );
+    authorization.protocols[0].completionEvidence.ownerDecision.decision =
+      "Pass";
+    authorization.protocols[0].completionEvidence.authorizationSnapshot.artifact =
+      hashedArtifact("plans/research/snapshot.md", snapshot);
+    authorization.protocols[0].completionEvidence.evidenceLedgerArtifact =
+      hashedArtifact("plans/research/ledger.md", ledger);
+    authorization.protocols[0].completionEvidence.withdrawalAndExclusionDispositionArtifact =
+      hashedArtifact("plans/research/disposition.md", disposition);
+    authorization.protocols[0].completionEvidence.synthesisArtifact =
+      hashedArtifact("plans/research/synthesis.md", synthesis);
+
+    await assert.doesNotReject(() =>
+      validateResearchAuthorizationArtifacts(repositoryRoot, authorization),
+    );
+
+    const missingLocalSourceLedger = ledger.replace(
+      "asana:1217966825442195/1217967000000000",
+      "plans/research/missing-evidence.md",
+    );
+    await writeFile(join(researchRoot, "ledger.md"), missingLocalSourceLedger);
+    authorization.protocols[0].completionEvidence.evidenceLedgerArtifact =
+      hashedArtifact("plans/research/ledger.md", missingLocalSourceLedger);
+    await assert.rejects(
+      () =>
+        validateResearchAuthorizationArtifacts(repositoryRoot, authorization),
+      /ENOENT/u,
+    );
+
+    for (const invalidConsent of ["", "None", "receipt one"]) {
+      const invalidLedger = ledger.replace("CONSENT-0001", invalidConsent);
+      await writeFile(join(researchRoot, "ledger.md"), invalidLedger);
+      authorization.protocols[0].completionEvidence.evidenceLedgerArtifact =
+        hashedArtifact("plans/research/ledger.md", invalidLedger);
+      await assert.rejects(
+        () =>
+          validateResearchAuthorizationArtifacts(repositoryRoot, authorization),
+        /invalid consent receipt evidence/u,
+      );
+    }
+
+    const duplicateConsentLedger = ledger.replace(
+      "CONSENT-0002",
+      "CONSENT-0001",
+    );
+    await writeFile(join(researchRoot, "ledger.md"), duplicateConsentLedger);
+    authorization.protocols[0].completionEvidence.evidenceLedgerArtifact =
+      hashedArtifact("plans/research/ledger.md", duplicateConsentLedger);
+    await assert.rejects(
+      () =>
+        validateResearchAuthorizationArtifacts(repositoryRoot, authorization),
+      /duplicates CONSENT-0001/u,
+    );
+
+    const contradictoryAlternativeLedger = ledger.replace(
+      "| Concrete | Action | Unresolved |",
+      "| Concrete | Absent | Resolves |",
+    );
+    await writeFile(
+      join(researchRoot, "ledger.md"),
+      contradictoryAlternativeLedger,
+    );
+    authorization.protocols[0].completionEvidence.evidenceLedgerArtifact =
+      hashedArtifact(
+        "plans/research/ledger.md",
+        contradictoryAlternativeLedger,
+      );
+    await assert.rejects(
+      () =>
+        validateResearchAuthorizationArtifacts(repositoryRoot, authorization),
+      /contradictory alternative coding/u,
+    );
+
+    await writeFile(join(researchRoot, "ledger.md"), ledger);
+    authorization.protocols[0].completionEvidence.evidenceLedgerArtifact =
+      hashedArtifact("plans/research/ledger.md", ledger);
+
+    const countDriftSynthesis = synthesis.replace(
+      "| Concrete recent problem and action | 8 / 8 |",
+      "| Concrete recent problem and action | 7 / 8 |",
+    );
+    await writeFile(join(researchRoot, "synthesis.md"), countDriftSynthesis);
+    authorization.protocols[0].completionEvidence.synthesisArtifact =
+      hashedArtifact("plans/research/synthesis.md", countDriftSynthesis);
+    await assert.rejects(
+      () =>
+        validateResearchAuthorizationArtifacts(repositoryRoot, authorization),
+      /Concrete recent problem and action count drift/u,
+    );
+
+    const resultDriftSynthesis = synthesis.replace(
+      "| Commitment level 2 | 8 / 8 | Pass |",
+      "| Commitment level 2 | 8 / 8 | Miss |",
+    );
+    await writeFile(join(researchRoot, "synthesis.md"), resultDriftSynthesis);
+    authorization.protocols[0].completionEvidence.synthesisArtifact =
+      hashedArtifact("plans/research/synthesis.md", resultDriftSynthesis);
+    await assert.rejects(
+      () =>
+        validateResearchAuthorizationArtifacts(repositoryRoot, authorization),
+      /Commitment level 2 result drift/u,
+    );
+
+    const falsePassSynthesis = synthesis.replace(
+      "| Credible demand depends on prohibited guarantees, surveillance, discriminatory selection, undisclosed sharing, or pay-to-rank | No | None |",
+      "| Credible demand depends on prohibited guarantees, surveillance, discriminatory selection, undisclosed sharing, or pay-to-rank | Yes | EVD-0001 |",
+    );
+    await writeFile(join(researchRoot, "synthesis.md"), falsePassSynthesis);
+    authorization.protocols[0].completionEvidence.synthesisArtifact =
+      hashedArtifact("plans/research/synthesis.md", falsePassSynthesis);
+    await assert.rejects(
+      () =>
+        validateResearchAuthorizationArtifacts(repositoryRoot, authorization),
+      /Pass contradicts ledger thresholds/u,
+    );
+
+    const unknownEvidenceSynthesis = falsePassSynthesis.replace(
+      "EVD-0001",
+      "EVD-9999",
+    );
+    await writeFile(
+      join(researchRoot, "synthesis.md"),
+      unknownEvidenceSynthesis,
+    );
+    authorization.protocols[0].completionEvidence.synthesisArtifact =
+      hashedArtifact("plans/research/synthesis.md", unknownEvidenceSynthesis);
+    await assert.rejects(
+      () =>
+        validateResearchAuthorizationArtifacts(repositoryRoot, authorization),
+      /lacks valid ledger evidence IDs/u,
+    );
+
+    const qualitativeStopSynthesis = falsePassSynthesis.replace(
+      "- **Decision status:** Pass",
+      "- **Decision status:** Stop",
+    );
+    await writeFile(
+      join(researchRoot, "synthesis.md"),
+      qualitativeStopSynthesis,
+    );
+    authorization.protocols[0].completionEvidence.synthesisArtifact =
+      hashedArtifact("plans/research/synthesis.md", qualitativeStopSynthesis);
+    authorization.protocols[0].completionEvidence.ownerDecision.decision =
+      "Stop";
+    await assert.doesNotReject(() =>
+      validateResearchAuthorizationArtifacts(repositoryRoot, authorization),
+    );
+
+    const qualitativeReviseSynthesis = synthesis
+      .replace("- **Decision status:** Pass", "- **Decision status:** Revise")
+      .replace(
+        "| Evidence splits materially by cohort | No | None |",
+        "| Evidence splits materially by cohort | Yes | EVD-0002 |",
+      );
+    await writeFile(
+      join(researchRoot, "synthesis.md"),
+      qualitativeReviseSynthesis,
+    );
+    authorization.protocols[0].completionEvidence.synthesisArtifact =
+      hashedArtifact("plans/research/synthesis.md", qualitativeReviseSynthesis);
+    authorization.protocols[0].completionEvidence.ownerDecision.decision =
+      "Revise";
+    await assert.doesNotReject(() =>
+      validateResearchAuthorizationArtifacts(repositoryRoot, authorization),
+    );
+
+    const contradictorySynthesis = synthesis.replace(
+      "- **Decision status:** Pass",
+      "- **Decision status:** Stop",
+    );
+    await writeFile(join(researchRoot, "synthesis.md"), contradictorySynthesis);
+    authorization.protocols[0].completionEvidence.synthesisArtifact =
+      hashedArtifact("plans/research/synthesis.md", contradictorySynthesis);
+    authorization.protocols[0].completionEvidence.ownerDecision.decision =
+      "Pass";
+
+    await assert.rejects(
+      () =>
+        validateResearchAuthorizationArtifacts(repositoryRoot, authorization),
+      /completion synthesis decision drift/u,
     );
   } finally {
     await rm(repositoryRoot, { recursive: true, force: true });
@@ -573,6 +991,10 @@ function protocol(overrides = {}) {
     status: "Not approved",
     artifact: artifact("plans/research/ARG-002-founder-matchmaker-workflow.md"),
     consentScript: artifact("plans/research/consent-and-session-script.md"),
+    evidenceArtifacts: [],
+    completionRequirements: {
+      minimumIncludedSessions: 1,
+    },
     approvals: {
       projectOwner: null,
       privacyTrustReviewer: null,
@@ -586,7 +1008,41 @@ function protocol(overrides = {}) {
     },
     permissions: permissions(),
     automatedTranscriptionProcessor: null,
+    completionEvidence: null,
     ...overrides,
+  };
+}
+
+function completionEvidence(researchProtocol) {
+  return {
+    completedAt: "2026-08-28T11:00:00Z",
+    completedBy: "Research Owner",
+    protocolArtifactSha256: researchProtocol.artifact.sha256,
+    consentScriptSha256: researchProtocol.consentScript.sha256,
+    authorizationEvidenceRefs: ["asana:1217966825442195/1217967000000000"],
+    includedSessionCount: 8,
+    firstIncludedSessionAt: "2026-08-20T10:00:00Z",
+    lastIncludedSessionAt: "2026-08-27T10:00:00Z",
+    authorizationSnapshot: {
+      artifact: artifact("plans/research/authorization-snapshot.md"),
+      operationalState: "Open",
+      protocolStatus: "Approved",
+      allowedActivities: ["outreach", "notes"],
+      effectiveFrom: "2026-08-19T00:00:00Z",
+      effectiveUntil: "2026-08-28T00:00:00Z",
+      approvalEvidenceRefs: ["asana:1217966825442195/1217967000000000"],
+    },
+    evidenceLedgerArtifact: artifact("plans/research/evidence-ledger.md"),
+    withdrawalAndExclusionDispositionArtifact: artifact(
+      "plans/research/completion-disposition.md",
+    ),
+    synthesisArtifact: artifact("plans/research/research-synthesis.md"),
+    ownerDecision: {
+      decision: "Revise",
+      decidedBy: "Project Owner",
+      decidedAt: "2026-08-28T11:30:00Z",
+      evidenceRef: "github:pull/90",
+    },
   };
 }
 
