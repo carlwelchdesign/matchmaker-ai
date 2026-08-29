@@ -125,8 +125,9 @@ owned and approved for the specific protocol.
 ## Delivery evidence
 
 - Branch: `ticket/ARG-030-research-operations`
-- Commit:
-- PR:
+- Commit: `f74bf1b`
+- PR: [#90](https://github.com/carlwelchdesign/matchmaker-ai/pull/90) — draft;
+  human/privacy review required
 - Merge:
 - Deployment: not applicable
 - Evidence URLs/paths:
@@ -141,5 +142,9 @@ owned and approved for the specific protocol.
 The user approved continuing after ARG-029's green PR. ARG-030 became the sole
 Asana WIP ticket on 2026-08-28. Drafting this package does not authorize human
 research.
+
+Architecture, delivery/TPM, and documentation specialists completed focused
+implementation re-reviews. No P0 findings remain; all recommend the draft PR
+handoff while controls stay closed and human/privacy approval remains pending.
 
 - Follow-up owner: Carl Welch
