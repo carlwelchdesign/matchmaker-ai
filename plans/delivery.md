@@ -99,6 +99,31 @@ A ticket is `Done` only when:
 
 Exceptional states: `Blocked`, `Deferred`, `Cancelled`.
 
+## Workflow authority, maturity, and WIP
+
+- Asana project `1217038055360286` is authoritative for operational workflow
+  status and section placement. The repository is authoritative for durable
+  scope, dependencies, acceptance criteria, decisions, and evidence.
+- [delivery-state.json](delivery-state.json) is a versioned reconciliation
+  snapshot, not a substitute for querying Asana. Update it whenever the active
+  ticket changes and resolve a mismatch before starting new work.
+- Delivery status answers whether work is authorized and active. Artifact
+  maturity independently describes what the evidence proves, for example:
+  planning control, research evidence, synthetic contract, synthetic prototype,
+  integrated system, human-validated workflow, or production-verified behavior.
+  A mature synthetic artifact does not make its parent ticket active or Done.
+- WIP is limited to one parent ticket and its subtasks. Only the parent appears
+  as `In progress` in the project section and repository backlog; subtasks do not
+  create additional top-level WIP slots.
+- A workflow mismatch blocks new implementation. Preserve evidence, reconcile
+  status with owner approval, record artifact maturity separately, refresh the
+  snapshot, and rerun planning validation.
+- A dependency exception must use the exact repository convention
+  `Approved dependency waiver (YYYY-MM-DD; approver: NAME; scope: SCOPE)` and
+  must not authorize work outside that scope.
+- A blocked ticket records `owner: NAME; review: YYYY-MM-DD; fallback: ACTION`
+  in its backlog reason until ARG-024 introduces richer traceability fields.
+
 ## Branch, commit, and PR policy
 
 - Branch: `ticket/ARG-###-short-description`
@@ -118,6 +143,8 @@ Exceptional states: `Blocked`, `Deferred`, `Cancelled`.
 - `Blocked` requires a reason, owner, review date, and fallback.
 - Reopening requires failed acceptance evidence or a linked regression.
 - Cancellation requires product owner approval and impact review.
+- The assigned owner confirms that the Asana section, backlog status, and
+  `delivery-state.json` snapshot agree before beginning work.
 
 ## Quality gates
 

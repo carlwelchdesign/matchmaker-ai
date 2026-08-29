@@ -36,6 +36,7 @@ When a ticket moves to `Ready`, copy [the ticket template](../templates/ticket.m
 - [ ] `ARG-026` Complete match-science evidence review, construct register, and prospective validation plan.
 - [ ] `ARG-027` Prototype and test optional structured, conversational, and hybrid intake.
 - [ ] `ARG-028` Evaluate on-device and server speech recognition for privacy, accuracy, cost, and accessibility.
+- [ ] `ARG-029` Enforce workflow authority, readiness, and the single-WIP delivery rule.
 
 ## Phase 1 — Repository, platform, and trust foundation
 

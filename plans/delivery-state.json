@@ -1,0 +1,36 @@
+{
+  "version": "1.0",
+  "capturedAt": "2026-08-28T18:55:00-07:00",
+  "workflowAuthority": {
+    "system": "Asana",
+    "projectId": "1217038055360286",
+    "inProgressSectionId": "1216473233375598",
+    "wipLimit": 1
+  },
+  "evidenceAuthority": "repository",
+  "activeTickets": [
+    {
+      "id": "ARG-029",
+      "workflowTaskRef": "1217966588260345",
+      "deliveryStatus": "In progress",
+      "artifactMaturity": "Planning control implementation"
+    }
+  ],
+  "reconciledTickets": [
+    {
+      "id": "ARG-004",
+      "deliveryStatus": "Blocked",
+      "artifactMaturity": "Synthetic visual direction"
+    },
+    {
+      "id": "ARG-026",
+      "deliveryStatus": "Blocked",
+      "artifactMaturity": "Planning and evidence review"
+    },
+    {
+      "id": "ARG-027",
+      "deliveryStatus": "Blocked",
+      "artifactMaturity": "Provider-free synthetic prototype"
+    }
+  ]
+}

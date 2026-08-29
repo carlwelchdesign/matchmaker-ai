@@ -14,6 +14,13 @@ const validStatuses = new Set([
   "Cancelled",
 ]);
 
+const validEstimateBands = new Set(["XS", "S", "M", "L", "XL", "TBD"]);
+const activeStatuses = new Set(["Ready", "In progress"]);
+const approvedDependencyWaiverPattern =
+  /^Approved dependency waiver \(\d{4}-\d{2}-\d{2}; approver: [^;()]+; scope: [^)]+\)$/u;
+const blockedReasonPattern =
+  /^owner: [^;]+; review: \d{4}-\d{2}-\d{2}; fallback: .+$/u;
+
 const requiredBacklogColumns = [
   "id",
   "epic",
@@ -118,6 +125,10 @@ export function validateBacklogRows(rows) {
       validStatuses.has(row.status),
       `${row.id} has invalid status: ${row.status}`,
     );
+    assert(
+      validEstimateBands.has(row.estimate_band),
+      `${row.id} has invalid estimate band: ${row.estimate_band}`,
+    );
   }
 
   for (const row of rows) {
@@ -135,7 +146,77 @@ export function validateBacklogRows(rows) {
   }
 
   assertDependencyGraphIsAcyclic(rows);
+
+  const doneIds = new Set(
+    rows.filter((row) => row.status === "Done").map((row) => row.id),
+  );
+  const inProgressRows = rows.filter((row) => row.status === "In progress");
+  assert(
+    inProgressRows.length <= 1,
+    `Single-WIP violation: ${inProgressRows.map((row) => row.id).join(", ")}`,
+  );
+
+  for (const row of rows) {
+    const missingDependencies = parseDependencies(row.dependencies).filter(
+      (dependency) => !doneIds.has(dependency),
+    );
+
+    if (activeStatuses.has(row.status)) {
+      assertAssigned(row, "owner");
+      assertAssigned(row, "reviewer");
+      assert(
+        row.acceptance_artifact !== "" &&
+          row.acceptance_artifact !== "Required at Ready",
+        `${row.id} is ${row.status} without a concrete acceptance artifact`,
+      );
+      assert(
+        row.risk_decision_links !== "",
+        `${row.id} is ${row.status} without risk or decision linkage`,
+      );
+      assert(
+        missingDependencies.length === 0 ||
+          hasApprovedDependencyWaiver(row.blocked_reason),
+        `${row.id} is ${row.status} with unfinished dependencies and no approved waiver: ${missingDependencies.join(", ")}`,
+      );
+    }
+
+    if (row.status === "Blocked") {
+      assertAssigned(row, "owner");
+      assertAssigned(row, "reviewer");
+      assert(
+        blockedReasonPattern.test(row.blocked_reason),
+        `${row.id} is Blocked without owner, review date, and fallback metadata`,
+      );
+    }
+
+    if (row.status === "Done" && missingDependencies.length > 0) {
+      assert(
+        hasApprovedDependencyWaiver(row.blocked_reason),
+        `${row.id} is Done with unfinished dependencies and no approved waiver: ${missingDependencies.join(", ")}`,
+      );
+    }
+  }
+
   return ids;
+}
+
+function assertAssigned(row, field) {
+  assert(
+    row[field] !== "" && row[field] !== "Unassigned",
+    `${row.id} is ${row.status} with an unassigned ${field}`,
+  );
+}
+
+export function hasApprovedDependencyWaiver(value) {
+  return approvedDependencyWaiverPattern.test(value);
+}
+
+function parseDependencies(dependencies) {
+  if (!dependencies || dependencies === "None") {
+    return [];
+  }
+
+  return dependencies.split(";").filter(Boolean);
 }
 
 function assertDependencyGraphIsAcyclic(rows) {
@@ -190,8 +271,12 @@ export async function validatePlans(repositoryRoot) {
   const backlogRows = parseCsv(await readFile(backlogCsvPath, "utf8"));
   const ids = validateBacklogRows(backlogRows);
   const rowsById = new Map(backlogRows.map((row) => [row.id, row]));
+  const deliveryState = JSON.parse(
+    await readFile(resolve(plansRoot, "delivery-state.json"), "utf8"),
+  );
 
   const checkedTicketFiles = await validateTicketFiles(plansRoot, rowsById);
+  validateDeliveryState(backlogRows, deliveryState);
   await validateBacklogChecklist(backlogMarkdownPath, backlogRows);
   await validateMarkdownLinks(plansRoot);
 
@@ -201,15 +286,100 @@ export async function validatePlans(repositoryRoot) {
   };
 }
 
+export function validateDeliveryState(rows, deliveryState) {
+  assert.equal(
+    deliveryState.workflowAuthority?.system,
+    "Asana",
+    "delivery-state workflow authority must be Asana",
+  );
+  assert.equal(
+    deliveryState.workflowAuthority?.wipLimit,
+    1,
+    "delivery-state WIP limit must be one parent ticket",
+  );
+  assert(
+    /^\d+$/u.test(deliveryState.workflowAuthority?.projectId ?? ""),
+    "delivery-state requires an Asana project id",
+  );
+  assert(
+    /^\d+$/u.test(deliveryState.workflowAuthority?.inProgressSectionId ?? ""),
+    "delivery-state requires an Asana In progress section id",
+  );
+  assert.equal(
+    deliveryState.evidenceAuthority,
+    "repository",
+    "delivery-state evidence authority must be the repository",
+  );
+
+  const rowsById = new Map(rows.map((row) => [row.id, row]));
+  const activeTickets = deliveryState.activeTickets ?? [];
+  assert(
+    activeTickets.length <= deliveryState.workflowAuthority.wipLimit,
+    "delivery-state exceeds the configured WIP limit",
+  );
+
+  const backlogActiveIds = rows
+    .filter((row) => row.status === "In progress")
+    .map((row) => row.id)
+    .sort();
+  const snapshotActiveIds = activeTickets.map((ticket) => ticket.id).sort();
+  assert.deepEqual(
+    snapshotActiveIds,
+    backlogActiveIds,
+    "delivery-state active tickets do not match backlog In progress tickets",
+  );
+
+  for (const ticket of activeTickets) {
+    assert.equal(
+      ticket.deliveryStatus,
+      "In progress",
+      `${ticket.id} has invalid active delivery status`,
+    );
+    assert(
+      /^\d+$/u.test(ticket.workflowTaskRef ?? ""),
+      `${ticket.id} is missing a workflow task reference`,
+    );
+    assert(
+      typeof ticket.artifactMaturity === "string" &&
+        ticket.artifactMaturity.trim() !== "",
+      `${ticket.id} is missing artifact maturity`,
+    );
+  }
+
+  const reconciledTickets = deliveryState.reconciledTickets ?? [];
+  const snapshotIds = new Set(snapshotActiveIds);
+  for (const ticket of reconciledTickets) {
+    assert(
+      !snapshotIds.has(ticket.id),
+      `${ticket.id} is duplicated in delivery-state`,
+    );
+    snapshotIds.add(ticket.id);
+    const backlogRow = rowsById.get(ticket.id);
+    assert(backlogRow !== undefined, `${ticket.id} is not in backlog.csv`);
+    assert.equal(
+      ticket.deliveryStatus,
+      backlogRow.status,
+      `${ticket.id} reconciliation status does not match backlog.csv`,
+    );
+    assert(
+      typeof ticket.artifactMaturity === "string" &&
+        ticket.artifactMaturity.trim() !== "",
+      `${ticket.id} is missing artifact maturity`,
+    );
+  }
+}
+
 async function validateTicketFiles(plansRoot, rowsById) {
   const ticketDirectory = resolve(plansRoot, "tickets");
   const ticketFiles = (await readdir(ticketDirectory))
     .filter((file) => /^ARG-\d{3}-.+\.md$/u.test(file))
     .sort();
 
+  const ticketIdsWithFiles = new Set();
   for (const ticketFile of ticketFiles) {
     const ticketId = ticketFile.match(/^(ARG-\d{3})-/u)?.[1];
     assert(ticketId !== undefined, `Cannot infer ticket id from ${ticketFile}`);
+    ticketIdsWithFiles.add(ticketId);
     const backlogRow = rowsById.get(ticketId);
     assert(backlogRow !== undefined, `${ticketFile} has no backlog.csv row`);
 
@@ -223,6 +393,15 @@ async function validateTicketFiles(plansRoot, rowsById) {
       status === backlogRow.status,
       `${ticketId} status drift: ticket file is "${status}", backlog.csv is "${backlogRow.status}"`,
     );
+  }
+
+  for (const row of rowsById.values()) {
+    if (activeStatuses.has(row.status)) {
+      assert(
+        ticketIdsWithFiles.has(row.id),
+        `${row.id} is ${row.status} without a detailed ticket file`,
+      );
+    }
   }
 
   return ticketFiles.length;
