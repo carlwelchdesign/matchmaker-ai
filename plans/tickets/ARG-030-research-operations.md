@@ -1,4 +1,4 @@
-# ARG-030 — Shared human-research authorization controls
+# ARG-030 — Fail-closed human-research authorization framework
 
 - **Epic:** Research governance
 - **Capability/requirement IDs:** CAP-001, CAP-004, CAP-007, CAP-010

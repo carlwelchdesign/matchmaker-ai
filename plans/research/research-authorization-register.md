@@ -101,14 +101,16 @@ or incentives.
 | --- | --- | --- | --- |
 | ARG-002 | Service operations and matchmaker workflow | Not approved | None |
 | ARG-003 | Candidate and client concept and language research | Not approved | None |
+| ARG-031 | Buyer problem intensity, authority, and commitment | Not approved | None |
 
 Additional protocols, including representative research supporting later
 implementation tickets, must be added to both the backlog and the
 machine-readable register before approval.
 
-The governed-ticket registry also includes future ARG-031 buyer discovery and
-ARG-809 consenting usability beta work. Neither can enter `Ready` or `In
-progress` until its concrete protocol is registered and outreach authorized.
+The governed-ticket registry also includes ARG-809 consenting usability beta
+work. ARG-031 is now registered but remains unauthorized; neither ticket can
+enter `Ready` or `In progress` until its concrete protocol has current outreach
+authorization.
 
 ## Approval record
 

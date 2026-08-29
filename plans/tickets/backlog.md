@@ -37,8 +37,9 @@ When a ticket moves to `Ready`, copy [the ticket template](../templates/ticket.m
 - [ ] `ARG-027` Prototype and test optional structured, conversational, and hybrid intake.
 - [ ] `ARG-028` Evaluate on-device and server speech recognition for privacy, accuracy, cost, and accessibility.
 - [x] `ARG-029` Enforce workflow authority, readiness, and the single-WIP delivery rule.
-- [x] `ARG-030` Approve shared human-research authorization controls.
+- [x] `ARG-030` Establish a fail-closed human-research authorization framework.
 - [ ] `ARG-031` Validate target-buyer problem intensity, authority, and commitment.
+- [ ] `ARG-032` Prepare the ARG-031 buyer-discovery protocol without outreach.
 
 ## Phase 1 — Repository, platform, and trust foundation
 

@@ -44,6 +44,8 @@ That check currently covers:
   between the backlog and `delivery-state.json`.
 - fail-closed human-research authorization, protocol registration, participant
   system-of-record selection, and outreach/recording prerequisites.
+- buyer-discovery protocol registration, exact artifact revision, and the
+  separation of planning evidence from authorized participant evidence.
 
 Later `ARG-024` traceability work should extend this to cover:
 

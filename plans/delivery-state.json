@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "capturedAt": "2026-08-28T21:28:00-07:00",
+  "capturedAt": "2026-08-28T21:58:00-07:00",
   "workflowAuthority": {
     "system": "Asana",
     "projectId": "1217038055360286",
@@ -8,7 +8,14 @@
     "wipLimit": 1
   },
   "evidenceAuthority": "repository",
-  "activeTickets": [],
+  "activeTickets": [
+    {
+      "id": "ARG-032",
+      "workflowTaskRef": "1217967564755104",
+      "deliveryStatus": "In progress",
+      "artifactMaturity": "Draft no-outreach buyer-discovery protocol"
+    }
+  ],
   "reconciledTickets": [
     {
       "id": "ARG-004",

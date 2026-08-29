@@ -172,7 +172,10 @@
         "followUp": false,
         "researchReuse": false
       },
-      "automatedTranscriptionProcessor": null
+      "automatedTranscriptionProcessor": null,
+      "commitmentStimulus": null,
+      "completionRequirements": null,
+      "completionEvidence": null
     },
     {
       "ticketId": "ARG-003",
@@ -211,7 +214,71 @@
         "followUp": false,
         "researchReuse": false
       },
-      "automatedTranscriptionProcessor": null
+      "automatedTranscriptionProcessor": null,
+      "commitmentStimulus": null,
+      "completionRequirements": null,
+      "completionEvidence": null
+    },
+    {
+      "ticketId": "ARG-031",
+      "purpose": "Buyer problem intensity, authority, and commitment",
+      "owner": "Carl Welch",
+      "status": "Not approved",
+      "artifact": {
+        "path": "plans/research/ARG-031-buyer-discovery-protocol.md",
+        "version": "1.0",
+        "sha256": "d9157afaf186594e0b164d1f57bb522670ed2a936927f4f62776db6b7b29789b"
+      },
+      "consentScript": {
+        "path": "plans/research/consent-and-session-script.md",
+        "version": "1.0",
+        "sha256": "eb1837bbf7a770d177a5f740ded3f17aae13b6674e6dca431588e2d4711cd0ca"
+      },
+      "evidenceArtifacts": [
+        {
+          "path": "plans/templates/buyer-discovery-evidence-ledger.md",
+          "version": "1.0",
+          "sha256": "6d6e25b5c322442d389b6a5baa33f2387be95b1d265cd495c8c0edb6e0432b8c"
+        },
+        {
+          "path": "plans/templates/buyer-discovery-synthesis.md",
+          "version": "1.0",
+          "sha256": "d64d5131aeb50369da97be92265eb6ecf2c6b0f03345fedf4f089868842c682b"
+        }
+      ],
+      "approvals": {
+        "projectOwner": null,
+        "privacyTrustReviewer": null
+      },
+      "cohorts": [],
+      "recruitmentChannelIds": [],
+      "incentiveDecision": {
+        "status": "Not approved",
+        "terms": null,
+        "approval": null
+      },
+      "permissions": {
+        "outreach": false,
+        "notes": false,
+        "shortQuotes": false,
+        "audioRecording": false,
+        "videoRecording": false,
+        "humanTranscription": false,
+        "automatedTranscription": false,
+        "followUp": false,
+        "researchReuse": false
+      },
+      "automatedTranscriptionProcessor": null,
+      "commitmentStimulus": {
+        "offerArtifact": null,
+        "reviewScript": null
+      },
+      "completionRequirements": {
+        "minimumIncludedSessions": 8,
+        "requiresCommitmentStimulus": true,
+        "decisionSampleSizes": [8, 12]
+      },
+      "completionEvidence": null
     }
   ]
 }
