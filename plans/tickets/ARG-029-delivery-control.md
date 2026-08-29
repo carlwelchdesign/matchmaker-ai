@@ -108,7 +108,7 @@ classification.
 ## Delivery evidence
 
 - Branch: `ticket/ARG-029-delivery-control`
-- Commit: recorded after the clean implementation commit
+- Commit: `bc5eaa9`
 - PR: <https://github.com/carlwelchdesign/matchmaker-ai/pull/89>
 - Merge:
 - Deployment: not applicable
