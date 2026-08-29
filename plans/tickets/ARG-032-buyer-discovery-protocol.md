@@ -3,8 +3,8 @@
 - **Epic:** Research governance
 - **Capability/requirement IDs:** CAP-001, CAP-004, CAP-007, CAP-010
 - **Priority:** P0
-- **Status:** In progress
-- **Artifact maturity:** Draft no-outreach protocol package
+- **Status:** Done
+- **Artifact maturity:** Approved no-outreach protocol baseline
 - **Named owner:** Carl Welch
 - **Named approver/reviewer:** Project owner
 - **Target milestone:** Decision gate
@@ -61,7 +61,7 @@ participant.
       `false` while operations remain `Closed`.
 - [x] Positive and negative validation proves ARG-031 cannot enter active work
       without current outreach authorization.
-- [ ] Project owner completes review and records an approve, revise, or reject
+- [x] Project owner completes review and records an approve, revise, or reject
       disposition; PR approval may serve as that evidence when its scope is
       explicit.
 
@@ -102,25 +102,29 @@ participant.
 - [x] Focused planning tests: 35/35 passed.
 - [x] Planning package validation: 140 backlog tickets and 21 ticket files.
 - [x] Formatting, typecheck, tests, and diff hygiene.
-- [ ] GitHub checks.
+- [x] GitHub checks.
 
 ## Delivery evidence
 
 - Branch: `ticket/ARG-032-buyer-discovery-protocol`
 - Commit: `6b6274b`
-- PR: [#91](https://github.com/carlwelchdesign/matchmaker-ai/pull/91) (draft)
-- Merge:
+- PR: [#91](https://github.com/carlwelchdesign/matchmaker-ai/pull/91) (merged)
+- Merge: `f2e0bf4aaffad9d784558c36d35f662b17792b25`
 - Deployment: not applicable
 - Evidence URLs/paths:
   - Asana task `1217967564755104`
   - `plans/research/ARG-031-buyer-discovery-protocol.md`
   - `plans/templates/buyer-discovery-evidence-ledger.md`
   - `plans/templates/buyer-discovery-synthesis.md`
-- Completion date:
+- Completion date: 2026-08-28
 
 ## Completion notes
 
 The user authorized creating this prerequisite and beginning work on 2026-08-28.
 Creating the protocol package does not authorize ARG-031 participant activity.
+
+On 2026-08-28, the project owner approved ARG-032 as the no-outreach
+buyer-discovery protocol baseline and authorized PR #91 to merge. The approval
+explicitly does not authorize participant outreach or data collection.
 
 - Follow-up owner: Carl Welch

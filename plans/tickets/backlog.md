@@ -39,7 +39,7 @@ When a ticket moves to `Ready`, copy [the ticket template](../templates/ticket.m
 - [x] `ARG-029` Enforce workflow authority, readiness, and the single-WIP delivery rule.
 - [x] `ARG-030` Establish a fail-closed human-research authorization framework.
 - [ ] `ARG-031` Validate target-buyer problem intensity, authority, and commitment.
-- [ ] `ARG-032` Prepare the ARG-031 buyer-discovery protocol without outreach.
+- [x] `ARG-032` Prepare the ARG-031 buyer-discovery protocol without outreach.
 
 ## Phase 1 — Repository, platform, and trust foundation
 
