@@ -107,8 +107,8 @@ participant.
 ## Delivery evidence
 
 - Branch: `ticket/ARG-032-buyer-discovery-protocol`
-- Commit:
-- PR:
+- Commit: `6b6274b`
+- PR: [#91](https://github.com/carlwelchdesign/matchmaker-ai/pull/91) (draft)
 - Merge:
 - Deployment: not applicable
 - Evidence URLs/paths:
