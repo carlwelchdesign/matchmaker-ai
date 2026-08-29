@@ -3,10 +3,11 @@
 - **Epic:** Research governance
 - **Capability/requirement IDs:** CAP-001, CAP-004, CAP-007, CAP-010
 - **Priority:** P0
-- **Status:** In progress
-- **Artifact maturity:** Draft research authorization controls
+- **Status:** Done
+- **Artifact maturity:** Approved closed research-governance framework
 - **Named owner:** Carl Welch
-- **Named approver/reviewer:** Project owner and privacy/trust reviewer
+- **Named approver/reviewer:** Project owner for framework delivery;
+  privacy/trust reviewer required before participant activity
 - **Target milestone:** Decision gate
 - **Estimate band:** S
 - **Dependencies:** ARG-029
@@ -67,7 +68,8 @@ owned and approved for the specific protocol.
       and authorization is evaluated for a specific protocol and activity.
 - [x] The approved consent readout is placeholder-free and a versioned safety
       procedure defines stop, escalation, incident, and follow-up behavior.
-- [ ] Carl and the privacy/trust reviewer approve the final package before any
+- [x] Carl approves the closed framework for delivery; a named privacy/trust
+      reviewer and complete operational controls remain required before any
       participant contact.
 
 ## Security, privacy, AI, data, and accessibility
@@ -126,16 +128,16 @@ owned and approved for the specific protocol.
 
 - Branch: `ticket/ARG-030-research-operations`
 - Commit: `f74bf1b`
-- PR: [#90](https://github.com/carlwelchdesign/matchmaker-ai/pull/90) — draft;
-  human/privacy review required
-- Merge:
+- PR: [#90](https://github.com/carlwelchdesign/matchmaker-ai/pull/90) — owner
+  approved for merge as a closed framework on 2026-08-28
+- Merge: owner-authorized; GitHub PR merge record is authoritative
 - Deployment: not applicable
 - Evidence URLs/paths:
   - Asana task `1217966825442195`
   - `plans/research/research-authorization.json`
   - `plans/research/research-authorization-register.md`
   - `plans/templates/research-consent-receipt.md`
-- Completion date:
+- Completion date: 2026-08-28
 
 ## Completion notes
 
@@ -144,7 +146,14 @@ Asana WIP ticket on 2026-08-28. Drafting this package does not authorize human
 research.
 
 Architecture, delivery/TPM, and documentation specialists completed focused
-implementation re-reviews. No P0 findings remain; all recommend the draft PR
-handoff while controls stay closed and human/privacy approval remains pending.
+implementation re-reviews. No P0 findings remain; all recommended handing off
+the framework for owner review while operational controls stayed closed.
+
+On 2026-08-28, Carl approved ARG-030 as a closed research-governance framework
+and authorized PR #90 to merge. This approval does not authorize participant
+outreach or data collection. The machine-readable controls remain `Not
+approved`, operations remain `Closed`, all activity permissions remain `false`,
+and a named privacy/trust reviewer plus complete protocol-specific operational
+decisions are still required before participant activity.
 
 - Follow-up owner: Carl Welch
