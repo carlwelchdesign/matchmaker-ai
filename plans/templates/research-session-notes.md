@@ -6,8 +6,12 @@
 - **Researcher:**
 - **Participant role:** Founder / matchmaker / applicant / candidate / client / partner / other
 - **Participant type:** Real / synthetic / internal reviewer
-- **Consent status:** Not collected / consented to notes / consented to recording / synthetic only
-- **Recording/transcript location:** None / link
+- **Opaque consent-receipt reference:** None / approved-system reference
+- **Granted activities from immutable receipt:** List only explicit grants using
+  `notes`, `shortQuotes`, `audioRecording`, `videoRecording`,
+  `humanTranscription`, `automatedTranscription`, `followUp`, or
+  `researchReuse`; all omitted activities are denied
+- **Recording/transcript reference:** None / opaque approved-system reference and access class
 - **Privacy handling:** No sensitive personal data / redacted / restricted
 
 ## Objective

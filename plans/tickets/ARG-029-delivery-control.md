@@ -3,8 +3,8 @@
 - **Epic:** Planning governance
 - **Capability/requirement IDs:** CAP-007
 - **Priority:** P0
-- **Status:** In progress
-- **Artifact maturity:** Planning control implementation
+- **Status:** Done
+- **Artifact maturity:** Merged planning control
 - **Named owner:** Carl Welch
 - **Named approver/reviewer:** Project owner
 - **Target milestone:** Decision gate
@@ -62,7 +62,7 @@ classification.
       waiver, and WIP states.
 - [x] ARG-004, ARG-026, and ARG-027 are reconciled without deleting their
       planning or synthetic evidence.
-- [ ] Human review is required before merge or completion.
+- [x] Human review is required before merge or completion.
 
 ## Security, privacy, AI, data, and accessibility
 
@@ -110,7 +110,7 @@ classification.
 - Branch: `ticket/ARG-029-delivery-control`
 - Commit: `bc5eaa9`
 - PR: <https://github.com/carlwelchdesign/matchmaker-ai/pull/89>
-- Merge:
+- Merge: `6e20136` on 2026-08-28
 - Deployment: not applicable
 - Evidence URLs/paths:
   - Asana task `1217966588260345`
@@ -118,12 +118,16 @@ classification.
   - `plans/delivery-state.json`
   - `scripts/report-next-work.mjs`
   - `scripts/validate-plans.mjs`
-- Completion date:
+- Completion date: 2026-08-28
 
 ## Completion notes
 
 The user authorized ticket creation and beginning ARG-029 on 2026-08-28. The
 Asana task is assigned to Carl Welch, and all other new audit outcomes remain in
 MVP pending human review.
+
+The user approved continuation after all PR checks passed. PR #89 was squash
+merged, the Asana task was completed and moved to Complete, and `main` was
+synchronized before ARG-030 entered WIP.
 
 - Follow-up owner: Carl Welch

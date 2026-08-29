@@ -3,15 +3,15 @@
 - **Epic:** Research
 - **Capability/requirement IDs:** CAP-001; CAP-003; CAP-004
 - **Priority:** P0
-- **Status:** Ready
+- **Status:** Blocked
 - **Named owner:** Project owner
 - **Named approver/reviewer:** Project owner
 - **Target milestone:** Decision gate
 - **Estimate band:** M
 - **Dependencies:** ARG-001
 - **Decision/risk links:** R-016; R-023; R-040
-- **Blocked reason/review date:** Ready for founder/operator and matchmaker
-  research execution.
+- **Blocked reason/review date:** ARG-030 participant-outreach authorization;
+  review 2026-09-04.
 
 ## Outcome
 

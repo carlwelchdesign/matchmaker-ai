@@ -1,8 +1,23 @@
 # Consent and Session Script
 
+- **Owner:** Carl Welch
+- **Approvers:** Project owner and privacy/trust reviewer
+- **Status:** Draft — contains unresolved approval placeholders
+- **Version:** 1.0
+- **Effective date:** Not approved
+- **Last reviewed:** 2026-08-28
+- **Next review:** Before any participant contact
+- **Controlling ticket:** ARG-030
+
+This draft must not be used until the shared and applicable protocol gates in
+[research-authorization.json](research-authorization.json) are approved. Before
+consent, replace the generic withdrawal language below with the approved channel
+and response targets from the authorization register.
+
 ## Opening script
 
-Use this before every `ARG-002` or `ARG-003` session.
+Use this only for a protocol that pins this exact script version and has been
+authorized for outreach.
 
 > Thanks for helping with early research for Argent Matchmaking. We are testing
 > how the service should work and how the language is understood. This is not an
@@ -18,18 +33,46 @@ Use this before every `ARG-002` or `ARG-003` session.
 > internal planning. Recording or transcription is separate and optional. You can
 > decline to answer any question or stop the session at any time.
 
+> If you later want us to correct or remove research material, use [APPROVED
+> WITHDRAWAL CHANNEL]. We will acknowledge your request within [APPROVED
+> ACKNOWLEDGEMENT TARGET] and communicate a disposition within [APPROVED
+> COMPLETION TARGET]. We will explain the approved deletion scope, any approved
+> exceptions, and how already de-identified synthesis is handled.
+
+## Required operational readout
+
+Replace every bracketed field with the exact approved protocol value:
+
+> The research purpose is [APPROVED PROTOCOL PURPOSE]. Approved records are
+> stored in [APPROVED PARTICIPANT SYSTEM] and may be accessed by [APPROVED
+> ROLES]. They are retained under [APPROVED RETENTION SUMMARY] and handled under
+> [APPROVED DELETION AND INCIDENT SUMMARY].
+
+> The foreseeable risks and stop/escalation path are [APPROVED RISK AND SAFETY
+> SUMMARY]. Questions or concerns can be directed to [APPROVED SAFETY OR CONCERN
+> CHANNEL].
+
+> The incentive terms are [APPROVED INCENTIVE TERMS OR NO INCENTIVE]. Available
+> participation adjustments can be requested through [APPROVED ACCESSIBILITY
+> CHANNEL] without sharing a diagnosis.
+
 ## Consent confirmation
 
-Record one:
+Present only choices allowed by the exact protocol and record each independently
+as `Granted`, `Declined`, `Not asked`, `Not applicable`, or `Withdrawn`:
 
-- Notes only: yes/no.
-- Short anonymized quotes: yes/no.
-- Recording: yes/no.
-- Transcript: yes/no.
-- Follow-up contact: yes/no.
+- Redacted notes:
+- Short anonymized quotes:
+- Audio recording:
+- Video recording:
+- Human transcription:
+- Automated transcription with [APPROVED NAMED PROCESSOR]:
+- Follow-up contact for this protocol:
+- Research reuse for [APPROVED SEPARATELY NAMED PURPOSE]:
 
-If recording or transcript consent is not explicitly granted, do not record or
-transcribe.
+Declining one choice does not affect participation or any other independently
+granted choice. A blank, ambiguous, bundled, or unasked choice grants nothing.
+Participant consent can narrow protocol permissions and cannot expand them.
 
 ## Research non-goals to restate
 
@@ -43,8 +86,10 @@ transcribe.
 ## Closeout script
 
 > Thank you. We will use this feedback to improve the workflow, copy, and
-> research plan. If any note seems too identifying or sensitive, tell us and we
-> will remove or redact it. The next step is synthesis, not product launch.
+> research plan. If any note seems too identifying or sensitive, use the
+> approved withdrawal/correction channel and we will follow the scope, timing,
+> exceptions, and status communication described above. The next step is
+> synthesis, not product launch.
 
 ## Researcher reminders
 
