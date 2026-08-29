@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { parseCsv } from "./validate-plans.mjs";
+import { hasApprovedDependencyWaiver, parseCsv } from "./validate-plans.mjs";
 
 const implementationReleaseGates = new Set([
   "Campaign",
@@ -20,6 +20,7 @@ export function buildBacklogReadinessReport(rows) {
     rows.filter((row) => row.status === "Done").map((row) => row.id),
   );
 
+  const wipAvailable = !rows.some((row) => row.status === "In progress");
   const candidates = rows.filter((row) =>
     ["Proposed", "Ready", "In progress", "In review", "Blocked"].includes(
       row.status,
@@ -31,7 +32,9 @@ export function buildBacklogReadinessReport(rows) {
     const missingDependencies = dependencies.filter(
       (dependency) => !doneIds.has(dependency),
     );
-    const dependenciesSatisfied = missingDependencies.length === 0;
+    const dependenciesSatisfied =
+      missingDependencies.length === 0 ||
+      hasApprovedDependencyWaiver(row.blocked_reason);
     const decisionGated =
       decisionMilestones.has(row.milestone) ||
       row.acceptance_artifact === "Required at Ready" ||
@@ -39,9 +42,16 @@ export function buildBacklogReadinessReport(rows) {
         row.release_gate,
       );
     const implementationSafe =
+      row.status === "Ready" &&
       dependenciesSatisfied &&
       !decisionGated &&
-      implementationReleaseGates.has(row.release_gate);
+      implementationReleaseGates.has(row.release_gate) &&
+      isAssigned(row.owner) &&
+      isAssigned(row.reviewer) &&
+      row.acceptance_artifact !== "" &&
+      row.acceptance_artifact !== "Required at Ready" &&
+      row.risk_decision_links !== "" &&
+      wipAvailable;
 
     return {
       ...row,
@@ -50,17 +60,28 @@ export function buildBacklogReadinessReport(rows) {
       dependenciesSatisfied,
       decisionGated,
       implementationSafe,
+      wipAvailable,
     };
   });
 
   return {
     done: rows.filter((row) => row.status === "Done"),
+    activeWip: rows.filter((row) => row.status === "In progress"),
     implementationReady: analyzed.filter((row) => row.implementationSafe),
     decisionReady: analyzed.filter(
-      (row) => row.dependenciesSatisfied && row.decisionGated,
+      (row) =>
+        ["Proposed", "Ready"].includes(row.status) &&
+        row.dependenciesSatisfied &&
+        row.decisionGated,
     ),
-    blockedByDependencies: analyzed.filter((row) => !row.dependenciesSatisfied),
+    blockedByDependencies: analyzed.filter(
+      (row) => row.missingDependencies.length > 0 && !row.dependenciesSatisfied,
+    ),
   };
+}
+
+function isAssigned(value) {
+  return value !== "" && value !== "Unassigned";
 }
 
 export function formatBacklogReadinessReport(report) {
@@ -68,6 +89,9 @@ export function formatBacklogReadinessReport(report) {
     "Argent backlog readiness report",
     "",
     `Done tickets: ${report.done.length}`,
+    "",
+    "Active WIP",
+    ...formatRows(report.activeWip, "WIP slot is available."),
     "",
     "Implementation-ready tickets",
     ...formatRows(

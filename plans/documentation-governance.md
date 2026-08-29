@@ -9,7 +9,13 @@ Before implementation, every canonical plan/runbook must have an owner, approver
 - Product/architecture/security decisions: `/plans`.
 - API contract: versioned OpenAPI source in the future contracts package.
 - Generated Dart/TypeScript clients and API docs: generated from the contract and drift-checked.
-- Ticket status: backlog CSV plus the active ticket file until a connected issue tracker becomes authoritative.
+- Operational ticket status and section placement: Asana project
+  `1217038055360286`.
+- Durable ticket scope, dependencies, acceptance, decisions, and evidence:
+  backlog CSV plus the active ticket file.
+- Workflow reconciliation and artifact maturity: versioned
+  [delivery-state.json](delivery-state.json), refreshed from Asana whenever the
+  active ticket changes. A mismatch blocks new work until owner review.
 - Operational procedures: versioned runbooks linked from `operations.md`.
 - Release changes: versioned release notes tied to commits, migrations, flags, and mobile compatibility.
 
@@ -33,6 +39,9 @@ That check currently covers:
 - ticket-file status drift against `backlog.csv`;
 - `backlog.md` coverage and `Done` checklist state;
 - local Markdown links under `/plans`.
+- single top-level WIP, active-ticket readiness, structured dependency waivers,
+  structured blocked-ticket metadata, estimate-band values, and agreement
+  between the backlog and `delivery-state.json`.
 
 Later `ARG-024` traceability work should extend this to cover:
 

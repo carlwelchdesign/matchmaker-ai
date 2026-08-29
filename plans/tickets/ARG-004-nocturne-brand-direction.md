@@ -2,7 +2,14 @@
 
 ## Status
 
-`In progress`
+`Blocked`
+
+- **Named owner:** Project owner
+- **Named approver/reviewer:** Project owner
+- **Artifact maturity:** Synthetic visual direction
+- **Blocked reason/review date:** Awaiting ARG-003 and final founder review;
+  review 2026-09-04; fallback is to retain the synthetic visual evidence without
+  treating the direction as approved.
 
 ## Outcome
 

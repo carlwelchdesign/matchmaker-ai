@@ -3,14 +3,17 @@
 - **Epic:** Match science
 - **Capability/requirement IDs:** CAP-003, CAP-005, CAP-009
 - **Priority:** P0
-- **Status:** In progress
-- **Named owner:** Unassigned
-- **Named approver/reviewer:** Unassigned relationship-science or psychometrics reviewer
+- **Status:** Blocked
+- **Artifact maturity:** Planning and evidence review
+- **Named owner:** Project owner
+- **Named approver/reviewer:** Project owner; qualified relationship-science or psychometrics review remains required
 - **Target milestone:** Decision gate
 - **Estimate band:** M
 - **Dependencies:** ARG-001, ARG-003
 - **Decision/risk links:** DEC-012, DEC-014, ADR-021, R-038, R-040
-- **Blocked reason/review date:** Reviewer, claims review, and prospective pilot approval are not assigned
+- **Blocked reason/review date:** ARG-003 and qualified review remain incomplete;
+  review 2026-09-04; fallback is to retain the evidence review as planning
+  evidence without authorizing predictive claims or implementation.
 
 ## Outcome
 
@@ -85,4 +88,3 @@ Argent has a defensible, transparent boundary for collecting match-relevant info
 The initial evidence supports an assistive retrieval and explanation system, not a compatibility predictor. Implementation remains blocked.
 
 - Follow-up owner: ARG-025 assignment required
-

@@ -3,14 +3,17 @@
 - **Epic:** Conversational intake
 - **Capability/requirement IDs:** CAP-001, CAP-004, CAP-005, CAP-010
 - **Priority:** P0
-- **Status:** In progress
-- **Named owner:** Unassigned
-- **Named approver/reviewer:** Unassigned product, privacy, accessibility, and AI reviewers
+- **Status:** Blocked
+- **Artifact maturity:** Provider-free synthetic prototype
+- **Named owner:** Carl Welch
+- **Named approver/reviewer:** Project owner; product, privacy, accessibility, and AI review remain required
 - **Target milestone:** Decision gate
 - **Estimate band:** M
 - **Dependencies:** ARG-003, ARG-006, ARG-018, ARG-026
 - **Decision/risk links:** DEC-013, DEC-014, ADR-020, R-039, R-040
-- **Blocked reason/review date:** Real-person testing, recording, and speech processing await research protocol, counsel review, and approved source-data handling. Local text-only comparison concepts may proceed.
+- **Blocked reason/review date:** ARG-003, ARG-006, ARG-018, and ARG-026 remain
+  incomplete; review 2026-09-04; fallback is to retain provider-free synthetic
+  prototypes without promoting them to authorized implementation.
 
 ## Outcome
 
