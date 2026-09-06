@@ -40,6 +40,7 @@ When a ticket moves to `Ready`, copy [the ticket template](../templates/ticket.m
 - [x] `ARG-030` Establish a fail-closed human-research authorization framework.
 - [ ] `ARG-031` Validate target-buyer problem intensity, authority, and commitment.
 - [x] `ARG-032` Prepare the ARG-031 buyer-discovery protocol without outreach.
+- [ ] `ARG-033` Reconcile the delivery plan, Asana and clean Git baseline before product development.
 
 ## Phase 1 — Repository, platform, and trust foundation
 

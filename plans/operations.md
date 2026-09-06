@@ -57,7 +57,7 @@ Name owners for:
 
 ## Release management
 
-- Trunk/main remains releasable.
+- Main is the verified baseline; scoped work integrates through `release/<version-or-date>` cut from current main. Run checks and authorized deployment from release, then merge that exact production-verified release back to main. Retain release through rollback. See [delivery policy](delivery.md) for explicit planning-only exceptions.
 - Feature flags protect incomplete or high-risk workflows.
 - Database migrations are backward-compatible and rehearsed.
 - Deployments have smoke checks and rollback criteria.

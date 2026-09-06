@@ -12,7 +12,7 @@ Entry: critical trust/security/legal gates passed. Exit: one bounded cohort and 
 
 ### Milestone C — Private beta
 
-Entry: service hypothesis and human workflow validated. Exit: governed AI and selected Flutter workflows satisfy their own quality and store gates.
+Entry: service hypothesis and human workflow validated. Exit: approved web workflows and any separately justified AI/mobile scope satisfy their own gates. Flutter is demand-led, not an automatic private-beta dependency.
 
 ### Milestone D — Expansion
 
@@ -125,6 +125,11 @@ Exceptional states: `Blocked`, `Deferred`, `Cancelled`.
   in its backlog reason until ARG-024 introduces richer traceability fields.
 
 ## Branch, commit, and PR policy
+
+- Follow the [September 6 reset](recovery-plan-2026-09-06.md) for current baseline, source disposition and milestone gates.
+- Work on scoped branches, never directly on `main`. Cut `release/<version-or-date>` from current main when assembling a release; merge reviewed work into it and run checks on that combined tree.
+- Deploy only an authorized release branch. After production verification, merge that exact release back to main and retain it through the rollback window. A no-deploy planning-only promotion needs an explicit owner exception.
+- Preserve unrelated local work and inspect status before every merge. Main cleanliness and synthetic evidence do not authorize operational rollout.
 
 - Branch: `ticket/ARG-###-short-description`
 - Commit: `ARG-###: concise outcome`
