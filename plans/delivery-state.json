@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "capturedAt": "2026-08-28T23:02:47-07:00",
+  "capturedAt": "2026-09-06T12:32:22-07:00",
   "workflowAuthority": {
     "system": "Asana",
     "projectId": "1217038055360286",
@@ -8,7 +8,14 @@
     "wipLimit": 1
   },
   "evidenceAuthority": "repository",
-  "activeTickets": [],
+  "activeTickets": [
+    {
+      "id": "ARG-033",
+      "deliveryStatus": "In progress",
+      "workflowTaskRef": "1218225587973356",
+      "artifactMaturity": "Planning and baseline reconciliation; no product rollout"
+    }
+  ],
   "reconciledTickets": [
     {
       "id": "ARG-004",

@@ -7,6 +7,7 @@ on:
       - ".trivyignore.yaml"
       - ".github/workflows/containers.yml"
       - "apps/web/**"
+      - "apps/admin/**"
       - "compose.yaml"
       - "infra/docker/**"
       - "package.json"
@@ -18,11 +19,13 @@ on:
   push:
     branches:
       - main
+      - "release/**"
     paths:
       - ".dockerignore"
       - ".trivyignore.yaml"
       - ".github/workflows/containers.yml"
       - "apps/web/**"
+      - "apps/admin/**"
       - "compose.yaml"
       - "infra/docker/**"
       - "package.json"
@@ -62,6 +65,7 @@ jobs:
       matrix:
         target:
           - web
+          - admin
           - api
           - worker
     steps:
