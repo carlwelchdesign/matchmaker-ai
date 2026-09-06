@@ -10,6 +10,8 @@ No implementation ticket should begin until it satisfies the Definition of Ready
 
 ## Planning goal
 
+The current near-term sequence and recommendation ownership are in the [September 6 delivery reset](recovery-plan-2026-09-06.md). Future inventory below is not a commitment to deliver every platform for November. No product development starts before the baseline gate.
+
 Deliver a secure, privacy-conscious private beta that supports:
 
 - public campaign landing pages and applications;
